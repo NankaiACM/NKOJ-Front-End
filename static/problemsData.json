@@ -1,0 +1,21 @@
+{
+  "status":0,
+  "message":"",
+  "data":[
+    {
+      "problemsID":"1001",
+      "problemsName":"A+B Problem",
+      "problemsRatio": 0.96
+    },
+    {
+      "problemsID":"1002",
+      "problemsName":"A*B Problem",
+      "problemsRatio": 0.90
+    },
+    {
+      "problemsID":"1003",
+      "problemsName":"A/B Problem",
+      "problemsRatio": 0.85
+    }
+  ]
+}
