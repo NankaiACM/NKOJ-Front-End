@@ -10,12 +10,12 @@
       <div><img id="userPicture" src="./assets/userPicture.jpg" v-on:click="changeTo404"></div>
       <div id="userName">User: Saurus</div>
       <ul id="navigation">
-        <li id="problems" v-on:click="changeToProblems">Problems</li>
-        <li id="home" v-on:click="changeTo404">Home</li>
-        <li id="status" v-on:click="changeTo404">Status</li>
-        <li id="contest" v-on:click="changeTo404">Contest</li>
-        <li id="ranklist" v-on:click="changeTo404">RankList</li>
-        <li id="discuss" v-on:click="changeTo404">Discuss</li>
+        <li id="home" v-on:click="changeToHome">主页</li>
+        <li id="problems" v-on:click="changeToProblems"> 题目</li>
+        <li id="status" v-on:click="changeTo404"> 评测</li>
+        <li id="contest" v-on:click="changeTo404"> 比赛</li>
+        <li id="ranklist" v-on:click="changeTo404"> 排名</li>
+        <li id="discuss" v-on:click="changeTo404"> 讨论</li>
       </ul>
     </aside>
     <section id="main">
@@ -25,19 +25,23 @@
 </template>
 
 <script>
-import componentA from './components/componentA'
 import componentB from './components/componentB'
+import componentProblems from './components/componentProblems'
+import componentHome from './components/componentHome'
 export default {
-  components: {componentA},
+  components: {},
   name: 'App',
   data: function () {
     return {
-      changeTest: componentA
+      changeTest: componentHome
     }
   },
   methods: {
     changeToProblems: function () {
-      this.changeTest = componentA
+      this.changeTest = componentProblems
+    },
+    changeToHome: function () {
+      this.changeTest = componentHome
     },
     changeTo404: function () {
       this.changeTest = componentB
@@ -77,10 +81,12 @@ aside{
   left:0;
   right:0;
   bottom:0;
-  background: #5c5c5c;
+  background: rgb(55, 55, 55);
 }
-ul li{
-  padding: 12px 0;
+#navigation li{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 38px;
 }
 #navigation{
   margin-top: 30px;
@@ -88,9 +94,8 @@ ul li{
 }
 #problems, #home, #status, #contest, #ranklist, #discuss{
   background-size: 30px;
-  background-position: 10px;
+  background-position: 25px;
   background-repeat: no-repeat;
-  padding-left: 50px;
   font-size: 15px;
   vertical-align: center;
   cursor: pointer;
@@ -117,11 +122,12 @@ ul li{
 }
 #problems:hover, #home:hover, #status:hover, #contest:hover, #ranklist:hover, #discuss:hover{
   background-color: black;
+  color: white;
 }
 #userPicture{
-  height: 130px;
-  margin-left:  10px;
-  margin-right:  10px;
+  height: 110px;
+  margin-left:  20px;
+  margin-right:  20px;
   margin-top:  20px;
   border-radius: 500px;
   cursor: pointer;
@@ -130,6 +136,7 @@ ul li{
   text-align: center;
   color: lightgray;
   font-weight: bold;
+  font-size: 0.9em;
   margin-top: 5px;
 }
 #mainIcon{
@@ -147,17 +154,17 @@ ul li{
   float: left;
   cursor: pointer;
 }
-#main{
+#main {
   position: absolute;
   left: 150px;
   top: 50px;
   right: 0;
   bottom: 0;
-  overflow: hidden;
+  overflow: auto;
+  background: rgb(230, 230, 230);
 }
 #con{
   height:100%;
-  overflow:auto;
   background-color:white;
   color:#fff;
   overflow: scroll;

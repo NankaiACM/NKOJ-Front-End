@@ -16,6 +16,104 @@
       "problemsID":"1003",
       "problemsName":"A/B Problem",
       "problemsRatio": 0.85
+    },{
+      "problemsID":"1004",
+      "problemsName":"A+B Problem",
+      "problemsRatio": 0.96
+    },
+    {
+      "problemsID":"1005",
+      "problemsName":"A*B Problem",
+      "problemsRatio": 0.90
+    },
+    {
+      "problemsID":"1006",
+      "problemsName":"A/B Problem",
+      "problemsRatio": 0.85
+    },{
+      "problemsID":"1007",
+      "problemsName":"A+B Problem",
+      "problemsRatio": 0.96
+    },
+    {
+      "problemsID":"1008",
+      "problemsName":"A*B Problem",
+      "problemsRatio": 0.90
+    },
+    {
+      "problemsID":"1009",
+      "problemsName":"A/B Problem",
+      "problemsRatio": 0.85
+    },{
+      "problemsID":"1010",
+      "problemsName":"A+B Problem",
+      "problemsRatio": 0.96
+    },
+    {
+      "problemsID":"1011",
+      "problemsName":"A*B Problem",
+      "problemsRatio": 0.90
+    },
+    {
+      "problemsID":"1012",
+      "problemsName":"A/B Problem",
+      "problemsRatio": 0.85
+    },{
+      "problemsID":"1013",
+      "problemsName":"A+B Problem",
+      "problemsRatio": 0.96
+    },
+    {
+      "problemsID":"1014",
+      "problemsName":"A*B Problem",
+      "problemsRatio": 0.90
+    },
+    {
+      "problemsID":"1015",
+      "problemsName":"A/B Problem",
+      "problemsRatio": 0.85
+    },{
+      "problemsID":"1016",
+      "problemsName":"A+B Problem",
+      "problemsRatio": 0.96
+    },
+    {
+      "problemsID":"1017",
+      "problemsName":"A*B Problem",
+      "problemsRatio": 0.90
+    },
+    {
+      "problemsID":"1018",
+      "problemsName":"A/B Problem",
+      "problemsRatio": 0.85
+    },{
+      "problemsID":"1019",
+      "problemsName":"A+B Problem",
+      "problemsRatio": 0.96
+    },
+    {
+      "problemsID":"1020",
+      "problemsName":"A*B Problem",
+      "problemsRatio": 0.90
+    },
+    {
+      "problemsID":"1021",
+      "problemsName":"A/B Problem",
+      "problemsRatio": 0.85
+    },{
+      "problemsID":"1022",
+      "problemsName":"A+B Problem",
+      "problemsRatio": 0.96
+    },
+    {
+      "problemsID":"1023",
+      "problemsName":"A*B Problem",
+      "problemsRatio": 0.90
+    },
+    {
+      "problemsID":"1024",
+      "problemsName":"A/B Problem",
+      "problemsRatio": 0.85
     }
   ]
 }
