@@ -33,7 +33,6 @@ export default {
       var _this = this
       this.$http.get('/static/problemsData.json').then(function (res) {
         _this.problemList = res.body.data
-        console.log(_this.problemList)
       })
     }
   }

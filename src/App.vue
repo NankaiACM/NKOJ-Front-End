@@ -19,32 +19,27 @@
       </ul>
     </aside>
     <section id="main">
-      <component :is="changeTest"></component>
+      <router-view></router-view>
     </section>
   </div>
 </template>
 
 <script>
-import componentB from './components/componentB'
-import componentProblems from './components/componentProblems'
-import componentHome from './components/componentHome'
 export default {
   components: {},
   name: 'App',
   data: function () {
-    return {
-      changeTest: componentHome
-    }
+    return {}
   },
   methods: {
     changeToProblems: function () {
-      this.changeTest = componentProblems
+      this.$router.push({path: '/problems'})
     },
     changeToHome: function () {
-      this.changeTest = componentHome
+      this.$router.push({path: '/home'})
     },
     changeTo404: function () {
-      this.changeTest = componentB
+      this.$router.push({path: '/notFound'})
     }
   }
 }
