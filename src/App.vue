@@ -98,7 +98,7 @@ aside{
   font-weight: bold;
 }
 #problems{
-  background-image: url(assets/problemset.png);
+  background-image: url(assets/problemSet.png);
 }
 #home{
   background-image: url(assets/home.png);
