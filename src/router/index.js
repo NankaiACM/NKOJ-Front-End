@@ -9,6 +9,9 @@ export default new Router({
     {path: '/home', component: componentHome},
     {path: '/problems', component: componentProblems},
     {path: '/notFound', component: componentB},
-    {path: '/', redirect: '/home'}
+    {path: '/', redirect: '/home'}/*,
+    {path: '/problem/:id', component: componentProblem},//TODO
+    {path: '/problem/:id', component: componentContest}//TODO
+    */
   ]
 })

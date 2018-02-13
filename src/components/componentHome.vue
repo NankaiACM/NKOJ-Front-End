@@ -1,32 +1,52 @@
 <template>
-<div>
-  <div id="announcement">
-    <h1 align="left">公告</h1>
-    <pre id="announcementText" v-text="announcement"></pre>
+<div class="container-fluid">
+  <div class="row">
+    <div id="announcement" class="col-sm-12">
+      <h2 align="left">公告</h2>
+      <pre id="announcementText" v-text="announcement"></pre>
+    </div>
   </div>
-  <div id="homeContest">
-    <h1 align="left">近期比赛</h1>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <img align="left" src="../assets/wtf1.jpg">
+  <div class="row">
+    <div id="homeContest" class="col-sm-8">
+      <h2 align="left">近期比赛</h2>
+      <div class="col-sm-6"
+           v-for="contest in newContests"
+           :key="contest.id"
+          >
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <router-link :to="{path:'contest/'+contest.contestID}">
+              {{contest.contestTitle}}
+            </router-link>
+          </div>
+          <div class="panel-body">
+            {{contest.contestContent}}
+          </div>
+        </div>
+      </div>
+      <img align="left" src="../assets/wtf1.jpg">
+    </div>
+    <div id="homeProblem" class="col-sm-4">
+      <h2 align="left">新增题目</h2>
+      <div class="list-group">
+        <router-link class="list-group-item"
+           v-for="problem in newProblems"
+           :key="problem.id"
+           :to="{path:'problem/'+problem.problemsID}">
+          {{problem.problemsName}}
+          <span class="badge">{{problem.problemsRatio}}</span>
+        </router-link>
+      </div>
+      <img align="left" src="../assets/wtf2.jpg">
+    </div>
   </div>
-  <div id="homeProblem">
-    <h1 align="left">新增题目</h1>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <img align="left" src="../assets/wtf2.jpg">
-  </div>
-  <div id="homeDiscuss">
-    <h1 align="left">最新讨论</h1>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <img align="left" src="../assets/wtf3.jpg">
+  <div class="row">
+    <div id="homeDiscuss" class="col-sm-12">
+      <h1 align="left">最新讨论</h1>
+      <h2 align="left">...........</h2>
+      <h2 align="left">...........</h2>
+      <img align="left" src="../assets/wtf3.jpg">
+    </div>
   </div>
 </div>
 </template>
@@ -37,7 +57,9 @@ export default {
   data: function () {
     return {
       announcement: '',
-      homeContestList: []
+      homeContestList: [],
+      newProblems: [],
+      newContests: []
     }
   },
   mounted: function () {
@@ -51,53 +73,39 @@ export default {
       this.$http.get('/static/announcement.json').then(function (res) {
         _this.announcement = res.body.data
       })
+      this.$http.get('/static/newProblems.json').then(function (res) {
+        _this.newProblems = res.body.data
+      })
+      this.$http.get('/static/newContests.json').then(function (res) {
+        _this.newContests = res.body.data
+      })
     }
   }
 }
 </script>
 
 <style>
+.container-fluid{
+  padding:2em;
+  text-align: left;
+  min-height:100%;
+}
+.row{
+  display: flex;
+}
 #announcement{
-  width: 90%;
-  height: 100px;
-  background: linear-gradient(to right, white, white 75%, #16aad8);
-  margin-top: 20px;
-  margin-left: 4%;
-  margin-right: 4%;
-  padding: 1%;
-  border-radius: 25px;
 }
 #homeContest{
-  width: 60%;
-  height: 300px;
-  background: linear-gradient(45deg, white, white 85%, #16aad8);
-  margin-top: 20px;
-  margin-left: 4%;
-  padding: 1%;
-  border-radius: 15px;
-  float: left;
 }
 #homeProblem{
-  width: 27%;
-  height: 300px;
-  background: linear-gradient(45deg, white, white 80%, #16aad8);
-  margin-top: 20px;
-  margin-left: 1%;
-  margin-right: 4%;
-  padding: 1%;
-  border-radius: 15px;
-  float: left;
 }
 #homeDiscuss{
-  width: 90%;
-  height: 300px;
-  background: linear-gradient(45deg, white, white 80%, #16aad8);
-  margin-top: 20px;
-  margin-left: 4%;
-  margin-right: 4%;
-  padding: 1%;
-  border-radius: 25px;
-  float:left;
+}
+#announcement,#homeContest,#homeDiscuss,#homeProblem,#homeContestList{
+  background: #fff;
+  height:auto;
+  margin:2em;
+  padding:4em;
 }
 #announcement:hover{
   cursor:pointer;

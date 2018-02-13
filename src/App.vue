@@ -11,11 +11,11 @@
       <div id="userName">User: Saurus</div>
       <ul id="navigation">
         <li id="home" v-on:click="changeToHome">主页</li>
-        <li id="problems" v-on:click="changeToProblems"> 题目</li>
-        <li id="status" v-on:click="changeTo404"> 评测</li>
-        <li id="contest" v-on:click="changeTo404"> 比赛</li>
-        <li id="ranklist" v-on:click="changeTo404"> 排名</li>
-        <li id="discuss" v-on:click="changeTo404"> 讨论</li>
+        <li id="problems" v-on:click="changeToProblems">题目</li>
+        <li id="status" v-on:click="changeTo404">评测</li>
+        <li id="contest" v-on:click="changeTo404">比赛</li>
+        <li id="ranklist" v-on:click="changeTo404">排名</li>
+        <li id="discuss" v-on:click="changeTo404">讨论</li>
       </ul>
     </aside>
     <section id="main">
@@ -81,7 +81,6 @@ aside{
 #navigation li{
   padding-top: 12px;
   padding-bottom: 12px;
-  padding-left: 38px;
 }
 #navigation{
   margin-top: 30px;
@@ -92,11 +91,12 @@ aside{
   background-position: 25px;
   background-repeat: no-repeat;
   font-size: 15px;
-  vertical-align: center;
+  vertical-align: middle;
   cursor: pointer;
   color: lightsteelblue;
   font-weight: bold;
 }
+/*
 #problems{
   background-image: url(assets/problemSet.png);
 }
@@ -115,6 +115,7 @@ aside{
 #discuss{
   background-image: url(assets/discuss.png);
 }
+*/
 #problems:hover, #home:hover, #status:hover, #contest:hover, #ranklist:hover, #discuss:hover{
   background-color: black;
   color: white;
