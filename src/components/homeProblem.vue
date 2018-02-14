@@ -4,7 +4,8 @@
   <div class="list-group">
     <router-link class="list-group-item" v-for="problem in newProblems" :key="problem.id" :to="{path:'problem/'+problem.problemsID}">
       {{problem.problemsName}}
-      <span class="badge">{{problem.problemsRatio}}</span>
+      <span class="badge hidden-xs hidden-sm">{{problem.problemsRatio}}</span>
+      <span class="label label-info visible-xs visible-sm">{{problem.problemsRatio}}</span>
     </router-link>
   </div>
   <img align="left" src="../assets/wtf2.jpg">
@@ -24,7 +25,7 @@ export default {
     });
   },
   methods: {
-    initView: function () {
+    initView: function() {
       var _this = this;
       this.$http.get('/static/newProblems.json').then(function(res) {
         _this.newProblems = res.body.data;
@@ -34,4 +35,8 @@ export default {
 }
 </script>
 <style>
+.list-group .label {
+  margin: 0 -15px -10px -15px;
+  border-radius: 0;
+}
 </style>

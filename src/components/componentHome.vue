@@ -3,7 +3,7 @@
   <div class="row">
     <div id="announcement" class="col-sm-12">
       <h2 align="left">公告</h2>
-      <pre id="announcementText" v-text="announcement"></pre>
+      <pre id="announcementText" v-text="announcement" class="alert alert-info" role="alert"></pre>
     </div>
   </div>
   <div class="row">
@@ -17,8 +17,8 @@
 </template>
 <script>
 import homeContest from './homeContest.vue'
-import homeDiscuss from './homeDiscuss'
-import homeProblem from './homeProblem'
+import homeDiscuss from './homeDiscuss.vue'
+import homeProblem from './homeProblem.vue'
 export default {
   name: 'component-home',
   data: function() {
@@ -36,9 +36,8 @@ export default {
   },
   methods: {
     initView: function() {
-      var _this = this
       this.$http.get('/static/announcement.json').then(function(res) {
-        _this.announcement = res.body.data
+        this.announcement = res.body.data
       })
     }
   },
@@ -68,18 +67,30 @@ export default {
 #homeContestList {
   background: #fff;
   height: auto;
-  margin: 2em;
-  padding: 4em;
+  margin: 1em;
+  padding: 2em;
 }
 
-#announcement:hover {
+#announcement {
   cursor: pointer;
 }
 
 #announcementText {
-  padding: 1%;
+  padding: 1em;
   font-size: 1.2em;
   text-align: left;
-  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (min-with:@screen-sm-min) {
+  #announcement,
+  #homeContest,
+  #homeDiscuss,
+  #homeProblem,
+  #homeContestList {
+    margin: 2em;
+    padding: 4em;
+  }
 }
 </style>

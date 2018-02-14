@@ -30,7 +30,7 @@ export default {
     });
   },
   methods: {
-    initView: function () {
+    initView: function() {
       var _this = this;
       this.$http.get('/static/newContests.json').then(function(res) {
         _this.newContests = res.body.data;
