@@ -83,7 +83,7 @@ export default {
   word-break: break-word;
 }
 
-@media (min-with:@screen-sm-min) {
+@media (min-width: 768px) {
   #announcement,
   #homeContest,
   #homeDiscuss,
