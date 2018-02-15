@@ -1,45 +1,84 @@
 <template>
-  <div>
-    <table border="1" id="problemTable" cellspacing="3">
+<div id="Problems" class="container-fluid">
+  <table id="problemTable" class="table table-hover">
+    <caption>problems</caption>
+    <thead>
       <tr>
         <th class="problemTableHeaderCol1">编号</th>
         <th class="problemTableHeaderCol2">题目名称</th>
         <th class="problemTableHeaderCol3">通过率</th>
       </tr>
-      <tr id="problemRow" v-for="problem in problemList" v-bind:key="problem.problemsID">
-        <td class="problemTableCol1" v-text="problem.problemsID"></td>
-        <td class="problemTableCol2" v-text="problem.problemsName"></td>
+    </thead>
+    <tbody>
+      <tr id="problemRow" v-for="problem in problemList" v-bind:key="problem.id">
+        <td class="problemTableCol1">
+          <router-link :to="{path:'problem/'+problem.problemsID}">
+            {{problem.problemsID}}
+          </router-link>
+        </td>
+        <td class="problemTableCol2">
+          <router-link :to="{path:'problem/'+problem.problemsID}">
+            {{problem.problemsName}}
+          </router-link>
+        </td>
         <td class="problemTableCol3" v-text="problem.problemsRatio"></td>
       </tr>
-    </table>
-  </div>
+      <infinite-loading @infinite="infiniteHandler">
+        <span slot="no-more">
+            There is no more problems :(
+          </span>
+      </infinite-loading>
+    </tbody>
+  </table>
+</div>
 </template>
 
 <script>
+import InfiniteLoading from 'vue-infinite-loading'
 export default {
   name: 'component-problems',
-  data: function () {
+  data: function() {
     return {
       problemList: []
     }
   },
-  mounted: function () {
-    this.$nextTick(function () {
+  mounted: function() {
+    this.$nextTick(function() {
       this.initView()
     })
   },
   methods: {
-    initView: function () {
-      var _this = this
-      this.$http.get('/static/problemsData.json').then(function (res) {
-        _this.problemList = res.body.data
+    initView: function() {
+      this.$http.get('/static/problemsData.json').then(function(res) {
+        this.problemList = res.body.data
+      })
+    },
+    infiniteHandler: function($state) {
+      this.$http.get('/static/problemsData.json').then(function(res) {
+        if (!res.body.data.length) return -1
+        this.problemList = this.problemList.concat(res.body.data)
+        console.log(this.problemList.length)
+        $state.loaded()
       })
     }
+  },
+  components: {
+    InfiniteLoading
   }
 }
 </script>
-
 <style>
+#Problems {
+  text-align: left;
+  background: #fff;
+  padding: 2em 4em;
+}
+
+#Problems td a {
+  color: #2c3e50;
+}
+
+/*
 #problemTable{
   width: 100%;
   padding: 20px;
@@ -78,4 +117,5 @@ td[class^=problemTable]{
 #problemRow:hover{
   background-color: lightgray;
 }
+*/
 </style>

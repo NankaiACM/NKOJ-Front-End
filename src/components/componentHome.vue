@@ -1,111 +1,96 @@
 <template>
-<div>
-  <div id="announcement">
-    <h1 align="left">公告</h1>
-    <pre id="announcementText" v-text="announcement"></pre>
+<div class="container-fluid">
+  <div class="row">
+    <div id="announcement" class="col-sm-12">
+      <h2 align="left">公告</h2>
+      <pre id="announcementText" v-text="announcement" class="alert alert-info" role="alert"></pre>
+    </div>
   </div>
-  <div id="homeContest">
-    <h1 align="left">近期比赛</h1>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <img align="left" src="../assets/wtf1.jpg">
+  <div class="row">
+    <homeContest/>
+    <homeProblem/>
   </div>
-  <div id="homeProblem">
-    <h1 align="left">新增题目</h1>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <img align="left" src="../assets/wtf2.jpg">
-  </div>
-  <div id="homeDiscuss">
-    <h1 align="left">最新讨论</h1>
-    <h2 align="left">...........</h2>
-    <h2 align="left">...........</h2>
-    <img align="left" src="../assets/wtf3.jpg">
+  <div class="row">
+    <homeDiscuss/>
   </div>
 </div>
 </template>
-
 <script>
+import homeContest from './homeContest.vue'
+import homeDiscuss from './homeDiscuss.vue'
+import homeProblem from './homeProblem.vue'
 export default {
   name: 'component-home',
-  data: function () {
+  data: function() {
     return {
       announcement: '',
-      homeContestList: []
+      homeContestList: [],
+      newProblems: [],
+      newContests: []
     }
   },
-  mounted: function () {
-    this.$nextTick(function () {
+  mounted: function() {
+    this.$nextTick(function() {
       this.initView()
     })
   },
   methods: {
-    initView: function () {
-      var _this = this
-      this.$http.get('/static/announcement.json').then(function (res) {
-        _this.announcement = res.body.data
+    initView: function() {
+      this.$http.get('/static/announcement.json').then(function(res) {
+        this.announcement = res.body.data
       })
     }
+  },
+  components: {
+    homeContest,
+    homeDiscuss,
+    homeProblem
   }
 }
 </script>
 
 <style>
-#announcement{
-  width: 90%;
-  height: 100px;
-  background: linear-gradient(to right, white, white 75%, #16aad8);
-  margin-top: 20px;
-  margin-left: 4%;
-  margin-right: 4%;
-  padding: 1%;
-  border-radius: 25px;
+.container-fluid {
+  padding: 2em;
+  text-align: left;
+  min-height: 100%;
 }
-#homeContest{
-  width: 60%;
-  height: 300px;
-  background: linear-gradient(45deg, white, white 85%, #16aad8);
-  margin-top: 20px;
-  margin-left: 4%;
-  padding: 1%;
-  border-radius: 15px;
-  float: left;
+
+.row {
+  display: flex;
 }
-#homeProblem{
-  width: 27%;
-  height: 300px;
-  background: linear-gradient(45deg, white, white 80%, #16aad8);
-  margin-top: 20px;
-  margin-left: 1%;
-  margin-right: 4%;
-  padding: 1%;
-  border-radius: 15px;
-  float: left;
+
+#announcement,
+#homeContest,
+#homeDiscuss,
+#homeProblem,
+#homeContestList {
+  background: #fff;
+  height: auto;
+  margin: 1em;
+  padding: 2em;
 }
-#homeDiscuss{
-  width: 90%;
-  height: 300px;
-  background: linear-gradient(45deg, white, white 80%, #16aad8);
-  margin-top: 20px;
-  margin-left: 4%;
-  margin-right: 4%;
-  padding: 1%;
-  border-radius: 25px;
-  float:left;
+
+#announcement {
+  cursor: pointer;
 }
-#announcement:hover{
-  cursor:pointer;
-}
-#announcementText{
-  padding: 1%;
+
+#announcementText {
+  padding: 1em;
   font-size: 1.2em;
   text-align: left;
-  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (min-width: 768px) {
+  #announcement,
+  #homeContest,
+  #homeDiscuss,
+  #homeProblem,
+  #homeContestList {
+    margin: 2em;
+    padding: 4em;
+  }
 }
 </style>
