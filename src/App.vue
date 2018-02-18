@@ -4,18 +4,22 @@
     <div>
       <div id="mainIcon"><img height="50px" src="./assets/peng.gif"></div>
       <div id="mainTitle" v-on:click="changeTo404">NKU Online Judge</div>
+      <ul class="nav navbar-nav navbar-right" id="headerRight">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
+      </ul>
     </div>
   </header>
   <aside class="hidden-xs">
     <div><img id="userPicture" src="./assets/userPicture.jpg" v-on:click="changeTo404"></div>
     <div id="userName">User: Saurus</div>
-    <ul id="navigation">
-      <li id="home" v-on:click="changeToHome">主页</li>
-      <li id="problems" v-on:click="changeToProblems">题目</li>
-      <li id="status" v-on:click="changeTo404">评测</li>
-      <li id="contest" v-on:click="changeTo404">比赛</li>
-      <li id="ranklist" v-on:click="changeTo404">排名</li>
-      <li id="discuss" v-on:click="changeTo404">讨论</li>
+    <ul class="nav nav-pills nav-stacked" id="navigation">
+      <li id="home" v-on:click="changeToHome"><span class="glyphicon glyphicon-home"></span>主页</li>
+      <li id="problems" v-on:click="changeToProblems"><span class="glyphicon glyphicon-list"></span>题目</li>
+      <li id="status" v-on:click="changeTo404"><span class="glyphicon glyphicon-stats"></span>评测</li>
+      <li id="contest" v-on:click="changeTo404"><span class="glyphicon glyphicon-tower"></span>比赛</li>
+      <li id="ranklist" v-on:click="changeTo404"><span class="glyphicon glyphicon-signal"></span>排名</li>
+      <li id="discuss" v-on:click="changeTo404"><span class="glyphicon glyphicon-comment"></span>讨论</li>
     </ul>
   </aside>
   <section id="main">
@@ -60,7 +64,24 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-
+#navigation .glyphicon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  margin-right: 15px;
+  -moz-osx-font-smoothing: grayscale;
+}
+#headerRight{
+  margin-right: 5px;
+}
+#headerRight li a{
+  color:white;
+  background: none;
+}
 * {
   padding: 0;
   margin: 0;
@@ -95,7 +116,6 @@ aside {
 
 #navigation {
   margin-top: 30px;
-  list-style: none;
 }
 
 #problems,

@@ -1,0 +1,44 @@
+{
+  "status": "",
+  "messages": "",
+  "data": [{
+    "problemsID": "1001",
+    "problemsName": "A+B Problem",
+    "problemsDescription": "请你来计算A+B",
+    "inputDescription": "两个整数，A和B",
+    "outputDescription": "输出一个整数答案",
+    "limitDescription": "整数小于等于1e9",
+    "sampleInput": "1 1",
+    "sampleOutput": "2"
+  },
+    {
+      "problemsID": "1002",
+      "problemsName": "A*B Problem",
+      "problemsDescription": "请你来计算A*B",
+      "inputDescription": "两个整数，A和B",
+      "outputDescription": "输出一个整数答案",
+      "limitDescription": "整数小于等于1e9",
+      "sampleInput": "1 1",
+      "sampleOutput": "1"
+    },
+    {
+      "problemsID": "1003",
+      "problemsName": "A/B Problem",
+      "problemsDescription": "请你来计算A/B",
+      "inputDescription": "两个整数，A和B",
+      "outputDescription": "输出一个整数答案",
+      "limitDescription": "整数小于等于1e9",
+      "sampleInput": "1 1",
+      "sampleOutput": "1"
+    }, {
+      "problemsID": "1004",
+      "problemsName": "A-B Problem",
+      "problemsDescription": "请你来计算A-B",
+      "inputDescription": "两个整数，A和B",
+      "outputDescription": "输出一个整数答案",
+      "limitDescription": "整数小于等于1e9",
+      "sampleInput": "1 1",
+      "sampleOutput": "0"
+    }
+  ]
+}
