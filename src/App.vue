@@ -6,7 +6,7 @@
       <div id="mainTitle" v-on:click="changeTo404">NKU Online Judge</div>
     </div>
   </header>
-  <aside>
+  <aside class="hidden-xs">
     <div><img id="userPicture" src="./assets/userPicture.jpg" v-on:click="changeTo404"></div>
     <div id="userName">User: Saurus</div>
     <ul id="navigation">
@@ -194,5 +194,12 @@ aside {
   background-color: white;
   color: #fff;
   overflow: scroll;
+}
+
+@media (max-width: 768px) {
+  #main {
+    left:0;
+    right:0;
+  }
 }
 </style>

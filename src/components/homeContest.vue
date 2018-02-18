@@ -1,19 +1,20 @@
 <template>
-<div id="homeContest" class="col-sm-8">
-  <h2 align="left">近期比赛</h2>
-  <div class="col-sm-6" v-for="contest in newContests" :key="contest.id">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <router-link :to="{path:'contest/'+contest.contestID}">
-          {{contest.contestTitle}}
-        </router-link>
-      </div>
-      <div class="panel-body">
-        {{contest.contestContent}}
+<div id="homeContest" class="col-sm-8 col-xs-12 home-component">
+  <h3 align="left">近期比赛</h3>
+  <div id="new-contest-container">
+    <div class="col-sm-6" v-for="contest in newContests" :key="contest.id">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <router-link :to="{path:'contest/'+contest.contestID}">
+            {{contest.contestTitle}}
+          </router-link>
+        </div>
+        <div class="panel-body">
+          {{contest.contestContent}}
+        </div>
       </div>
     </div>
   </div>
-  <img align="left" src="../assets/wtf1.jpg">
 </div>
 </template>
 <script>
@@ -40,4 +41,7 @@ export default {
 }
 </script>
 <style>
+#new-contest-container {
+  margin: 0 -15px;
+}
 </style>
