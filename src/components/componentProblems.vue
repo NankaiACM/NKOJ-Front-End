@@ -162,6 +162,7 @@ export default {
   text-align: left;
   background: #fff;
   padding: 2em 4em;
+  min-height: 100%;
 }
 
 #Problems td a {
