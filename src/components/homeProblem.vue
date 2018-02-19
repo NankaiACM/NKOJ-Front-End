@@ -1,14 +1,12 @@
 <template>
-<div id="homeProblem" class="col-sm-4">
-  <h2 align="left">新增题目</h2>
+<div id="homeProblem" class="col-sm-4 col-xs-12 home-component">
+  <h3 align="left">新增题目</h3>
   <div class="list-group">
     <router-link class="list-group-item" v-for="problem in newProblems" :key="problem.id" :to="{path:'problem/'+problem.problemsID}">
       {{problem.problemsName}}
-      <span class="badge hidden-xs hidden-sm">{{problem.problemsRatio}}</span>
-      <span class="label label-info visible-xs visible-sm">{{problem.problemsRatio}}</span>
+      <span class="badge visible-lg">{{problem.problemsRatio}}</span>
     </router-link>
   </div>
-  <img align="left" src="../assets/wtf2.jpg">
 </div>
 </template>
 <script>

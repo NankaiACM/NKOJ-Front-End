@@ -1,8 +1,8 @@
 <template>
 <div class="container-fluid">
   <div class="row">
-    <div id="announcement" class="col-sm-12">
-      <h2 align="left">公告</h2>
+    <div id="announcement" class="col-sm-12 home-component">
+      <h3 align="left">公告</h3>
       <pre id="announcementText" v-text="announcement" class="alert alert-info" role="alert"></pre>
     </div>
   </div>
@@ -12,6 +12,7 @@
   </div>
   <div class="row">
     <homeDiscuss/>
+    <componentShell/>
   </div>
 </div>
 </template>
@@ -19,6 +20,7 @@
 import homeContest from './homeContest.vue'
 import homeDiscuss from './homeDiscuss.vue'
 import homeProblem from './homeProblem.vue'
+import componentShell from './componentShell'
 export default {
   name: 'component-home',
   data: function() {
@@ -44,7 +46,8 @@ export default {
   components: {
     homeContest,
     homeDiscuss,
-    homeProblem
+    homeProblem,
+    componentShell
   }
 }
 </script>
@@ -60,11 +63,12 @@ export default {
   display: flex;
 }
 
-#announcement,
-#homeContest,
-#homeDiscuss,
-#homeProblem,
-#homeContestList {
+.row h3 {
+  margin-top: 0;
+  font-family: '微软雅黑';
+}
+
+.home-component {
   background: #fff;
   height: auto;
   margin: 1em;
@@ -75,22 +79,35 @@ export default {
   cursor: pointer;
 }
 
+#announcement h2 {
+  margin-top: 0;
+}
+
 #announcementText {
   padding: 1em;
+  margin: 0;
   font-size: 1.2em;
   text-align: left;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
-@media (min-width: 768px) {
-  #announcement,
-  #homeContest,
-  #homeDiscuss,
-  #homeProblem,
-  #homeContestList {
+@media (min-width: 1241px) {
+  .container-fluid{
+    padding: 2em 6em;
+  }
+  .home-component {
     margin: 2em;
     padding: 4em;
+  }
+}
+
+@media (max-width: 768px) {
+  .row:nth-child(2) {
+    flex-direction: column;
+  }
+  .home-component {
+    margin: 0;
   }
 }
 </style>

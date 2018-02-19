@@ -1,6 +1,6 @@
 <template>
-<div id="homeDiscuss" class="col-sm-12">
-  <h2>最新讨论</h2>
+<div id="homeDiscuss" class="col-sm-12 col-lg-10 home-component">
+  <h3>最新讨论</h3>
   <div class="media" v-for="talk in newDiscuss" :key="talk.id">
     <div class="media-left">
       <router-link :to="{path:'member/'+talk.sponsor}">
@@ -24,7 +24,6 @@
       </router-link>
     </div>
   </div>
-  <img align="left" src="../assets/wtf3.jpg">
 </div>
 </template>
 <script>
