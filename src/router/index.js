@@ -14,7 +14,7 @@ export default new Router({
     {path: '/notFound', component: componentB},
     {path: '/', redirect: '/home'},
     {path: '/problem/:id', component: problemsPage},
-    {path: '/status',component: statusPage},
+    {path: '/status', component: statusPage},
     {path: '/contest', component: componentContest}
     /*,
     {path: '/problem/:id', component: componentProblem},//TODO
