@@ -29,7 +29,6 @@
   </div>
   <div class="col-sm-5" id="problemSubmit">
     <nav class="navbar navbar-default" role="navigation">
-      <div class="container-fluid">
         <div class="navbar-header navbar-brand">Code</div>
         <div>
           <ul class="nav navbar-nav navbar-right">
@@ -51,7 +50,6 @@
             </li>
           </ul>
         </div>
-      </div>
     </nav>
     <div id="codeArea">
       <editor v-model="submitCode" @init="editorInit" lang="c_cpp" theme="terminal" height="400px"></editor>
