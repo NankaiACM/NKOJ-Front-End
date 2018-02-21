@@ -2,19 +2,18 @@
   <div id="component-contest">
     <breadcrumb  :places="['Home','Contests']"/>
     <div class="contest-content">
-      <contest-page class="contest-main"/>
-      <!--pagination id="pagination"/-->
+      <!--contest-page class="contest-main"/-->
+      <all-contest class="contest-main"/>
       <contest-side-bar class="contest-sidebar"/>
     </div>
-    <div class="footer"><span>footer</span></div>
   </div>
 </template>
 
 <script>
 import contestPage from './contestpage/contest.vue'
-import Breadcrumb from './contestpage/contestComponents/breadcrumb'
-import contestSideBar from './contestpage/contestComponents/contestSideBar'
-import pagination from './contestpage/contestComponents/pagination'
+import Breadcrumb from './contestpage/breadcrumb'
+import contestSideBar from './contestpage/contestSideBar'
+import allContest from "./contestpage/allContest";
 
 export default {
   name: 'component-contest',
@@ -22,7 +21,7 @@ export default {
     contestPage,
     Breadcrumb,
     contestSideBar,
-    pagination
+    allContest,
   }
 }
 </script>
@@ -35,11 +34,7 @@ export default {
     text-align: center;
     color: #2c3e50;
     background: white;
-  }
-
-  body {
-    margin: 0;
-    padding: 0;
+    font-size: 16px;
   }
 
   h5 {
@@ -74,17 +69,17 @@ export default {
     width: 25%;
     box-sizing: border-box;
     padding: 15px 0;
-    margin-left: 20px;
+    margin-left: 3%;
   }
 
-  .footer, .header {
-    height: 100px;
-    background-color: #87CEFA;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 3em;
+  a{
+    text-decoration: none;
+    color:inherit;
+  }
+
+  a:hover{
+    color: inherit;
+    text-decoration: none;
   }
 
   a.contest-link {
@@ -98,8 +93,4 @@ export default {
     text-decoration-line: underline;
   }
 
-  #pagination {
-    box-sizing: border-box;
-    width: 75%;
-  }
 </style>

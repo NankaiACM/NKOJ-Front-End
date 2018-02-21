@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="active-contest">
+    <div class="contest-wrapper">
       <h5 class="contest-title">Active Contests</h5>
-      <div class="active-contest-list">
+      <div class="contest-list">
         <ul>
           <li v-for="(activeContest,index) in activeContests" :key=activeContest.id
             is="contests-list-box"  @onclickbar="changeStatusInActive" :id="index"
@@ -11,9 +11,9 @@
         </ul>
       </div>
     </div>
-    <div class="pased-contest">
+    <div class="contest-wrapper">
       <h5 class="contest-title">Ended Contests</h5>
-      <div class="pased-contest-list">
+      <div class="contest-list">
         <ul>
           <li v-for="(archivedContest,index) in archivedContests" :key=archivedContest.id
             is="contests-list-box"  @onclickbar="changeStatusInArchived" :id="index"
@@ -77,16 +77,9 @@ export default {
 }
 </script>
 
-<style scoped>
-.active-contest,.pased-contest{
+<style>
+.contest-wrapper{
   padding: 10px 0 0;
-}
-h5{
-  padding: 10px 0;
-  margin: 0;
-  font-size: 125%;
-  font-weight: 500;
-  text-align: left;
 }
 .contest-title{
   margin-left: 10px;
@@ -97,16 +90,7 @@ h5{
   box-sizing: border-box;
   display: block;
 }
-a.navigation{
-  font-size: 110%;
-	color: #87CEFA;
-	text-decoration: none;
-  cursor: pointer;
-}
-a.navigation:hover{
-  color: #7bbfea;
-}
-ul{
+.contest-wrapper ul{
   width: 100%;
   margin: 0;
   padding: 0;
