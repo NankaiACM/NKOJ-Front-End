@@ -81,13 +81,6 @@ export default {
 .active-contest,.pased-contest{
   padding: 10px 0 0;
 }
-h5{
-  padding: 10px 0;
-  margin: 0;
-  font-size: 125%;
-  font-weight: 500;
-  text-align: left;
-}
 .contest-title{
   margin-left: 10px;
 }
@@ -96,15 +89,6 @@ h5{
   padding: 10px 0;
   box-sizing: border-box;
   display: block;
-}
-a.navigation{
-  font-size: 110%;
-	color: #87CEFA;
-	text-decoration: none;
-  cursor: pointer;
-}
-a.navigation:hover{
-  color: #7bbfea;
 }
 ul{
   width: 100%;

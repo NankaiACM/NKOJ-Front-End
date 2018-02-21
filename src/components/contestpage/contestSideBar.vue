@@ -21,7 +21,7 @@
 
 <script>
 // contest界面侧边栏
-import iconSearch from '../iconsearch/icon'
+import iconSearch from './iconsearch/icon'
 
 export default {
   name: 'contestSideBar',
