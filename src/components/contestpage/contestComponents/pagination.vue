@@ -100,6 +100,16 @@ export default {
     min-width: 350px;
     overflow: hidden;
 }
+ul{
+    width: 340px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+span{
+    display: flex;
+    align-items: center;
+}
 #pagination-list li.current{
     background-color: #83fcd8;
     color: #2c3e50;
