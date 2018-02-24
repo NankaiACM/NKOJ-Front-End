@@ -78,22 +78,4 @@ export default {
 </script>
 
 <style>
-.contest-wrapper{
-  padding: 10px 0 0;
-}
-.contest-title{
-  margin-left: 10px;
-}
-.a-wrapper{
-  margin: 10px 0;
-  padding: 10px 0;
-  box-sizing: border-box;
-  display: block;
-}
-.contest-wrapper ul{
-  width: 100%;
-  margin: 0;
-  padding: 0;
-	list-style: none;
-}
 </style>
