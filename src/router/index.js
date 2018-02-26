@@ -5,6 +5,7 @@ import componentHome from '../components/componentHome'
 import componentB from '../components/componentB'
 import problemsPage from '../components/problemPage'
 import statusPage from '../components/statusPage'
+import discussPage from '../components/discussPage'
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -13,7 +14,8 @@ export default new Router({
     {path: '/notFound', component: componentB},
     {path: '/', redirect: '/home'},
     {path: '/problem/:id', component: problemsPage},
-    {path: '/status',component: statusPage}
+    {path: '/status',component: statusPage},
+    {path: '/discuss',component: discussPage}
     /*,
     {path: '/problem/:id', component: componentProblem},//TODO
     {path: '/problem/:id', component: componentContest}//TODO

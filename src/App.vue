@@ -19,7 +19,7 @@
       <li id="status" v-on:click="changeToStatus"><span class="glyphicon glyphicon-stats"></span>评测</li>
       <li id="contest" v-on:click="changeTo404"><span class="glyphicon glyphicon-tower"></span>比赛</li>
       <li id="ranklist" v-on:click="changeTo404"><span class="glyphicon glyphicon-signal"></span>排名</li>
-      <li id="discuss" v-on:click="changeTo404"><span class="glyphicon glyphicon-comment"></span>讨论</li>
+      <li id="discuss" v-on:click="changeToDiscuss"><span class="glyphicon glyphicon-comment"></span>讨论</li>
     </ul>
   </aside>
   <section id="main">
@@ -49,6 +49,11 @@ export default {
     changeToStatus: function(){
       this.$router.push({
         path: '/status'
+      })
+    },
+    changeToDiscuss: function () {
+      this.$router.push({
+        path: '/discuss'
       })
     },
     changeTo404: function() {
