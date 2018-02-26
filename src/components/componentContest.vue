@@ -1,9 +1,11 @@
 <template>
   <div id="component-contest">
-    <breadcrumb  :places="['Home','Contests']"/>
     <div class="contest-content">
-      <!--contest-page class="contest-main"/-->
+      <!--
+      <contest-page class="contest-main"/>
       <all-contest class="contest-main"/>
+      -->
+      <contest-detail class="contest-main"/>
       <contest-side-bar class="contest-sidebar"/>
     </div>
   </div>
@@ -14,6 +16,7 @@ import contestPage from './contestpage/contest.vue'
 import Breadcrumb from './contestpage/breadcrumb'
 import contestSideBar from './contestpage/contestSideBar'
 import allContest from "./contestpage/allContest";
+import contestDetail from "./contestpage/contestDetail";
 
 export default {
   name: 'component-contest',
@@ -22,6 +25,7 @@ export default {
     Breadcrumb,
     contestSideBar,
     allContest,
+    contestDetail,
   }
 }
 </script>
@@ -35,6 +39,16 @@ export default {
     color: #2c3e50;
     background: white;
     font-size: 16px;
+  }
+  @media screen and (min-width: 1281px){
+    #component-contest{
+      padding: 0px 10%;
+    }
+  }
+  @media screen and (max-width: 1280px){
+    #component-contest{
+      padding: 0px 10px;
+    }
   }
 
   h5 {
@@ -62,14 +76,15 @@ export default {
 
   .contest-main {
     width: 75%;
-    padding: 15px 30px 20px 5px;
+    padding: 15px 30px 40px 5px;
   }
 
   .contest-sidebar {
     width: 25%;
     box-sizing: border-box;
-    padding: 15px 0;
+    padding: 20px 0 0;
     margin-left: 3%;
+    margin-top: 100px;
   }
 
   a{
@@ -93,4 +108,31 @@ export default {
     text-decoration-line: underline;
   }
 
+
+.contest-wrapper{
+  padding: 10px 0 0;
+}
+.contest-title{
+  margin-left: 10px;
+}
+.a-wrapper{
+  margin: 10px 0;
+  padding: 10px 0;
+  box-sizing: border-box;
+  display: block;
+}
+.contest-wrapper ul{
+  width: 100%;
+  margin: 0;
+  padding: 0;
+	list-style: none;
+}
+h4{
+  font-size: 1.5em;
+  margin: 10px 0;
+}
+.block-wrapper{
+  width: 100%;
+  padding: 20px 0;
+}
 </style>

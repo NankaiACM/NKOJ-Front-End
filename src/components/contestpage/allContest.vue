@@ -2,7 +2,7 @@
 <!--一些css设定在contest.vue中-->
   <div>
     <div class="contest-wrapper">
-      <h5 class="contest-title">Active Contests</h5>
+      <h5 class="contest-title">All Contests</h5>
       <div class="contest-list">
         <ul>
           <li v-for="(allContest,index) in allContests" :key=allContest.id
