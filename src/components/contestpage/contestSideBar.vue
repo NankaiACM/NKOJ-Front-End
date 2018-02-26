@@ -50,7 +50,7 @@ export default {
 .icon-search{
   position: absolute;
   left: 5px;
-  top: 2px;
+  top: -2px;
   color: #AAAAAA;
   transition: color 0.3s ease;
   pointer-events: none;
