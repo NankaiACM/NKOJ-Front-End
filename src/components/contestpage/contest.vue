@@ -1,0 +1,81 @@
+<template>
+  <div>
+    <div class="contest-wrapper">
+      <h5 class="contest-title">Active Contests</h5>
+      <div class="contest-list">
+        <ul>
+          <li v-for="(activeContest,index) in activeContests" :key=activeContest.id
+            is="contests-list-box"  @onclickbar="changeStatusInActive" :id="index"
+            :isOpen="(index==activeContestOpen)" :name=activeContest.name :time=activeContest.time
+            :isActive=true></li>
+        </ul>
+      </div>
+    </div>
+    <div class="contest-wrapper">
+      <h5 class="contest-title">Ended Contests</h5>
+      <div class="contest-list">
+        <ul>
+          <li v-for="(archivedContest,index) in archivedContests" :key=archivedContest.id
+            is="contests-list-box"  @onclickbar="changeStatusInArchived" :id="index"
+            :isOpen="(index==archivedContestOpen)" :name=archivedContest.name :time=archivedContest.time
+            :isActive=false></li>
+        </ul>
+      </div>
+    </div>
+    <div class="a-wrapper">
+      <a class="contest-link">Show All Contests</a>
+    </div>
+  </div>
+</template>
+
+<script>
+import ContestsListBox from './contestComponents/contestsListBox.vue'
+
+export default {
+  name: 'contestPage',
+  components: {
+    ContestsListBox
+  },
+  data () {
+    return {
+      activeContestOpen: -1,
+      archivedContestOpen: -1,
+      activeContests: [
+        {name: 'A Contest Name', time: 'Feb 10th, 12:30 pm'},
+        {name: 'A Contest Name', time: 'Feb 11th, 12:30 pm'},
+        {name: 'Another Contest Name', time: 'Feb 12th, 12:30 pm'},
+        {name: 'B Contest Name', time: 'Feb 13th, 12:30 pm'}
+      ],
+      archivedContests: [
+        {name: 'A Contest Name', time: 'Nov 10th 2017, 12:30 pm'},
+        {name: 'A Contest Name', time: 'Dec 11th 2017, 12:30 pm'},
+        {name: 'Another Contest Name', time: 'Feb 9th, 12:30 pm'},
+        {name: 'B Contest Name', time: 'Feb 1st, 12:30 pm'},
+        {name: 'A Contest Name', time: 'Nov 10th 2017, 12:30 pm'},
+        {name: 'A Contest Name', time: 'Dec 11th 2017, 12:30 pm'},
+        {name: 'Another Contest Name', time: 'Feb 9th, 12:30 pm'},
+        {name: 'B Contest Name', time: 'Feb 1st, 12:30 pm'}
+      ]
+    }
+  },
+  methods: {
+    changeStatusInActive (id) {
+      if (this.activeContestOpen == id) this.activeContestOpen = -1
+      else {
+        this.activeContestOpen = id
+        this.archivedContestOpen = -1
+      }
+    },
+    changeStatusInArchived (id) {
+      if (this.archivedContestOpen == id) this.archivedContestOpen = -1
+      else {
+        this.archivedContestOpen = id
+        this.activeContestOpen = -1
+      }
+    }
+  }
+}
+</script>
+
+<style>
+</style>

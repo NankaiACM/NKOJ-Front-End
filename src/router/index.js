@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import componentProblems from '../components/componentProblems'
 import componentHome from '../components/componentHome'
 import componentB from '../components/componentB'
+import componentContest from '../components/componentContest'
 import problemsPage from '../components/problemPage'
 import statusPage from '../components/statusPage'
 import discussPage from '../components/discussPage'
@@ -15,7 +16,8 @@ export default new Router({
     {path: '/', redirect: '/home'},
     {path: '/problem/:id', component: problemsPage},
     {path: '/status',component: statusPage},
-    {path: '/discuss',component: discussPage}
+    {path: '/discuss',component: discussPage},
+    {path: '/contest', component: componentContest}
     /*,
     {path: '/problem/:id', component: componentProblem},//TODO
     {path: '/problem/:id', component: componentContest}//TODO

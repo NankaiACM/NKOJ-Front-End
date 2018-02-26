@@ -17,7 +17,7 @@
       <li id="home" v-on:click="changeToHome"><span class="glyphicon glyphicon-home"></span>主页</li>
       <li id="problems" v-on:click="changeToProblems"><span class="glyphicon glyphicon-list"></span>题目</li>
       <li id="status" v-on:click="changeToStatus"><span class="glyphicon glyphicon-stats"></span>评测</li>
-      <li id="contest" v-on:click="changeTo404"><span class="glyphicon glyphicon-tower"></span>比赛</li>
+      <li id="contest" v-on:click="changeToContest"><span class="glyphicon glyphicon-tower"></span>比赛</li>
       <li id="ranklist" v-on:click="changeTo404"><span class="glyphicon glyphicon-signal"></span>排名</li>
       <li id="discuss" v-on:click="changeToDiscuss"><span class="glyphicon glyphicon-comment"></span>讨论</li>
     </ul>
@@ -46,7 +46,7 @@ export default {
         path: '/home'
       })
     },
-    changeToStatus: function(){
+    changeToStatus: function() {
       this.$router.push({
         path: '/status'
       })
@@ -54,7 +54,6 @@ export default {
     changeToDiscuss: function () {
       this.$router.push({
         path: '/discuss'
-      })
     },
     changeTo404: function() {
       this.$router.push({
