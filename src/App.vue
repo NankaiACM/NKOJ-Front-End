@@ -3,7 +3,7 @@
   <header>
     <div>
       <div id="mainIcon"><img height="50px" src="./assets/peng.gif"></div>
-      <div id="mainTitle" v-on:click="changeTo404">NKU Online Judge</div>
+      <div id="mainTitle" v-on:click="changeToHome">NKU Online Judge</div>
       <ul class="nav navbar-nav navbar-right" id="headerRight">
         <li><a href="#"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
@@ -11,7 +11,7 @@
     </div>
   </header>
   <aside class="hidden-xs">
-    <div><img id="userPicture" src="./assets/userPicture.jpg" v-on:click="changeTo404"></div>
+    <div><img id="userPicture" src="./assets/userPicture.jpg" v-on:click="changeToUser"></div>
     <div id="userName">User: Saurus</div>
     <ul class="nav nav-pills nav-stacked" id="navigation">
       <li id="home" v-on:click="changeToHome"><span class="glyphicon glyphicon-home"></span>主页</li>
@@ -54,6 +54,11 @@ export default {
     changeToContest: function () {
       this.$router.push({
         path: '/contest'
+      })
+    },
+    changeToUser: function() {
+      this.$router.push({
+        path: '/user/Saurus'
       })
     },
     changeTo404: function() {
