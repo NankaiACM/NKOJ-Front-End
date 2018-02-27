@@ -17,7 +17,7 @@ export default new Router({
     {path: '/problem/:id', component: problemsPage},
     {path: '/status', component: statusPage},
     {path: '/contest', component: componentContest},
-    {path: '/user/:id', component: userPage}
+    {path: '/user/:id', component: userPage},
     /*,
     {path: '/problem/:id', component: componentProblem},//TODO
     {path: '/problem/:id', component: componentContest}//TODO

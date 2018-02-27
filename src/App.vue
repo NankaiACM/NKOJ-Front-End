@@ -1,12 +1,13 @@
 <template>
 <div id="app">
+  <div class="shadow" v-if="isLoginShow||isSignupShow"></div>
   <header>
     <div>
-      <div id="mainIcon"><img height="50px" src="./assets/peng.gif"></div>
+      <div id="mainIcon"><img height="50px" src="./assets/logo.png"></div>
       <div id="mainTitle" v-on:click="changeToHome">NKU Online Judge</div>
       <ul class="nav navbar-nav navbar-right" id="headerRight">
-        <li><a href="#"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
+        <li v-on:click="changeToSignup"><a><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+        <li v-on:click="changeToLogin"><a><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
       </ul>
     </div>
   </header>
@@ -23,17 +24,22 @@
     </ul>
   </aside>
   <section id="main">
+    <login-page v-if="isLoginShow"></login-page>
     <router-view></router-view>
   </section>
 </div>
 </template>
 
 <script>
+import loginPage from './components/loginPage'
 export default {
-  components: {},
+  components: {loginPage},
   name: 'App',
   data: function() {
-    return {}
+    return {
+      isLoginShow: false,
+      isSignupShow: false
+    }
   },
   methods: {
     changeToProblems: function() {
@@ -60,6 +66,12 @@ export default {
       this.$router.push({
         path: '/user/Saurus'
       })
+    },
+    changeToLogin: function () {
+      this.isLoginShow = true;
+    },
+    changeToSignup: function () {
+      this.isSignupShow = true;
     },
     changeTo404: function() {
       this.$router.push({
@@ -123,7 +135,16 @@ aside {
   bottom: 0;
   background: rgb(55, 55, 55);
 }
-
+.shadow{
+  position: absolute;
+  left: 150px;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  opacity: 0.6;
+  background: black;
+  z-index: 3;
+}
 #navigation li {
   padding-top: 12px;
   padding-bottom: 12px;

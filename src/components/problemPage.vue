@@ -147,7 +147,7 @@ export default {
   font-weight: bold;
 }
 #problemPage h2{
-  background: lightseagreen;
+  background: #5cb85c;
   padding: 10px;
   margin: 0;
   font-weight: bolder;
