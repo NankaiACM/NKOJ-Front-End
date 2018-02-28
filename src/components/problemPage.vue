@@ -32,7 +32,7 @@
         <div class="navbar-header navbar-brand">Code</div>
         <div>
           <ul class="nav navbar-nav navbar-right">
-            <li><a>语言</a></li>
+            <li class="navbar-text">语言</li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="submitLanguage">
                 {{submitLan}}
@@ -147,7 +147,7 @@ export default {
   font-weight: bold;
 }
 #problemPage h2{
-  background: lightseagreen;
+  background: #5cb85c;
   padding: 10px;
   margin: 0;
   font-weight: bolder;

@@ -7,6 +7,7 @@ import componentContest from '../components/componentContest'
 import problemsPage from '../components/problemPage'
 import statusPage from '../components/statusPage'
 import discussPage from '../components/discussPage'
+import userPage from '../components/userPage'
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -17,10 +18,7 @@ export default new Router({
     {path: '/problem/:id', component: problemsPage},
     {path: '/status',component: statusPage},
     {path: '/discuss',component: discussPage},
-    {path: '/contest', component: componentContest}
-    /*,
-    {path: '/problem/:id', component: componentProblem},//TODO
-    {path: '/problem/:id', component: componentContest}//TODO
-    */
+    {path: '/contest', component: componentContest},
+    {path: '/user/:id', component: userPage}
   ]
 })
