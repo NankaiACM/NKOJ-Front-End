@@ -54,6 +54,7 @@ export default {
     changeToDiscuss: function () {
       this.$router.push({
         path: '/discuss'
+      })
     },
     changeTo404: function() {
       this.$router.push({
