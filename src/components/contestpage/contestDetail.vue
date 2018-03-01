@@ -89,7 +89,9 @@ export default {
       var leave3=leave2%(60*1000)      //计算分钟数后剩余的毫秒数  
       var seconds=Math.floor(leave3/1000)  
       var el=this
-      setInterval(function(){el.nowTime=new Date();}, 100);
+      setTimeout(() => {
+        el.nowTime=new Date();
+      }, 100);
       return{
         ds:days,
         hrs:hours,
@@ -129,7 +131,7 @@ hr{
   flex-direction: column ;
   border: 3px solid #87CEFA;
   border-radius: 5px;
-  margin: 0 4px;
+  margin: 0 10px;
   padding: 5px;
 }
 .timer-number{

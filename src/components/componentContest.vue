@@ -4,6 +4,7 @@
       <!--
       <contest-page class="contest-main"/>
       <all-contest class="contest-main"/>
+      <contest-open class="contest-main"/>
       -->
       <contest-detail class="contest-main"/>
       <contest-side-bar class="contest-sidebar"/>
@@ -17,6 +18,7 @@ import Breadcrumb from './contestpage/breadcrumb'
 import contestSideBar from './contestpage/contestSideBar'
 import allContest from "./contestpage/allContest";
 import contestDetail from "./contestpage/contestDetail";
+import contestOpen from "./contestpage/contestOpen";
 
 export default {
   name: 'component-contest',
@@ -26,6 +28,7 @@ export default {
     contestSideBar,
     allContest,
     contestDetail,
+    contestOpen,
   }
 }
 </script>
