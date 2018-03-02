@@ -94,11 +94,11 @@ export default {
       this.submitLan = Lan
     },
     editorInit: function () {
-      require('vue2-ace-editor/node_modules/brace/mode/html')
-      require('vue2-ace-editor/node_modules/brace/mode/javascript')
-      require('vue2-ace-editor/node_modules/brace/mode/c_cpp')
-      require('vue2-ace-editor/node_modules/brace/mode/less')
-      require('vue2-ace-editor/node_modules/brace/theme/terminal')
+      require('brace/mode/html')
+      require('brace/mode/javascript')
+      require('brace/mode/c_cpp')
+      require('brace/mode/less')
+      require('brace/theme/terminal')
     }
   }
 }

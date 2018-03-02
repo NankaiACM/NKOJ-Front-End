@@ -8,8 +8,11 @@ import problemsPage from '../components/problemPage'
 import statusPage from '../components/statusPage'
 import discussPage from '../components/discussPage'
 import userPage from '../components/userPage'
+
 Vue.use(Router)
+
 export default new Router({
+  mode: 'history',
   routes: [
     {path: '/home', component: componentHome},
     {path: '/problems', component: componentProblems},

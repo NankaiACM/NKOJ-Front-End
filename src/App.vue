@@ -57,6 +57,11 @@ export default {
         path: '/status'
       })
     },
+    changeToContest: function () {
+      this.$router.push({
+        path: '/contest'
+      })
+    },
     changeToDiscuss: function () {
       this.$router.push({
         path: '/discuss'
@@ -135,6 +140,17 @@ aside {
   bottom: 0;
   background: rgb(55, 55, 55);
 }
+
+section>div:first-child {
+  /*use in the main components load in the section#main*/
+  overflow: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
 .shadow{
   position: absolute;
   left: 150px;
@@ -168,6 +184,7 @@ aside {
   cursor: pointer;
   color: lightsteelblue;
   font-weight: bold;
+  overflow: auto;
 }
 
 /*
@@ -241,7 +258,7 @@ aside {
   top: 50px;
   right: 0;
   bottom: 0;
-  overflow: auto;
+  overflow: hidden;
   background: rgb(230, 230, 230);
 }
 
