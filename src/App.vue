@@ -1,13 +1,13 @@
 <template>
 <div id="app">
-  <div class="shadow" v-if="isLoginShow||isSignupShow"></div>
+  <div class="shadow" v-if="isLoginShow||isSignupShow" v-on:click="exitShow"></div>
   <header>
     <div>
       <div id="mainIcon"><img height="50px" src="./assets/logo.png"></div>
       <div id="mainTitle" v-on:click="changeToHome">NKU Online Judge</div>
       <ul class="nav navbar-nav navbar-right" id="headerRight">
-        <li v-on:click="changeToSignup"><a><span class="glyphicon glyphicon-user"></span> 注册</a></li>
-        <li v-on:click="changeToLogin"><a><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
+        <li v-on:click="changeToSignup" class="headerRight"><a><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+        <li v-on:click="changeToLogin" class="headerRight"><a><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
       </ul>
     </div>
   </header>
@@ -25,6 +25,7 @@
   </aside>
   <section id="main">
     <login-page v-if="isLoginShow"></login-page>
+    <signup-page v-if="isSignupShow"></signup-page>
     <router-view></router-view>
   </section>
 </div>
@@ -32,27 +33,28 @@
 
 <script>
 import loginPage from './components/loginPage'
+import signupPage from './components/signupPage'
 export default {
-  components: {loginPage},
+  components: {loginPage, signupPage},
   name: 'App',
-  data: function() {
+  data: function () {
     return {
       isLoginShow: false,
       isSignupShow: false
     }
   },
   methods: {
-    changeToProblems: function() {
+    changeToProblems: function () {
       this.$router.push({
         path: '/problems'
       })
     },
-    changeToHome: function() {
+    changeToHome: function () {
       this.$router.push({
         path: '/home'
       })
     },
-    changeToStatus: function() {
+    changeToStatus: function () {
       this.$router.push({
         path: '/status'
       })
@@ -67,21 +69,25 @@ export default {
         path: '/discuss'
       })
     },
-    changeToUser: function() {
+    changeToUser: function () {
       this.$router.push({
         path: '/user/Saurus'
       })
     },
     changeToLogin: function () {
-      this.isLoginShow = true;
+      this.isLoginShow = true
     },
     changeToSignup: function () {
-      this.isSignupShow = true;
+      this.isSignupShow = true
     },
-    changeTo404: function() {
+    changeTo404: function () {
       this.$router.push({
         path: '/notFound'
       })
+    },
+    exitShow: function () {
+      this.isLoginShow = false
+      this.isSignupShow = false
     }
   }
 }
@@ -95,6 +101,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.headerRight:hover{
+  cursor: pointer;
 }
 #navigation .glyphicon {
   position: relative;

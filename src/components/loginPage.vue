@@ -11,6 +11,9 @@
       <input type="text" class="form-control" placeholder="密码" v-model="loginPassword">
     </div>
     <div class="form-group">
+      <p align="left">{{loginMessage}}</p>
+    </div>
+    <div class="form-group">
       <button class="btn btn-success" v-on:click="loginAtempt()">登陆</button>
       <button class="btn btn-info">注册</button>
     </div>
@@ -19,18 +22,35 @@
 </template>
 
 <script>
+import '../../bin/rsa-wrapper.min.js'
 export default {
   name: 'login-page',
   data: function () {
     return {
       loginAccount: '',
-      loginPassword: ''
+      loginPassword: '',
+      tempPassword: '',
+      loginMessage: ''
     }
   },
   methods: {
+    passwordEncrypt: function (password) {
+      this.tempPassword = password
+    },
     loginAtempt: function () {
       var _this = this
-      this.$http.post()
+      var loginPackege = []
+      loginPackege.user = this.loginAccount
+      rsaEncrypt(this.loginPassword, this.passwordEncrypt)
+      loginPackege.password = this.tempPassword
+      this.$http.post('http://111.231.98.20:8000/api/u/login', loginPackege).then(function (res) {
+        console.log(res)
+        if (res.body.code === 400) {
+          _this.loginMessage = '用户名不存在'
+        } else {
+          // todo
+        }
+      })
     }
   }
 }
@@ -45,6 +65,10 @@ export default {
   margin: 10% 30%;
   z-index: 4;
   border-radius: 10px;
+}
+#loginPage p{
+  color: red;
+  font-weight: bold;
 }
 #loginPage h2{
   padding: 10px 0;
