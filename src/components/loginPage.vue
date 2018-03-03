@@ -14,7 +14,7 @@
       <p align="left">{{loginMessage}}</p>
     </div>
     <div class="form-group">
-      <button class="btn btn-success" v-on:click="loginAtempt()">登陆</button>
+      <button class="btn btn-success" v-on:click="loginAttempt">登陆</button>
       <button class="btn btn-info">注册</button>
     </div>
   </form>
@@ -43,7 +43,7 @@ export default {
       }
       loginPackege.password = this.tempPassword
       loginPackege.user = this.loginAccount
-      this.$http.post('http://111.231.98.20:8000/api/u/login', loginPackege).then( (res) => {
+      this.$http.post('http://111.231.98.20:8000/api/u/login', loginPackege,  {crossDomain : true, xhrFields: {withCredentials : true}}).then( (res) => {
         console.log(res)
         if (res.body.code === 400) {
           this.loginMessage = '用户名不存在'
@@ -55,8 +55,9 @@ export default {
         }
       })
     },
-    loginAtempt: function () {
+    loginAttempt: function (event) {
       rsaEncrypt(this.loginPassword, this.passwordEncrypt)
+      event.preventDefault()
     }
   }
 }
