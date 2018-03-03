@@ -13,7 +13,7 @@
   </header>
   <aside class="hidden-xs">
     <div><img id="userPicture" src="./assets/userPicture.jpg" v-on:click="changeToUser"></div>
-    <div id="userName">User: Saurus</div>
+    <div id="userName">User: {{loginUserName}}</div>
     <ul class="nav nav-pills nav-stacked" id="navigation">
       <li id="home" v-on:click="changeToHome"><span class="glyphicon glyphicon-home"></span>主页</li>
       <li id="problems" v-on:click="changeToProblems"><span class="glyphicon glyphicon-list"></span>题目</li>
@@ -40,7 +40,8 @@ export default {
   data: function () {
     return {
       isLoginShow: false,
-      isSignupShow: false
+      isSignupShow: false,
+      loginUserName: 'null'
     }
   },
   methods: {
