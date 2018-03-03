@@ -4,7 +4,7 @@
     <form>
       <div class="form-group">
         <h4 align="left"><label>邮箱</label></h4>
-        <input type="text" class="form-control" placeholder="用户名" v-model="signupAccount">
+        <input type="text" class="form-control" placeholder="用户名" v-model="signupEmail">
       </div>
       <div class="form-group">
         <h4 align="left"><label>密码</label></h4>
@@ -57,7 +57,23 @@ export default {
   },
   methods: {
     passwordEncrypt: function (password) {
+      var sendPackge = {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
       this.tempPassword = password
+      sendPackge.password = this.tempPassword
+      sendPackge.nickname = this.signupName
+      sendPackge.email = this.signupEmail
+      sendPackge.gender = this.signupGender
+      sendPackge.school = 'NanKai University'
+      this.$http.post('http://111.231.98.20:8000/api/u/register', sendPackge).then(res => {
+        console.log(res)
+        if (res.body.code === 0) {
+          this.signupMessage = '注册成功！'
+        }
+      })
     },
     checkPassword: function () {
       if (this.signupPassword === this.signupPassword2) return true
@@ -67,7 +83,7 @@ export default {
       return new Promise((resolve, reject) => {
         var isOK = true
         this.$http.get('http://111.231.98.20:8000/api/u/check/email/' + this.signupEmail).then(res => {
-          if (!res.body.ok) isOK = false
+          if (res.body.code) isOK = false
           resolve(isOK)
         })
       })
@@ -76,40 +92,30 @@ export default {
       return new Promise((resolve) => {
         var isOK = true
         this.$http.get('http://111.231.98.20:8000/api/u/check/nickname' + this.signupName).then(res => {
-          if (!res.body.ok) isOK = false
+          if (res.body.code) isOK = false
           resolve(isOK)
         })
       })
     },
     signupAtempt: function () {
-      if (!this.checkPassword()) {
-        this.signupMessage = '两次密码输入不一致！'
-        return
-      }
-      this.signupMessage = ''
-      this.checkAccount().then(val => {
-        if (!val) {
-          this.signupMessage = '邮箱已被注册啦！'
-        }
-      })
+      // if (!this.checkPassword()) {
+      //   this.signupMessage = '两次密码输入不一致！'
+      //   return
+      // }
+      // this.signupMessage = ''
+      // this.checkAccount().then(val => {
+      //   if (!val) {
+      //     this.signupMessage = '邮箱已被注册啦！'
+      //   }
+      // })
+      // if (this.signupMessage.length > 0) return
+      // this.checkName().then(val => {
+      //   if (!val) {
+      //     this.signupMessage = '昵称重名啦！'
+      //   }
+      // })
       if (this.signupMessage.length > 0) return
-      this.checkName().then(val => {
-        if (!val) {
-          this.signupMessage = '昵称重名啦！'
-        }
-      })
-      if (this.signupMessage.length > 0) return
-      var sendPackge = []
       rsaEncrypt(this.signupPassword, this.passwordEncrypt)
-      sendPackge.password = this.tempPassword
-      sendPackge.nickname = this.signupName
-      sendPackge.email = this.signupEmail
-      sendPackge.gender = this.signupGender
-      this.$http.post('http://111.231.98.20:8000/api/u/signup', sendPackge).then(res => {
-        if (res.body.ok) {
-          this.signupMessage = '注册成功！'
-        }
-      })
     }
   }
 }

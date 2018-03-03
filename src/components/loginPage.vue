@@ -36,21 +36,27 @@ export default {
   methods: {
     passwordEncrypt: function (password) {
       this.tempPassword = password
-    },
-    loginAtempt: function () {
-      var _this = this
-      var loginPackege = []
-      loginPackege.user = this.loginAccount
-      rsaEncrypt(this.loginPassword, this.passwordEncrypt)
+      var loginPackege = {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
       loginPackege.password = this.tempPassword
-      this.$http.post('http://111.231.98.20:8000/api/u/login', loginPackege).then(function (res) {
+      loginPackege.user = this.loginAccount
+      this.$http.post('http://111.231.98.20:8000/api/u/login', loginPackege).then( (res) => {
         console.log(res)
         if (res.body.code === 400) {
-          _this.loginMessage = '用户名不存在'
-        } else {
-          // todo
+          this.loginMessage = '用户名不存在'
+        } else if(res.body.code === 1){
+          this.loginMessage = '用户名或密码错误'
+        } else if(res.body.code === 0){
+          this.loginMessage = '成功登陆！'
+          this.$emit('userInfo', res.body.user)
         }
       })
+    },
+    loginAtempt: function () {
+      rsaEncrypt(this.loginPassword, this.passwordEncrypt)
     }
   }
 }
