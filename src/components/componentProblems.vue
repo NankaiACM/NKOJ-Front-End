@@ -136,8 +136,8 @@ export default {
     this.$nextTick(function() {
       this.initView()
     })
-    //this.dom.barviewh = document.querySelector(".problem-page-title").offsetHeight
-    //this.dom.barviewh = document.querySelector(".question-filter-base").offsetHeight
+    this.dom.barviewh = document.querySelector(".problem-page-title").offsetHeight
+    this.dom.barviewh += document.querySelector(".question-filter-base").offsetHeight
     console.info(this.dom.barviewh)
   },
   methods: {
