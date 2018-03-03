@@ -6,23 +6,22 @@ import componentB from '../components/componentB'
 import componentContest from '../components/componentContest'
 import problemsPage from '../components/problemPage'
 import statusPage from '../components/statusPage'
+import discussPage from '../components/discussPage'
 import userPage from '../components/userPage'
-import allContest from '../components/contestpage/allContest'
+
 Vue.use(Router)
+
 export default new Router({
+  mode: 'history',
   routes: [
     {path: '/home', component: componentHome},
     {path: '/problems', component: componentProblems},
     {path: '/notFound', component: componentB},
     {path: '/', redirect: '/home'},
     {path: '/problem/:id', component: problemsPage},
-    {path: '/status', component: statusPage},
+    {path: '/status',component: statusPage},
+    {path: '/discuss',component: discussPage},
     {path: '/contest', component: componentContest},
-    {path: '/user/:id', component: userPage},
-    {path: '/contest/allContest', component: allC}
-    /*,
-    {path: '/problem/:id', component: componentProblem},//TODO
-    {path: '/problem/:id', component: componentContest}//TODO
-    */
+    {path: '/user/:id', component: userPage}
   ]
 })
