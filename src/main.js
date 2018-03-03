@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 import App from './App'
+import App2 from "./App2"
 import router from './router'
 Vue.config.productionTip = false
 Vue.use(VueResource)
@@ -11,6 +12,6 @@ console.log(router)
 new Vue({
   el: '#app',
   router,
-  components: { App },
-  template: '<App/>'
+  components: { App2 },
+  template: '<App2/>'
 })
