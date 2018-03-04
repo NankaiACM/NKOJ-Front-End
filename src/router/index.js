@@ -8,6 +8,7 @@ import problemsPage from '../components/problemPage'
 import statusPage from '../components/statusPage'
 import discussPage from '../components/discussPage'
 import userPage from '../components/userPage'
+import codePage from '../components/codePage'
 
 Vue.use(Router)
 
@@ -19,9 +20,10 @@ export default new Router({
     {path: '/notFound', component: componentB},
     {path: '/', redirect: '/home'},
     {path: '/problem/:id', component: problemsPage},
-    {path: '/status',component: statusPage},
-    {path: '/discuss',component: discussPage},
+    {path: '/status', component: statusPage},
+    {path: '/discuss', component: discussPage},
     {path: '/contest', component: componentContest},
-    {path: '/user/:id', component: userPage}
+    {path: '/user/:id', component: userPage},
+    {path: '/code/:id', component: codePage}
   ]
 })

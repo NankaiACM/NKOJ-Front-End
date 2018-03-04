@@ -134,6 +134,7 @@ export default {
 }
 #problemSubmit .navbar-header, #submitLanguage{
   color:white;
+  background: #212121;
 }
 #codeArea{
   padding: 10px 0;

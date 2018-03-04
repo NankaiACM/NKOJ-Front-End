@@ -311,44 +311,4 @@ tbody .problem-status {
     left: 150px;
   }
 }
-/*
-#problemTable{
-  width: 100%;
-  padding: 20px;
-  mso-cellspacing: 2px;
-  border: 1px black;
-}
-td[class$=Col1]{
-  width: 5%;
-}
-td[class$=Col3]{
-  width: 8%;
-}
-td[class^=problemTable]{
-  text-align: left;
-  font-size: 0.9em;
-  padding: 10px;
-  cursor: pointer;
-  border-width: 1px;
-  border-color: black;
-  border-radius: 2px;
-}
-#problemTable th {
-  padding:5px 15px 5px 6px;
-  background-color: deepskyblue;
-  border:1px solid deepskyblue;
-  text-align:left;
-  color:#fff;
-  border-radius: 5px;
-}
-#problemTable tr:nth-child(odd) {
-  background-color: rgb(230, 245, 245)
-}
-#problemTable tr:nth-child(even) {
-  background-color:#fff;
-}
-#problemRow:hover{
-  background-color: lightgray;
-}
-*/
 </style>
