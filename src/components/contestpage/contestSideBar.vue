@@ -12,7 +12,7 @@
     <div class="sidebar-el">
       <h5>Quick Link</h5>
       <ul>
-        <li class="sidebar-link"><a href="#/contest/allContest" class="contest-link">All Contests</a></li>
+        <li class="sidebar-link"><a href="contest/allContest" class="contest-link">All Contests</a></li>
         <li class="sidebar-link"><a class="contest-link">Other OJ Contests</a></li>
       </ul>
     </div>
