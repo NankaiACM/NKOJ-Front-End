@@ -1,37 +1,53 @@
 <template>
-  <div id="signupPage">
+  <div v-bind:style="{height: signupHeight + 'px'}" class="signupPage">
     <h2 align="left">注册</h2><hr>
-    <form>
+    <form class="form-horizontal">
       <div class="form-group">
-        <h4 align="left"><label>邮箱</label></h4>
-        <input type="text" class="form-control" placeholder="用户名" v-model="signupEmail">
+        <label class="col-sm-3 control-label">邮箱</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" placeholder="" v-model="signupEmail">
+        </div>
       </div>
+      <div class="form-group blueTextDiv" v-if="emailMessage">{{emailMessage}}</div>
+      <transition name="fade" mode="out-in">
+        <div v-if="isEmailSend" class="afterEmailSendDiv">
+          <div class="form-group" v-if="isEmailSend">
+            <label class="col-sm-3 control-label">密码</label>
+            <div class="col-sm-8">
+              <input type="password" class="form-control" v-model="signupPassword">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">确认密码</label>
+            <div class="col-sm-8">
+              <input type="password" class="form-control" v-model="signupPassword2">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">昵称</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="你喜欢的名字" v-model="signupName">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">性别</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="男/女/未知/扶他" v-model="signupGender">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">邮箱验证码</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" v-model="emailCode">
+            </div>
+          </div>
+        </div>
+      </transition>
+      <br>
+      <div class="form-group blueTextDiv" v-if="errorMessage">{{errorMessage}}</div>
       <div class="form-group">
-        <h4 align="left"><label>密码</label></h4>
-        <input type="password" class="form-control" v-model="signupPassword">
-      </div>
-      <div class="form-group">
-        <h4 align="left"><label>确认密码</label></h4>
-        <input type="password" class="form-control" v-model="signupPassword2">
-      </div>
-      <div class="form-group">
-        <h4 align="left"><label>性别</label></h4>
-        <input type="text" class="form-control" placeholder="男/女/未知/扶他" v-model="signupGender">
-      </div>
-      <div class="form-group">
-        <h4 align="left"><label>昵称</label></h4>
-        <input type="text" class="form-control" placeholder="你喜欢的名字" v-model="signupName">
-      </div>
-      <div class="form-group">
-        <h4 align="left"><label>个人签名</label></h4>
-        <input type="text" class="form-control" placeholder="我永远喜欢python" v-model="signupWords">
-      </div>
-      <div class="form-group">
-        <p align="left">{{signupMessage}}</p>
-      </div>
-      <div class="form-group">
-        <button class="btn btn-success" v-on:click="signupAtempt()">注册</button>
-        <button class="btn btn-info">清空</button>
+        <button v-on:click="emailAttempt" class="btn btn-info" v-if="!isEmailSend">验证邮箱</button>
+        <button v-on:click="signupAttempt" class="btn btn-info" v-if="isEmailSend">注册</button>
       </div>
     </form>
   </div>
@@ -51,12 +67,22 @@ export default {
       signupEmail: '',
       signupWords: '',
       signupMessage: '',
+      isEmailSend: false,
+      emailCode: '',
       tempPassword: '',
-      checkAccountState: false
+      emailMessage: undefined,
+      errorMessage: undefined,
+      signupHeight: 250
     }
   },
   methods: {
     passwordEncrypt: function (password) {
+      if(this.signupPassword !== this.signupPassword2){
+        if(typeof this.emailMessage === undefined)
+          this.$set(this.data, "errorMessage", '两次输入的密码不一致！')
+        else this.errorMessage = '两次输入的密码不一致！'
+        return
+      }
       var sendPackge = {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -68,67 +94,76 @@ export default {
       sendPackge.email = this.signupEmail
       sendPackge.gender = this.signupGender
       sendPackge.school = 'NanKai University'
-      this.$http.post('http://111.231.98.20:8000/api/u/register', sendPackge).then(res => {
+      sendPackge.ecode = this.emailCode
+      this.$http.post('http://111.231.98.20:8000/api/u/register', sendPackge, {crossDomain : true, xhrFields: {withCredentials : true}}).then(res => {
         console.log(res)
         if (res.body.code === 0) {
-          this.signupMessage = '注册成功！'
+          this.errorMessage = '注册成功！'
+        } else {
+          this.errorMessage = '未知错误！'
         }
       })
     },
-    checkPassword: function () {
-      if (this.signupPassword === this.signupPassword2) return true
-      else return false
-    },
-    checkAccount: function () {
-      return new Promise((resolve, reject) => {
-        var isOK = true
-        this.$http.get('http://111.231.98.20:8000/api/u/check/email/' + this.signupEmail).then(res => {
-          if (res.body.code) isOK = false
-          resolve(isOK)
-        })
+    emailAttempt: function (event) {
+      console.log('http://111.231.98.20:8000/api/u/verify/' + this.signupEmail)
+      this.$http.get('http://111.231.98.20:8000/api/u/verify/' + this.signupEmail,  {crossDomain : true, xhrFields: {withCredentials : true}}).then((res, err) => {
+        if(err){
+          console.log(err)
+        } else {
+          if (res.body.code === 0) {
+            this.isEmailSend = true
+            this.signupHeight = 550
+            if(typeof this.emailMessage === undefined)
+              this.$set(this.data, "emailMessage", '我们已经向您的邮箱发送了邮件！')
+            else this.emailMessage = '我们已经向您的邮箱发送了邮件！'
+          } else {
+            this.isEmailSend = true
+            this.signupHeight = 550
+            if(typeof this.emailMessage === undefined)
+              this.$set(this.data, "emailMessage", '邮箱不正确或者已经被注册！')
+            else this.emailMessage = '邮箱不正确或者已经被注册！'
+          }
+        }
       })
+      event.preventDefault()
     },
-    checkName: function () {
-      return new Promise((resolve) => {
-        var isOK = true
-        this.$http.get('http://111.231.98.20:8000/api/u/check/nickname' + this.signupName).then(res => {
-          if (res.body.code) isOK = false
-          resolve(isOK)
-        })
-      })
-    },
-    signupAtempt: function () {
-      // if (!this.checkPassword()) {
-      //   this.signupMessage = '两次密码输入不一致！'
-      //   return
-      // }
-      // this.signupMessage = ''
-      // this.checkAccount().then(val => {
-      //   if (!val) {
-      //     this.signupMessage = '邮箱已被注册啦！'
-      //   }
-      // })
-      // if (this.signupMessage.length > 0) return
-      // this.checkName().then(val => {
-      //   if (!val) {
-      //     this.signupMessage = '昵称重名啦！'
-      //   }
-      // })
-      if (this.signupMessage.length > 0) return
+    signupAttempt: function (event) {
       rsaEncrypt(this.signupPassword, this.passwordEncrypt)
+      event.preventDefault()
     }
   }
 }
 </script>
 
 <style scoped>
-#signupPage{
+.signupPage{
   position:absolute;
   background: white;
   width: 35%;
   padding: 20px;
-  margin: 10% 30%;
+  margin: 5% 30%;
   z-index: 4;
   border-radius: 10px;
+  transition: all 0.5s;
+  overflow: hidden;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to{
+  opacity: 0;
+  transform: translateY(20px);
+}
+.signupPage button, .signupPage2 button{
+  padding: 5px 10%;
+}
+.blueTextDiv{
+  color: #5bc0de;
+  font-weight: bold;
+}
+.afterEmailSendDiv{
+  margin-bottom: 0;
+  padding-bottom: 0;
+  transition: all 1s;
 }
 </style>
