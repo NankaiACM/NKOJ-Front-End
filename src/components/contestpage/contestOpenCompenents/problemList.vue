@@ -27,7 +27,7 @@ export default {
     questionNumber(){
       return String.fromCharCode(this.problemIndex+65);
     }
-  }
+  },
 }
 </script>
 

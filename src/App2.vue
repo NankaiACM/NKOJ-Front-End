@@ -30,7 +30,7 @@
         <div class="shader shader-bottom"></div>
       </div></div>
       <!--时间-->
-      <div class="time-bar">
+      <div class="time-bar container">
         <div class="width-80-center setflex padding-t-20">
           <hr class="color-white hrsize-2 flex-1">
           <div class="color-white margin-l-r-20 word">Before End</div>
@@ -54,14 +54,15 @@
     </div>
 
     <!--题目板块-->
-    <div class="bg-white band-with-80padding">
+    <div class="bg-white band-with-80padding problem-band">
       <!--problem标题-->
-      <h3><span class="glyphicon glyphicon-list"></span>Problems</h3>
+      <h3><span class="glyphicon glyphicon-list"></span>PROBLEMS</h3>
       <!--题目列表-->
       <div class="container padding-t-40">
         <ul>
           <li v-for="(problem,index) in problems" :key="problem.id">
-            <problem-list :problem-index="index" :problem-name="problem.problemName" :status="problem.status"/>
+            <problem-list :problem-index="index" :problem-name="problem.problemName" 
+             :status="problem.status"/>
           </li>
         </ul>
       </div>
@@ -72,7 +73,7 @@
     <!--提交状态板块-->
     <div class="bg-white band-with-80padding">
       <!--提交状态标题-->
-      <h3><span class="glyphicon glyphicon-stats"></span>Status</h3>
+      <h3><span class="glyphicon glyphicon-stats"></span>STATUS</h3>
       <!--提交状态列表-->
       <div class="container padding-t-40">
         <status/>
@@ -85,7 +86,7 @@
     <!--排名板块-->
     <div class="bg-white band-with-80padding">
       <!--排名标题-->
-      <h3><span class=" glyphicon glyphicon-signal"></span>Rank</h3>
+      <h3><span class=" glyphicon glyphicon-signal"></span>RANK</h3>
       <!--排名列表-->
       <div class="container padding-t-40">
         <status/>
@@ -169,6 +170,16 @@ export default {
         }
       }
     },
+    changeProblemListHeight(){
+      let problemList = document.querySelectorAll(".problem-list");
+      var maxnum=0;
+      for(var i=0;i<problemList.length;i++){
+        maxnum = Math.max(maxnum,problemList[i].offsetHeight);
+      }
+      for(var i=0;i<problemList.length;i++){
+        problemList[i].style.cssText = "height:"+maxnum+'px';
+      }
+    },
     scrollBand(index){
       let band = document.querySelectorAll("div.band-with-80padding");
       Velocity(band[index],"scroll",{ duration:500 ,offset: "-60px"});
@@ -180,6 +191,7 @@ export default {
   mounted: function () {
     this.$nextTick(function () {
       window.addEventListener('scroll', this.handleScroll);
+      this.changeProblemListHeight();
     })
   },
   computed:{
@@ -510,24 +522,35 @@ hr.cut-off{
     text-align: center;
     color: #87b7cb;
     font-size: 3rem;
-    font-weight: bold;
+    font-weight: 400;
+    font-family: "Whitney SSm A", "Whitney SSm B", "Avenir", "Segoe UI", "Ubuntu", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .band-with-80padding h3 span{
     margin-right: 1rem;
+    font-size: 2.5rem;
 }
 .band-title{
     width: 80%;
     margin: auto;
 }
-.container ul{
+.problem-band ul{
     list-style: none;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: stretch;
-    padding: 0;
 }
-.container ul li{
+@media (min-width: 992px) {
+    .problem-band ul{
+        padding: 0 6rem;
+    }
+}
+@media (min-width: 767px) {
+    .problem-band ul{
+        justify-content: space-between;
+    }
+}
+.problem-band ul li{
     display: block;
     display: flex;
     align-items: stretch;
