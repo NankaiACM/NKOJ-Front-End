@@ -13,14 +13,14 @@
   </header>
   <aside class="hidden-xs">
     <div><img id="userPicture" src="./assets/userPicture.jpg" v-on:click="changeToUser"></div>
-    <div id="userName">User: Saurus</div>
+    <div id="userName">User: {{loginUserName}}</div>
     <ul class="nav nav-pills nav-stacked" id="navigation">
       <li id="home" v-on:click="changeToHome"><span class="glyphicon glyphicon-home"></span>主页</li>
       <li id="problems" v-on:click="changeToProblems"><span class="glyphicon glyphicon-list"></span>题目</li>
       <li id="status" v-on:click="changeToStatus"><span class="glyphicon glyphicon-stats"></span>评测</li>
       <li id="contest" v-on:click="changeToContest"><span class="glyphicon glyphicon-tower"></span>比赛</li>
       <li id="ranklist" v-on:click="changeTo404"><span class="glyphicon glyphicon-signal"></span>排名</li>
-      <li id="discuss" v-on:click="changeTo404"><span class="glyphicon glyphicon-comment"></span>讨论</li>
+      <li id="discuss" v-on:click="changeToDiscuss"><span class="glyphicon glyphicon-comment"></span>讨论</li>
     </ul>
   </aside>
   <section id="main">
@@ -40,7 +40,8 @@ export default {
   data: function () {
     return {
       isLoginShow: false,
-      isSignupShow: false
+      isSignupShow: false,
+      loginUserName: 'null'
     }
   },
   methods: {
@@ -62,6 +63,11 @@ export default {
     changeToContest: function () {
       this.$router.push({
         path: '/contest'
+      })
+    },
+    changeToDiscuss: function () {
+      this.$router.push({
+        path: '/discuss'
       })
     },
     changeToUser: function () {
@@ -144,6 +150,17 @@ aside {
   bottom: 0;
   background: rgb(55, 55, 55);
 }
+
+section>div:first-child {
+  /*use in the main components load in the section#main*/
+  overflow: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
 .shadow{
   position: absolute;
   left: 150px;
@@ -177,6 +194,7 @@ aside {
   cursor: pointer;
   color: lightsteelblue;
   font-weight: bold;
+  overflow: auto;
 }
 
 /*
@@ -250,7 +268,7 @@ aside {
   top: 50px;
   right: 0;
   bottom: 0;
-  overflow: auto;
+  overflow: hidden;
   background: rgb(230, 230, 230);
 }
 

@@ -1,12 +1,7 @@
 <template>
   <div id="component-contest">
     <div class="contest-content">
-      <!--
-      <contest-page class="contest-main"/>
-      <all-contest class="contest-main"/>
-      <contest-open class="contest-main"/>
-      -->
-      <contest-detail class="contest-main"/>
+      <router-view class="contest-main"></router-view>
       <contest-side-bar class="contest-sidebar"/>
     </div>
   </div>

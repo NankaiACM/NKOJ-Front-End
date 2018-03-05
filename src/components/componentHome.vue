@@ -1,5 +1,5 @@
 <template>
-<div class="container-fluid">
+<div id="component-home" class="container-fluid">
   <div class="row">
     <div id="announcement" class="col-sm-12 home-component">
       <h3 align="left">公告</h3>
@@ -53,7 +53,7 @@ export default {
 </script>
 
 <style>
-.container-fluid {
+#component-home.container-fluid {
   padding: 2em;
   text-align: left;
   min-height: 100%;
@@ -93,7 +93,7 @@ export default {
 }
 
 @media (min-width: 1241px) {
-  .container-fluid{
+  #component-home.container-fluid{
     padding: 2em 6em;
   }
   .home-component {

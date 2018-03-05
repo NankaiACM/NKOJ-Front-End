@@ -1,7 +1,9 @@
 <template>
-<div id="Problems" class="container-fluid">
+<div id="Problems" class="container-fluid" @scroll="handleScroll($event)">
+  <h3 class="problem-page-title">题目列表</h3>
   <!--bar-->
-  <div class="question-filter-base">
+  <div class="fat-container container-fluid col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
+  <div :class="'question-filter-base '+(dom.attach?'nagi':'')">
     <ul class="row search-bar-control nav nav-pills">
       <li role="presentation" class="col-sm-6">
         <input @keyup.enter="initView" v-model="filter.keywords" type="text" class="form-control" placeholder="IDs,titles,or description">
@@ -60,8 +62,7 @@
     </ul>
   </div>
   <!---->
-  <table id="problemTable" class="table table-hover">
-    <caption>problems</caption>
+  <table id="ProblemTable" class="table table-hover">
     <thead>
       <tr>
         <th class="problem-status"></th>
@@ -72,7 +73,23 @@
     </thead>
     <tbody>
       <tr id="problemRow" v-for="problem in problemList" v-bind:key="problem.id">
-        <td class="problem-status"></td>
+        <td class="problem-status">
+          <i
+            :class="{
+              'glyphicon':true,
+              'glyphicon-star-empty':true,
+              'pro-status-star':problem.isStar
+            }">
+          </i>
+          <i
+            :class="{
+              'glyphicon':true,
+              'glyphicon-minus-sign':problem.state==='none',
+              'glyphicon-refresh':problem.state==='on',
+              'glyphicon-ok':problem.state==='ac'
+            }">
+          </i>
+        </td>
         <td class="problemTableCol1">
           <router-link :to="{path:'problem/'+problem.problemsID}">
             {{problem.problemsID}}
@@ -95,6 +112,7 @@
     </tbody>
   </table>
 </div>
+</div>
 </template>
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
@@ -102,6 +120,10 @@ export default {
   name: 'component-problems',
   data: function() {
     return {
+      dom: {
+        barviewh: 50,
+        attach: false
+      },
       filter: {
         difficulty: '',
         status: '',
@@ -114,6 +136,9 @@ export default {
     this.$nextTick(function() {
       this.initView()
     })
+    this.dom.barviewh = document.querySelector(".problem-page-title").offsetHeight
+    this.dom.barviewh += document.querySelector(".question-filter-base").offsetHeight
+    console.info(this.dom.barviewh)
   },
   methods: {
     initView: function() {
@@ -150,6 +175,16 @@ export default {
       this.filter.status = status
       this.problemList = []
       this.initView()
+    },
+    handleScroll: function (event) {
+      if (!this.dom.attach&&(event.srcElement.scrollTop > this.dom.barviewh)) {
+        this.dom.attach = true
+        console.info('attach')
+      }
+      if (event.srcElement.scrollTop <= this.dom.barviewh) {
+        this.dom.attach = false
+        console.info('un attach')
+      }
     }
   },
   components: {
@@ -160,53 +195,120 @@ export default {
 <style>
 #Problems {
   text-align: left;
-  background: #fff;
-  padding: 2em 4em;
+  background: none;
+  color: #233;
+  padding:0;
   min-height: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
+  position: absolute;
+  transition: all 1s;
+}
+
+.fat-container {
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0px 9px 10px 5px #ccc;
+}
+
+.problem-page-title {
+  padding: .5em 2em;
+  margin: 0;
+  background: #2cbfec;
+  color: #fff;
+  font-weight:bolder;
+}
+
+.question-filter-base {
+  background: #fff;
+  padding: 4em 3em 3em 3em;
+  transition: padding 1s;
+}
+
+.nagi {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 1em 3em;
+  box-shadow: 10px 3px 10px 3px #ccc;
 }
 
 #Problems td a {
   color: #2c3e50;
+  text-decoration: none;
 }
 
-/*
-#problemTable{
-  width: 100%;
-  padding: 20px;
-  mso-cellspacing: 2px;
-  border: 1px black;
+#ProblemTable {
+  background: #fff;
+  padding: 2em;
 }
-td[class$=Col1]{
-  width: 5%;
+
+#ProblemTable thead tr th {
+  color: #2cbfec;
+  font-size: 1.4em;
+  font-weight: 600;
+  font-family: '微软雅黑';
 }
-td[class$=Col3]{
-  width: 8%;
+
+#ProblemTable tbody tr td:first-child {
+  padding-left: 3em;
 }
-td[class^=problemTable]{
-  text-align: left;
-  font-size: 0.9em;
-  padding: 10px;
+
+#ProblemTable tbody tr td:last-child {
+  padding-right: 3em;
+}
+
+#ProblemTable td {
+  vertical-align: middle;
+}
+
+tbody .problem-status {
+  width: 2rem;
+  height: 4rem;
+}
+
+.problem-status i {
+  width: 2rem;
+  height: 2rem;
+  font-size: 2rem;
+  color: #b1b1b1;
+  margin: 0;
+  padding: 0;
+  transition: color .5s;
   cursor: pointer;
-  border-width: 1px;
-  border-color: black;
-  border-radius: 2px;
 }
-#problemTable th {
-  padding:5px 15px 5px 6px;
-  background-color: deepskyblue;
-  border:1px solid deepskyblue;
-  text-align:left;
-  color:#fff;
-  border-radius: 5px;
+
+.problem-status i:hover {
+  color: #8b8b8b;
 }
-#problemTable tr:nth-child(odd) {
-  background-color: rgb(230, 245, 245)
+
+.problem-status i.pro-status-star {
+  color: orange;
 }
-#problemTable tr:nth-child(even) {
-  background-color:#fff;
+
+.problem-status i.glyphicon-refresh {
+  color: #6cf;
 }
-#problemRow:hover{
-  background-color: lightgray;
+
+.problem-status i.glyphicon-ok {
+  color: #63c163;
 }
-*/
+
+@media (min-width: 992px) {
+  .problem-page-title {
+    padding: .5em 2em;
+    margin: 0 0 4em 0;
+    box-shadow: 0px 3px 10px 3px #ccc;
+  }
+}
+@media (min-width: 768px) {
+  .nagi {
+    left: 150px;
+  }
+}
 </style>
