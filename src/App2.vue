@@ -61,7 +61,7 @@
       <div class="container padding-t-40">
         <ul>
           <li v-for="(problem,index) in problems" :key="problem.id">
-            <problem-list :problem-index="index" :problem-name="problem.problemName" 
+            <problem-list :problem-index="index" :problem-name="problem.problemName"
              :status="problem.status"/>
           </li>
         </ul>
@@ -210,10 +210,10 @@ export default {
       var leave3=leave2%(60*1000)      //计算分钟数后剩余的毫秒数
       var seconds=Math.floor(leave3/1000)
       if(this.isPadZero){
-        days = days.toString().padStart(2,'0')
-        hours = hours.toString().padStart(2,'0')
-        minutes = minutes.toString().padStart(2,'0')
-        seconds = seconds.toString().padStart(2,'0')
+        days = ('0'+days).substr(-2)
+        hours = ('0'+hours).substr(-2)
+        minutes = ('0'+minutes).substr(-2)
+        seconds = ('0'+seconds).substr(-2)
       }
 
       var el=this
@@ -477,7 +477,7 @@ hr.cut-off{
     background: transparent;
     color: #e8f1f2;
     transition: all 0.3s ease;
-} 
+}
 .navbar ul li a.btn-ghost:hover{
     border-color: #247ba0;
 }
