@@ -1,24 +1,35 @@
 <template>
   <div id="app2">
-    <div class="navbar" :class="{'show-head':headShowing}">
+    <!--导航栏-->
+    <div class="navbar" :class="{'show-head':headShowing}"><div class="container">
       <a class="navbar-brand"><img src="./assets/logo.png"></a>
+      <!--div>-before end-<br>{{endIn.hrs}}:{{endIn.mins}}:{{endIn.secs}}</div-->
       <ul>
-        <li><a>Problems</a></li>
-        <li><a>Status</a></li>
-        <li><a>Rank</a></li>
+        <li><a :class="{'hover':hoverNav==0}" @click="scrollBand(0)">Problems</a></li>
+        <li><a :class="{'hover':hoverNav==1}" @click="scrollBand(1)">Status</a></li>
+        <li><a :class="{'hover':hoverNav==2}" @click="scrollBand(2)">Rank</a></li>
         <li><a class="btn btn-ghost">LOG IN</a></li>
         <li><a class="btn btn-default">SIGN UP</a></li>
       </ul>
+    </div></div>
+
+    <!--回到顶部按钮-->
+    <div v-if="headShowing" class="up-to-top" @click="upToTop">
+      <span class="glyphicon glyphicon-chevron-up"></span>
     </div>
+
+    <!--标题板块-->
     <div class="bg-blue band-with-40padding first-band">
-      <div class="margin-t-b-40 title-box">
+      <!--标题-->
+      <div class="container"><div class="title-box">
         <div class="shader shader-top"></div>
         <div class="color-white bg-blue">
           <h2>Nankai University Freshman Programming Contest 2017</h2>
           <span>Start Time: 2017/05/01 16:00:00</span>
         </div>
         <div class="shader shader-bottom"></div>
-      </div>
+      </div></div>
+      <!--时间-->
       <div class="time-bar">
         <div class="width-80-center setflex padding-t-20">
           <hr class="color-white hrsize-2 flex-1">
@@ -27,68 +38,143 @@
         </div>
         <div class="timers margin-20">
           <div class="timer timer-first">
-            <div class="bg-white"><div>04</div></div>
+            <div class="bg-white"><div>{{endIn.hrs}}</div></div>
             <span class="unit">hrs</span>
           </div>
           <div class="timer">
-            <div class="bg-white"><div>47</div></div>
+            <div class="bg-white"><div>{{endIn.mins}}</div></div>
             <span class="unit">mins</span>
           </div>
           <div class="timer">
-            <div class="bg-white"><div>25</div></div>
+            <div class="bg-white"><div>{{endIn.secs}}</div></div>
             <span class="unit">secs</span>
           </div>
         </div>
       </div>
     </div>
+
+    <!--题目板块-->
     <div class="bg-white band-with-80padding">
-      <h3>Problems</h3>
+      <!--problem标题-->
+      <h3><span class="glyphicon glyphicon-list"></span>Problems</h3>
+      <!--题目列表-->
       <div class="container padding-t-40">
         <ul>
-          <li>
-            <div class="problem-list">
-              <div><div class="number">A</div>Fantastic Girlfriend And White Album</div>
-              <hr>
-              <div class="status"><span class="not-submit">Not submit yet</span></div>
-            </div>
-          </li>
-          <li>
-            <div class="problem-list">
-              <div><div class="number">B</div>Touhou Project</div>
-              <hr>
-              <div class="status"><span class="trying">trying...</span></div>
-            </div>
-          </li>
-          <li>
-            <div class="problem-list">
-              <div><div class="number">C</div>Osu! ver.2</div>
-              <hr>
-              <div class="status"><span class="accept">has accepted!</span></div>
-            </div>
+          <li v-for="(problem,index) in problems" :key="problem.id">
+            <problem-list :problem-index="index" :problem-name="problem.problemName" :status="problem.status"/>
           </li>
         </ul>
       </div>
+    </div>
+
+    <hr class="cut-off">
+
+    <!--提交状态板块-->
+    <div class="bg-white band-with-80padding">
+      <!--提交状态标题-->
+      <h3><span class="glyphicon glyphicon-stats"></span>Status</h3>
+      <!--提交状态列表-->
+      <div class="container padding-t-40">
+        <status/>
+        <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
+      </div>
+    </div>
+
+    <hr class="cut-off">
+
+    <!--排名板块-->
+    <div class="bg-white band-with-80padding">
+      <!--排名标题-->
+      <h3><span class=" glyphicon glyphicon-signal"></span>Rank</h3>
+      <!--排名列表-->
+      <div class="container padding-t-40">
+        <status/>
+        <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
+      </div>
+    </div>
+
+    <div class="footer band-with-40padding">
+      <div class="total">NKOJ Ver 2.0.0 | FAQ | | 12 ms : 8 | PageView:24126539</div>
+      <div class="contact">NKUACM 2017 <a>[加入QQ群]</a> 南开ACM协会 <a>[加入QQ群]</a></div>
+      <div class="copyright">© Copyright 2005-2018 Sun Wei & Wang Yan & SunriseFox . All Rights Reserved.</div>
+      <div class="advert">如果您愿意加入 OJ 的开发，请联系 sunrisefox@qq.com ~</div>
     </div>
   </div>
 </template>
 
 <script>
+import problemList from "./components/contestpage/contestOpenCompenents/problemList.vue";
+import status from "./components/statusPage.vue";
+
 export default {
   name: 'App2',
+  components:{
+    problemList,
+    status,
+  },
   data(){
     return{
       headShowing: false,
+      hoverNav:3,
+      nowTime: new Date(),
+      endTime: '2018/05/01 00:00:00',
+      isPadZero: true,
+      problems:[
+        {
+          problemName:'Fantastic Girlfriend And White Album',
+          status:0,
+        },
+        {
+          problemName:'Touhou Project',
+          status:1,
+        },
+        {
+          problemName:'Osu! ver 2.0',
+          status:2,
+        },
+        {
+          problemName:'A Game With Numbers',
+          status:0,
+        },
+        {
+          problemName:'Congruence Equation',
+          status:0,
+        },
+        {
+          problemName:'Seat Arrangements',
+          status:0,
+        },
+        {
+          problemName:'Perfect Number',
+          status:2,
+        },
+      ],
     }
   },
   methods:{
     handleScroll(){
       let scrolled = document.documentElement.scrollTop || document.body.scrollTop;
-      if(scrolled > 15){
+      if(scrolled > 30){
         this.headShowing=true;
       }
       else{
         this.headShowing=false;
       }
+      let band = document.querySelectorAll("div.band-with-80padding");
+      this.hoverNav=3;
+      for(var i=2;i>=0;i--){
+        if(scrolled > band[i].offsetTop-70) {
+          this.hoverNav=i;
+          break;
+        }
+      }
+    },
+    scrollBand(index){
+      let band = document.querySelectorAll("div.band-with-80padding");
+      Velocity(band[index],"scroll",{ duration:500 ,offset: "-60px"});
+    },
+    upToTop(){
+      Velocity(document.querySelector("body"),"scroll", { duration: 500, easing: "easeOutQuart" })
     }
   },
   mounted: function () {
@@ -96,6 +182,40 @@ export default {
       window.addEventListener('scroll', this.handleScroll);
     })
   },
+  computed:{
+    endIn:function(){
+      var msecond = new Date(this.endTime).getTime() - new Date(this.nowTime).getTime();   //时间差的毫秒数
+      //------------------------------
+      //计算出相差天数
+      var days=Math.floor(msecond/(24*3600*1000))
+      //计算出小时数
+      var leave1=msecond%(24*3600*1000)    //计算天数后剩余的毫秒数
+      var hours=Math.floor(leave1/(3600*1000))
+      //计算相差分钟数
+      var leave2=leave1%(3600*1000)        //计算小时数后剩余的毫秒数
+      var minutes=Math.floor(leave2/(60*1000))
+      //计算相差秒数
+      var leave3=leave2%(60*1000)      //计算分钟数后剩余的毫秒数
+      var seconds=Math.floor(leave3/1000)
+      if(this.isPadZero){
+        days = days.toString().padStart(2,'0')
+        hours = hours.toString().padStart(2,'0')
+        minutes = minutes.toString().padStart(2,'0')
+        seconds = seconds.toString().padStart(2,'0')
+      }
+
+      var el=this
+      setTimeout(() => {
+        el.nowTime=new Date();
+      }, 100);
+      return{
+        ds:days,
+        hrs:hours,
+        mins:minutes,
+        secs:seconds
+      }
+    }
+  }
 }
 </script>
 
@@ -167,21 +287,27 @@ export default {
 .setflex{
     display: flex;
 }
-
+hr.cut-off{
+    margin: 0;
+    color: #d3dcdc;
+    border-top: 1px solid #d3dcdc;
+}
 
 
 
 
 .title-box{
-    margin: 8rem 20% 6rem;
+    margin: 8rem 12% 6rem;
     border: 10px solid #e8f1f2;
     overflow: visible;
+    padding-left: 6rem;
+    padding-right: 6rem;
 }
 .title-box .shader{
-    width: 88%;
+    width: 90%;
     position: relative;
     height: 20px;
-    left: 6%;
+    left: 5%;
 }
 .title-box .shader-top{
     top: -15px;
@@ -267,14 +393,17 @@ export default {
     left: 0;
     right: 0;
     top: 0;
-    padding: 60px 8%;
+    padding-top: 60px;
+    padding-bottom: 60px;
     transition: all 0.5s ease;
     z-index: 1;
     background: #1b98e0;
+    border-radius: 0;
 }
 .show-head{
     background: #13293d;
-    padding: 10px 8%;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 .navbar-brand{
     height: 50px;
@@ -316,7 +445,13 @@ export default {
     background: #7bbfea;
     display: block;
 }
+.show-head ul li a::after{
+    background: #87b7cb;
+}
 .navbar ul li a:hover::after{
+    transform: scale(1,1);
+}
+.navbar ul li a.hover::after{
     transform: scale(1,1);
 }
 .navbar ul li a.btn{
@@ -350,12 +485,39 @@ export default {
 }
 
 
+.up-to-top{
+    position: fixed;
+    bottom: 30px;
+    right: 10px;
+    width: 4rem;
+    height: 4rem;
+    background: rgba(19, 41, 61, 0.3);
+    color: #e8f1f2;
+    font-size: 2rem;
+    line-height: 4rem;
+    text-align: center;
+    transition: background 550ms ease;
+    cursor: pointer;
+}
+.up-to-top:hover{
+    background: rgba(19, 41, 61, 0.5);
+}
+
+
 
 
 .band-with-80padding h3{
     text-align: center;
-    color: #13293d;
+    color: #87b7cb;
     font-size: 3rem;
+    font-weight: bold;
+}
+.band-with-80padding h3 span{
+    margin-right: 1rem;
+}
+.band-title{
+    width: 80%;
+    margin: auto;
 }
 .container ul{
     list-style: none;
@@ -370,62 +532,35 @@ export default {
     display: flex;
     align-items: stretch;
 }
-.problem-list{
-    border: 1px solid #d3dcdc;
-    border-radius: 3px;
-    padding: 20px;
-    transition: all 0.5s ease;
-    margin: 20px;
-    width: 30rem;
-    letter-spacing: 0.1rem;
-    font-size: 1.5rem;
-    line-height: 3rem;
-    height: inherit;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    cursor: pointer;
-}
-.problem-list:hover{
-    box-shadow: 0 4px 8px 0 rgba(7,17,27,.1);
-    border-color: #e8f1f2;
-}
-.problem-list .number{
-    width: 2.8rem;
-    height: 2.8rem;
-    border-radius: 1.4rem;
-    background: #1b98e0;
-    color: #e8f1f2;
-    line-height: 2.8rem;
-    font-size: 1.4rem;
-    text-align: center;
-    display: inline-block;
-    margin-right: 1rem;
-}
-.problem-list hr{
-    margin-top: 10px;
-    margin-bottom: 10px;
-    color: #d3dcdc;
-    border-top: 1px solid #d3dcdc;
-    width: 80%;
-}
-.problem-list .status{
+.container .view-more{
     text-align: right;
-    width: 100%;
+    margin-top: 3rem;
+    font-size: 2rem;
 }
-.problem-list .status span{
+.container .view-more a{
+    color: #44aae5;
+    cursor: pointer;
+    display: block;
     float: right;
-    padding: 0 1rem;
-    border-radius: 5px;
+}
+
+
+
+.footer{
+    background: #006494;
     color: #e8f1f2;
 }
-.problem-list .status span.not-submit{
-    background: #247ba0;
+.footer div{
+    width: 100%;
+    text-align: center;
+    line-height: 2rem;
 }
-.problem-list .status span.trying{
-    background: #ba921a;
+.footer div.total{
+    font-size: 1rem;
+    color: #bec6c7;
 }
-.problem-list .status span.accept{
-    background: #70c1b3;
+.footer div.contact a{
+    color: #1b98e0;
+    cursor: pointer;
 }
 </style>
