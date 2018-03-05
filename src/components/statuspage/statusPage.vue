@@ -40,8 +40,8 @@
     <li role="presentation"><a href="#" class="text-muted" @click="getStatus">Submit</a></li>
   </ul>
   <div class="container-fluid table-container">
-    <table id="statusTable" class="table">
-      <caption>status</caption>
+    <table id="statusTable" class="table table-hover">
+      <caption></caption>
       <thead>
         <th class="hidden-xs">run id</th>
         <th>user id</th>
@@ -264,7 +264,7 @@ export default {
 
 #status-page .nav {
   position: fixed;
-  padding: .5em 4em;
+  padding: 1em 4em;
   left: 0;
   top: 50px;
   background: inherit;
@@ -285,9 +285,15 @@ export default {
 
 .table-container table.table td {
   vertical-align: middle;
+  border: none;
 }
 
-.table-containertd a:hover {
+#statusTable th {
+  font-size: 1.2em;
+  border-bottom: 2px solid #ddd;
+}
+
+#statusTable td a:hover {
   text-decoration: none;
 }
 
