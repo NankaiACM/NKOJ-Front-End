@@ -43,7 +43,7 @@ export default {
       }
       loginPackege.password = this.tempPassword
       loginPackege.user = this.loginAccount
-      this.$http.post('http://111.231.98.20:8000/api/u/login', loginPackege,  {crossDomain : true, xhrFields: {withCredentials : true}}).then( (res) => {
+      this.$http.post('http://111.231.98.20:8000/api/u/login', loginPackege,  {crossDomain : true, credentials : true}).then( (res) => {
         console.log(res)
         if (res.body.code === 400) {
           this.loginMessage = '用户名不存在'

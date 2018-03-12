@@ -8,7 +8,7 @@
     <div id="problemSubmit" v-if="isSee">
       <h4>Code: {{submitLan}}</h4>
       <div id="codeArea">
-        <editor v-model="submitCode" @init="editorInit" lang="c_cpp" theme="github" height="430px"></editor>
+        <editor v-model="submitCode" @init="editorInit" lang="c_cpp" theme="terminal" height="430px"></editor>
       </div>
       <div>
         <button class="mobileHome btn btn-default" @mouseleave="middleInfo = false" @mouseenter="middleInfo = true" >
@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     initView: function () {
-      this.$http.get('/static/problemTest.md').then((res) => {
+      this.$http.get('http://localhost:8000/api/p/'+this.$route.params.problemId).then((res) => {
         console.log(res.body)
         this.problemMarkDownText = res.body
         this.isStart = true
@@ -91,7 +91,7 @@ export default {
       require('brace/mode/javascript')
       require('brace/mode/c_cpp')
       require('brace/mode/less')
-      require('brace/theme/github')
+      require('brace/theme/terminal')
     },
     test: function () {
       console.log('wtf')

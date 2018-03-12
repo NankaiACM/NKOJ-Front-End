@@ -19,7 +19,7 @@ export default new Router({
     {path: '/problems', component: componentProblems},
     {path: '/notFound', component: componentB},
     {path: '/', redirect: '/home'},
-    {path: '/problem/:id', component: problemsPage},
+    {path: '/problem/:problemId', component: problemsPage},
     {path: '/status',component: statusPage},
     {path: '/discuss',component: discussPage},
     {path: '/user/:id', component: userPage},

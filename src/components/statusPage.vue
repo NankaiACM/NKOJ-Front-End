@@ -1,44 +1,5 @@
 <template>
 <div id="status-page">
-  <ul class="nav nav-pills">
-    <li role="presentation">
-      <input type="text" class="form-control" placeholder="problem ID" v-model="filter.problemID">
-    </li>
-    <li role="presentation">
-      <input type="text" class="form-control" placeholder="user ID" v-model="filter.userID">
-    </li>
-    <li role="presentation" class="dropdown">
-      <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-        status
-        <span class="caret"></span>
-      </a>
-      <ul class="dropdown-menu">
-        <li v-for="status in dropdata.status"><a @click="setStatus(status.value)" href="#">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.status===status.value"></span>
-            {{status.status}}
-            </a>
-        </li>
-        <li role="separator" class="divider"></li>
-        <li><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.status}}</a></li>
-      </ul>
-    </li>
-    <li role="presentation" class="dropdown">
-      <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-        language
-        <span class="caret"></span>
-      </a>
-      <ul class="dropdown-menu">
-        <li v-for="lang in dropdata.lang"><a @click="setLang(lang.value)" href="#">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.lang===lang.value"></span>
-            {{lang.lang}}
-            </a>
-        </li>
-        <li role="separator" class="divider"></li>
-        <li><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.lang}}</a></li>
-      </ul>
-    </li>
-    <li role="presentation"><a href="#" class="text-muted" @click="getStatus">Submit</a></li>
-  </ul>
   <div class="container-fluid table-container">
     <table id="statusTable" class="table">
       <caption>status</caption>
