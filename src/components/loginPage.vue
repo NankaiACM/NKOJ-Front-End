@@ -51,6 +51,7 @@ export default {
           this.loginMessage = '用户名或密码错误'
         } else if(res.body.code === 0){
           this.loginMessage = '成功登陆！'
+          console.log(res.body.user)
           this.$emit('userInfo', res.body.user)
         }
       })

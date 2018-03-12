@@ -86,10 +86,10 @@ export default {
     }
   },
   watch:{
-    isLoginShow:function(oldValue,newValue){
+    isLoginShow:function(newValue,oldValue){
       if(newValue==false) this.userPage='None'
     },
-    isSignupShow:function(oldValue,newValue){
+    isSignupShow:function(newValue,oldValue){
       if(newValue==false) this.userPage='None'
     }
   }
