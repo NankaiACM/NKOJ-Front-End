@@ -27,6 +27,7 @@ export default {
       isSignupShow: false,
       nowPage: 'Home',
       userPage: 'None',
+      loginUserName: 'null'
     }
   },
   methods: {
@@ -52,6 +53,11 @@ export default {
       this.nowPage='Contest'
       this.$router.push({
         path: '/contest'
+      })
+    },
+    changeToDiscuss: function () {
+      this.$router.push({
+        path: '/discuss'
       })
     },
     changeToUser: function () {
@@ -122,6 +128,7 @@ header {
   top: 0px;
   z-index: 1;
 }
+
 
 .shadow{
   position: absolute;
