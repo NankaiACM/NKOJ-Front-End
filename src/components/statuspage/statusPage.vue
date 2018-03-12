@@ -1,8 +1,49 @@
 <template>
 <div id="status-page">
+  <ul class="nav nav-pills">
+    <li role="presentation">
+      <input type="text" class="form-control" placeholder="problem ID" v-model="filter.problemID">
+    </li>
+    <li role="presentation">
+      <input type="text" class="form-control" placeholder="user ID" v-model="filter.userID">
+    </li>
+    <li role="presentation" class="dropdown">
+      <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        status
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li v-for="status in dropdata.status"><a @click="setStatus(status.value)" href="#">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.status===status.value"></span>
+            {{status.status}}
+            </a>
+        </li>
+        <li role="separator" class="divider"></li>
+        <li>
+          <a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.status}}</a>
+        </li>
+      </ul>
+    </li>
+    <li role="presentation" class="dropdown">
+      <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        language
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li v-for="lang in dropdata.lang"><a @click="setLang(lang.value)" href="#">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.lang===lang.value"></span>
+            {{lang.lang}}
+            </a>
+        </li>
+        <li role="separator" class="divider"></li>
+        <li><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.lang}}</a></li>
+      </ul>
+    </li>
+    <li role="presentation"><a href="#" class="text-muted" @click="getStatus">Submit</a></li>
+  </ul>
   <div class="container-fluid table-container">
-    <table id="statusTable" class="table">
-      <caption>status</caption>
+    <table id="statusTable" class="table table-hover">
+      <caption></caption>
       <thead>
         <th class="hidden-xs">run id</th>
         <th>user id</th>
@@ -27,7 +68,17 @@
               <span class="label label-info">{{status.problem_id}}</span>
             </router-link>
           </td>
-          <td><span :class="['label',getStatusClass(status.status)]">{{getStatusText(status.status)}}</span></td>
+          <td>
+            <button
+              :class="['btn btn-sm',getStatusClass(status.status)]"
+              type="button"
+              class="btn btn-primary"
+              data-toggle="modal"
+              data-target="#status-details"
+              @click="setDetailsRunId(status.run_id)">
+                {{getStatusText(status.status)}}
+            </button>
+          </td>
           <td>{{status.lang}}</td>
           <td>
             {{status.code_size}}&nbsp;&nbsp;
@@ -49,72 +100,77 @@
       </tbody>
     </table>
   </div>
+  <status-details :run_id="details.run_id"></status-details>
 </div>
 </template>
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
+import StatusDetails from './details.vue'
 export default {
   name: 'statusPage',
   data: function() {
     var status_map = [{
         "value": "107",
         "status": "Accepted",
-        "label_class": "label-success"
+        "label_class": "btn-success"
       },
       {
         "value": "102",
         "status": "Wrong Answer",
-        "label_class": "label-danger"
+        "label_class": "btn-danger"
       },
       {
         "value": "108",
         "status": "Presentation Error",
-        "label_class": "label-warning"
+        "label_class": "btn-warning"
       },
       {
         "value": "101",
         "status": "Compilation Error",
-        "label_class": "label-danger"
+        "label_class": "btn-danger"
       },
       {
         "value": "103",
         "status": "Runtime Error",
-        "label_class": "label-danger"
+        "label_class": "btn-danger"
       },
       {
         "value": "105",
         "status": "Time Limit Exceeded",
-        "label_class": "label-warning"
+        "label_class": "btn-warning"
       },
       {
         "value": "104",
         "status": "Memory Limit Exceeded",
-        "label_class": "label-warning"
+        "label_class": "btn-warning"
       },
       {
         "value": "106",
         "status": "Output Limit Exceeded",
-        "label_class": "label-warning"
+        "label_class": "btn-warning"
       },
       {
         "value": "109",
         "status": "Function Limit Exceeded",
-        "label_class": "label-warning"
+        "label_class": "btn-warning"
       },
       {
         "value": "100",
         "status": "Judging",
-        "label_class": "label-info"
+        "label_class": "btn-info"
       },
       {
         "value": "118",
         "status": "System Error",
-        "label_class": "label-warning"
+        "label_class": "btn-warning"
       }
     ]
     return {
       statusList: [],
       status_map: status_map,
+      details:{
+        run_id: "-1"
+      },
       filter: {
         problemID: '',
         userID: '',
@@ -145,6 +201,9 @@ export default {
     }
   },
   methods: {
+    setDetailsRunId: function(run_id){
+      this.details.run_id = run_id
+    },
     setStatus: function(status) {
       if (this.filter.status === status) status = ''
       this.filter.status = status
@@ -211,7 +270,8 @@ export default {
     })
   },
   components: {
-    InfiniteLoading
+    InfiniteLoading,
+    StatusDetails
   }
 }
 </script>
@@ -225,7 +285,7 @@ export default {
 
 #status-page .nav {
   position: fixed;
-  padding: .5em 4em;
+  padding: 1em 4em;
   left: 0;
   top: 50px;
   background: inherit;
@@ -246,15 +306,32 @@ export default {
 
 .table-container table.table td {
   vertical-align: middle;
+  border: none;
 }
 
-.table-containertd a:hover {
+#statusTable th {
+  font-size: 1.2em;
+  border-bottom: 2px solid #ddd;
+}
+
+#statusTable td a:hover {
   text-decoration: none;
 }
 
 .table-container td span.label {
   padding: .2em .6em .2em;
   font-size: 100%;
+}
+
+.table-container td button.btn {
+  font-size: 80%;
+  border-radius: .25em;
+  font-weight: 700;
+  transition: all 1.41s,outline .1s;
+}
+
+.table-container td button.btn:hover {
+  outline: 3px solid #ccc;
 }
 
 @media (min-width: 768px) {
