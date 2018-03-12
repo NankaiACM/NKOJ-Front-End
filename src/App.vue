@@ -2,27 +2,10 @@
 <div id="app">
   <div class="shadow" v-if="isLoginShow||isSignupShow" v-on:click="exitShow"></div>
   <header>
-    <div>
-      <div id="mainIcon"><img height="50px" src="./assets/logo.png"></div>
-      <div id="mainTitle" v-on:click="changeToHome">NKU Online Judge</div>
-      <ul class="nav navbar-nav navbar-right" id="headerRight">
-        <li v-on:click="changeToSignup" class="headerRight"><a><span class="glyphicon glyphicon-user"></span> 注册</a></li>
-        <li v-on:click="changeToLogin" class="headerRight"><a><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
-      </ul>
-    </div>
+    <head-bar @toHome='changeToHome' @logIn='changeToLogin' @signUp='changeToSignup'
+              @toProblem="changeToProblems" @toStatus="changeToStatus" @toContest="changeToContest"
+              @toRank="changeTo404" @toDiscuss="changeTo404" :nowPage=nowPage :userPage=userPage></head-bar>
   </header>
-  <aside class="hidden-xs">
-    <div><img id="userPicture" src="./assets/userPicture.jpg" v-on:click="changeToUser"></div>
-    <div id="userName">User: Saurus</div>
-    <ul class="nav nav-pills nav-stacked" id="navigation">
-      <li id="home" v-on:click="changeToHome"><span class="glyphicon glyphicon-home"></span>主页</li>
-      <li id="problems" v-on:click="changeToProblems"><span class="glyphicon glyphicon-list"></span>题目</li>
-      <li id="status" v-on:click="changeToStatus"><span class="glyphicon glyphicon-stats"></span>评测</li>
-      <li id="contest" v-on:click="changeToContest"><span class="glyphicon glyphicon-tower"></span>比赛</li>
-      <li id="ranklist" v-on:click="changeTo404"><span class="glyphicon glyphicon-signal"></span>排名</li>
-      <li id="discuss" v-on:click="changeTo404"><span class="glyphicon glyphicon-comment"></span>讨论</li>
-    </ul>
-  </aside>
   <section id="main">
     <login-page v-if="isLoginShow"></login-page>
     <signup-page v-if="isSignupShow"></signup-page>
@@ -34,48 +17,59 @@
 <script>
 import loginPage from './components/loginPage'
 import signupPage from './components/signupPage'
+import headBar from './components/headBar'
 export default {
-  components: {loginPage, signupPage},
+  components: {loginPage, signupPage,headBar},
   name: 'App',
   data: function () {
     return {
       isLoginShow: false,
-      isSignupShow: false
+      isSignupShow: false,
+      nowPage: 'Home',
+      userPage: 'None',
     }
   },
   methods: {
     changeToProblems: function () {
+      this.nowPage='Problem'
       this.$router.push({
         path: '/problems'
       })
     },
     changeToHome: function () {
+      this.nowPage='Home'
       this.$router.push({
         path: '/home'
       })
     },
     changeToStatus: function () {
+      this.nowPage='Status'
       this.$router.push({
         path: '/status'
       })
     },
     changeToContest: function () {
+      this.nowPage='Contest'
       this.$router.push({
         path: '/contest'
       })
     },
     changeToUser: function () {
+      this.nowPage='User'
       this.$router.push({
         path: '/user/Saurus'
       })
     },
     changeToLogin: function () {
+      this.userPage='Login'
       this.isLoginShow = true
     },
     changeToSignup: function () {
+      this.userPage='Signup'
       this.isSignupShow = true
     },
     changeTo404: function () {
+      this.nowPage='404'
       this.$router.push({
         path: '/notFound'
       })
@@ -83,6 +77,14 @@ export default {
     exitShow: function () {
       this.isLoginShow = false
       this.isSignupShow = false
+    }
+  },
+  watch:{
+    isLoginShow:function(oldValue,newValue){
+      if(newValue==false) this.userPage='None'
+    },
+    isSignupShow:function(oldValue,newValue){
+      if(newValue==false) this.userPage='None'
     }
   }
 }
@@ -95,10 +97,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
-}
-.headerRight:hover{
-  cursor: pointer;
 }
 #navigation .glyphicon {
   position: relative;
@@ -111,13 +109,6 @@ export default {
   margin-right: 15px;
   -moz-osx-font-smoothing: grayscale;
 }
-#headerRight{
-  margin-right: 5px;
-}
-#headerRight li a{
-  color:white;
-  background: none;
-}
 * {
   padding: 0;
   margin: 0;
@@ -126,24 +117,12 @@ export default {
 
 header {
   width: 100%;
-  height: 50px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: #16aad8;
-  color: #fff;
+  height: 60px;
+  position: fixed;
+  top: 0px;
+  z-index: 1;
 }
 
-aside {
-  width: 150px;
-  position: absolute;
-  top: 50px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgb(55, 55, 55);
-}
 .shadow{
   position: absolute;
   left: 150px;
@@ -153,30 +132,6 @@ aside {
   opacity: 0.6;
   background: black;
   z-index: 3;
-}
-#navigation li {
-  padding-top: 12px;
-  padding-bottom: 12px;
-}
-
-#navigation {
-  margin-top: 30px;
-}
-
-#problems,
-#home,
-#status,
-#contest,
-#ranklist,
-#discuss {
-  background-size: 30px;
-  background-position: 25px;
-  background-repeat: no-repeat;
-  font-size: 15px;
-  vertical-align: middle;
-  cursor: pointer;
-  color: lightsteelblue;
-  font-weight: bold;
 }
 
 /*
@@ -200,16 +155,6 @@ aside {
 }
 */
 
-#problems:hover,
-#home:hover,
-#status:hover,
-#contest:hover,
-#ranklist:hover,
-#discuss:hover {
-  background-color: black;
-  color: white;
-}
-
 #userPicture {
   height: 110px;
   margin-left: 20px;
@@ -227,31 +172,11 @@ aside {
   margin-top: 5px;
 }
 
-#mainIcon {
-  height: 50px;
-  padding-left: 20px;
-  padding-right: 20px;
-  float: left;
-}
-
-#mainTitle {
-  color: white;
-  font-size: 30px;
-  font-family: "Adobe Arabic";
-  padding: 10px 0;
-  margin: 0;
-  float: left;
-  cursor: pointer;
-}
 
 #main {
-  position: absolute;
-  left: 150px;
-  top: 50px;
-  right: 0;
-  bottom: 0;
   overflow: auto;
   background: rgb(230, 230, 230);
+  margin-top: 60px;
 }
 
 #con {
