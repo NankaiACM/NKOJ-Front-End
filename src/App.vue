@@ -123,7 +123,6 @@ export default {
 
 header {
   width: 100%;
-  height: 60px;
   position: fixed;
   top: 0px;
   z-index: 1;

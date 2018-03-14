@@ -39,7 +39,9 @@ export default {
 .head-wrapper{
   display: table;
   width: 100%;
-  background-color: #e8f1f2;
+  height: 100%;
+  background-color: #fff;
+  border-bottom: 1px solid #e8f1f2;
 }
 .add-shadow{
   box-shadow: 0 4px 8px 0 rgba(7,17,27,.2);
@@ -54,16 +56,16 @@ export default {
   height: 50px;
 }
 .navbar-nav{
-  height: 60px;
+  height: 100%;
   display: block;
   line-height: 50px;
 }
 .navbar-nav li{
-  color: #be96b6;
+  color: #939da6;
   padding: 5px 1rem;
   font-size: 1.5rem;
   width: 10rem;
-  height: 60px;
+  height: 100%;
   overflow: hidden;
   cursor: pointer;
   display: inline-block;
@@ -71,14 +73,14 @@ export default {
   transition: all 0.3s ease;
 }
 .navbar-nav li.focusing{
-  background-color: #be96b6;
-  color: #fff;
+  background-color: #f2f7f7;
+  color: #13293d;
   cursor: default;
   pointer-events: none;
 }
 .navbar-nav li:hover{
-  background-color: #d8c0d3;
-  color: #fff;
+  background-color: #e8f1f2;
+  color: #687683;
 }
 .navbar-nav li span{
   margin-right: 5px;
@@ -100,7 +102,7 @@ export default {
 }
 .usersBar div.field a{
   line-height: 60px;
-  color: #be96b6;
+  color: #687683;
   position: relative;
   top: -60px;
   transition: top 0.4s ease;
