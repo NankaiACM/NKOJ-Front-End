@@ -1,14 +1,13 @@
 <template>
-<div id="Problems" class="container-fluid" @scroll="handleScroll($event)">
-  <h3 class="problem-page-title">题目列表</h3>
+<div id="Problems" class="container">
   <!--bar-->
-  <div class="fat-container container-fluid col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
-  <div :class="'question-filter-base '+(dom.attach?'nagi':'')">
-    <ul class="row search-bar-control nav nav-pills">
+
+  <div class="question-filter-base container-fluid">
+    <ul class="search-bar-control nav nav-pills">
       <li role="presentation" class="col-sm-6">
         <input @keyup.enter="initView" v-model="filter.keywords" type="text" class="form-control" placeholder="IDs,titles,or description">
       </li>
-      <li role="presentation" class="dropdown">
+      <li role="presentation" class="dropdown navbar-right">
         <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
           Difficulty
           <span class="caret"></span>
@@ -30,7 +29,7 @@
           <li><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.difficulty}}</a></li>
         </ul>
       </li>
-      <li role="presentation" class="dropdown">
+      <li role="presentation" class="dropdown navbar-right">
         <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
           Status
           <span class="caret"></span>
@@ -48,7 +47,7 @@
           <li><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.status}}</a></li>
         </ul>
       </li>
-      <li role="presentation" class="dropdown">
+      <li role="presentation" class="dropdown navbar-right">
         <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
           Tags
           <span class="caret"></span>
@@ -62,6 +61,7 @@
     </ul>
   </div>
   <!---->
+  <div class="fat-container container-fluid col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
   <table id="ProblemTable" class="table table-hover">
     <thead>
       <tr>
@@ -104,26 +104,16 @@
           {{problem.problemsRatio}}
         </td>
       </tr>
-      <infinite-loading @infinite="infiniteHandler">
-        <span slot="no-more">
-            There is no more problems :( at bottom
-        </span>
-      </infinite-loading>
     </tbody>
   </table>
 </div>
 </div>
 </template>
 <script>
-import InfiniteLoading from 'vue-infinite-loading'
 export default {
   name: 'component-problems',
   data: function() {
     return {
-      dom: {
-        barviewh: 50,
-        attach: false
-      },
       filter: {
         difficulty: '',
         status: '',
@@ -136,9 +126,6 @@ export default {
     this.$nextTick(function() {
       this.initView()
     })
-    this.dom.barviewh = document.querySelector(".problem-page-title").offsetHeight
-    this.dom.barviewh += document.querySelector(".question-filter-base").offsetHeight
-    console.info(this.dom.barviewh)
   },
   methods: {
     initView: function() {
@@ -149,17 +136,6 @@ export default {
           'status': this.filter.status
         }).then(function(res) {
         this.problemList = res.body.data
-      })
-    },
-    infiniteHandler: function($state) {
-      this.$http.get('/static/problemsData.json').then(function(res) {
-        if (!res.body.data.length) {
-          $state.complete()
-          return -1
-        }
-        this.problemList = this.problemList.concat(res.body.data)
-        $state.loaded()
-        console.log(this.problemList.length)
       })
     },
     setDifficulty: function(difficulty) {
@@ -175,67 +151,57 @@ export default {
       this.filter.status = status
       this.problemList = []
       this.initView()
-    },
-    handleScroll: function (event) {
-      if (!this.dom.attach&&(event.srcElement.scrollTop > this.dom.barviewh)) {
-        this.dom.attach = true
-        console.info('attach')
-      }
-      if (event.srcElement.scrollTop <= this.dom.barviewh) {
-        this.dom.attach = false
-        console.info('un attach')
-      }
     }
   },
   components: {
-    InfiniteLoading
   }
 }
 </script>
-<style>
+<style lang="less">
+@barheight: 61px;
+@fat-container-margin-top: 40x;
+
 #Problems {
-  text-align: left;
   background: none;
   color: #233;
   padding:0;
   min-height: 100%;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  overflow: auto;
-  position: absolute;
   transition: all 1s;
 }
 
 .fat-container {
   background: #fff;
   border-radius: 2px;
-  box-shadow: 0px 9px 10px 5px #ccc;
-}
-
-.problem-page-title {
-  padding: .5em 2em;
-  margin: 0;
-  background: #2cbfec;
-  color: #fff;
-  font-weight:bolder;
+  border: 1px solid #e8f1f2;
+  margin-top: @barheight+@fat-container-margin-top;
 }
 
 .question-filter-base {
-  background: #fff;
-  padding: 4em 3em 3em 3em;
-  transition: padding 1s;
-}
-
-.nagi {
   position: fixed;
-  top: 50px;
+  display: flex;
+  align-items: center;
   left: 0;
   right: 0;
-  z-index: 3;
-  padding: 1em 3em;
-  box-shadow: 10px 3px 10px 3px #ccc;
+  top: @barheight;
+  height: 60px;
+  z-index: 1;
+  background: #fff;
+  border-bottom: 1px solid #e8f1f2;
+}
+
+.search-bar-control {
+  width: 100%;
+}
+
+.search-bar-control input.form-control {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  transition: all 1s;
+}
+
+.search-bar-control input.form-control:focus,
+.search-bar-control input.form-control:active {
 }
 
 #Problems td a {
@@ -253,6 +219,9 @@ export default {
   font-size: 1.4em;
   font-weight: 600;
   font-family: '微软雅黑';
+  border: 0;
+  height: 6rem;
+  text-align: center;
 }
 
 #ProblemTable tbody tr td:first-child {
@@ -265,6 +234,11 @@ export default {
 
 #ProblemTable td {
   vertical-align: middle;
+  border: 0;
+}
+
+#ProblemTable tr {
+  transition: all 1s;
 }
 
 tbody .problem-status {
@@ -301,14 +275,10 @@ tbody .problem-status {
 
 @media (min-width: 992px) {
   .problem-page-title {
-    padding: .5em 2em;
-    margin: 0 0 4em 0;
-    box-shadow: 0px 3px 10px 3px #ccc;
   }
 }
 @media (min-width: 768px) {
   .nagi {
-    left: 150px;
   }
 }
 </style>

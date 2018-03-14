@@ -4,12 +4,13 @@
   <header>
     <head-bar @toHome='changeToHome' @logIn='changeToLogin' @signUp='changeToSignup'
               @toProblem="changeToProblems" @toStatus="changeToStatus" @toContest="changeToContest"
-              @toRank="changeTo404" @toDiscuss="changeTo404" :nowPage=nowPage :userPage=userPage></head-bar>
+              @toRank="changeTo404" @toDiscuss="changeTo404" :nowPage=nowPage :userPage=userPage>
+    </head-bar>
   </header>
   <section id="main">
-    <login-page v-if="isLoginShow" @exit="exitShow" ></login-page>
+    <login-page v-if="isLoginShow" @exit="exitShow"></login-page>
     <signup-page v-if="isSignupShow"></signup-page>
-    <router-view></router-view>
+    <router-view class="com-container"></router-view>
   </section>
 </div>
 </template>
@@ -138,26 +139,10 @@ header {
   z-index: 2;
 }
 
-/*
-#problems{
-  background-image: url(assets/problemSet.png);
+.com-container {
+  width: 100%;
+  min-height: 100%;
 }
-#home{
-  background-image: url(assets/home.png);
-}
-#status{
-  background-image: url(assets/status.png);
-}
-#contest{
-  background-image: url(assets/contest.png);
-}
-#ranklist{
-  background-image: url(assets/rankList.png);
-}
-#discuss{
-  background-image: url(assets/discuss.png);
-}
-*/
 
 #userPicture {
   height: 110px;
@@ -178,5 +163,6 @@ header {
 
 #main {
   margin-top: 60px;
+  width:100%;
 }
 </style>

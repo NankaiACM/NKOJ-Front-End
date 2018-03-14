@@ -7,7 +7,7 @@
     <li role="presentation">
       <input type="text" class="form-control" placeholder="user ID" v-model="filter.userID">
     </li>
-    <li role="presentation" class="dropdown">
+    <li role="presentation" class="dropdown navbar-right">
       <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
         status
         <span class="caret"></span>
@@ -24,7 +24,7 @@
         </li>
       </ul>
     </li>
-    <li role="presentation" class="dropdown">
+    <li role="presentation" class="dropdown navbar-right">
       <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
         language
         <span class="caret"></span>
@@ -39,7 +39,7 @@
         <li><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.lang}}</a></li>
       </ul>
     </li>
-    <li role="presentation"><a href="#" class="text-muted" @click="getStatus">Submit</a></li>
+    <li role="presentation" class="navbar-right"><a href="#" class="text-muted" @click="getStatus">Submit</a></li>
   </ul>
   <div class="container-fluid table-container">
     <table id="statusTable" class="table table-hover">
@@ -224,12 +224,6 @@ export default {
         "end": this.filter.page_length
       }).then(function(res) {
         _this.statusList = res.body.data
-        /*.map(item=>{
-                  item.run_id=`<a>${item.run_id}</a>`;
-                  item.timestamp=(new Date(item.timestamp*1)).toLocaleString()
-                  //timestap使用毫秒事件戳
-                  return item
-                })*/
       })
     },
     getStatusClass: function(status_id) {
@@ -275,7 +269,9 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="less">
+@barheight: 61px;
+
 #status-page {
   text-align: left;
   background: #fff;
@@ -287,15 +283,18 @@ export default {
   position: fixed;
   padding: 1em 4em;
   left: 0;
-  top: 50px;
+  top: @barheight;
   background: inherit;
   right: 0;
-  box-shadow: 10px 3px 10px 3px #ccc;
   font-size: .5em;
+  border-bottom: 1px solid #e8f1f2;
 }
 
 #status-page .nav input {
   width: 8em;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .table-container {
@@ -307,11 +306,18 @@ export default {
 .table-container table.table td {
   vertical-align: middle;
   border: none;
+  text-align: center;
 }
 
 #statusTable th {
   font-size: 1.2em;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 0;
+  height: 3em;
+  text-align: center;
+}
+
+.table-container table.table tr {
+  transition: all .41s;
 }
 
 #statusTable td a:hover {
@@ -335,9 +341,6 @@ export default {
 }
 
 @media (min-width: 768px) {
-  #status-page .nav {
-    left: 150px;
-  }
 }
 
 @media (min-width: 992px) {
