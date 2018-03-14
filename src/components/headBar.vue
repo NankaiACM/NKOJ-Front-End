@@ -1,5 +1,5 @@
 <template>
-  <div class="head-wrapper">
+  <div class="head-wrapper" :class="{'add-shadow':isScrolled}">
     <div class="mainIcon"><img height="50px" src="../assets/logo_new_whitemode.png" v-on:click="$emit('toHome')"></div>
     <ul class="nav navbar-nav">
       <li :class="{focusing:nowPage=='Home'}" v-on:click="$emit('toHome')"><span class="glyphicon glyphicon-home"></span>主页</li>
@@ -11,10 +11,10 @@
     </ul>
     <div class="usersBar">
       <div class="field" :class="{'field-focus':userPage=='Signup'}" v-on:click="$emit('signUp')">
-        <a href="#"> 注册<span class="glyphicon glyphicon-user"></span></a>
+        <a> 注册<span class="glyphicon glyphicon-user"></span></a>
       </div>
       <div class="field" :class="{'field-focus':userPage=='Login'}" v-on:click="$emit('logIn')">
-        <a href="#"> 登录<span class="glyphicon glyphicon-log-in"></span></a>
+        <a> 登录<span class="glyphicon glyphicon-log-in"></span></a>
       </div>
     </div>
   </div>
@@ -29,9 +29,25 @@ export default {
   },
   data(){
     return{
-
+      isScrolled: false,
     }
-  }
+  },
+  methods:{
+    handleScroll(){
+      let scrolled = document.documentElement.scrollTop || document.body.scrollTop;
+      if(scrolled>0){
+        this.isScrolled = true;
+      }
+      else{
+        this.isScrolled = false;
+      }
+    }
+  },
+  mounted: function () {
+    this.$nextTick(function () {
+      window.addEventListener('scroll', this.handleScroll);
+    })
+  },
 }
 </script>
 
@@ -42,9 +58,10 @@ export default {
   height: 100%;
   background-color: #fff;
   border-bottom: 1px solid #e8f1f2;
+  transition: box-shadow 0.5s ease;
 }
 .add-shadow{
-  box-shadow: 0 4px 8px 0 rgba(7,17,27,.2);
+  box-shadow: 0 4px 8px 0 rgba(7,17,27,.1);
 }
 .mainIcon {
   height: 50px;

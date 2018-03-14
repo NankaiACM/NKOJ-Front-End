@@ -1,13 +1,13 @@
 <template>
 <div id="app">
-  <div class="shadow" v-if="isLoginShow||isSignupShow" v-on:click="exitShow"></div>
+  <div class="shadow-veil" v-if="isSignupShow" v-on:click="exitShow"></div>
   <header>
     <head-bar @toHome='changeToHome' @logIn='changeToLogin' @signUp='changeToSignup'
               @toProblem="changeToProblems" @toStatus="changeToStatus" @toContest="changeToContest"
               @toRank="changeTo404" @toDiscuss="changeTo404" :nowPage=nowPage :userPage=userPage></head-bar>
   </header>
   <section id="main">
-    <login-page v-if="isLoginShow"></login-page>
+    <login-page v-if="isLoginShow" @exit="exitShow" ></login-page>
     <signup-page v-if="isSignupShow"></signup-page>
     <router-view></router-view>
   </section>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import loginPage from './components/loginPage'
+import loginPage from './components/dialog'
 import signupPage from './components/signupPage'
 import headBar from './components/headBar'
 export default {
@@ -83,7 +83,7 @@ export default {
     exitShow: function () {
       this.isLoginShow = false
       this.isSignupShow = false
-    }
+    },
   },
   watch:{
     isLoginShow:function(newValue,oldValue){
@@ -128,16 +128,14 @@ header {
   z-index: 1;
 }
 
-
-.shadow{
+.shadow-veil{
   position: absolute;
-  left: 150px;
-  top: 50px;
+  left: 0;
+  top: 0;
   right: 0;
   bottom: 0;
-  opacity: 0.6;
   background: black;
-  z-index: 3;
+  z-index: 2;
 }
 
 /*
@@ -178,24 +176,7 @@ header {
   margin-top: 5px;
 }
 
-
 #main {
-  overflow: auto;
-  background: rgb(230, 230, 230);
   margin-top: 60px;
-}
-
-#con {
-  height: 100%;
-  background-color: white;
-  color: #fff;
-  overflow: scroll;
-}
-
-@media (max-width: 768px) {
-  #main {
-    left:0;
-    right:0;
-  }
 }
 </style>
