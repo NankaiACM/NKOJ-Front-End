@@ -1,6 +1,6 @@
 <template>
 <div id="loginPage">
-  <h2 align="left">登陆</h2><hr>
+  <div class="title">登陆</div><hr>
   <form>
     <div class="form-group">
       <h4 align="left"><label>账号</label></h4>

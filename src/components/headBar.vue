@@ -2,12 +2,12 @@
   <div class="head-wrapper" :class="{'add-shadow':isScrolled}">
     <div class="mainIcon"><img height="50px" src="../assets/logo_new_whitemode.png" v-on:click="$emit('toHome')"></div>
     <ul class="nav navbar-nav">
-      <li :class="{focusing:nowPage=='Home'}" v-on:click="$emit('toHome')"><span class="glyphicon glyphicon-home"></span>主页</li>
-      <li :class="{focusing:nowPage=='Problem'}" v-on:click="$emit('toProblem')"><span class="glyphicon glyphicon-list"></span>题目</li>
-      <li :class="{focusing:nowPage=='Status'}" v-on:click="$emit('toStatus')"><span class="glyphicon glyphicon-stats"></span>评测</li>
-      <li :class="{focusing:nowPage=='Contest'}" v-on:click="$emit('toContest')"><span class="glyphicon glyphicon-tower"></span>比赛</li>
-      <li :class="{focusing:nowPage=='Rank'}" v-on:click="$emit('toRank')"><span class="glyphicon glyphicon-signal"></span>排名</li>
-      <li :class="{focusing:nowPage=='Discuss'}" v-on:click="$emit('toDiscuss')"><span class="glyphicon glyphicon-comment"></span>讨论</li>
+      <li :class="{focusing:nowPage=='home'}" v-on:click="$emit('toHome')"><span class="glyphicon glyphicon-home"></span>主页</li>
+      <li :class="{focusing:nowPage=='problem'}" v-on:click="$emit('toProblem')"><span class="glyphicon glyphicon-list"></span>题目</li>
+      <li :class="{focusing:nowPage=='status'}" v-on:click="$emit('toStatus')"><span class="glyphicon glyphicon-stats"></span>评测</li>
+      <li :class="{focusing:nowPage=='contest'}" v-on:click="$emit('toContest')"><span class="glyphicon glyphicon-tower"></span>比赛</li>
+      <li :class="{focusing:nowPage=='rank'}" v-on:click="$emit('toRank')"><span class="glyphicon glyphicon-signal"></span>排名</li>
+      <li :class="{focusing:nowPage=='discuss'}" v-on:click="$emit('toDiscuss')"><span class="glyphicon glyphicon-comment"></span>讨论</li>
     </ul>
     <div class="usersBar">
       <div class="field" :class="{'field-focus':userPage=='Signup'}" v-on:click="$emit('signUp')">
@@ -36,10 +36,10 @@ export default {
     handleScroll(){
       let scrolled = document.documentElement.scrollTop || document.body.scrollTop;
       if(scrolled>0){
-        this.isScrolled = true;
+        if(!this.isScrolled) this.isScrolled = true;
       }
       else{
-        this.isScrolled = false;
+        if(this.isScrolled) this.isScrolled = false;
       }
     }
   },
@@ -57,11 +57,12 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #fff;
-  border-bottom: 1px solid #e8f1f2;
-  transition: box-shadow 0.5s ease;
+  border-bottom: 2px solid #e8f1f2;
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px 0 rgba(7,17,27,0);
 }
 .add-shadow{
-  box-shadow: 0 4px 8px 0 rgba(7,17,27,.1);
+  box-shadow: 0 2px 6px 0 rgba(7,17,27,.1);
 }
 .mainIcon {
   height: 50px;
