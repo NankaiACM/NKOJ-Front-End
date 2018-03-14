@@ -1,6 +1,6 @@
 <template>
   <div class="head-wrapper">
-    <div class="mainIcon"><img height="50px" src="../assets/logo_new.png" v-on:click="$emit('toHome')"></div>
+    <div class="mainIcon"><img height="50px" src="../assets/logo_new_whitemode.png" v-on:click="$emit('toHome')"></div>
     <ul class="nav navbar-nav">
       <li :class="{focusing:nowPage=='Home'}" v-on:click="$emit('toHome')"><span class="glyphicon glyphicon-home"></span>主页</li>
       <li :class="{focusing:nowPage=='Problem'}" v-on:click="$emit('toProblem')"><span class="glyphicon glyphicon-list"></span>题目</li>
@@ -39,14 +39,19 @@ export default {
 .head-wrapper{
   display: table;
   width: 100%;
+  background-color: #e8f1f2;
+}
+.add-shadow{
   box-shadow: 0 4px 8px 0 rgba(7,17,27,.2);
-  background-color: #13293d;
 }
 .mainIcon {
-  height: 60px;
+  height: 50px;
   float: left;
-  padding: 5px 10px 5px 20px;
+  margin: 5px 40px 5px 20px;
   cursor: pointer;
+}
+.mainIcon img{
+  height: 50px;
 }
 .navbar-nav{
   height: 60px;
@@ -54,7 +59,7 @@ export default {
   line-height: 50px;
 }
 .navbar-nav li{
-  color: #e8f1f2;
+  color: #be96b6;
   padding: 5px 1rem;
   font-size: 1.5rem;
   width: 10rem;
@@ -63,15 +68,17 @@ export default {
   cursor: pointer;
   display: inline-block;
   white-space:nowrap;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 .navbar-nav li.focusing{
-  background-color: #0b1722;
+  background-color: #be96b6;
+  color: #fff;
   cursor: default;
   pointer-events: none;
 }
 .navbar-nav li:hover{
-  background-color: #283c4e
+  background-color: #d8c0d3;
+  color: #fff;
 }
 .navbar-nav li span{
   margin-right: 5px;
@@ -93,7 +100,7 @@ export default {
 }
 .usersBar div.field a{
   line-height: 60px;
-  color: #e8f1f2;
+  color: #be96b6;
   position: relative;
   top: -60px;
   transition: top 0.4s ease;
