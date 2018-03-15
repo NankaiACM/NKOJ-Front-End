@@ -4,8 +4,7 @@
   <header>
     <head-bar @toHome='changeToHome' @logIn='changeToLogin' @signUp='changeToSignup'
               @toProblem="changeToProblems" @toStatus="changeToStatus" @toContest="changeToContest"
-              @toRank="changeTo404" @toDiscuss="changeTo404" :nowPage=nowPage :userPage=userPage>
-    </head-bar>
+              @toRank="changeTo404" @toDiscuss="changeTo404" :nowPage=nowPageF :userPage=userPage></head-bar>
   </header>
   <section id="main">
     <login-page v-if="isLoginShow" @exit="exitShow"></login-page>
@@ -16,7 +15,7 @@
 </template>
 
 <script>
-import loginPage from './components/dialog'
+import loginPage from './components/dialog/dialog'
 import signupPage from './components/signupPage'
 import headBar from './components/headBar'
 export default {
@@ -26,32 +25,32 @@ export default {
     return {
       isLoginShow: false,
       isSignupShow: false,
-      nowPage: 'Home',
       userPage: 'None',
-      loginUserName: 'null'
+      loginUserName: 'null',
+      nowPage: '',
     }
   },
   methods: {
     changeToProblems: function () {
-      this.nowPage='Problem'
+      this.nowPage='problem'
       this.$router.push({
         path: '/problems'
       })
     },
     changeToHome: function () {
-      this.nowPage='Home'
+      this.nowPage='home'
       this.$router.push({
         path: '/home'
       })
     },
     changeToStatus: function () {
-      this.nowPage='Status'
+      this.nowPage='status'
       this.$router.push({
         path: '/status'
       })
     },
     changeToContest: function () {
-      this.nowPage='Contest'
+      this.nowPage='contest'
       this.$router.push({
         path: '/contest'
       })
@@ -85,6 +84,14 @@ export default {
       this.isLoginShow = false
       this.isSignupShow = false
     },
+  },
+  computed:{
+    nowPageF:function(){
+      if(this.nowPage=='')
+        return this.$router.currentRoute.fullPath.split("/")[1]
+      else
+        return this.nowPage
+    }
   },
   watch:{
     isLoginShow:function(newValue,oldValue){
