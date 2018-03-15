@@ -26,7 +26,7 @@ export default {
     initView: function() {
       var _this = this;
       this.$http.get('http://localhost:8000/api/p/1001').then(function(res) {
-        console.log(res)
+        console.log(res.body)
         _this.newProblems = res.body.data;
       });
     }

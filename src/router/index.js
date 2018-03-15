@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import componentProblems from '../components/componentProblems'
+import componentProblems from '../components/problemslistpage/problemsPage'
 import componentHome from '../components/componentHome'
 import componentB from '../components/componentB'
 import componentContest from '../components/componentContest'

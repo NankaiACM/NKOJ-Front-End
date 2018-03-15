@@ -19,7 +19,6 @@
 </div>
 </template>
 <script>
-import status_details from './details'
 export default {
   name: 'status-details',
   props: ['run_id'],

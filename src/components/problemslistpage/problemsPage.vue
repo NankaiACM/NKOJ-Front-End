@@ -106,10 +106,12 @@
       </tr>
     </tbody>
   </table>
+  <problems-pagination @viewingleap="handleViewing"></problems-pagination>
 </div>
 </div>
 </template>
 <script>
+import ProblemsPagination from './pagination.vue'
 export default {
   name: 'component-problems',
   data: function() {
@@ -119,7 +121,11 @@ export default {
         status: '',
         keywords: ''
       },
-      problemList: []
+      problemList: [],
+      pageSize: 20,
+      queryleft: 1,
+      queryright: 20,
+      viewing: 1
     }
   },
   mounted: function() {
@@ -128,32 +134,42 @@ export default {
     })
   },
   methods: {
-    initView: function() {
-      this.$http.get(
-        '/static/problemsData.json', {
+    initView: function () {
+      this.$http.post(
+        'http://localhost:8000/api/problems/list', {
           'keywords': this.filter.keywords,
           'difficulty': this.filter.difficulty,
-          'status': this.filter.status
+          'status': this.filter.status,
+          'queryleft': this.queryleft,
+          'queryright': this.queryright
         }).then(function(res) {
-        this.problemList = res.body.data
+          console.log(res.body.data)
+          this.problemList = res.body.data
       })
     },
-    setDifficulty: function(difficulty) {
+    setDifficulty: function (difficulty) {
       if (difficulty === this.filter.difficulty)
         difficulty = ''
       this.filter.difficulty = difficulty
       this.problemList = []
       this.initView()
     },
-    setStatus: function(status) {
+    setStatus: function (status) {
       if (status === this.filter.status)
         status = ''
       this.filter.status = status
       this.problemList = []
       this.initView()
+    },
+    handleViewing: function (newv) {
+      this.viewing = newv.viewing
+      this.queryleft = newv.viewing
+      this.queryright = newv.viewing + this.pageSize
+      this.initView()
     }
   },
   components: {
+    ProblemsPagination
   }
 }
 </script>
@@ -174,6 +190,7 @@ export default {
   border-radius: 2px;
   border: 1px solid #e8f1f2;
   margin-top: @barheight+@fat-container-margin-top;
+  margin-bottom: @barheight+@fat-container-margin-top;
 }
 
 .question-filter-base {
@@ -212,6 +229,8 @@ export default {
 #ProblemTable {
   background: #fff;
   padding: 2em;
+  border-bottom: 1px solid #e5e9ef;
+  margin-bottom: 1em;
 }
 
 #ProblemTable thead tr th {
