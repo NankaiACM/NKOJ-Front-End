@@ -91,17 +91,17 @@
           </i>
         </td>
         <td class="problemTableCol1">
-          <router-link :to="{path:'problem/'+problem.problemsID}">
-            {{problem.problemsID}}
+          <router-link :to="{path:'problem/'+problem.problem_id}">
+            {{problem.problem_id}}
           </router-link>
         </td>
         <td class="problemTableCol2">
-          <router-link :to="{path:'problem/'+problem.problemsID}">
-            {{problem.problemsName}}
+          <router-link :to="{path:'problem/'+problem.problem_id}">
+            {{problem.title}}
           </router-link>
         </td>
         <td class="problemTableCol3">
-          {{problem.problemsRatio}}
+          {{problem.submit_ac}} / {{problem.submit_all}}
         </td>
       </tr>
     </tbody>
@@ -114,6 +114,7 @@
 import ProblemsPagination from './pagination.vue'
 export default {
   name: 'component-problems',
+  props: ['user_pros_msg'],
   data: function() {
     return {
       filter: {
@@ -122,8 +123,11 @@ export default {
         keywords: ''
       },
       problemList: [],
+      starlist: [],
+      aclist: [],
+      onlist: [],
       pageSize: 20,
-      queryleft: 1,
+      queryleft: 1001,
       queryright: 20,
       viewing: 1
     }
@@ -144,7 +148,22 @@ export default {
           'queryright': this.queryright
         }).then(function(res) {
           console.log(res.body.data)
-          this.problemList = res.body.data
+          var tmp = res.body.data
+          for(var x in tmp){
+            var item = tmp[x]
+            tmp[x].isStar = false
+            tmp[x].state = 'none'
+            if(this.starlist.indexOf(item.problem_id) !== -1){
+              tmp[x].isStar = true
+            }
+            if(this.aclist.indexOf(item.problem_id) !== -1){
+              item[x].state = 'ac'
+            }
+            if(this.onlist.indexOf(item.problem_id) !== -1){
+              item[x].state = 'on'
+            }
+          }
+          this.problemList = tmp
       })
     },
     setDifficulty: function (difficulty) {
@@ -163,9 +182,16 @@ export default {
     },
     handleViewing: function (newv) {
       this.viewing = newv.viewing
-      this.queryleft = newv.viewing
-      this.queryright = newv.viewing + this.pageSize
+      this.queryleft = (newv.viewing - 1) * this.pageSize + 1 +1000
+      this.queryright = this.queryleft + this.pageSize - 1
       this.initView()
+    }
+  },
+  watch: {
+    user_pros_msg : function (newv,oldv) {
+      this.starlist = newv.star
+      this.aclist = newv.ac
+      this.onlist = newv.on
     }
   },
   components: {

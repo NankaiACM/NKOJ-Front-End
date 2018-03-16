@@ -40,7 +40,7 @@
     </ul>
     <div class="jump-pager pagination">
       共{{num.all_pages}}页/{{num.last}}个，跳至
-      <input type="text" class="jump-input" :placeholder="num.jump_input" v-model="num.jump_input" @enter="junmp(num.jump_input)">
+      <input type="text" class="jump-input" :placeholder="num.jump_input" v-model="num.jump_input" @keyup.enter="jump(num.jump_input)">
       页
     </div>
   </nav>
