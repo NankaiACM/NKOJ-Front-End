@@ -111,7 +111,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lnag="less">
 #problemPage pre{
   text-align: left;
   background: white;
@@ -141,7 +141,7 @@ export default {
 }
 .problemDescription{
   position: absolute;
-  margin-top: 100px;
+  margin-top: 150px;
   top: 0;
   left: 10%;
   right: 10%;
@@ -153,7 +153,7 @@ export default {
   border-radius: 10px;
 }
 .problemDescription:hover{
-  box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1), 0 -5px 5px rgba(150, 150, 150, 0.1), 5px 0 5px rgba(150, 150, 150, 0.1), -5px 0 5px rgba(150, 150, 150, 0.1);
+  box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1), 0 0px 20px rgba(150, 150, 150, 0.1), 5px 0 5px rgba(150, 150, 150, 0.1), -5px 0 5px rgba(150, 150, 150, 0.1);
 }
 #problemSubmit nav{
   padding-right: 20px;
@@ -176,17 +176,17 @@ export default {
   font-weight: 600;
 }
 #problemPage .problemPageTitle{
-  background: #2cbfec;
+  background: #fff;
   position: fixed;
   z-index: 2;
-  padding-left: 20px;
+  padding-left: 6em;
   padding-top: 10px;
   padding-bottom:  10px;
   margin: 0;
   font-weight: 600;
   font-family: "inherit";
-  color: white;
-  box-shadow: 0px 5px 5px rgb(150, 150, 150);
+  color: #233;
+  border-bottom: 1px solid #eee;
 }
 
 .fade-enter-active, .fade-leave-active{
@@ -234,7 +234,9 @@ export default {
   left: 210px;
   border: none;
 }
-#problemPage .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover{
+#problemPage .navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:focus,
+.navbar-default .navbar-nav>.open>a:hover{
   background: #2cbfec;
   border-radius: 10px;
 }

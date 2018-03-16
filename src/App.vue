@@ -104,7 +104,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
+@import './less/global.less';
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -112,6 +113,12 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
+#app header {
+  transform: translateZ(99px);
+  z-index: 99;
+}
+
 #navigation .glyphicon {
   position: relative;
   top: 1px;
@@ -123,6 +130,7 @@ export default {
   margin-right: 15px;
   -moz-osx-font-smoothing: grayscale;
 }
+
 * {
   padding: 0;
   margin: 0;

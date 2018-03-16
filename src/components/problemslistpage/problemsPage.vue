@@ -128,12 +128,13 @@ export default {
       onlist: [],
       pageSize: 20,
       queryleft: 1001,
-      queryright: 20,
+      queryright: 10020,
       viewing: 1
     }
   },
   mounted: function() {
     this.$nextTick(function() {
+      console.info('ping!')
       this.initView()
     })
   },
@@ -200,8 +201,7 @@ export default {
 }
 </script>
 <style lang="less">
-@barheight: 61px;
-@fat-container-margin-top: 40x;
+@import '../../less/global.less';
 
 #Problems {
   background: none;
