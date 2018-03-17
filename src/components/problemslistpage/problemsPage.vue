@@ -262,7 +262,7 @@ export default {
 #ProblemTable thead tr th {
   color: #2cbfec;
   font-size: 1.4em;
-  font-weight: 600;
+  font-weight: 300;
   font-family: '微软雅黑';
   border: 0;
   height: 6rem;
