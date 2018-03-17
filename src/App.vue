@@ -4,7 +4,8 @@
   <header>
     <head-bar @toHome='changeToHome' @logIn='changeToLogin' @signUp='changeToSignup'
               @toProblem="changeToProblems" @toStatus="changeToStatus" @toContest="changeToContest"
-              @toRank="changeTo404" @toDiscuss="changeTo404" :nowPage=nowPageF :userPage=userPage></head-bar>
+              @toRank="changeTo404" @toDiscuss="changeTo404" :nowPage=nowPageF :userPage=userPage>
+    </head-bar>
   </header>
   <section id="main">
     <login-page v-if="isLoginShow" @exit="exitShow"></login-page>
@@ -159,6 +160,11 @@ header {
   min-height: 100%;
 }
 
+#head-filter {
+  clear: both;
+  width:100%;
+}
+
 #userPicture {
   height: 110px;
   margin-left: 20px;
@@ -177,7 +183,10 @@ header {
 }
 
 #main {
-  margin-top: 60px;
-  width:100%;
+  position: absolute;
+  margin-top: @barheight;
+  width: 100%;
+  top: 0;
+  bottom: 0;
 }
 </style>

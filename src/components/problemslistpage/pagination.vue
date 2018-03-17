@@ -7,7 +7,7 @@
             上一页
         </a>
       </li>
-      <li id="first-page-num" v-if="num.viewing > 5" :class="{'active': num.viewing === 1}">
+      <li id="first-page-num" v-if="num.viewing > 5" :class="{'active': num.viewing === 1}" @click="jump(1)">
         <a href="#">
           1
         </a>

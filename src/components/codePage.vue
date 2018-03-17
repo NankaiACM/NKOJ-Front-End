@@ -1,7 +1,7 @@
 <template>
   <div id="code-page" class="container-fluid">
-    <div class="editor-container col-md-12 animated zoomIn">
-      <editor v-model="code" @init="editorInit" :lang="lang" theme="terminal" width="100%" height="100%"></editor>
+    <div class="editor-container col-md-12 animated jello">
+      <editor v-model="code" @init="editorInit" :lang="lang" theme="github" width="100%" height="100%"></editor>
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
         require(`brace/mode/${this.lang_map[item]}`)
         console.log(this.lang_map[item])
       }
-      require('brace/theme/terminal')
+      require('brace/theme/github')
     },
     initView: function () {
       var code_id=this.$route.params.id
@@ -60,9 +60,13 @@ export default {
 </script>
 <style>
 #code-page {
+  position: absolute;
+  top: 0;
+  bottom: 0;
   padding: 0;
   margin: 0;
-  background: #333;
+  background: #fff;
+  overflow: hidden;
 }
 
 .editor-container {
@@ -74,9 +78,9 @@ export default {
 
 #code-page .ace_editor {
   margin: 0;
-  border-top: 2em solid #000;
-  border-right: 2em solid #000;
-  border-bottom: 2em solid #000;
-  box-shadow: 0 0 30em 0em #000;
+  border-top: 2em solid #fff;
+  border-right: 2em solid #fff;
+  border-bottom: 2em solid #fff;
+  box-shadow: 0 0 30em 0em #bfbfbf;
 }
 </style>

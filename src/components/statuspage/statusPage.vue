@@ -1,46 +1,48 @@
 <template>
 <div id="status-page">
-  <ul class="nav nav-pills">
-    <li role="presentation">
-      <input type="text" class="form-control" placeholder="problem ID" v-model="filter.problemID">
-    </li>
-    <li role="presentation">
-      <input type="text" class="form-control" placeholder="user ID" v-model="filter.userID">
-    </li>
-    <li role="presentation" class="dropdown navbar-right">
-      <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+  <div class="question-filter-base container-fluid">
+    <ul class="nav nav-pills">
+      <li role="presentation">
+        <input type="text" class="form-control" placeholder="problem ID" v-model="filter.problemID">
+      </li>
+      <li role="presentation">
+        <input type="text" class="form-control" placeholder="user ID" v-model="filter.userID">
+      </li>
+      <li role="presentation" class="dropdown navbar-right">
+        <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
         status
         <span class="caret"></span>
       </a>
-      <ul class="dropdown-menu">
-        <li v-for="status in dropdata.status"><a @click="setStatus(status.value)" href="#">
+        <ul class="dropdown-menu">
+          <li v-for="status in dropdata.status"><a @click="setStatus(status.value)" href="#">
             <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.status===status.value"></span>
             {{status.status}}
             </a>
-        </li>
-        <li role="separator" class="divider"></li>
-        <li>
-          <a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.status}}</a>
-        </li>
-      </ul>
-    </li>
-    <li role="presentation" class="dropdown navbar-right">
-      <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          </li>
+          <li role="separator" class="divider"></li>
+          <li>
+            <a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.status}}</a>
+          </li>
+        </ul>
+      </li>
+      <li role="presentation" class="dropdown navbar-right">
+        <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
         language
         <span class="caret"></span>
       </a>
-      <ul class="dropdown-menu">
-        <li v-for="lang in dropdata.lang"><a @click="setLang(lang.value)" href="#">
+        <ul class="dropdown-menu">
+          <li v-for="lang in dropdata.lang"><a @click="setLang(lang.value)" href="#">
             <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.lang===lang.value"></span>
             {{lang.lang}}
             </a>
-        </li>
-        <li role="separator" class="divider"></li>
-        <li><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.lang}}</a></li>
-      </ul>
-    </li>
-    <li role="presentation" class="navbar-right"><a href="#" class="text-muted" @click="getStatus">Submit</a></li>
-  </ul>
+          </li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.lang}}</a></li>
+        </ul>
+      </li>
+      <li role="presentation" class="navbar-right"><a href="#" class="text-muted" @click="getStatus">Submit</a></li>
+    </ul>
+  </div>
   <div class="container-fluid table-container">
     <table id="statusTable" class="table table-hover">
       <caption></caption>
@@ -69,13 +71,7 @@
             </router-link>
           </td>
           <td>
-            <button
-              :class="['btn btn-sm',getStatusClass(status.status)]"
-              type="button"
-              class="btn btn-primary"
-              data-toggle="modal"
-              data-target="#status-details"
-              @click="setDetailsRunId(status.run_id)">
+            <button :class="['btn btn-sm',getStatusClass(status.status)]" type="button" class="btn btn-primary" data-toggle="modal" data-target="#status-details" @click="setDetailsRunId(status.run_id)">
                 {{getStatusText(status.status)}}
             </button>
           </td>
@@ -168,7 +164,7 @@ export default {
     return {
       statusList: [],
       status_map: status_map,
-      details:{
+      details: {
         run_id: "-1"
       },
       filter: {
@@ -201,7 +197,7 @@ export default {
     }
   },
   methods: {
-    setDetailsRunId: function(run_id){
+    setDetailsRunId: function(run_id) {
       this.details.run_id = run_id
     },
     setStatus: function(status) {
@@ -270,96 +266,98 @@ export default {
 }
 </script>
 <style lang="less">
-@barheight: 61px;
+@import '../../less/global.less';
 
 #status-page {
-  text-align: left;
-  background: #fff;
-  padding: 0;
-  min-height: 100%;
+    text-align: left;
+    background: #fff;
+    padding: 0;
+    min-height: 100%;
 }
 
+.question-filter-base {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: @barheight;
+    height: @filterheight;
+    border-bottom: 1px solid #e8f1f2;
+}
 #status-page .nav {
-  position: fixed;
-  padding: 1em 4em;
-  left: 0;
-  top: @barheight;
-  background: inherit;
-  right: 0;
-  font-size: .5em;
-  border-bottom: 1px solid #e8f1f2;
+    background: inherit;
+    font-size: 0.5em;
+    width: 100%;
 }
 
 #status-page .nav input {
-  width: 8em;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
+    width: 8em;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 .table-container {
-  padding: 6em 2em;
-  font-size: .5em;
-  min-width: 600px;
+    padding: 6em 2em;
+    font-size: 0.5em;
+    min-width: 600px;
 }
 
 .table-container table.table td {
-  vertical-align: middle;
-  border: none;
-  text-align: center;
+    vertical-align: middle;
+    border: none;
+    text-align: center;
 }
 
 #statusTable th {
-  font-size: 1.2em;
-  border-bottom: 0;
-  height: 3em;
-  text-align: center;
+    font-size: 1.2em;
+    border-bottom: 0;
+    height: 3em;
+    text-align: center;
 }
 
 .table-container table.table tr {
-  transition: all .41s;
+    transition: all 0.41s;
 }
 
 #statusTable td a:hover {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 .table-container td span.label {
-  padding: .2em .6em .2em;
-  font-size: 100%;
+    padding: 0.2em 0.6em;
+    font-size: 100%;
 }
 
 .table-container td button.btn {
-  font-size: 80%;
-  border-radius: .25em;
-  font-weight: 700;
-  transition: all 1.41s,outline .1s;
+    font-size: 80%;
+    border-radius: 0.25em;
+    font-weight: 700;
+    transition: all 1.41s,outline 0.1s;
 }
 
 .table-container td button.btn:hover {
-  outline: 3px solid #ccc;
+    outline: 3px solid #ccc;
 }
 
-@media (min-width: 768px) {
-}
+@media (min-width: 768px) {}
 
 @media (min-width: 992px) {
-  .table-container {
-    padding: 6em 4em;
-    font-size: inherit;
-  }
-  #status-page .nav {
-    font-size: inherit;
-  }
-  #status-page .nav input {
-    width: 100%;
-  }
+    .table-container {
+        padding: 6em 4em;
+        font-size: inherit;
+    }
+    #status-page .nav {
+        font-size: inherit;
+    }
+    #status-page .nav input {
+        width: 100%;
+    }
 }
 
 @media (min-width: 1200px) {
-  .table-container {
-    padding: 6em 10em;
-    font-size: inherit;
-  }
+    .table-container {
+        padding: 6em 10em;
+        font-size: inherit;
+    }
 }
 </style>
