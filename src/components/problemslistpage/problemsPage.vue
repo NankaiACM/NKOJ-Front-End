@@ -91,27 +91,30 @@
           </i>
         </td>
         <td class="problemTableCol1">
-          <router-link :to="{path:'problem/'+problem.problemsID}">
-            {{problem.problemsID}}
+          <router-link :to="{path:'problem/'+problem.problem_id}">
+            {{problem.problem_id}}
           </router-link>
         </td>
         <td class="problemTableCol2">
-          <router-link :to="{path:'problem/'+problem.problemsID}">
-            {{problem.problemsName}}
+          <router-link :to="{path:'problem/'+problem.problem_id}">
+            {{problem.title}}
           </router-link>
         </td>
         <td class="problemTableCol3">
-          {{problem.problemsRatio}}
+          {{problem.submit_ac}} / {{problem.submit_all}}
         </td>
       </tr>
     </tbody>
   </table>
+  <problems-pagination @viewingleap="handleViewing"></problems-pagination>
 </div>
 </div>
 </template>
 <script>
+import ProblemsPagination from './pagination.vue'
 export default {
   name: 'component-problems',
+  props: ['user_pros_msg'],
   data: function() {
     return {
       filter: {
@@ -119,47 +122,86 @@ export default {
         status: '',
         keywords: ''
       },
-      problemList: []
+      problemList: [],
+      starlist: [],
+      aclist: [],
+      onlist: [],
+      pageSize: 20,
+      queryleft: 1001,
+      queryright: 10020,
+      viewing: 1
     }
   },
   mounted: function() {
     this.$nextTick(function() {
+      console.info('ping!')
       this.initView()
     })
   },
   methods: {
-    initView: function() {
-      this.$http.get(
-        '/static/problemsData.json', {
+    initView: function () {
+      this.$http.post(
+        'http://localhost:8000/api/problems/list', {
           'keywords': this.filter.keywords,
           'difficulty': this.filter.difficulty,
-          'status': this.filter.status
+          'status': this.filter.status,
+          'queryleft': this.queryleft,
+          'queryright': this.queryright
         }).then(function(res) {
-        this.problemList = res.body.data
+          console.log(res.body.data)
+          var tmp = res.body.data
+          for(var x in tmp){
+            var item = tmp[x]
+            tmp[x].isStar = false
+            tmp[x].state = 'none'
+            if(this.starlist.indexOf(item.problem_id) !== -1){
+              tmp[x].isStar = true
+            }
+            if(this.aclist.indexOf(item.problem_id) !== -1){
+              item[x].state = 'ac'
+            }
+            if(this.onlist.indexOf(item.problem_id) !== -1){
+              item[x].state = 'on'
+            }
+          }
+          this.problemList = tmp
       })
     },
-    setDifficulty: function(difficulty) {
+    setDifficulty: function (difficulty) {
       if (difficulty === this.filter.difficulty)
         difficulty = ''
       this.filter.difficulty = difficulty
       this.problemList = []
       this.initView()
     },
-    setStatus: function(status) {
+    setStatus: function (status) {
       if (status === this.filter.status)
         status = ''
       this.filter.status = status
       this.problemList = []
       this.initView()
+    },
+    handleViewing: function (newv) {
+      this.viewing = newv.viewing
+      this.queryleft = (newv.viewing - 1) * this.pageSize + 1 +1000
+      this.queryright = this.queryleft + this.pageSize - 1
+      this.initView()
+    }
+  },
+  watch: {
+    user_pros_msg : function (newv,oldv) {
+      this.starlist = newv.star
+      this.aclist = newv.ac
+      this.onlist = newv.on
     }
   },
   components: {
+    ProblemsPagination
   }
 }
 </script>
 <style lang="less">
-@barheight: 61px;
-@fat-container-margin-top: 40x;
+@import '../../less/global.less';
 
 #Problems {
   background: none;
@@ -174,6 +216,7 @@ export default {
   border-radius: 2px;
   border: 1px solid #e8f1f2;
   margin-top: @barheight+@fat-container-margin-top;
+  margin-bottom: @barheight+@fat-container-margin-top;
 }
 
 .question-filter-base {
@@ -212,6 +255,8 @@ export default {
 #ProblemTable {
   background: #fff;
   padding: 2em;
+  border-bottom: 1px solid #e5e9ef;
+  margin-bottom: 1em;
 }
 
 #ProblemTable thead tr th {
