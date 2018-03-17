@@ -1,6 +1,5 @@
 <template>
 <div id="app">
-  <div class="shadow-veil" v-if="isSignupShow" v-on:click="exitShow"></div>
   <header>
     <head-bar @toHome='changeToHome' @logIn='changeToLogin' @signUp='changeToSignup'
               @toProblem="changeToProblems" @toStatus="changeToStatus" @toContest="changeToContest"
@@ -8,15 +7,15 @@
     </head-bar>
   </header>
   <section id="main">
-    <login-page v-if="isLoginShow" @exit="exitShow"></login-page>
-    <signup-page v-if="isSignupShow"></signup-page>
+    <login-page v-if="isLoginShow" @exit="exitShow" status="login"></login-page>
+    <login-page v-if="isSignupShow" @exit="exitShow" status="signUp"></login-page>
     <router-view class="com-container"></router-view>
   </section>
 </div>
 </template>
 
 <script>
-import loginPage from './components/dialog/dialog'
+import loginPage from './components/dialog/loginSignUp'
 import signupPage from './components/signupPage'
 import headBar from './components/headBar'
 export default {
@@ -33,7 +32,7 @@ export default {
   },
   methods: {
     changeToProblems: function () {
-      this.nowPage='problem'
+      this.nowPage='problems'
       this.$router.push({
         path: '/problems'
       })
