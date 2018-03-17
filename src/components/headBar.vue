@@ -21,9 +21,11 @@
         </div>
       </div>
     </div>
+    <!--
     <div class="head-container">
       <slot></slot>
     </div>
+    -->
   </div>
 </template>
 
