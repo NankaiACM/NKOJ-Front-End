@@ -112,6 +112,7 @@ export default {
 </script>
 
 <style scoped lnag="less">
+@import '../less/global.less';
 #problemPage pre{
   text-align: left;
   background: white;
@@ -177,6 +178,7 @@ export default {
 }
 #problemPage .problemPageTitle{
   background: #fff;
+  height: @filterheight;
   position: fixed;
   z-index: 2;
   padding-left: 6em;

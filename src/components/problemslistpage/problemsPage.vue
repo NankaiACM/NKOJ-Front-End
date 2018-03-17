@@ -226,7 +226,7 @@ export default {
   left: 0;
   right: 0;
   top: @barheight;
-  height: 60px;
+  height: @filterheight;
   z-index: 1;
   background: #fff;
   border-bottom: 1px solid #e8f1f2;
