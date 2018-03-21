@@ -70,11 +70,13 @@
           <p>{{statusMessage}}</p>
           <div class="text">
             你还可以：
-            <a @click="isEmailSend=falase,
+            <a @click="isEmailSend=false,
                        signupAttribute.signupCaptcha='',
                        showMessageBar('.appear .message-bar', 0),
                        captchaUrl='http://111.231.98.20:8000/captcha/sendmail?_t=' + Math.random(),
-                       focusing=0">重新填写邮箱</a>或<a>重发邮件</a>
+                       focusing=0">重新填写邮箱</a>
+            或
+            <a :class="{'disabled':sendColdTime!=0}" @click="resendEmailAttempt(),sendColdTime=61,setSendColdTime()">重发邮件</a>
           <span v-if="sendColdTime!=0">(还有{{sendColdTime}}s)</span>
           </div>
       </div>
@@ -124,13 +126,14 @@ export default {
         emailCode: ""
       },
       isEmailSending: false,
-      isEmailSend: false,
+      isEmailSend: true,
+      emailSendDate: new Date(),
       isEmailVerify: false,
       statusMessage: "",
-      signupHeight: 250,
+      emailKey: "",
       captchaUrl:
         "http://111.231.98.20:8000/captcha/sendmail?_t=" + Math.random(),
-      sendColdTime: 60,
+      sendColdTime: 61
     };
   },
   methods: {
@@ -237,10 +240,12 @@ export default {
               var resp = res.body;
               if (resp.code === 0) {
                 vue.isEmailSend = true;
+                vue.emailKey = resp.data.key; //记录key
+                vue.emailSendDate = new Date(); //记录当前时间
                 vue.statusMessage = "我们已经向您的邮箱发送了邮件！";
                 vue.showMessageBar(".appear .message-bar", 4);
               } else if (resp.code === 233) {
-                vue.statusMessage = "请刷新验证码,再试一次！";
+                vue.statusMessage = "请再输入一次验证码~";
                 vue.showMessageBar(".appear .message-bar", 2);
               } else if (resp.code === 234) {
                 vue.statusMessage = "验证码错啦！";
@@ -249,12 +254,31 @@ export default {
                 vue.statusMessage = "邮箱已经被注册或暂时无法发送邮件！";
                 vue.showMessageBar(".appear .message-bar", 2);
               }
-              vue.captchaUrl='http://111.231.98.20:8000/captcha/sendmail?_t=' + Math.random();
+              vue.signupAttribute.signupCaptcha = "";
+              vue.captchaUrl =
+                "http://111.231.98.20:8000/captcha/sendmail?_t=" +
+                Math.random();
               this.isEmailSending = false;
             },
             res => {
               var vue = this;
-              vue.statusMessage = "电波……无法传达……（连接失败）";
+              console.log(res);
+              if (res.status === 429) {
+                vue.statusMessage =
+                  "请求过于频繁啦，再等" +
+                  (60 -
+                    Math.floor(
+                      (new Date().getTime() - vue.emailSendDate.getTime()) /
+                        1000
+                    )) +
+                  "秒吧";
+                vue.signupAttribute.signupCaptcha = "";
+                vue.captchaUrl =
+                  "http://111.231.98.20:8000/captcha/sendmail?_t=" +
+                  Math.random();
+              } else {
+                vue.statusMessage = "电波……无法传达……（连接失败）";
+              }
               vue.showMessageBar(".appear .message-bar", 2);
               this.isEmailSending = false;
             }
@@ -267,6 +291,75 @@ export default {
           });
       }
     },
+    resendEmailAttempt() {
+      var vue = this;
+      vue.isEmailSending = true;
+      vue.$http.get(
+        "http://111.231.98.20:8000/api/u/verify/" +
+          vue.emailKey +
+          "/" +
+          vue.signupAttribute.signupEmail,
+        {
+          crossDomain: true,
+          xhrFields: { withCredentials: true },
+          timeout: "8000",
+          cache: true,
+          credentials: true
+        }
+      )
+      .then(
+        res => {
+          var vue = this;
+          console.log(res.body);
+          var resp = res.body;
+          if (resp.code === 0) {
+            vue.isEmailSend = true;
+            vue.emailKey = resp.data.key; //记录key
+            vue.emailSendDate = new Date(); //记录当前时间
+            vue.statusMessage = "我们已经向您的邮箱发送了邮件！";
+            vue.showMessageBar(".appear .message-bar", 4);
+          } else if (resp.code === 233) {
+            vue.statusMessage = "请再输入一次验证码~";
+            vue.showMessageBar(".appear .message-bar", 2);
+          } else if (resp.code === 234) {
+            vue.statusMessage = "验证码错啦！";
+            vue.showMessageBar(".appear .message-bar", 2);
+          } else {
+            vue.statusMessage = "邮箱已经被注册或暂时无法发送邮件！";
+            vue.showMessageBar(".appear .message-bar", 2);
+          }
+          vue.signupAttribute.signupCaptcha = "";
+          vue.captchaUrl =
+            "http://111.231.98.20:8000/captcha/sendmail?_t=" + Math.random();
+          this.isEmailSending = false;
+        },
+        res => {
+          var vue = this;
+          console.log(res);
+          if (res.status === 429) {
+            vue.statusMessage =
+              "请求过于频繁啦，再等" +
+              (60 -
+                Math.floor(
+                  (new Date().getTime() - vue.emailSendDate.getTime()) / 1000
+                )) +
+              "秒吧";
+            vue.signupAttribute.signupCaptcha = "";
+            vue.captchaUrl =
+              "http://111.231.98.20:8000/captcha/sendmail?_t=" + Math.random();
+          } else {
+            vue.statusMessage = "电波……无法传达……（连接失败）";
+          }
+          vue.showMessageBar(".appear .message-bar", 2);
+          this.isEmailSending = false;
+        }
+      ).catch(function(response) {
+        var vue = this;
+        vue.statusMessage = "通讯间发生错误……稍后再试吧";
+        vue.showMessageBar(".appear .message-bar", 2);
+        this.isEmailSending = false;
+      });
+    },
     signupAttempt: function(event) {
       rsaEncrypt(
         this.signupAttribute.signupPassword,
@@ -275,20 +368,33 @@ export default {
       event.preventDefault();
     },
     CheckMail(mail) {
-      var filter = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+      var filter = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
       return filter.test(mail);
     },
     showMessageBar(classcode, high) {
       var mb = document.querySelector(classcode);
-      if (mb.style.height != high) {
-        Velocity(mb, { height: high + "rem" }, { duration: 300 });
+      if (mb.style.height != high + "rem") {
+        Velocity(
+          mb,
+          { height: [high + "rem", mb.style.height] },
+          { duration: 300 }
+        );
       }
     },
     labelClick(event) {
       event.target.nextElementSibling.focus();
     },
-    circle(event) {
-      console.log(event.target);
+    setSendColdTime() {
+      this.sendColdTime--;
+      if (this.sendColdTime != 0) {
+        setTimeout(this.setSendColdTime, 1000);
+      }
+    }
+  },
+  watch: {
+    isEmailSend: function(newValue, oldValue) {
+      if (newValue) this.setSendColdTime();
+      else this.sendColdTime = 61;
     }
   }
 };
@@ -343,6 +449,13 @@ export default {
 .dialog-field input.disabled:hover {
   border-color: #ccc;
 }
+.dialog-field a.disabled,
+.dialog-field a.disabled:hover,
+.dialog-field a.disabled:focus,
+.dialog-field a.disabled:active {
+  pointer-events: none;
+  color: #aaa;
+}
 .dialog-field .captcha input {
   padding-right: 150px;
 }
@@ -374,7 +487,7 @@ export default {
 
 .dialog-field .message-bar {
   margin: -15px;
-  height: 0;
+  height: 2rem;
   overflow: hidden;
   font-size: 1.4rem;
   color: #5bc0de;

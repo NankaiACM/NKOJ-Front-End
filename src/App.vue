@@ -116,7 +116,7 @@ export default {
 
 #app header {
   transform: translateZ(99px);
-  z-index: 99;
+  z-index: 3;
 }
 
 #navigation .glyphicon {
