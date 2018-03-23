@@ -10,7 +10,8 @@ import discussPage from '../components/discussPage'
 import userPage from '../components/userPage'
 import allContest from '../components/contestpage/allContest'
 import contest from '../components/contestpage/contestDetail'
-import codePage from '../components/codePage'
+//import codePage from '../components/codePage'
+import detailsPage from '../components/detailspage/details'
 Vue.use(Router)
 
 export default new Router({
@@ -24,7 +25,8 @@ export default new Router({
     {path: '/status',component: statusPage},
     {path: '/discuss',component: discussPage},
     {path: '/user/:id', component: userPage},
-    {path: '/code/:id', component: codePage},
+    //{path: '/code/:id', component: codePage},
+    {path: '/details/:solution_id', component: detailsPage},
     {
       path: '/contest',
       component: componentContest,

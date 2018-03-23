@@ -42,7 +42,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 #status-details.modal.fade.in,
 .modal-backdrop.in {
   top: 50px;
