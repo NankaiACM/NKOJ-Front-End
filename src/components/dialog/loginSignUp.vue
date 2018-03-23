@@ -42,7 +42,7 @@
         <label @click="labelClick">右图中的文字</label>
         <input type="text" class="form-control" :class="{'disabled':isEmailSending}" v-model="signupAttribute.signupCaptcha" 
             :disabled="isEmailSending" @focus="focusing=4" @blur="focusing=0" maxlength="6">
-        <img class="captcha" :src="captchaUrl" @click="captchaUrl='http://111.231.98.20:8000/captcha/sendmail?_t=' + Math.random()"/>
+        <img class="captcha" :src="captchaUrl" @click="captchaUrl=`http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random()"/>
       </div>
       <!--第二阶段，输入验证码-->
       <div class="form-group" v-if="isEmailSend" :class="{'hastext':signupAttribute.emailCode!='','focus':focusing==1}">
@@ -73,7 +73,7 @@
             <a @click="isEmailSend=falase,
                        signupAttribute.signupCaptcha='',
                        showMessageBar('.appear .message-bar', 0),
-                       captchaUrl='http://111.231.98.20:8000/captcha/sendmail?_t=' + Math.random(),
+                       captchaUrl=`http://${window.noPointHost}0:8000/captcha/sendmail?_t=` + Math.random(),
                        focusing=0">重新填写邮箱</a>或<a>重发邮件</a>
           <span v-if="sendColdTime!=0">(还有{{sendColdTime}}s)</span>
           </div>
@@ -129,7 +129,7 @@ export default {
       statusMessage: "",
       signupHeight: 250,
       captchaUrl:
-        "http://111.231.98.20:8000/captcha/sendmail?_t=" + Math.random(),
+        `http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random(),
       sendColdTime: 60,
     };
   },
@@ -143,7 +143,7 @@ export default {
       loginPackege.password = password;
       loginPackege.user = this.loginAttribute.loginAccount;
       this.$http
-        .post("http://111.231.98.20:8000/api/u/login", loginPackege, {
+        .post(`http://${window.noPointHost}:8000/api/u/login`, loginPackege, {
           crossDomain: true,
           xhrFields: { withCredentials: true }
         })
@@ -196,7 +196,7 @@ export default {
       sendPackge.school = "NanKai University";
       sendPackge.ecode = this.emailCode;
       this.$http
-        .post("http://111.231.98.20:8000/api/u/register", sendPackge, {
+        .post(`http://${window.noPointHost}:8000/api/u/register`, sendPackge, {
           crossDomain: true,
           xhrFields: { withCredentials: true }
         })
@@ -218,7 +218,7 @@ export default {
         this.isEmailSending = true;
         this.$http
           .get(
-            "http://111.231.98.20:8000/api/u/verify/" +
+            `http://${window.noPointHost}:8000/api/u/verify/` +
               this.signupAttribute.signupEmail +
               "?captcha=" +
               this.signupAttribute.signupCaptcha,
@@ -249,7 +249,7 @@ export default {
                 vue.statusMessage = "邮箱已经被注册或暂时无法发送邮件！";
                 vue.showMessageBar(".appear .message-bar", 2);
               }
-              vue.captchaUrl='http://111.231.98.20:8000/captcha/sendmail?_t=' + Math.random();
+              vue.captchaUrl=`http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random();
               this.isEmailSending = false;
             },
             res => {

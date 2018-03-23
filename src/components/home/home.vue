@@ -13,7 +13,7 @@
   </div>
   <div class="row">
     <homeDiscuss/>
-    <componentShell/>
+    <componentShell class="col-lg-8 visible-lg home-component"><h3 align="left">Shell</h3></componentShell>
   </div>
 </div>
 </div>
@@ -22,7 +22,7 @@
 import homeContest from './homeContest.vue'
 import homeDiscuss from './homeDiscuss.vue'
 import homeProblem from './homeProblems.vue'
-import componentShell from './shell'
+import componentShell from '../shell/mayoi.vue'
 export default {
   name: 'component-home',
   data: function() {
