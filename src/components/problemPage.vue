@@ -111,7 +111,7 @@ export default {
 }
 </script>
 
-<style scoped lnag="less">
+<style scoped lang="less">
 @import '../less/global.less';
 #problemPage pre{
   text-align: left;
