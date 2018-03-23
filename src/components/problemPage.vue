@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     initView: function () {
-      this.$http.get('http://localhost:8000/api/p/'+this.$route.params.problemId).then((res) => {
+      this.$http.get(`http://${window.noPointHost}:8000/api/p/`+this.$route.params.problemId).then((res) => {
         console.log(res.body)
         this.problemMarkDownText = res.body
         this.isStart = true
@@ -111,7 +111,7 @@ export default {
 }
 </script>
 
-<style scoped lnag="less">
+<style scoped lang="less">
 @import '../less/global.less';
 #problemPage pre{
   text-align: left;
