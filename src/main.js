@@ -6,6 +6,7 @@ import App from './App'
 import App2 from "./App2"
 import router from './router'
 Vue.config.productionTip = false
+import '@/less/global.less'
 Vue.use(VueResource)
 /* eslint-disable no-new */
 console.log(router)

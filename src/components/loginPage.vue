@@ -1,6 +1,6 @@
 <template>
 <div id="loginPage">
-  <h2 align="left">登陆</h2><hr>
+  <div class="title">登陆</div><hr>
   <form>
     <div class="form-group">
       <h4 align="left"><label>账号</label></h4>
@@ -14,7 +14,7 @@
       <p align="left">{{loginMessage}}</p>
     </div>
     <div class="form-group">
-      <button class="btn btn-success" v-on:click="loginAtempt()">登陆</button>
+      <button class="btn btn-success" v-on:click="loginAttempt">登陆</button>
       <button class="btn btn-info">注册</button>
     </div>
   </form>
@@ -36,21 +36,29 @@ export default {
   methods: {
     passwordEncrypt: function (password) {
       this.tempPassword = password
-    },
-    loginAtempt: function () {
-      var _this = this
-      var loginPackege = []
-      loginPackege.user = this.loginAccount
-      rsaEncrypt(this.loginPassword, this.passwordEncrypt)
+      var loginPackege = {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
       loginPackege.password = this.tempPassword
-      this.$http.post('http://111.231.98.20:8000/api/u/login', loginPackege).then(function (res) {
+      loginPackege.user = this.loginAccount
+      this.$http.post(`http://${window.noPointHost}/api/u/login`, loginPackege,  {crossDomain : true, credentials : true}).then( (res) => {
         console.log(res)
         if (res.body.code === 400) {
-          _this.loginMessage = '用户名不存在'
-        } else {
-          // todo
+          this.loginMessage = '用户名不存在'
+        } else if(res.body.code === 1){
+          this.loginMessage = '用户名或密码错误'
+        } else if(res.body.code === 0){
+          this.loginMessage = '成功登陆！'
+          console.log(res.body.user)
+          this.$emit('userInfo', res.body.user)
         }
       })
+    },
+    loginAttempt: function (event) {
+      rsaEncrypt(this.loginPassword, this.passwordEncrypt)
+      event.preventDefault()
     }
   }
 }
