@@ -96,7 +96,7 @@
       </tbody>
     </table>
     <div id="load-btn-box" v-if="isBtn">
-      <div class="load-btn"><span class="glyphicon glyphicon-refresh"></span>
+      <div class="load-btn" @click="getStatus"><span class="glyphicon glyphicon-refresh"></span>
       </div>
     </div>
   </div>
@@ -108,7 +108,7 @@ import InfiniteLoading from 'vue-infinite-loading'
 import StatusDetails from './details.vue'
 export default {
   name: 'statusPage',
-  props: ['isFilter','isInfinite','isBtn'],
+  props: ['isFilter','isInfinite','isBtn','apiUrl'],
   data: function() {
     var status_map = [{
         "value": "107",
@@ -218,7 +218,7 @@ export default {
       console.log(this.isInfinite)
       var _this = this
       this.filter.index = 0
-      this.$http.get('/static/status.json', {
+      this.$http.get(this.apiUrl, {
         "problemsID": _this.filter.problemID,
         "userID": _this.filter.userID,
         "status": _this.filter.status,
@@ -250,13 +250,20 @@ export default {
       var _start = _this.filter.index * _this.filter.page_length
       _this.filter.index++
         var _end = _this.filter.index * _this.filter.page_length
-      this.$http.get('/static/status.json').then(function(res) {
+      this.$http.get(this.apiUrl,{
+        "problemsID": _this.filter.problemID,
+        "userID": _this.filter.userID,
+        "status": _this.filter.status,
+        "lang": _this.filter.lang,
+        "start": 0,
+        "end": this.filter.page_length
+      }).then(function(res) {
         if (!res.body.data.length) {
-          $state.complete()
+          if ($state.complete) $state.complete()
           return -1
         }
         _this.statusList = _this.statusList.concat(res.body.data)
-        $state.loaded()
+        if ($state.loaded) $state.loaded()
         console.log(_this.statusList.length)
       })
     }
@@ -289,6 +296,9 @@ export default {
     top: @barheight;
     height: @filterheight;
     border-bottom: 1px solid #e8f1f2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 #status-page .nav {
     background: inherit;
@@ -320,6 +330,7 @@ export default {
     border-bottom: 0;
     height: 3em;
     text-align: center;
+    font-weight: 200;
 }
 
 .table-container table.table tr {
@@ -357,17 +368,31 @@ export default {
 .load-btn {
   width: 50px;
   height: 50px;
-  //border-radius: 50px;
-  background: royalblue;
+  color: #ccc;
+  transition: all 1s cubic-bezier(.17,.67,.83,.67);
+}
+
+.load-btn:hover {
+  border-radius: 50px;
+  background: #87b7cb;
   color: #fff;
+  box-shadow: 1px 1px 1px #ccc;
 }
 
 .load-btn span {
   width: 50px;
   height: 50px;
-  font-size: 50px;
+  padding: 12.5px;
+  font-size: 25px;
   text-align: center;
-  line-height: 50px;
+  line-height: 25px;
+  cursor: pointer;
+  transform-origin: center center;
+  transition: all 1s;
+}
+
+.load-btn span:hover {
+  transform: rotate(180deg);
 }
 
 @media (min-width: 768px) {}

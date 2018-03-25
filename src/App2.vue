@@ -76,7 +76,7 @@
       <h3><span class="glyphicon glyphicon-stats"></span>STATUS</h3>
       <!--提交状态列表-->
       <div class="container padding-t-40">
-        <status :is-infinite="false" :is-filter="false" :is-btn="true"/>
+        <status :is-infinite="false" :is-filter="false" :is-btn="true" api-url="/static/status.json"/>
         <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
       </div>
     </div>
@@ -89,7 +89,6 @@
       <h3><span class=" glyphicon glyphicon-signal"></span>RANK</h3>
       <!--排名列表-->
       <div class="container padding-t-40">
-        <status :is-infinite="true" :is-filter="false"/>
         <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
       </div>
     </div>

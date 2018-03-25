@@ -22,7 +22,16 @@ export default new Router({
     {path: '/notFound', component: componentB},
     {path: '/', redirect: '/home'},
     {path: '/problem/:problemId', component: problemsPage},
-    {path: '/status',component: statusPage},
+    {
+      path: '/status',
+      component: statusPage,
+      props: {
+        isFilter: true,
+        isInfinite: true,
+        isBtn: false,
+        apiUrl: '/static/status.json'
+      }
+    },
     {path: '/discuss',component: discussPage},
     {path: '/user/:id', component: userPage},
     //{path: '/code/:id', component: codePage},

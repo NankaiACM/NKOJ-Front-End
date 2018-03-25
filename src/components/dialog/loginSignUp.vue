@@ -42,7 +42,7 @@
         <label @click="labelClick">右图中的文字</label>
         <input type="text" class="form-control" :class="{'disabled':isEmailSending}" v-model="signupAttribute.signupCaptcha" 
             :disabled="isEmailSending" @focus="focusing=4" @blur="focusing=0" maxlength="6">
-        <img class="captcha" :src="captchaUrl" @click="captchaUrl=`http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random()"/>
+        <img class="captcha" :src="captchaUrl" @click="captchaUrl=`http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random()"/>
       </div>
       <!--第二阶段，输入验证码-->
       <div class="form-group" v-if="isEmailSend" :class="{'hastext':signupAttribute.emailCode!='','focus':focusing==1}">
@@ -73,7 +73,7 @@
             <a @click="isEmailSend=falase,
                        signupAttribute.signupCaptcha='',
                        showMessageBar('.appear .message-bar', 0),
-                       captchaUrl=`http://${window.noPointHost}0:8000/captcha/sendmail?_t=` + Math.random(),
+                       captchaUrl=`http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random(),
                        focusing=0">重新填写邮箱</a>或<a>重发邮件</a>
           <span v-if="sendColdTime!=0">(还有{{sendColdTime}}s)</span>
           </div>
@@ -128,6 +128,7 @@ export default {
       isEmailVerify: false,
       statusMessage: "",
       signupHeight: 250,
+      noPointHost: window.noPointHost,
       captchaUrl:
         `http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random(),
       sendColdTime: 60,
