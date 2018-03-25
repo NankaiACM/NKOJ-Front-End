@@ -50,7 +50,7 @@ export default {
   right: 0;
   bottom: 0;
   background-color: black;
-  z-index: 2;
+  z-index: 4;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,7 +61,7 @@ export default {
   width: 35rem;
   background: #fff;
   border-radius: 1rem;
-  padding: 1rem 2.5rem;
+  padding: 10px 25px;
 }
 .dialog-field .glyphicon-remove{
   position: absolute;

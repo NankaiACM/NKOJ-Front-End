@@ -144,15 +144,6 @@ header {
   z-index: 1;
 }
 
-.shadow-veil{
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background: black;
-  z-index: 2;
-}
 
 .com-container {
   width: 100%;
