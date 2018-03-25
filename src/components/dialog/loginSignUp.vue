@@ -50,7 +50,7 @@
                      v-model="signupAttribute.signupCaptcha"
                      :disabled="isEmailSending" @focus="focusing=4" @blur="focusing=0" maxlength="6">
               <img class="captcha" :src="captchaUrl"
-                   @click="captchaUrl='http://111.231.98.20:8000/captcha/sendmail?_t=' + Math.random()"/>
+                   @click="captchaUrl=`http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random()"/>
             </div>
             <div class="message-bar">
               <p>{{statusMessage}}</p>
@@ -175,10 +175,8 @@ export default {
       statusMessage: "",
       emailKey: "",
       captchaUrl:
-        "http://111.231.98.20:8000/captcha/sendmail?_t=" + Math.random(),
-      sendColdTime: 0,
-      timeToClose: 0,
-      tansitionHeight: 0
+        `http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random(),
+      sendColdTime: 60,
     };
   },
   methods: {
@@ -191,7 +189,7 @@ export default {
       loginPackege.password = password;
       loginPackege.user = this.loginAttribute.loginAccount;
       this.$http
-        .post("http://111.231.98.20:8000/api/u/login", loginPackege, {
+        .post(`http://${window.noPointHost}:8000/api/u/login`, loginPackege, {
           crossDomain: true,
           xhrFields: { withCredentials: true }
         })
@@ -232,7 +230,7 @@ export default {
         this.isEmailSending = true;
         this.$http
           .get(
-            "http://111.231.98.20:8000/api/u/verify/" +
+            `http://${window.noPointHost}:8000/api/u/verify/` +
               this.signupAttribute.signupEmail +
               "?captcha=" +
               this.signupAttribute.signupCaptcha,
@@ -267,7 +265,7 @@ export default {
               vue.showMessageBar(".message-bar", 2);
               vue.signupAttribute.signupCaptcha = "";
               vue.captchaUrl =
-                "http://111.231.98.20:8000/captcha/sendmail?_t=" +
+                `http://${window.noPointHost}:8000/captcha/sendmail?_t=` +
                 Math.random();
               this.isEmailSending = false;
             },
@@ -285,7 +283,7 @@ export default {
                   "秒吧";
                 vue.signupAttribute.signupCaptcha = "";
                 vue.captchaUrl =
-                  "http://111.231.98.20:8000/captcha/sendmail?_t=" +
+                  `http://${window.noPointHost}:8000/captcha/sendmail?_t=` +
                   Math.random();
               } else {
                 vue.statusMessage = "电波……无法传达……（连接失败）";
@@ -307,7 +305,7 @@ export default {
       vue.isEmailSending = true;
       vue.$http
         .get(
-          "http://111.231.98.20:8000/api/u/verify/" +
+          `http://${window.noPointHost}:8000/api/u/verify/` +
             vue.emailKey +
             "/" +
             vue.signupAttribute.signupEmail,
@@ -364,7 +362,7 @@ export default {
       vue.isEmailVerifying = true;
       vue.$http
         .get(
-          "http://111.231.98.20:8000/api/u/verify/" +
+          `http://${window.noPointHost}:8000/api/u/verify/` +
             vue.emailKey +
             "/" +
             vue.signupAttribute.emailCode,
@@ -433,7 +431,7 @@ export default {
       sendPackge.gender = 1;
       console.log(sendPackge);
       this.$http
-        .post("http://111.231.98.20:8000/api/u/register", sendPackge, {
+        .post(`http://${window.noPointHost}:8000/api/u/register`, sendPackge, {
           crossDomain: true,
           xhrFields: { withCredentials: true },
           timeout: "8000",
@@ -500,7 +498,7 @@ export default {
         form,
         { height: keep - this.tansitionHeight + target + "px" },
         {
-          duration: (Math.abs(this.tansitionHeight - target))*5,
+          duration: Math.sqrt(Math.abs(this.tansitionHeight - target))*10,
           complete: function() {
             el.style.display = "block";
             form.style.height = "auto";
@@ -527,7 +525,7 @@ export default {
       } else {
         this.signupAttribute.signupCaptcha = "";
         this.captchaUrl =
-          "http://111.231.98.20:8000/captcha/sendmail?_t=" + Math.random();
+          `http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random();
       }
       this.focusing = 0;
     },
