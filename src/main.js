@@ -1,13 +1,11 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import './global.js'
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 import App from './App'
 import App2 from "./App2"
 import router from './router'
-
-//window.noPointHost = 'localhost'
-window.noPointHost = '111.231.98.20'
 
 Vue.config.productionTip = false
 Vue.use(VueResource)

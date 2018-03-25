@@ -89,6 +89,7 @@
       <h3><span class=" glyphicon glyphicon-signal"></span>RANK</h3>
       <!--排名列表-->
       <div class="container padding-t-40">
+        <ranks/>
         <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
       </div>
     </div>
@@ -105,12 +106,14 @@
 <script>
 import problemList from "./components/contestpage/contestOpenCompenents/problemList.vue";
 import status from "./components/statuspage/statusPage.vue";
+import ranks from "./components/contestpage/contestRank.vue";
 
 export default {
   name: 'App2',
   components:{
     problemList,
     status,
+    ranks
   },
   data(){
     return{

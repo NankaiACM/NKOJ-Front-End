@@ -13,7 +13,7 @@ import contest from '../components/contestpage/contestDetail'
 //import codePage from '../components/codePage'
 import detailsPage from '../components/detailspage/details'
 Vue.use(Router)
-
+console.log(window.noPointHost)
 export default new Router({
   mode: 'history',
   routes: [
@@ -29,7 +29,7 @@ export default new Router({
         isFilter: true,
         isInfinite: true,
         isBtn: false,
-        apiUrl: '/static/status.json'
+        apiUrl: 'http://'+window.noPointHost+':'+window.noPointPort+'/api/status/list'
       }
     },
     {path: '/discuss',component: discussPage},

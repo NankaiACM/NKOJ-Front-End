@@ -58,8 +58,8 @@
         <th>submit time</th>
       </thead>
       <tbody>
-        <tr v-for="status in statusList">
-          <td class="hidden-xs">{{status.run_id}}</td>
+        <tr v-for="status in statusList" :key="status.solution_id">
+          <td class="hidden-xs">{{status.solution_id}}</td>
           <td>
             <router-link :to="{path:'user/'+status.user_id}">
               <span class="label label-info">{{status.user_id}}</span>
@@ -71,11 +71,11 @@
             </router-link>
           </td>
           <td>
-            <button :class="['btn btn-sm',getStatusClass(status.status)]" type="button" class="btn btn-primary" data-toggle="modal" data-target="#status-details" @click="setDetailsRunId(status.run_id)">
-                {{getStatusText(status.status)}}
+            <button :class="['btn btn-sm',getStatusClass(status.status_id)]" type="button" class="btn btn-primary" data-toggle="modal" data-target="#status-details" @click="setDetailsRunId(status.solution_id)">
+                {{getStatusText(status.status_id)}}
             </button>
           </td>
-          <td>{{status.lang}}</td>
+          <td>{{status.language}}</td>
           <td>
             {{status.code_size}}&nbsp;&nbsp;
             <router-link v-if="status.code_id" :to="{path:'code/'+status.code_id}">
@@ -86,7 +86,7 @@
           </td>
           <td>{{status.time}}</td>
           <td>{{status.memory}}</td>
-          <td>{{new Date(status.timestamp*1).toLocaleString()}}</td>
+          <td>{{new Date(status.when).toLocaleString()}}</td>
         </tr>
         <infinite-loading @infinite="infiniteHandler" v-if="isInfinite==true">
           <span slot="no-more">
@@ -100,7 +100,7 @@
       </div>
     </div>
   </div>
-  <status-details :run_id="details.run_id"></status-details>
+  <status-details :solution_id="details.solution_id"></status-details>
 </div>
 </template>
 <script>
@@ -168,16 +168,31 @@ export default {
     ]
     return {
       statusList: [],
+      /* 
+        status in statusList
+        {
+          "solution_id": 1,
+          "user_id": 1,
+          "problem_id": 1001,
+          "status_id": null,
+          "language": 0,
+          "code_size": null,
+          "time": null,
+          "memory": null,
+          "when": "2018-03-25T13:34:47.887Z",
+          "ipaddr_id": 10
+        }
+      */
       status_map: status_map,
       details: {
-        run_id: "-1"
+        solution_id: "-1"
       },
       filter: {
         problemID: '',
         userID: '',
         status: '',
         lang: '',
-        index: 0,
+        index: 1,
         page_length: 20
       },
       dropdata: {
@@ -202,8 +217,8 @@ export default {
     }
   },
   methods: {
-    setDetailsRunId: function(run_id) {
-      this.details.run_id = run_id
+    setDetailsRunId: function(solution_id) {
+      this.details.solution_id = solution_id
     },
     setStatus: function(status) {
       if (this.filter.status === status) status = ''
@@ -214,19 +229,28 @@ export default {
       this.filter.lang = lang
     },
     getStatus: function() {
-      console.log(this.isFilter)
-      console.log(this.isInfinite)
       var _this = this
       this.filter.index = 0
-      this.$http.get(this.apiUrl, {
+      console.log(this.apiUrl)
+      this.$http.post(this.apiUrl, {
+      /*
         "problemsID": _this.filter.problemID,
         "userID": _this.filter.userID,
         "status": _this.filter.status,
-        "lang": _this.filter.lang,
+        "language": _this.filter.language,
         "start": 0,
         "end": this.filter.page_length
+      */
+        'queryleft': 1,
+        'queryright': this.filter.page_length
       }).then(function(res) {
+        if (!res.body.data) {
+          console.log('abort')
+          console.log(res)
+          return
+        }
         _this.statusList = res.body.data
+        console.log(res.body.data.length)
       })
     },
     getStatusClass: function(status_id) {
@@ -249,15 +273,24 @@ export default {
       var _this = this
       var _start = _this.filter.index * _this.filter.page_length
       _this.filter.index++
-        var _end = _this.filter.index * _this.filter.page_length
-      this.$http.get(this.apiUrl,{
+      var _end = _this.filter.index * _this.filter.page_length
+      this.$http.post(this.apiUrl,{
+      /*
         "problemsID": _this.filter.problemID,
         "userID": _this.filter.userID,
         "status": _this.filter.status,
         "lang": _this.filter.lang,
         "start": 0,
         "end": this.filter.page_length
+      */
+         'queryleft': _start,
+         'queryright': _end
       }).then(function(res) {
+        console.log(res.body)
+        if (!res.body.data) {
+          console.log('erro')
+          return
+        }
         if (!res.body.data.length) {
           if ($state.complete) $state.complete()
           return -1
