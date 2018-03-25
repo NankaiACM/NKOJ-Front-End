@@ -1,6 +1,7 @@
 <template>
   <dialog-wrap @exit="$emit('exit')">
-    <div class="login-sign-up" :class="{appear:pageStatus=='login'}">
+    <transition @enter="fadeEnter" @leave="fadeLeave" :css="false">
+    <div class="login-sign-up" v-if="pageStatus=='login'">
       <div class="title-bar">
         <div class="title">登录</div>
         <div class="subtitle">由此登录，开启今日的ACM之旅吧~</div>
@@ -9,11 +10,13 @@
       <form>
         <div class="form-group" :class="{'hastext':loginAttribute.loginAccount!='','focus':focusing==1}">
           <label @click="labelClick">用户名或邮箱</label>
-          <input type="text" class="form-control" v-model="loginAttribute.loginAccount" @focus="focusing=1" @blur="focusing=0">
+          <input type="text" class="form-control" v-model="loginAttribute.loginAccount" @focus="focusing=1"
+                 @blur="focusing=0">
         </div>
         <div class="form-group" :class="{'hastext':loginAttribute.loginPassword!='','focus':focusing==2}">
           <label @click="labelClick">密码</label>
-          <input type="password" class="form-control" v-model="loginAttribute.loginPassword" @focus="focusing=2" @blur="focusing=0">
+          <input type="password" class="form-control" v-model="loginAttribute.loginPassword" @focus="focusing=2"
+                 @blur="focusing=0">
         </div>
         <div class="form-group message-bar">
           <p>{{loginMessage}}</p>
@@ -22,81 +25,123 @@
           <button class="btn" v-on:click="loginAttempt">登陆</button>
         </div>
       </form>
-      <div class="text">没有帐号？立刻<a>注册</a>！</div>
+      <div class="text">没有帐号？立刻<a @click="pageStatus='signUp'">注册</a>！</div>
     </div>
 
-    <div class="login-sign-up" :class="{appear:pageStatus=='signUp'}">
+    <div class="login-sign-up" v-if="pageStatus=='signUp'">
       <div class="title-bar">
         <div class="title">注册</div>
         <div class="subtitle">由此注册，加入南开ACM大家族吧~</div>
       </div>
       <hr>
-    <form>
-      <!--第一阶段，输入邮箱名-->
-      <div class="form-group" :class="{'hastext':signupAttribute.signupEmail!='','focus':focusing==3}">
-        <label @click="labelClick">邮箱</label>
-        <input type="text" class="form-control" :class="{'disabled':isEmailSending || isEmailSend}" 
-            v-model="signupAttribute.signupEmail" :disabled="isEmailSending || isEmailSend" @focus="focusing=3" @blur="focusing=0">
-      </div>
-      <div class="form-group captcha" v-if="!isEmailSend" :class="{'hastext':signupAttribute.signupCaptcha!='','focus':focusing==4}">
-        <label @click="labelClick">右图中的文字</label>
-        <input type="text" class="form-control" :class="{'disabled':isEmailSending}" v-model="signupAttribute.signupCaptcha" 
-            :disabled="isEmailSending" @focus="focusing=4" @blur="focusing=0" maxlength="6">
-        <img class="captcha" :src="captchaUrl" @click="captchaUrl=`http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random()"/>
-      </div>
-      <!--第二阶段，输入验证码-->
-      <div class="form-group" v-if="isEmailSend" :class="{'hastext':signupAttribute.emailCode!='','focus':focusing==1}">
-        <label @click="labelClick">邮箱验证码</label>
-        <input type="text" class="form-control" v-model="signupAttribute.emailCode" @focus="focusing=1" @blur="focusing=0">
-      </div>
-      <div v-if="isEmailVerify" class="afterEmailSendDiv">
-        <div class="form-group">
-          <label @click="labelClick" class="col-sm-3 control-label">密码</label>
-          <input type="password" class="form-control" v-model="signupAttribute.signupPassword">
-        </div>
-        <div class="form-group">
-          <label @click="labelClick" class="col-sm-3 control-label">确认密码</label>
-          <input type="password" class="form-control" v-model="signupAttribute.signupPassword2">
-        </div>
-        <div class="form-group">
-          <label @click="labelClick" class="col-sm-3 control-label">用户名</label>
-          <input type="text" class="form-control" v-model="signupAttribute.signupName">
-        </div>
-        <div class="form-group">
-          <label @click="labelClick" class="col-sm-3 control-label">邮箱验证码</label>
-        </div>
-      </div>
-      <div class="form-group message-bar">
-          <p>{{statusMessage}}</p>
-          <div class="text">
-            你还可以：
-            <a @click="isEmailSend=falase,
-                       signupAttribute.signupCaptcha='',
-                       showMessageBar('.appear .message-bar', 0),
-                       captchaUrl=`http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random(),
-                       focusing=0">重新填写邮箱</a>或<a>重发邮件</a>
-          <span v-if="sendColdTime!=0">(还有{{sendColdTime}}s)</span>
+      <form>
+        <transition name="fade" @enter="fadeEnter" @leave="fadeLeave" :css="false">
+          <!--第一阶段，输入邮箱名-->
+          <div key=1 class="wrapper" v-if="!isEmailSend">
+            <div class="form-group" :class="{'hastext':signupAttribute.signupEmail!='','focus':focusing==3}">
+              <label @click="labelClick">邮箱</label>
+              <input type="text" class="form-control" :class="{'disabled':isEmailSending}"
+                     v-model="signupAttribute.signupEmail" :disabled="isEmailSending" @focus="focusing=3"
+                     @blur="focusing=0">
+            </div>
+            <div class="form-group captcha" :class="{'hastext':signupAttribute.signupCaptcha!='','focus':focusing==4}">
+              <label @click="labelClick">右图中的文字</label>
+              <input type="text" class="form-control" :class="{'disabled':isEmailSending}"
+                     v-model="signupAttribute.signupCaptcha"
+                     :disabled="isEmailSending" @focus="focusing=4" @blur="focusing=0" maxlength="6">
+              <img class="captcha" :src="captchaUrl"
+                   @click="captchaUrl=`http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random()"/>
+            </div>
+            <div class="message-bar">
+              <p>{{statusMessage}}</p>
+            </div>
+            <div class="form-group">
+            <button class="btn" v-on:click.prevent="emailSendAttempt()" :disabled="isEmailSending">
+              <vue-loading type="spin" color="white" :size="{ width: '30px', height: '30px' }" v-if="isEmailSending"></vue-loading>
+              <div v-else><span class="glyphicon glyphicon-envelope" style="positon:relative;left:-5px;"></span>确定邮箱</div>
+            </button>
+            </div>
           </div>
-      </div>
-      <div class="form-group">
-        <button class="btn" v-if="isEmailSending">
-          <vue-loading type="spin" color="white" :size="{ width: '30px', height: '30px' }"></vue-loading>
-        </button>
-        <button v-on:click.prevent="emailSendAttempt" class="btn" v-else-if="!isEmailSend">
-          <span class="glyphicon glyphicon-envelope" style="positon:relative;left:-5px;"></span>确定邮箱
-        </button>
-        <button v-on:click.prevent="emailAttempt" class="btn" v-else-if="!isEmailVerify">验证邮箱</button>
-        <button v-on:click.prevent="signupAttempt" class="btn" v-else>注册</button>
-      </div>
-    </form>
-      <div class="text">已有帐号？立刻<a>登录</a>！</div>
+          <!--第二阶段，输入验证码-->
+          <div key=2 class="wrapper" v-if="isEmailSend && !isEmailVerify">
+            <div class="form-group" :class="{'hastext':signupAttribute.signupEmail!='','focus':focusing==3}">
+              <label @click="labelClick">邮箱</label>
+              <input type="text" class="form-control disabled" disabled="true"
+                     v-model="signupAttribute.signupEmail" @focus="focusing=3"
+                     @blur="focusing=0">
+            </div>
+            <div class="form-group" v-if="isEmailSend && !isEmailVerify"
+                 :class="{'hastext':signupAttribute.emailCode!='','focus':focusing==1}">
+              <label @click="labelClick">邮箱验证码</label>
+              <input type="text" class="form-control" :class="{disabled:isEmailVerifying}"
+                     v-model="signupAttribute.emailCode"
+                     :disabled="isEmailVerifying" @focus="focusing=1" @blur="focusing=0" maxlength="6">
+            </div>
+            <div class="message-bar" style="height:6rem;padding-top:10px;margin-bottom:-20px">
+              <p>{{statusMessage}}</p>
+              <div>
+                你还可以：
+                <a @click="isEmailSend=false">重新填写邮箱</a>
+                或
+                <a :class="{'disabled':sendColdTime!=0}" @click="resendEmailAttempt">重发邮件</a>
+                <span v-if="sendColdTime!=0">(还有{{sendColdTime}}s)</span>
+              </div>
+            </div>
+            <div class="form-group">
+            <button class="btn" v-on:click.prevent="emailVerifyAttempt()" :disabled="isEmailVerifying">
+              <vue-loading type="spin" color="white" :size="{ width: '30px', height: '30px' }"
+               v-if="isEmailVerifying"></vue-loading>
+              <div v-else>验证邮箱</div>
+            </button>
+            </div>
+          </div>
+          <!--第三阶段，输入其他信息-->
+          <div key=3 class="wrapper" v-if="isEmailVerify && !isSignOK">
+            <div class="form-group" :class="{'hastext':signupAttribute.signupName!='','focus':focusing==10}">
+              <label @click="labelClick">用户名</label>
+              <input type="text" class="form-control" :class="{'disabled':isSignuping}" @focus="focusing=10" @blur="focusing=0"
+                     v-model="signupAttribute.signupName" :disabled="isSignuping">
+            </div>
+            <div class="form-group" :class="{'hastext':signupAttribute.signupPassword!='','focus':focusing==11}">
+              <label @click="labelClick">密码</label>
+              <input type="password" class="form-control" :class="{'disabled':isSignuping}" @focus="focusing=11" @blur="focusing=0"
+                     v-model="signupAttribute.signupPassword" :disabled="isSignuping">
+            </div>
+            <div class="form-group" :class="{'hastext':signupAttribute.signupPassword2!='','focus':focusing==12}">
+              <label @click="labelClick">确认密码</label>
+              <input type="password" class="form-control" :class="{'disabled':isSignuping}" @focus="focusing=12" @blur="focusing=0"
+                     v-model="signupAttribute.signupPassword2" :disabled="isSignuping">
+            </div>
+            <div class="message-bar">
+              <p>{{statusMessage}}</p>
+            </div>
+            <div class="form-group">
+            <button class="btn" v-on:click.prevent="signupAttempt()" :disabled="isSignuping">
+              <vue-loading type="spin" color="white" :size="{ width: '30px', height: '30px' }"
+               v-if="isSignuping"></vue-loading>
+              <div v-else>注册</div>
+            </button>
+            </div>
+          </div>
+          <!--第四阶段，注册成功-->
+          <div key=4 class="wrapper" v-if="isSignOK">
+            <div class="message-bar" style="height:9rem;padding-top:2rem">
+              <p>注册成功哒~</p>
+              <p>（ 窗口将在{{timeToClose}}秒后自动关闭 ）</p>
+            </div>
+          </div>
+        </transition>
+      </form>
+      <div class="text" v-if="!isSignOK">已有帐号？立刻<a @click="pageStatus='login'">登录</a>！</div>
     </div>
+    </transition>
   </dialog-wrap>
 </template>
 
 <script>
 import dialogWrap from "./dialogWrap";
 import vueLoading from "vue-loading-template";
+
 export default {
   name: "loginSignUp",
   props: {
@@ -113,22 +158,23 @@ export default {
       focusing: 0,
       pageStatus: this.status,
       signupAttribute: {
-        signupAccount: "",
         signupPassword: "",
         signupPassword2: "",
         signupName: "",
         signupEmail: "",
         signupCaptcha: "",
-        signupWords: "",
-        signupMessage: "",
         emailCode: ""
       },
       isEmailSending: false,
       isEmailSend: false,
+      isEmailVerifying: false,
       isEmailVerify: false,
+      isSignuping: false,
+      isSignOK: false,
+      emailSendDate: new Date(),
       statusMessage: "",
-      signupHeight: 250,
       noPointHost: window.noPointHost,
+      emailKey: "",
       captchaUrl:
         `http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random(),
       sendColdTime: 60,
@@ -159,7 +205,7 @@ export default {
             console.log(res.body.user);
             this.$emit("userInfo", res.body.user);
           }
-          this.showMessageBar(".appear .message-bar", 2);
+          this.showMessageBar(".message-bar", 2);
         });
     },
     loginAttempt: function(event) {
@@ -175,46 +221,12 @@ export default {
       }
       event.preventDefault();
     },
-    signuppasswordEncrypt: function(password) {
-      if (
-        this.signupAttribute.signupPassword !==
-        this.signupAttribute.signupPassword2
-      ) {
-        if (typeof this.emailMessage === undefined)
-          this.$set(this.data, "statusMessage", "两次输入的密码不一致！");
-        else this.statusMessage = "两次输入的密码不一致！";
-        return;
-      }
-      var sendPackge = {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
-      };
-      sendPackge.password = password;
-      sendPackge.nickname = this.signupAttribute.signupName;
-      sendPackge.email = this.signupAttribute.signupEmail;
-      sendPackge.gender = this.signupAttribute.signupGender;
-      sendPackge.school = "NanKai University";
-      sendPackge.ecode = this.emailCode;
-      this.$http
-        .post(`http://${window.noPointHost}:8000/api/u/register`, sendPackge, {
-          crossDomain: true,
-          xhrFields: { withCredentials: true }
-        })
-        .then(res => {
-          console.log(res);
-          if (res.body.code === 0) {
-            this.statusMessage = "注册成功！";
-          } else {
-            this.statusMessage = "未知错误！";
-          }
-        });
-    },
     emailSendAttempt: function(event) {
       //邮箱检验
       if (!this.CheckMail(this.signupAttribute.signupEmail)) {
         this.statusMessage = "哎呀，邮箱格式错了，再检查一下吧！";
-        this.showMessageBar(".appear .message-bar", 2);
+        this.showMessageBar(".message-bar", 2);
+        return;
       } else {
         this.isEmailSending = true;
         this.$http
@@ -238,151 +250,438 @@ export default {
               var resp = res.body;
               if (resp.code === 0) {
                 vue.isEmailSend = true;
+                vue.emailKey = resp.data.key; //记录key
+                vue.emailSendDate = new Date(); //记录当前时间
                 vue.statusMessage = "我们已经向您的邮箱发送了邮件！";
-                vue.showMessageBar(".appear .message-bar", 4);
+                this.isEmailSending = false;
+                return;
               } else if (resp.code === 233) {
-                vue.statusMessage = "请刷新验证码,再试一次！";
-                vue.showMessageBar(".appear .message-bar", 2);
+                vue.statusMessage = "请再输入一次验证码~";
               } else if (resp.code === 234) {
                 vue.statusMessage = "验证码错啦！";
-                vue.showMessageBar(".appear .message-bar", 2);
               } else {
+                vue.emailSendDate = new Date(); //记录当前时间
                 vue.statusMessage = "邮箱已经被注册或暂时无法发送邮件！";
-                vue.showMessageBar(".appear .message-bar", 2);
               }
-              vue.captchaUrl=`http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random();
+              vue.showMessageBar(".message-bar", 2);
+              vue.signupAttribute.signupCaptcha = "";
+              vue.captchaUrl =
+                `http://${window.noPointHost}:8000/captcha/sendmail?_t=` +
+                Math.random();
               this.isEmailSending = false;
             },
             res => {
               var vue = this;
-              vue.statusMessage = "电波……无法传达……（连接失败）";
-              vue.showMessageBar(".appear .message-bar", 2);
+              console.log(res);
+              if (res.status === 429) {
+                vue.statusMessage =
+                  "请求过于频繁啦，再等" +
+                  (60 -
+                    Math.floor(
+                      (new Date().getTime() - vue.emailSendDate.getTime()) /
+                        1000
+                    )) +
+                  "秒吧";
+                vue.signupAttribute.signupCaptcha = "";
+                vue.captchaUrl =
+                  `http://${window.noPointHost}:8000/captcha/sendmail?_t=` +
+                  Math.random();
+              } else {
+                vue.statusMessage = "电波……无法传达……（连接失败）";
+              }
+              vue.showMessageBar(".message-bar", 2);
               this.isEmailSending = false;
             }
           )
           .catch(function(response) {
             var vue = this;
             vue.statusMessage = "通讯间发生错误……稍后再试吧";
-            vue.showMessageBar(".appear .message-bar", 2);
+            vue.showMessageBar(".message-bar", 2);
             this.isEmailSending = false;
           });
       }
     },
+    resendEmailAttempt() {
+      var vue = this;
+      vue.isEmailSending = true;
+      vue.$http
+        .get(
+          `http://${window.noPointHost}:8000/api/u/verify/` +
+            vue.emailKey +
+            "/" +
+            vue.signupAttribute.signupEmail,
+          {
+            crossDomain: true,
+            xhrFields: { withCredentials: true },
+            timeout: "8000",
+            cache: true,
+            credentials: true
+          }
+        )
+        .then(
+          res => {
+            var vue = this;
+            console.log(res.body);
+            var resp = res.body;
+            if (resp.code === 0) {
+              vue.isEmailSend = true;
+              vue.emailSendDate = new Date(); //记录当前时间
+              vue.statusMessage = "邮件重新发送成功";
+              vue.sendColdTime = 61;
+              vue.setSendColdTime();
+            } else {
+              vue.statusMessage = "暂时无法发送邮件！";
+            }
+            this.isEmailSending = false;
+          },
+          res => {
+            var vue = this;
+            console.log(res);
+            if (res.status === 429) {
+              vue.statusMessage =
+                "请求过于频繁啦，再等" +
+                (60 -
+                  Math.floor(
+                    (new Date().getTime() - vue.emailSendDate.getTime()) / 1000
+                  )) +
+                "秒吧";
+            } else {
+              vue.statusMessage = "电波……无法传达……（连接失败）";
+            }
+            this.isEmailSending = false;
+          }
+        )
+        .catch(function(response) {
+          var vue = this;
+          vue.statusMessage = "通讯间发生错误……稍后再试吧";
+          vue.showMessageBar(".message-bar", 2);
+          this.isEmailSending = false;
+        });
+    },
+    emailVerifyAttempt() {
+      var vue = this;
+      vue.isEmailVerifying = true;
+      vue.$http
+        .get(
+          `http://${window.noPointHost}:8000/api/u/verify/` +
+            vue.emailKey +
+            "/" +
+            vue.signupAttribute.emailCode,
+          {
+            crossDomain: true,
+            xhrFields: { withCredentials: true },
+            timeout: "8000",
+            cache: true,
+            credentials: true
+          }
+        )
+        .then(
+          res => {
+            var vue = this;
+            console.log(res.body);
+            var resp = res.body;
+            if (resp.code === 0) {
+              vue.isEmailVerify = true;
+              vue.statusMessage = "";
+            } else {
+              vue.statusMessage = "邮箱验证码错误，要仔细核对哦";
+            }
+            vue.isEmailVerifying = false;
+          },
+          res => {
+            var vue = this;
+            console.log(res);
+            if (res.status === 429) {
+              vue.statusMessage =
+                "请求过于频繁啦，再等" +
+                (60 -
+                  Math.floor(
+                    (new Date().getTime() - vue.emailSendDate.getTime()) / 1000
+                  )) +
+                "秒吧";
+            } else {
+              vue.statusMessage = "电波……无法传达……（连接失败）";
+            }
+            vue.isEmailVerifying = false;
+          }
+        )
+        .catch(function(response) {
+          var vue = this;
+          vue.statusMessage = "通讯间发生错误……稍后再试吧";
+          vue.showMessageBar(".message-bar", 2);
+          isEmailVerifying = false;
+        });
+    },
+    signuppasswordEncrypt: function(password) {
+      var attr = this.signupAttribute;
+      if (attr.signupPassword !== attr.signupPassword2) {
+        this.statusMessage = "两次输入的密码不一致！";
+        this.showMessageBar(".message-bar", 2);
+        this.isSignuping = false;
+        return;
+      }
+      var sendPackge = {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      };
+      sendPackge.password = password;
+      sendPackge.nickname = attr.signupName;
+      sendPackge.email = attr.signupEmail;
+      sendPackge.school = "Nankai University";
+      sendPackge.gender = 1;
+      console.log(sendPackge);
+      this.$http
+        .post(`http://${window.noPointHost}:8000/api/u/register`, sendPackge, {
+          crossDomain: true,
+          xhrFields: { withCredentials: true },
+          timeout: "8000",
+          credentials: true
+        })
+        .then(res => {
+          console.log(res);
+          if (res.body.code === 0) {
+            this.statusMessage = "注册成功！";
+            this.isSignOK = true;
+            this.isSignuping = false;
+            return;
+          } else if(res.body.code === 400) {
+            this.statusMessage="";
+            if(res.body.error.nickname) this.statusMessage+=("nickname "+ res.body.error.nickname)+". "
+            if(res.body.error.password) this.statusMessage+=("password "+ res.body.error.password)+". "
+          } else {
+            this.statusMessage = "未知错误！";
+          }
+          this.showMessageBar(".message-bar", 2);
+          this.isSignuping = false;
+        });
+    },
     signupAttempt: function(event) {
+      this.isSignuping = true;
       rsaEncrypt(
         this.signupAttribute.signupPassword,
         this.signuppasswordEncrypt
       );
-      event.preventDefault();
     },
     CheckMail(mail) {
-      var filter = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+      var filter = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
       return filter.test(mail);
     },
     showMessageBar(classcode, high) {
       var mb = document.querySelector(classcode);
-      if (mb.style.height != high) {
-        Velocity(mb, { height: high + "rem" }, { duration: 300 });
+      var target= high==0?"0":"10px"
+      var target2= high==0?"0":"-15px"
+      if(high!=0) high+=1
+      if (mb.style.height != high + "rem") {
+        Velocity(
+          mb,
+          { height: [high + "rem", mb.style.height],paddingTop:target,marginBottom:target2  },
+          { duration: 300 }
+        );
       }
     },
     labelClick(event) {
       event.target.nextElementSibling.focus();
     },
-    circle(event) {
-      console.log(event.target);
+    setSendColdTime() {
+      this.sendColdTime--;
+      if (this.sendColdTime != 0) {
+        setTimeout(this.setSendColdTime, 1000);
+      }
+    },
+    fadeEnter(el, done) {
+      var target = el.offsetHeight;
+      el.style.display = "none";
+      var form = el.parentElement;
+      var keep = form.offsetHeight;
+      form.style.height = keep + "px";
+      Velocity(
+        form,
+        { height: keep - this.tansitionHeight + target + "px" },
+        {
+          duration: Math.sqrt(Math.abs(this.tansitionHeight - target))*10,
+          complete: function() {
+            el.style.display = "block";
+            form.style.height = "auto";
+            done();
+          }
+        }
+      );
+      Velocity(el.parentElement, { opacity: 1 }, { duration: 300 });
+    },
+    fadeLeave(el, done) {
+      this.tansitionHeight = el.offsetHeight;
+      Velocity(
+        el.parentElement,
+        { opacity: 0 },
+        { duration: 300, complete: done }
+      );
+    }
+  },
+  watch: {
+    isEmailSend: function(newValue, oldValue) {
+      if (newValue) {
+        this.sendColdTime = 61;
+        this.setSendColdTime();
+      } else {
+        this.signupAttribute.signupCaptcha = "";
+        this.captchaUrl =
+          `http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random();
+      }
+      this.focusing = 0;
+    },
+    isSignOK: function(newValue, oldValue) {
+      if (newValue) {
+        var vue=this;
+        var mesbar = document.querySelector(".message-bar");
+        var form = mesbar.parentElement;
+        var keep=form.offsetHeight;
+        form.style.height=keep+"px";
+        setTimeout(
+          function(){
+            Velocity(form, {height: keep-vue.tansitionHeight+20+"px"},{duration:300})
+            mesbar.style.margin="30px"
+            mesbar.style.height="4rem"
+        Velocity(
+          form,
+          { opacity:1 },
+          { duration: 300 }
+        );
+          }
+        ,300)
+        vue.timeToClose=50;
+        var func=function(){
+          vue.timeToClose--;
+          if(vue.timeToClose==0){
+            vue.$emit('exit');
+          }
+          else{
+            setTimeout(func, 1000);
+          }
+        }
+        setTimeout(func,1000)
+      }
     }
   }
 };
 </script>
 
 <style>
-.login-sign-up {
-  visibility: hidden;
-  position: absolute;
-}
-.appear {
-  visibility: visible;
-  position: relative;
-}
-
 .dialog-field .title-bar {
   padding: 1.5rem 0;
 }
+
 .dialog-field .title-bar .title {
   font-size: 2rem;
   font-weight: bold;
   padding-bottom: 10px;
 }
+
 .dialog-field .title-bar .subtitle {
   color: #aaaaaa;
 }
+
 .dialog-field hr {
   margin: 0;
 }
 
+.dialog-field form {
+  overflow: hidden;
+}
+
 .dialog-field .form-group {
   position: relative;
-  margin: 30px 0;
+  padding: 30px 0 0;
+  margin: 0;
 }
+
 .dialog-field .form-group input {
   box-shadow: none;
   padding: 2.8rem 20px 0.7rem;
   height: auto;
   border-radius: 5px;
 }
+
 .dialog-field input:focus {
   box-shadow: none;
 }
+
 .dialog-field input:hover {
   box-shadow: none;
   border-color: #66afe9;
 }
+
 .dialog-field input.disabled {
   background: #dedede;
   cursor: default;
 }
+
 .dialog-field input.disabled:hover {
   border-color: #ccc;
 }
+
+.dialog-field a.disabled,
+.dialog-field a.disabled:hover,
+.dialog-field a.disabled:focus,
+.dialog-field a.disabled:active,
+.dialog-field .message-bar a.disabled:hover,
+.dialog-field .message-bar a.disabled:focus,
+.dialog-field .message-bar a.disabled:active,
+.dialog-field .message-bar a.disabled {
+  pointer-events: none;
+  color: #aaa;
+}
+
 .dialog-field .captcha input {
   padding-right: 150px;
 }
+
 .dialog-field .captcha img {
   position: absolute;
-  top: 0.5rem;
+  top: 35px;
   right: 5px;
   width: 140px;
   height: 46px;
   border-radius: 3px;
   cursor: pointer;
 }
+
 .dialog-field .form-group label {
   font-weight: normal;
   position: absolute;
   left: 20px;
-  top: 1.8rem;
+  top: 48px;
   font-size: 1.5rem;
   transition: all 0.3s;
   color: #2c3e50;
   cursor: text;
 }
+
 .dialog-field .focus label,
 .dialog-field .hastext label {
-  top: 0.7rem;
+  top: 37px;
   font-size: 90%;
   color: #aaaaaa;
 }
 
 .dialog-field .message-bar {
-  margin: -15px;
-  height: 0;
+  height: 0rem;
   overflow: hidden;
   font-size: 1.4rem;
-  color: #5bc0de;
+  color: #2c3e50;
   line-height: 2.5rem;
 }
 
-.form-group button {
+.dialog-field .message-bar p{
+  margin: 0;
+}
+
+.dialog-field .message-bar a{
+  cursor: pointer;
+  color: #1b98e0;
+}
+
+.wrapper button {
   width: 100%;
   height: 5.5rem;
   border-radius: 7px;
@@ -390,20 +689,24 @@ export default {
   background-color: #b8bedd;
   color: white;
 }
-.form-group button:hover {
+
+.wrapper button:hover {
   background-color: #c4c9e3;
   color: white;
 }
-.form-group button:focus,
-.form-group button:active {
+
+.wrapper button:focus,
+.wrapper button:active {
   background-color: #a8adc9;
   color: white;
 }
 
 .text {
-  padding: 0.5rem 0;
-  margin-top: -20px;
+  padding: 1rem 0;
+  top: 5px;
+  position: relative;
 }
+
 .text a {
   cursor: pointer;
   color: #1b98e0;
@@ -420,26 +723,42 @@ export default {
   transition: all 0.5s;
   overflow: hidden;
 }
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
 }
+
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
   transform: translateY(20px);
 }
+
 .signupPage button,
 .signupPage2 button {
   padding: 5px 10%;
 }
+
 .blueTextDiv {
   color: #5bc0de;
   font-weight: bold;
 }
+
 .afterEmailSendDiv {
   margin-bottom: 0;
   padding-bottom: 0;
   transition: all 1s;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  position: absolute;
+  transition: opacity 10.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
