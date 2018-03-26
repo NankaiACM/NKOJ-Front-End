@@ -8,8 +8,8 @@
         <li><a :class="{'hover':hoverNav==0}" @click="scrollBand(0)">Problems</a></li>
         <li><a :class="{'hover':hoverNav==1}" @click="scrollBand(1)">Status</a></li>
         <li><a :class="{'hover':hoverNav==2}" @click="scrollBand(2)">Rank</a></li>
-        <li><a class="btn btn-ghost">LOG IN</a></li>
-        <li><a class="btn btn-default">SIGN UP</a></li>
+        <li><a class="btn btn-ghost" @click="userPage='login'">LOG IN</a></li>
+        <li><a class="btn btn-default" @click="userPage='signUp'">SIGN UP</a></li>
       </ul>
     </div></div>
 
@@ -24,8 +24,8 @@
       <div class="container"><div class="title-box">
         <div class="shader shader-top"></div>
         <div class="color-white bg-blue">
-          <h2>Nankai University Freshman Programming Contest 2017</h2>
-          <span>Start Time: 2017/05/01 16:00:00</span>
+          <h2>{{contestTitle}}</h2>
+          <span>Start Time: {{new Date(startTime).toString()}}</span>
         </div>
         <div class="shader shader-bottom"></div>
       </div></div>
@@ -33,28 +33,43 @@
       <div class="time-bar container">
         <div class="width-80-center setflex padding-t-20">
           <hr class="color-white hrsize-2 flex-1">
-          <div class="color-white margin-l-r-20 word">Before End</div>
+          <div class="color-white margin-l-r-20 word" v-if="contestStatus==1">Before End</div>
+          <div class="color-white margin-l-r-20 word" v-else-if="contestStatus==0">Before Start</div>
           <hr class="color-white hrsize-2 flex-1">
         </div>
-        <div class="timers margin-20">
-          <div class="timer timer-first">
-            <div class="bg-white"><div>{{endIn.hrs}}</div></div>
-            <span class="unit">hrs</span>
+        <div class="timers">
+          <div class="timer" :class="{'timer-first':countDown.ds!=0}" v-if="countDown.ds!=0">
+            <div class="bg-white"><div>{{countDown.ds}}</div></div>
+            <span class="unit" v-if="countDown.ds!=1">days</span>
+            <span class="unit" v-else>day</span>
+          </div>
+          <div class="timer" :class="{'timer-first':countDown.ds==0}">
+            <div class="bg-white"><div>{{countDown.hrs}}</div></div>
+            <span class="unit" v-if="countDown.hrs!=1">hours</span>
+            <span class="unit" v-else>hour</span>
           </div>
           <div class="timer">
-            <div class="bg-white"><div>{{endIn.mins}}</div></div>
-            <span class="unit">mins</span>
+            <div class="bg-white"><div>{{countDown.mins}}</div></div>
+            <span class="unit" v-if="countDown.mins!=1">mins</span>
+            <span class="unit" v-else>min</span>
           </div>
           <div class="timer">
-            <div class="bg-white"><div>{{endIn.secs}}</div></div>
-            <span class="unit">secs</span>
+            <div class="bg-white"><div>{{countDown.secs}}</div></div>
+            <span class="unit" v-if="countDown.secs!=1">secs</span>
+            <span class="unit" v-else>sec</span>
           </div>
         </div>
       </div>
     </div>
 
+    <!--题目about界面-->
+    
+
+    <!--题目rule界面-->
+
+
     <!--题目板块-->
-    <div class="bg-white band-with-80padding problem-band">
+    <div class="bg-white band-with-80padding problem-band" v-if="contestStatus==1">
       <!--problem标题-->
       <h3><span class="glyphicon glyphicon-list"></span>PROBLEMS</h3>
       <!--题目列表-->
@@ -71,7 +86,7 @@
     <hr class="cut-off">
 
     <!--提交状态板块-->
-    <div class="bg-white band-with-80padding">
+    <div class="bg-white band-with-80padding" v-if="contestStatus==1">
       <!--提交状态标题-->
       <h3><span class="glyphicon glyphicon-stats"></span>STATUS</h3>
       <!--提交状态列表-->
@@ -84,7 +99,7 @@
     <hr class="cut-off">
 
     <!--排名板块-->
-    <div class="bg-white band-with-80padding">
+    <div class="bg-white band-with-80padding" v-if="contestStatus==1">
       <!--排名标题-->
       <h3><span class=" glyphicon glyphicon-signal"></span>RANK</h3>
       <!--排名列表-->
@@ -100,6 +115,10 @@
       <div class="copyright">© Copyright 2005-2018 Sun Wei & Wang Yan & SunriseFox . All Rights Reserved.</div>
       <div class="advert">如果您愿意加入 OJ 的开发，请联系 sunrisefox@qq.com ~</div>
     </div>
+
+    <!--弹出框板块-->
+    <login-page v-if="userPage=='login' || userPage=='signUp'" @exit="exitShow" :status="userPage" 
+      @changeStatus="changeLogin"></login-page>
   </div>
 </template>
 
@@ -107,20 +126,25 @@
 import problemList from "./components/contestpage/contestOpenCompenents/problemList.vue";
 import status from "./components/statuspage/statusPage.vue";
 import ranks from "./components/contestpage/contestRank.vue";
+import loginPage from './components/dialog/loginSignUp';
 
 export default {
   name: 'App2',
   components:{
     problemList,
     status,
-    ranks
+    ranks,
+    loginPage,
   },
   data(){
     return{
       headShowing: false,
       hoverNav:3,
       nowTime: new Date(),
-      endTime: '2018/05/01 00:00:00',
+      startTime: "",
+      endTime: "",
+      contestid: 23,
+      contestTitle: "",
       isPadZero: true,
       problems:[
         {
@@ -152,6 +176,7 @@ export default {
           status:2,
         },
       ],
+      userPage:"None",
     }
   },
   methods:{
@@ -188,17 +213,59 @@ export default {
     },
     upToTop(){
       Velocity(document.querySelector("body"),"scroll", { duration: 500, easing: "easeOutQuart" })
+    },
+    exitShow: function () {
+      this.userPage="None"
+    },
+    changeLogin:function(value){
+      this.userPage=value;
+    },
+    initDatas:function(){
+      var vue=this;
+      vue.$http
+          .get(
+            `http://${noPointHost}:8000/api/contest/` +
+              vue.contestid,
+            {
+              crossDomain: true,
+              xhrFields: { withCredentials: true },
+              timeout: "8000",
+              cache: true,
+              credentials: true
+            }
+          )
+          .then(
+            res => {
+              var datas=res.body.data;
+              vue.startTime=datas.start;
+              vue.endTime=datas.end;
+              vue.contestTitle=datas.title;
+            },
+            res => {
+              //wait to code
+              var vue = this;
+            }
+          )
+          .catch(function(response) {
+            //wait to code
+            var vue = this;
+          });
+      setInterval(() => {
+        vue.nowTime=new Date();
+      }, 100);
     }
   },
   mounted: function () {
     this.$nextTick(function () {
       window.addEventListener('scroll', this.handleScroll);
+      this.initDatas();
       this.changeProblemListHeight();
     })
   },
   computed:{
-    endIn:function(){
-      var msecond = new Date(this.endTime).getTime() - new Date(this.nowTime).getTime();   //时间差的毫秒数
+    countDown:function(){
+      var targetTime = this.contestStatus==1? this.endTime : this.startTime;
+      var msecond = new Date(targetTime).getTime() - new Date(this.nowTime).getTime();   //时间差的毫秒数
       //------------------------------
       //计算出相差天数
       var days=Math.floor(msecond/(24*3600*1000))
@@ -217,16 +284,23 @@ export default {
         minutes = ('0'+minutes).substr(-2)
         seconds = ('0'+seconds).substr(-2)
       }
-
-      var el=this
-      setTimeout(() => {
-        el.nowTime=new Date();
-      }, 100);
       return{
         ds:days,
         hrs:hours,
         mins:minutes,
         secs:seconds
+      }
+    },
+    contestStatus:function(){
+      if(this.nowTime<this.endTime){
+        //end
+        return 2;
+      } else if(this.nowTime<this.startTime){
+        //starting
+        return 1;
+      } else{
+        //waiting for start
+        return 0;
       }
     }
   }
@@ -355,28 +429,23 @@ hr.cut-off{
 
 
 
-.time-bar span{
-    letter-spacing: 0.08em;
-}
 .time-bar .timers{
     display: flex;
     justify-content: center;
+    margin-top: 20px;
 }
 .time-bar .timer{
     display: inline-block;
 }
-.time-bar .timer-first{
-    margin-left: 7rem;
-}
 .timer .bg-white{
     border-radius: 10px;
-    display: inline-block;
     height: 8rem;
     width: 8rem;
     font-size: 4rem;
     line-height: 8rem;
     color: #1b98e0;
     vertical-align: bottom;
+    margin: 0 20px;
 }
 .timer .bg-white div{
     text-align: center;
@@ -384,9 +453,9 @@ hr.cut-off{
 .timer .unit{
     color: #e8f1f2;
     font-size: 2rem;
-    margin-left: 10px;
+    text-align: center;
     line-height: 2rem;
-    width: 6rem;
+    width: 100%;
     display: inline-block;
     vertical-align: bottom;
 }

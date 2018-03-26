@@ -19,12 +19,12 @@
                  @blur="focusing=0">
         </div>
         
-            <div class="form-group captcha" :class="{'hastext':signupAttribute.signupCaptcha!='','focus':focusing==4}">
+            <div class="form-group captcha" v-show="!noNeedCaptcha" :class="{'hastext':loginAttribute.captcha!='','focus':focusing==4}">
               <label @click="labelClick">右图中的文字</label>
               <input type="text" class="form-control" :class="{'disabled':isEmailSending}"
-                     v-model="signupAttribute.signupCaptcha"
+                     v-model="loginAttribute.captcha"
                      :disabled="isEmailSending" @focus="focusing=4" @blur="focusing=0" maxlength="6">
-              <img class="captcha" :src="captchaUrlLogin"
+              <img class="captcha" :src="captchaUrlLogin" @error="noNeedCaptcha=true" @load="noNeedCaptcha=false;loginAttribute.captcha=''"
                    @click="captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()"/>
             </div>
         <div class="message-bar">
@@ -161,7 +161,8 @@ export default {
     return {
       loginAttribute: {
         loginAccount: "",
-        loginPassword: ""
+        loginPassword: "",
+        captcha:"",
       },
       loginMessage: "",
       focusing: 0,
@@ -187,7 +188,9 @@ export default {
       captchaUrl:
         `http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random(),
       captchaUrlLogin:`http://${noPointHost}:8000/captcha/login?_t=` + Math.random(),
-      sendColdTime: 60,
+      sendColdTime: 0,
+      timeToClose: 0,
+      noNeedCaptcha: false,
     };
   },
   methods: {
@@ -199,22 +202,26 @@ export default {
       };
       loginPackege.password = password;
       loginPackege.user = this.loginAttribute.loginAccount;
+      loginPackege.captcha = this.loginAttribute.captcha;
       this.$http
         .post(`http://${noPointHost}:8000/api/u/login`, loginPackege, {
-          crossDomain: true,
-          xhrFields: { withCredentials: true }
+              crossDomain: true,
+              xhrFields: { withCredentials: true },
+              timeout: "8000",
+              cache: true,
+              credentials: true
         })
         .then(res => {
           console.log(res);
           if (res.body.code === 0) {
             this.loginMessage = "成功登陆！";
-            console.log(res.body.user);
             this.$emit("userInfo", res.body.user);
           } else {
             this.loginMessage="";
             for (var item in res.body.error){
               this.loginMessage +=item+" "+res.body.error[item]+". ";
             }
+            this.captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()
           } 
           this.showMessageBar(".message-bar", 2);
         });
@@ -257,7 +264,6 @@ export default {
           .then(
             res => {
               var vue = this;
-              console.log(res.body);
               var resp = res.body;
               if (resp.code === 0) {
                 vue.isEmailSend = true;
@@ -283,7 +289,6 @@ export default {
             },
             res => {
               var vue = this;
-              console.log(res);
               if (res.status === 429) {
                 vue.statusMessage =
                   "请求过于频繁啦，再等" +
@@ -332,7 +337,6 @@ export default {
         .then(
           res => {
             var vue = this;
-            console.log(res.body);
             var resp = res.body;
             if (resp.code === 0) {
               vue.isEmailSend = true;
@@ -347,7 +351,6 @@ export default {
           },
           res => {
             var vue = this;
-            console.log(res);
             if (res.status === 429) {
               vue.statusMessage =
                 "请求过于频繁啦，再等" +
@@ -389,7 +392,6 @@ export default {
         .then(
           res => {
             var vue = this;
-            console.log(res.body);
             var resp = res.body;
             if (resp.code === 0) {
               vue.isEmailVerify = true;
@@ -401,7 +403,6 @@ export default {
           },
           res => {
             var vue = this;
-            console.log(res);
             if (res.status === 429) {
               vue.statusMessage =
                 "请求过于频繁啦，再等" +
@@ -441,7 +442,6 @@ export default {
       sendPackge.email = attr.signupEmail;
       sendPackge.school = "Nankai University";
       sendPackge.gender = 1;
-      console.log(sendPackge);
       this.$http
         .post(`http://${noPointHost}:8000/api/u/register`, sendPackge, {
           crossDomain: true,
@@ -450,7 +450,6 @@ export default {
           credentials: true
         })
         .then(res => {
-          console.log(res);
           if (res.body.code === 0) {
             this.statusMessage = "注册成功！";
             this.isSignOK = true;
@@ -527,7 +526,7 @@ export default {
         { opacity: 0 },
         { duration: 300, complete: done }
       );
-    }
+    },
   },
   watch: {
     isEmailSend: function(newValue, oldValue) {
@@ -577,7 +576,7 @@ export default {
       this.$emit('changeStatus',newValue);
       if(newValue=="signUp")this.captchaUrl=`http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random()
       if(newValue=="login")this.captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()
-    }
+    },
   }
 };
 </script>
@@ -585,6 +584,7 @@ export default {
 <style>
 .dialog-field .title-bar {
   padding: 1.5rem 0;
+  text-align: center;
 }
 
 .dialog-field .title-bar .title {
@@ -686,6 +686,7 @@ export default {
   font-size: 1.4rem;
   color: #2c3e50;
   line-height: 2.5rem;
+  text-align: center;
 }
 
 .dialog-field .message-bar p{
@@ -721,6 +722,7 @@ export default {
   padding: 1rem 0;
   top: 5px;
   position: relative;
+  text-align: center;
 }
 
 .text a {
