@@ -63,10 +63,10 @@
     </div>
 
     <!--题目about界面-->
-    
+    <div v-html="aboutMD"></div>
 
     <!--题目rule界面-->
-
+    <div v-html="ruleMD"></div>
 
     <!--题目板块-->
     <div class="bg-white band-with-80padding problem-band" v-if="contestStatus==1">
@@ -117,7 +117,7 @@
     </div>
 
     <!--弹出框板块-->
-    <login-page v-if="userPage=='login' || userPage=='signUp'" @exit="exitShow" :status="userPage" 
+    <login-page v-if="userPage=='login' || userPage=='signUp'" @exit="exitShow" :status="userPage"
       @changeStatus="changeLogin"></login-page>
   </div>
 </template>
@@ -177,6 +177,8 @@ export default {
         },
       ],
       userPage:"None",
+      ruleMDtext: '',
+      aboutMDtext: ''
     }
   },
   methods:{
@@ -250,6 +252,12 @@ export default {
             //wait to code
             var vue = this;
           });
+      vue.$http.get(`http://${noPointHost}:8000/api/contest/` + this.contestid + '/rule').then(res => {
+        this.ruleMDtext = res.body
+      })
+      vue.$http.get(`http://${noPointHost}:8000/api/contest/` + this.contestid + '/about').then(res => {
+        this.aboutMDtext = res.body
+      })
       setInterval(() => {
         vue.nowTime=new Date();
       }, 100);
@@ -302,6 +310,12 @@ export default {
         //waiting for start
         return 0;
       }
+    },
+    ruleMD: function () {
+      return marked(this.ruleMDtext, {sanitize : true})
+    },
+    aboutMD: function () {
+      return marked(this.aboutMDtext, {sanitize : true})
     }
   }
 }
