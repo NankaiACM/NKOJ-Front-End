@@ -1,9 +1,10 @@
 <template>
 <div id="component-home" class="container-fluid">
+  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
   <div class="row">
     <div id="announcement" class="col-sm-12 home-component">
       <h3 align="left">公告</h3>
-      <pre id="announcementText" v-text="announcement" class="alert alert-info" role="alert"></pre>
+      <pre id="announcementText" v-text="announcement" class="alert" role="alert"></pre>
     </div>
   </div>
   <div class="row">
@@ -12,15 +13,16 @@
   </div>
   <div class="row">
     <homeDiscuss/>
-    <componentShell/>
+    <componentShell class="col-lg-8 visible-lg home-component"><h3 align="left">Shell</h3></componentShell>
   </div>
+</div>
 </div>
 </template>
 <script>
 import homeContest from './homeContest.vue'
 import homeDiscuss from './homeDiscuss.vue'
-import homeProblem from './homeProblem.vue'
-import componentShell from './componentShell'
+import homeProblem from './homeProblems.vue'
+import componentShell from '../shell/mayoi.vue'
 export default {
   name: 'component-home',
   data: function() {
@@ -52,7 +54,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
+@import '../../less/global.less';
 #component-home.container-fluid {
   padding: 2em;
   text-align: left;
@@ -72,7 +75,7 @@ export default {
   background: #fff;
   height: auto;
   margin: 1em;
-  padding: 2em;
+  padding: 1em;
 }
 
 #announcement {
@@ -87,18 +90,16 @@ export default {
   padding: 1em;
   margin: 0;
   font-size: 1.2em;
+  background: #fff;
   text-align: left;
   white-space: pre-wrap;
   word-break: break-word;
+  border: @home-com-border;
 }
 
 @media (min-width: 1241px) {
   #component-home.container-fluid{
     padding: 2em 6em;
-  }
-  .home-component {
-    margin: 2em;
-    padding: 4em;
   }
 }
 

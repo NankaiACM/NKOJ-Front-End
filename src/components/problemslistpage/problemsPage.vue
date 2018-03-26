@@ -1,14 +1,13 @@
 <template>
-<div id="Problems" class="container-fluid" @scroll="handleScroll($event)">
-  <h3 class="problem-page-title">题目列表</h3>
+<div id="Problems" class="container">
   <!--bar-->
-  <div class="fat-container container-fluid col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
-  <div :class="'question-filter-base '+(dom.attach?'nagi':'')">
-    <ul class="row search-bar-control nav nav-pills">
+
+  <div class="question-filter-base container-fluid">
+    <ul class="search-bar-control nav nav-pills">
       <li role="presentation" class="col-sm-6">
         <input @keyup.enter="initView" v-model="filter.keywords" type="text" class="form-control" placeholder="IDs,titles,or description">
       </li>
-      <li role="presentation" class="dropdown">
+      <li role="presentation" class="dropdown navbar-right">
         <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
           Difficulty
           <span class="caret"></span>
@@ -30,7 +29,7 @@
           <li><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.difficulty}}</a></li>
         </ul>
       </li>
-      <li role="presentation" class="dropdown">
+      <li role="presentation" class="dropdown navbar-right">
         <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
           Status
           <span class="caret"></span>
@@ -48,7 +47,7 @@
           <li><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.status}}</a></li>
         </ul>
       </li>
-      <li role="presentation" class="dropdown">
+      <li role="presentation" class="dropdown navbar-right">
         <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
           Tags
           <span class="caret"></span>
@@ -62,6 +61,7 @@
     </ul>
   </div>
   <!---->
+  <div class="fat-container container-fluid col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
   <table id="ProblemTable" class="table table-hover">
     <thead>
       <tr>
@@ -91,151 +91,160 @@
           </i>
         </td>
         <td class="problemTableCol1">
-          <router-link :to="{path:'problem/'+problem.problemsID}">
-            {{problem.problemsID}}
+          <router-link :to="{path:'problem/'+problem.problem_id}">
+            {{problem.problem_id}}
           </router-link>
         </td>
         <td class="problemTableCol2">
-          <router-link :to="{path:'problem/'+problem.problemsID}">
-            {{problem.problemsName}}
+          <router-link :to="{path:'problem/'+problem.problem_id}">
+            {{problem.title}}
           </router-link>
         </td>
         <td class="problemTableCol3">
-          {{problem.problemsRatio}}
+          {{problem.submit_ac}} / {{problem.submit_all}}
         </td>
       </tr>
-      <infinite-loading @infinite="infiniteHandler">
-        <span slot="no-more">
-            There is no more problems :( at bottom
-        </span>
-      </infinite-loading>
     </tbody>
   </table>
+  <problems-pagination @viewingleap="handleViewing"></problems-pagination>
 </div>
 </div>
 </template>
 <script>
-import InfiniteLoading from 'vue-infinite-loading'
+import ProblemsPagination from './pagination.vue'
 export default {
   name: 'component-problems',
+  props: ['user_pros_msg'],
   data: function() {
     return {
-      dom: {
-        barviewh: 50,
-        attach: false
-      },
       filter: {
         difficulty: '',
         status: '',
         keywords: ''
       },
-      problemList: []
+      problemList: [],
+      starlist: [],
+      aclist: [],
+      onlist: [],
+      pageSize: 20,
+      queryleft: 1001,
+      queryright: 10020,
+      viewing: 1
     }
   },
   mounted: function() {
     this.$nextTick(function() {
+      console.info('ping!')
       this.initView()
     })
-    this.dom.barviewh = document.querySelector(".problem-page-title").offsetHeight
-    this.dom.barviewh += document.querySelector(".question-filter-base").offsetHeight
-    console.info(this.dom.barviewh)
   },
   methods: {
-    initView: function() {
-      this.$http.get(
-        '/static/problemsData.json', {
+    initView: function () {
+      this.$http.post(
+        `http://${window.noPointHost}:8000/api/problems/list`, {
           'keywords': this.filter.keywords,
           'difficulty': this.filter.difficulty,
-          'status': this.filter.status
+          'status': this.filter.status,
+          'queryleft': this.queryleft,
+          'queryright': this.queryright
         }).then(function(res) {
-        this.problemList = res.body.data
+          console.log(res.body.data)
+          var tmp = res.body.data
+          for(var x in tmp){
+            var item = tmp[x]
+            tmp[x].isStar = false
+            tmp[x].state = 'none'
+            if(this.starlist.indexOf(item.problem_id) !== -1){
+              tmp[x].isStar = true
+            }
+            if(this.aclist.indexOf(item.problem_id) !== -1){
+              item[x].state = 'ac'
+            }
+            if(this.onlist.indexOf(item.problem_id) !== -1){
+              item[x].state = 'on'
+            }
+          }
+          this.problemList = tmp
       })
     },
-    infiniteHandler: function($state) {
-      this.$http.get('/static/problemsData.json').then(function(res) {
-        if (!res.body.data.length) {
-          $state.complete()
-          return -1
-        }
-        this.problemList = this.problemList.concat(res.body.data)
-        $state.loaded()
-        console.log(this.problemList.length)
-      })
-    },
-    setDifficulty: function(difficulty) {
+    setDifficulty: function (difficulty) {
       if (difficulty === this.filter.difficulty)
         difficulty = ''
       this.filter.difficulty = difficulty
       this.problemList = []
       this.initView()
     },
-    setStatus: function(status) {
+    setStatus: function (status) {
       if (status === this.filter.status)
         status = ''
       this.filter.status = status
       this.problemList = []
       this.initView()
     },
-    handleScroll: function (event) {
-      if (!this.dom.attach&&(event.srcElement.scrollTop > this.dom.barviewh)) {
-        this.dom.attach = true
-        console.info('attach')
-      }
-      if (event.srcElement.scrollTop <= this.dom.barviewh) {
-        this.dom.attach = false
-        console.info('un attach')
-      }
+    handleViewing: function (newv) {
+      this.viewing = newv.viewing
+      this.queryleft = (newv.viewing - 1) * this.pageSize + 1 +1000
+      this.queryright = this.queryleft + this.pageSize - 1
+      this.initView()
+    }
+  },
+  watch: {
+    user_pros_msg : function (newv,oldv) {
+      this.starlist = newv.star
+      this.aclist = newv.ac
+      this.onlist = newv.on
     }
   },
   components: {
-    InfiniteLoading
+    ProblemsPagination
   }
 }
 </script>
-<style>
+<style lang="less">
+@import '../../less/global.less';
+
 #Problems {
-  text-align: left;
   background: none;
   color: #233;
   padding:0;
   min-height: 100%;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  overflow: auto;
-  position: absolute;
   transition: all 1s;
 }
 
 .fat-container {
   background: #fff;
   border-radius: 2px;
-  box-shadow: 0px 9px 10px 5px #ccc;
-}
-
-.problem-page-title {
-  padding: .5em 2em;
-  margin: 0;
-  background: #2cbfec;
-  color: #fff;
-  font-weight:bolder;
+  border: 1px solid #e8f1f2;
+  margin-top: @barheight+@fat-container-margin-top;
+  margin-bottom: @barheight+@fat-container-margin-top;
 }
 
 .question-filter-base {
-  background: #fff;
-  padding: 4em 3em 3em 3em;
-  transition: padding 1s;
-}
-
-.nagi {
   position: fixed;
-  top: 50px;
+  display: flex;
+  align-items: center;
   left: 0;
   right: 0;
-  z-index: 3;
-  padding: 1em 3em;
-  box-shadow: 10px 3px 10px 3px #ccc;
+  top: @barheight;
+  height: @filterheight;
+  z-index: 1;
+  background: #fff;
+  border-bottom: 1px solid #e8f1f2;
+}
+
+.search-bar-control {
+  width: 100%;
+}
+
+.search-bar-control input.form-control {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  transition: all 1s;
+}
+
+.search-bar-control input.form-control:focus,
+.search-bar-control input.form-control:active {
 }
 
 #Problems td a {
@@ -246,13 +255,18 @@ export default {
 #ProblemTable {
   background: #fff;
   padding: 2em;
+  border-bottom: 1px solid #e5e9ef;
+  margin-bottom: 1em;
 }
 
 #ProblemTable thead tr th {
   color: #2cbfec;
   font-size: 1.4em;
-  font-weight: 600;
+  font-weight: 300;
   font-family: '微软雅黑';
+  border: 0;
+  height: 6rem;
+  text-align: center;
 }
 
 #ProblemTable tbody tr td:first-child {
@@ -265,6 +279,11 @@ export default {
 
 #ProblemTable td {
   vertical-align: middle;
+  border: 0;
+}
+
+#ProblemTable tr {
+  transition: all 1s;
 }
 
 tbody .problem-status {
@@ -301,14 +320,10 @@ tbody .problem-status {
 
 @media (min-width: 992px) {
   .problem-page-title {
-    padding: .5em 2em;
-    margin: 0 0 4em 0;
-    box-shadow: 0px 3px 10px 3px #ccc;
   }
 }
 @media (min-width: 768px) {
   .nagi {
-    left: 150px;
   }
 }
 </style>

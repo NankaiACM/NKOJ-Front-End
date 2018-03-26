@@ -40,8 +40,17 @@ export default {
   }
 }
 </script>
-<style>
+<style scope lang="less">
+@import '../../less/global.less';
 #new-contest-container {
   margin: 0 -15px;
+}
+.panel {
+  margin-top: 2rem;
+  border: @home-com-border;
+}
+.panel-info>.panel-heading {
+  background: #fff;
+  border-bottom: @home-com-border;
 }
 </style>
