@@ -407,7 +407,7 @@ export default {
 }
 
 .load-btn:hover {
-  border-radius: 50px;
+  border-radius: 50%;
   background: #87b7cb;
   color: #fff;
   box-shadow: 1px 1px 1px #ccc;
@@ -416,10 +416,10 @@ export default {
 .load-btn span {
   width: 50px;
   height: 50px;
-  padding: 12.5px;
-  font-size: 25px;
+  padding: 10px;
+  font-size: 30px;
   text-align: center;
-  line-height: 25px;
+  line-height: 30px;
   cursor: pointer;
   transform-origin: center center;
   transition: all 1s;

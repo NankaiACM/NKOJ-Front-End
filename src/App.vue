@@ -7,8 +7,7 @@
     </head-bar>
   </header>
   <section id="main">
-    <login-page v-if="isLoginShow" @exit="exitShow" status="login"></login-page>
-    <login-page v-if="isSignupShow" @exit="exitShow" status="signUp"></login-page>
+    <login-page v-if="userPage=='login' || userPage=='signUp'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-page>
     <router-view class="com-container"></router-view>
   </section>
 </div>
@@ -23,8 +22,6 @@ export default {
   name: 'App',
   data: function () {
     return {
-      isLoginShow: false,
-      isSignupShow: false,
       userPage: 'None',
       loginUserName: 'null',
       nowPage: '',
@@ -67,12 +64,10 @@ export default {
       })
     },
     changeToLogin: function () {
-      this.userPage='Login'
-      this.isLoginShow = true
+      this.userPage='login'
     },
     changeToSignup: function () {
-      this.userPage='Signup'
-      this.isSignupShow = true
+      this.userPage='signUp'
     },
     changeTo404: function () {
       this.nowPage='404'
@@ -81,9 +76,11 @@ export default {
       })
     },
     exitShow: function () {
-      this.isLoginShow = false
-      this.isSignupShow = false
+      this.userPage="None"
     },
+    changeLogin:function(value){
+      this.userPage=value;
+    }
   },
   computed:{
     nowPageF:function(){
@@ -93,14 +90,6 @@ export default {
         return this.nowPage
     }
   },
-  watch:{
-    isLoginShow:function(newValue,oldValue){
-      if(newValue==false) this.userPage='None'
-    },
-    isSignupShow:function(newValue,oldValue){
-      if(newValue==false) this.userPage='None'
-    }
-  }
 }
 </script>
 

@@ -1,31 +1,52 @@
 <template>
   <dialog-wrap @exit="$emit('exit')">
-    <transition @enter="fadeEnter" @leave="fadeLeave" :css="false">
+    <transition name="fade" @enter="fadeEnter" @leave="fadeLeave" :css="false">
     <div class="login-sign-up" v-if="pageStatus=='login'">
       <div class="title-bar">
         <div class="title">登录</div>
         <div class="subtitle">由此登录，开启今日的ACM之旅吧~</div>
       </div>
       <hr>
-      <form>
+      <form class="wrapper">
+        <transition name="fade" @enter="fadeEnter" @leave="fadeLeave" :css="false">
+        <div v-if="loginStatus==0 || loginStatus==1" key="1">
         <div class="form-group" :class="{'hastext':loginAttribute.loginAccount!='','focus':focusing==1}">
           <label @click="labelClick">用户名或邮箱</label>
           <input type="text" class="form-control" v-model="loginAttribute.loginAccount" @focus="focusing=1"
-                 @blur="focusing=0">
+                 @blur="focusing=0" :disabled="loginStatus==1" :class="{'disabled':loginStatus==1}">
         </div>
         <div class="form-group" :class="{'hastext':loginAttribute.loginPassword!='','focus':focusing==2}">
           <label @click="labelClick">密码</label>
           <input type="password" class="form-control" v-model="loginAttribute.loginPassword" @focus="focusing=2"
-                 @blur="focusing=0">
+                 @blur="focusing=0" :disabled="loginStatus==1" :class="{'disabled':loginStatus==1}">
         </div>
-        <div class="form-group message-bar">
+
+            <div class="form-group captcha" v-show="!noNeedCaptcha" :class="{'hastext':loginAttribute.captcha!='','focus':focusing==4}">
+              <label @click="labelClick">右图中的文字</label>
+              <input type="text" class="form-control" v-model="loginAttribute.captcha" :disabled="loginStatus==1"
+                :class="{'disabled':loginStatus==1}" @focus="focusing=4" @blur="focusing=0" maxlength="6">
+              <img class="captcha" :src="captchaUrlLogin" @error="noNeedCaptcha=true" @load="noNeedCaptcha=false;loginAttribute.captcha=''"
+                   @click="captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()"/>
+            </div>
+        <div class="message-bar">
           <p>{{loginMessage}}</p>
         </div>
         <div class="form-group">
-          <button class="btn" v-on:click="loginAttempt">登陆</button>
+          <button class="btn" @click.prevent="loginAttempt" :disabled="loginStatus==1">
+            <vue-loading type="spin" color="white" :size="{ width: '30px', height: '30px' }" v-if="loginStatus==1"></vue-loading>
+            <div v-else>登陆</div>
+          </button>
         </div>
+        </div>
+        <div v-else-if="loginStatus==2" key="2">
+            <div class="message-bar" style="height:9rem;padding-top:2rem">
+              <p>登录成功哒~</p>
+              <p>（ 窗口将在{{timeToClose}}秒后自动关闭 ）</p>
+            </div>
+        </div>
+        </transition>
       </form>
-      <div class="text">没有帐号？立刻<a @click="pageStatus='signUp'">注册</a>！</div>
+      <div class="text" v-if="loginStatus!=2">没有帐号？立刻<a @click="pageStatus='signUp'">注册</a>！</div>
     </div>
 
     <div class="login-sign-up" v-if="pageStatus=='signUp'">
@@ -152,9 +173,11 @@ export default {
     return {
       loginAttribute: {
         loginAccount: "",
-        loginPassword: ""
+        loginPassword: "",
+        captcha:"",
       },
       loginMessage: "",
+      loginStatus: 0,
       focusing: 0,
       pageStatus: this.status,
       signupAttribute: {
@@ -173,15 +196,18 @@ export default {
       isSignOK: false,
       emailSendDate: new Date(),
       statusMessage: "",
-      signupHeight: 250,
       noPointHost: window.noPointHost,
       emailKey: "",
-      captchaUrl: `http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random(),
-      sendColdTime: 60,
+      captchaUrl: `http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random(),
+      captchaUrlLogin:`http://${noPointHost}:8000/captcha/login?_t=` + Math.random(),
+      sendColdTime: 0,
+      timeToClose: 0,
+      noNeedCaptcha: false,
     };
   },
   methods: {
     loginpasswordEncrypt: function(password) {
+      this.loginStatus=1;
       var loginPackege = {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
@@ -189,21 +215,28 @@ export default {
       };
       loginPackege.password = password;
       loginPackege.user = this.loginAttribute.loginAccount;
+      loginPackege.captcha = this.loginAttribute.captcha;
       this.$http
-        .post(`http://${window.noPointHost}:8000/api/u/login`, loginPackege, {
-          crossDomain: true,
-          xhrFields: { withCredentials: true }
+        .post(`http://${noPointHost}:8000/api/u/login`, loginPackege, {
+              crossDomain: true,
+              xhrFields: { withCredentials: true },
+              timeout: "8000",
+              cache: true,
+              credentials: true
         })
         .then(res => {
           console.log(res);
-          if (res.body.code === 400) {
-            this.loginMessage = "用户名不存在";
-          } else if (res.body.code === 1) {
-            this.loginMessage = "用户名或密码错误";
-          } else if (res.body.code === 0) {
-            this.loginMessage = "成功登陆！";
-            console.log(res.body.user);
+          if (res.body.code === 0) {
+            this.loginStatus=2;
             this.$emit("userInfo", res.body.user);
+            return;
+          } else {
+            this.loginMessage="";
+            for (var item in res.body.error){
+              this.loginMessage +=item+" "+res.body.error[item]+". ";
+            }
+            this.captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()
+            this.loginStatus=0;
           }
           this.showMessageBar(".message-bar", 2);
         });
@@ -231,7 +264,7 @@ export default {
         this.isEmailSending = true;
         this.$http
           .get(
-            `http://${window.noPointHost}:8000/api/u/verify/` +
+            `http://${noPointHost}:8000/api/u/verify/` +
               this.signupAttribute.signupEmail +
               "?captcha=" +
               this.signupAttribute.signupCaptcha,
@@ -246,7 +279,6 @@ export default {
           .then(
             res => {
               var vue = this;
-              console.log(res.body);
               var resp = res.body;
               if (resp.code === 0) {
                 vue.isEmailSend = true;
@@ -266,13 +298,12 @@ export default {
               vue.showMessageBar(".message-bar", 2);
               vue.signupAttribute.signupCaptcha = "";
               vue.captchaUrl =
-                `http://${window.noPointHost}:8000/captcha/sendmail?_t=` +
+                `http://${noPointHost}:8000/captcha/sendmail?_t=` +
                 Math.random();
               this.isEmailSending = false;
             },
             res => {
               var vue = this;
-              console.log(res);
               if (res.status === 429) {
                 vue.statusMessage =
                   "请求过于频繁啦，再等" +
@@ -284,7 +315,7 @@ export default {
                   "秒吧";
                 vue.signupAttribute.signupCaptcha = "";
                 vue.captchaUrl =
-                  `http://${window.noPointHost}:8000/captcha/sendmail?_t=` +
+                  `http://${noPointHost}:8000/captcha/sendmail?_t=` +
                   Math.random();
               } else {
                 vue.statusMessage = "电波……无法传达……（连接失败）";
@@ -306,7 +337,7 @@ export default {
       vue.isEmailSending = true;
       vue.$http
         .get(
-          `http://${window.noPointHost}:8000/api/u/verify/` +
+          `http://${noPointHost}:8000/api/u/verify/` +
             vue.emailKey +
             "/" +
             vue.signupAttribute.signupEmail,
@@ -321,7 +352,6 @@ export default {
         .then(
           res => {
             var vue = this;
-            console.log(res.body);
             var resp = res.body;
             if (resp.code === 0) {
               vue.isEmailSend = true;
@@ -336,7 +366,6 @@ export default {
           },
           res => {
             var vue = this;
-            console.log(res);
             if (res.status === 429) {
               vue.statusMessage =
                 "请求过于频繁啦，再等" +
@@ -363,7 +392,7 @@ export default {
       vue.isEmailVerifying = true;
       vue.$http
         .get(
-          `http://${window.noPointHost}:8000/api/u/verify/` +
+          `http://${noPointHost}:8000/api/u/verify/` +
             vue.emailKey +
             "/" +
             vue.signupAttribute.emailCode,
@@ -378,7 +407,6 @@ export default {
         .then(
           res => {
             var vue = this;
-            console.log(res.body);
             var resp = res.body;
             if (resp.code === 0) {
               vue.isEmailVerify = true;
@@ -390,7 +418,6 @@ export default {
           },
           res => {
             var vue = this;
-            console.log(res);
             if (res.status === 429) {
               vue.statusMessage =
                 "请求过于频繁啦，再等" +
@@ -430,18 +457,16 @@ export default {
       sendPackge.email = attr.signupEmail;
       sendPackge.school = "Nankai University";
       sendPackge.gender = 1;
-      console.log(sendPackge);
       this.$http
-        .post(`http://${window.noPointHost}:8000/api/u/register`, sendPackge, {
+        .post(`http://${noPointHost}:8000/api/u/register`, sendPackge, {
           crossDomain: true,
           xhrFields: { withCredentials: true },
           timeout: "8000",
           credentials: true
         })
         .then(res => {
-          console.log(res);
           if (res.body.code === 0) {
-            this.statusMessage = "注册成功！";
+            this.$emit("userInfo", res.body.user);
             this.isSignOK = true;
             this.isSignuping = false;
             return;
@@ -471,7 +496,7 @@ export default {
       var mb = document.querySelector(classcode);
       var target= high==0?"0":"10px"
       var target2= high==0?"0":"-15px"
-      if(high!=0) high+=1
+      if(high!=0) high+=1.2
       if (mb.style.height != high + "rem") {
         Velocity(
           mb,
@@ -499,7 +524,7 @@ export default {
         form,
         { height: keep - this.tansitionHeight + target + "px" },
         {
-          duration: Math.sqrt(Math.abs(this.tansitionHeight - target))*10,
+          duration: Math.sqrt(Math.abs(this.tansitionHeight - target))*20,
           complete: function() {
             el.style.display = "block";
             form.style.height = "auto";
@@ -516,7 +541,7 @@ export default {
         { opacity: 0 },
         { duration: 300, complete: done }
       );
-    }
+    },
   },
   watch: {
     isEmailSend: function(newValue, oldValue) {
@@ -526,7 +551,7 @@ export default {
       } else {
         this.signupAttribute.signupCaptcha = "";
         this.captchaUrl =
-          `http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random();
+          `http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random();
       }
       this.focusing = 0;
     },
@@ -549,7 +574,7 @@ export default {
         );
           }
         ,300)
-        vue.timeToClose=50;
+        vue.timeToClose=5;
         var func=function(){
           vue.timeToClose--;
           if(vue.timeToClose==0){
@@ -561,7 +586,44 @@ export default {
         }
         setTimeout(func,1000)
       }
-    }
+    },
+    loginStatus: function(newValue, oldValue) {
+      if (newValue==2) {
+        var vue=this;
+        var mesbar = document.querySelector(".message-bar");
+        var form = mesbar.parentElement;
+        var keep=form.offsetHeight;
+        form.style.height=keep+"px";
+        setTimeout(
+          function(){
+            Velocity(form, {height: keep-vue.tansitionHeight+20+"px"},{duration:300})
+            mesbar.style.margin="30px"
+            mesbar.style.height="4rem"
+        Velocity(
+          form,
+          { opacity:1 },
+          { duration: 300 }
+        );
+          }
+        ,300)
+        vue.timeToClose=5;
+        var func=function(){
+          vue.timeToClose--;
+          if(vue.timeToClose==0){
+            vue.$emit('exit');
+          }
+          else{
+            setTimeout(func, 1000);
+          }
+        }
+        setTimeout(func,1000)
+      }
+    },
+    pageStatus: function (newValue,oldValue) {
+      this.$emit('changeStatus',newValue);
+      if(newValue=="signUp")this.captchaUrl=`http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random()
+      if(newValue=="login")this.captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()
+    },
   }
 };
 </script>
@@ -569,6 +631,7 @@ export default {
 <style>
 .dialog-field .title-bar {
   padding: 1.5rem 0;
+  text-align: center;
 }
 
 .dialog-field .title-bar .title {
@@ -670,6 +733,7 @@ export default {
   font-size: 1.4rem;
   color: #2c3e50;
   line-height: 2.5rem;
+  text-align: center;
 }
 
 .dialog-field .message-bar p{
@@ -701,13 +765,14 @@ export default {
   color: white;
 }
 
-.text {
+.login-sign-up .text {
   padding: 1rem 0;
   top: 5px;
   position: relative;
+  text-align: center;
 }
 
-.text a {
+.login-sign-up .text a {
   cursor: pointer;
   color: #1b98e0;
 }

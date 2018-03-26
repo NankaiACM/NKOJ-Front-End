@@ -6,7 +6,7 @@
         <div class="per-cnt-ctn media-body container">
           <div class="luck">
           <span class="line"><span class="split-mius">#</span><span :style="t()">{{index + 1}}</span></span><br>
-          <span class="line" :title="'nikename'"><span class="split-mius l"></span>nick name<span class="split-mius r"></span></span><br>
+          <span class="line nick" :title="'nikename'"><span class="split-mius l"></span>nick name<span class="split-mius r"></span></span><br>
           <span class="line"><span class="split-mius l"></span>solved<span class="split-mius r"></span></span><br>
           <span class="line"><span class="split-mius l"></span>fraction<span class="split-mius r"></span></span>
           </div>
@@ -156,6 +156,13 @@ export default {
   cursor: pointer;
 }
 
+.luck .line.nick {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 20em;
+}
 .luck .line:hover .split-mius.l::after {
   content: '/';
 }
@@ -183,7 +190,7 @@ export default {
 }
 
 .pro-item.ac {
-  background: greenyellow;
+  background: #70c1b3;
 }
 
 @keyframes luckright {

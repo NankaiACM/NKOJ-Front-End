@@ -13,10 +13,10 @@
       </ul>
       <div class="usersBar">
         <div class="separate"></div>
-        <div class="field" :class="{'field-focus':userPage=='Signup'}" v-on:click="$emit('signUp')">
+        <div class="field" :class="{'field-focus':userPage=='signUp'}" v-on:click="$emit('signUp')">
           <a> 注册<span class="glyphicon glyphicon-user"></span></a>
         </div>
-        <div class="field" :class="{'field-focus':userPage=='Login'}" v-on:click="$emit('logIn')">
+        <div class="field" :class="{'field-focus':userPage=='login'}" v-on:click="$emit('logIn')">
           <a> 登录<span class="glyphicon glyphicon-log-in"></span></a>
         </div>
       </div>
