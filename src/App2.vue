@@ -78,10 +78,11 @@
     <div v-if="contestStatus==0">
       <!--题目about界面-->
       <div class="bg-white band-with-80padding">
-        <!--problem标题-->
-        <h3><span class="glyphicon glyphicon-list"></span>ABOUT</h3>
+        
         <!--题目列表-->
-        <div class="container padding-t-40">
+        <div class="container">
+          <!--problem标题-->
+          <h3><span class="glyphicon glyphicon-list"></span>ABOUT</h3>
           <div v-html="aboutMD"></div>
         </div>
       </div>
@@ -90,10 +91,10 @@
 
       <!--题目rule界面-->
       <div class="bg-white band-with-80padding">
-        <!--problem标题-->
-        <h3><span class="glyphicon glyphicon-list"></span>RULES</h3>
         <!--题目列表-->
-        <div class="container padding-t-40">
+        <div class="container">
+          <!--problem标题-->
+          <h3><span class="glyphicon glyphicon-list"></span>RULES</h3>
           <div v-html="ruleMD"></div>
         </div>
       </div>
@@ -648,6 +649,13 @@ hr.cut-off{
 .band-with-80padding h3 span{
     margin-right: 1rem;
     font-size: 2.5rem;
+}
+.band-with-80padding p,
+.band-with-80padding li{
+    letter-spacing: 0.08em;
+}
+.band-with-80padding h4{
+    padding: 40px 0 10px;
 }
 .band-title{
     width: 80%;
