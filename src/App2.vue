@@ -6,9 +6,9 @@
         <a class="navbar-brand"><img src="./assets/logo.png"></a>
         <!--div>-before end-<br>{{endIn.hrs}}:{{endIn.mins}}:{{endIn.secs}}</div-->
         <ul>
-          <li><a :class="{'hover':hoverNav==0}" @click="scrollBand(0)">Problems</a></li>
-          <li><a :class="{'hover':hoverNav==1}" @click="scrollBand(1)">Status</a></li>
-          <li><a :class="{'hover':hoverNav==2}" @click="scrollBand(2)">Rank</a></li>
+          <li v-for="(item,index) in navbarItems" :key="item">
+            <a :class="{'hover':hoverNav==index}" @click="scrollBand(index)">{{item}}</a>
+          </li>
           <li><a class="btn btn-ghost" @click="userPage='login'">LOG IN</a></li>
           <li><a class="btn btn-default" @click="userPage='signUp'">SIGN UP</a></li>
         </ul>
@@ -28,7 +28,7 @@
           <div class="shader shader-top"></div>
           <div class="color-white bg-blue">
             <h2>{{contestTitle}}</h2>
-            <span>Start Time: {{new Date(startTime).toString()}}</span>
+            <span>开始时间： {{new Date(startTime).toLocaleString()}}</span>
           </div>
           <div class="shader shader-bottom"></div>
         </div>
@@ -37,8 +37,8 @@
       <div class="time-bar container">
         <div class="width-80-center setflex padding-t-20">
           <hr class="color-white hrsize-2 flex-1">
-          <div class="color-white margin-l-r-20 word" v-if="contestStatus==1">Before End</div>
-          <div class="color-white margin-l-r-20 word" v-else-if="contestStatus==0">Before Start</div>
+          <div class="color-white margin-l-r-20 word" v-if="contestStatus==1">距离比赛结束</div>
+          <div class="color-white margin-l-r-20 word" v-else-if="contestStatus==0">距离比赛开始</div>
           <hr class="color-white hrsize-2 flex-1">
         </div>
         <div class="timers">
@@ -76,28 +76,18 @@
 
     <!--比赛前的介绍界面-->
     <div v-if="contestStatus==0">
-      <!--题目about界面-->
+      <div v-for="(text,index) in MDtext" :key="text">
       <div class="bg-white band-with-80padding">
-        
-        <!--题目列表-->
         <div class="container">
-          <!--problem标题-->
-          <h3><span class="glyphicon glyphicon-list"></span>ABOUT</h3>
-          <div v-html="aboutMD"></div>
+          <!--标题-->
+          <h3><span class="glyphicon glyphicon-list"></span>{{navbarItems[index].toUpperCase()}}</h3>
+          <div v-html="getMD(text)"></div>
         </div>
       </div>
 
-      <hr class="cut-off">
-
-      <!--题目rule界面-->
-      <div class="bg-white band-with-80padding">
-        <!--题目列表-->
-        <div class="container">
-          <!--problem标题-->
-          <h3><span class="glyphicon glyphicon-list"></span>RULES</h3>
-          <div v-html="ruleMD"></div>
-        </div>
+      <hr class="cut-off" v-if="index!=MDtext.length-1">
       </div>
+
     </div>
 
     <!--比赛中的界面-->
@@ -213,8 +203,10 @@ export default {
         },
       ],
       userPage:"None",
+      MDtext: [],
       ruleMDtext: '',
-      aboutMDtext: ''
+      aboutMDtext: '',
+      navbarItems: [],
     }
   },
   methods:{
@@ -227,8 +219,8 @@ export default {
         this.headShowing=false;
       }
       let band = document.querySelectorAll("div.band-with-80padding");
-      this.hoverNav=3;
-      for(var i=2;i>=0;i--){
+      this.hoverNav=this.navbarItems.length+1;
+      for(var i=this.navbarItems.length-1;i>=0;i--){
         if(scrolled > band[i].offsetTop-70) {
           this.hoverNav=i;
           break;
@@ -278,6 +270,12 @@ export default {
               vue.startTime=datas.start;
               vue.endTime=datas.end;
               vue.contestTitle=datas.title;
+              vue.navbarItems=datas.info;
+              for(var i=0;i<vue.navbarItems.length;i++){
+                vue.$http.get(`http://${noPointHost}:8000/api/contest/` + this.contestid + '/' + vue.navbarItems[i]).then(res => {
+                  vue.MDtext.push(res.body)
+                })
+              }
             },
             res => {
               //wait to code
@@ -288,16 +286,13 @@ export default {
             //wait to code
             var vue = this;
           });
-      vue.$http.get(`http://${noPointHost}:8000/api/contest/` + this.contestid + '/rule').then(res => {
-        this.ruleMDtext = res.body
-      })
-      vue.$http.get(`http://${noPointHost}:8000/api/contest/` + this.contestid + '/about').then(res => {
-        this.aboutMDtext = res.body
-      })
       setInterval(() => {
         vue.nowTime=new Date();
       }, 100);
-    }
+    },
+    getMD: function (text) {
+      return marked(text, {sanitize : true})
+    },
   },
   mounted: function () {
     this.$nextTick(function () {
@@ -347,12 +342,6 @@ export default {
         return 0;
       }
     },
-    ruleMD: function () {
-      return marked(this.ruleMDtext, {sanitize : true})
-    },
-    aboutMD: function () {
-      return marked(this.aboutMDtext, {sanitize : true})
-    }
   }
 }
 </script>
@@ -657,6 +646,7 @@ hr.cut-off{
 .band-with-80padding h4{
     padding: 40px 0 0;
     font-weight: bold;
+    font-size: 1.2em;
 }
 .band-with-80padding code{
     background: white;
