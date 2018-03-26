@@ -761,10 +761,7 @@ hr.cut-off{
     text-overflow:ellipsis;
     white-space: nowrap;
     max-width: 120px;
-    cursor: pointer;
-}
-.navbar .avatar .text:hover{
-    text-decoration: underline;
+    pointer-events: none;
 }
 .navbar .avatar img{
 	height: 34px;
@@ -772,11 +769,6 @@ hr.cut-off{
 	width: 34px;
 	border: 2px solid white;
     margin: auto;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-.navbar .avatar img:hover{
-    border-color:#87b7cb;
 }
 .navbar .avatar .menu{
     position: absolute;

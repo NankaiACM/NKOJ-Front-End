@@ -766,14 +766,14 @@ export default {
   color: white;
 }
 
-.text {
+.login-sign-up .text {
   padding: 1rem 0;
   top: 5px;
   position: relative;
   text-align: center;
 }
 
-.text a {
+.login-sign-up .text a {
   cursor: pointer;
   color: #1b98e0;
 }
