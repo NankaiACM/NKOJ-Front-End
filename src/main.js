@@ -14,6 +14,6 @@ console.log(router)
 new Vue({
   el: '#app',
   router,
-  components: { App },
-  template: '<App/>'
+  components: { App2 },
+  template: '<App2/>'
 })

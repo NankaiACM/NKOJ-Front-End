@@ -61,8 +61,8 @@
         <tr v-for="status in statusList" :key="status.solution_id">
           <td class="hidden-xs">{{status.solution_id}}</td>
           <td>
-            <router-link :to="{path:'user/'+status.user_id}">
-              <span class="label label-info">{{status.user_id}}</span>
+            <router-link :to="{path:'user/'+status.nickname}">
+              <span class="label label-info">{{status.nickname}}</span>
             </router-link>
           </td>
           <td>
@@ -172,7 +172,7 @@ export default {
         status in statusList
         {
           "solution_id": 1,
-          "user_id": 1,
+          "nickname": 1,
           "problem_id": 1001,
           "status_id": null,
           "language": 0,
@@ -249,7 +249,7 @@ export default {
           return
         }
         _this.statusList = res.body.data
-        console.log(res.body.data.length)
+        console.log(res.body.data[0])
       },function (res) {
         console.log(res)
       })
