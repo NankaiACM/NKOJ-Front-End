@@ -5,19 +5,25 @@
       <div class="container">
         <a class="navbar-brand"><img src="./assets/logo.png"></a>
         <!--div>-before end-<br>{{endIn.hrs}}:{{endIn.mins}}:{{endIn.secs}}</div-->
-        <ul>
+        <ul class="navul">
           <li v-for="(item,index) in navbarItems" :key="item">
             <a :class="{'hover':hoverNav==index}" @click="scrollBand(index)">{{item.toUpperCase()}}</a>
           </li>
           <li v-if="userData===undefined"><a class="btn btn-ghost" @click="userPage='login'">登录</a></li>
           <li v-if="userData===undefined"><a class="btn btn-default" @click="userPage='signUp'">注册</a></li>
           <li v-if="userData!==undefined">
-            <div class="avatar">
-              <div class="text">{{userData.nickname}}</div>
-              <img :src="avatarUrl">
-              <div class="menu">
+              <div class="avatar">
+                <div class="text">{{userData.nickname}}</div>
+                <img :src="avatarUrl">
+                <div class="dropdown">
+                  <button class="dropdown-toggle avatarDown" type="button"  data-toggle="dropdown">
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-right avatarDownul" id="avatardown" aria-labelledby="dropdownMenu1">
+                    <li><a href="#" @click="logout">Logout</a></li>
+                  </ul>
+                </div>
               </div>
-            </div>
           </li>
         </ul>
       </div>
@@ -221,7 +227,7 @@ export default {
       ],
       MDtext: [],
       navbarItems: [],
-      
+
       userPage:"None",
       userData: undefined,
       dialogMessage: "",
@@ -386,6 +392,27 @@ export default {
             var vue = this;
           });
       }
+    },
+    logout: function (event) {
+      event.preventDefault()
+      this.$http.get(`http://${noPointHost}:8000/api/user/logout`,
+      {
+        crossDomain: true,
+        xhrFields: {withCredentials: true},
+        timeout: "8000",
+        cache: true,
+        credentials: true
+      }).then( res => {
+          if(res.body.code === 0){
+            this.dialogMessage = "注销成功"
+            this.userData = undefined
+          } else {
+            this.dialogMessage = "注销失败"
+          }
+      }, err => {
+        this.dialogMessage = "注销失败"
+      })
+      this.userPage = 'dialog'
     }
   },
   mounted: function () {
@@ -637,7 +664,7 @@ hr.cut-off{
     height: 50px;
     display: block;
 }
-.navbar ul{
+.navbar .navul{
     float: right;
     margin: 0;
     padding: 0;
@@ -645,11 +672,11 @@ hr.cut-off{
     display: flex;
     align-items: baseline;
 }
-.navbar ul li{
+.navbar .navul li{
     float: left;
     display: block;
 }
-.navbar ul li a{
+.navbar .navul li a{
     margin: 7px 1.5rem;
     line-height: 34px;
     font-weight: 400;
@@ -659,10 +686,10 @@ hr.cut-off{
     cursor: pointer;
     height: 36px;
 }
-.navbar ul li a:hover{
+.navbar .navul li a:hover{
     text-decoration: none;
 }
-.navbar ul li a::after{
+.navbar .navul li a::after{
     content: '';
     transition: all 550ms cubic-bezier(.45,1,.32,1);
     width: 100%;
@@ -671,46 +698,46 @@ hr.cut-off{
     background: #7bbfea;
     display: block;
 }
-.show-head ul li a::after{
+.show-head .navul li a::after{
     background: #87b7cb;
 }
-.navbar ul li a:hover::after{
+.navbar .navul li a:hover::after{
     transform: scale(1,1);
 }
-.navbar ul li a.hover::after{
+.navbar .navul li a.hover::after{
     transform: scale(1,1);
 }
-.navbar ul li a.btn{
+.navbar .navul li a.btn{
     padding: 0 3rem;
     position: relative;
     top: -1px;
 }
-.navbar ul li a.btn:focus,
-.navbar ul li a.btn:active{
+.navbar .navul li a.btn:focus,
+.navbar .navul li a.btn:active{
     box-shadow: none;
 }
-.navbar ul li a.btn-ghost{
+.navbar .navul li a.btn-ghost{
     border: 2px solid #e8f1f2;
     border-color: #e8f1f2;
     background: transparent;
     color: #e8f1f2;
     transition: all 0.3s ease;
 }
-.navbar ul li a.btn-ghost:hover{
+.navbar .navul li a.btn-ghost:hover{
     border-color: #247ba0;
 }
-.navbar ul li a.btn-default{
+.navbar .navul li a.btn-default{
     border: 2px solid #e8f1f2;
     background: #e8f1f2;
     color: #1b98e0;
     transition: all 0.3s ease;
 }
-.navbar ul li a.btn-default:hover{
+.navbar .navul li a.btn-default:hover{
     background: #247ba0;
     color: #e8f1f2;
     border-color: #247ba0;
 }
-.navbar ul li a.btn::after{
+.navbar .navul li a.btn::after{
     visibility: hidden;
 }
 .navbar .avatar{
@@ -904,5 +931,45 @@ hr.cut-off{
 .footer div.contact a{
     color: #1b98e0;
     cursor: pointer;
+}
+
+.avatarDown span{
+  background: none;
+  color: white;
+}
+.avatarDown {
+  border: none;
+  background: none;
+  height: 34px;
+  border-radius: 34px;
+  width: 20px;
+  margin: 3px;
+  padding: 0px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+#avatardown {
+  width: 100px;
+  min-width: 150px;
+}
+#avatardown li{
+  width: 100%;
+  text-align: center;
+  display: inline-block;
+}
+#avatardown li a::after{
+  background: transparent;
+
+}
+#avatardown li a{
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  height: 30px;
+  color: #333;
+  white-space: nowrap;
+  margin: 10px 0;
 }
 </style>

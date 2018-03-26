@@ -20,7 +20,7 @@
           <input type="password" class="form-control" v-model="loginAttribute.loginPassword" @focus="focusing=2"
                  @blur="focusing=0" :disabled="loginStatus==1" :class="{'disabled':loginStatus==1}">
         </div>
-        
+
             <div class="form-group captcha" v-show="!noNeedCaptcha" :class="{'hastext':loginAttribute.captcha!='','focus':focusing==4}">
               <label @click="labelClick">右图中的文字</label>
               <input type="text" class="form-control" v-model="loginAttribute.captcha" :disabled="loginStatus==1"
@@ -238,7 +238,7 @@ export default {
             }
             this.captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()
             this.loginStatus=0;
-          } 
+          }
           this.showMessageBar(".message-bar", 2);
         });
     },
