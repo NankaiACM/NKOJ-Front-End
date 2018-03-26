@@ -1,17 +1,19 @@
 <template>
   <div id="app2">
     <!--导航栏-->
-    <div class="navbar" :class="{'show-head':headShowing}"><div class="container">
-      <a class="navbar-brand"><img src="./assets/logo.png"></a>
-      <!--div>-before end-<br>{{endIn.hrs}}:{{endIn.mins}}:{{endIn.secs}}</div-->
-      <ul>
-        <li><a :class="{'hover':hoverNav==0}" @click="scrollBand(0)">Problems</a></li>
-        <li><a :class="{'hover':hoverNav==1}" @click="scrollBand(1)">Status</a></li>
-        <li><a :class="{'hover':hoverNav==2}" @click="scrollBand(2)">Rank</a></li>
-        <li><a class="btn btn-ghost" @click="userPage='login'">LOG IN</a></li>
-        <li><a class="btn btn-default" @click="userPage='signUp'">SIGN UP</a></li>
-      </ul>
-    </div></div>
+    <div class="navbar" :class="{'show-head':headShowing}">
+      <div class="container">
+        <a class="navbar-brand"><img src="./assets/logo.png"></a>
+        <!--div>-before end-<br>{{endIn.hrs}}:{{endIn.mins}}:{{endIn.secs}}</div-->
+        <ul>
+          <li><a :class="{'hover':hoverNav==0}" @click="scrollBand(0)">Problems</a></li>
+          <li><a :class="{'hover':hoverNav==1}" @click="scrollBand(1)">Status</a></li>
+          <li><a :class="{'hover':hoverNav==2}" @click="scrollBand(2)">Rank</a></li>
+          <li><a class="btn btn-ghost" @click="userPage='login'">LOG IN</a></li>
+          <li><a class="btn btn-default" @click="userPage='signUp'">SIGN UP</a></li>
+        </ul>
+      </div>
+    </div>
 
     <!--回到顶部按钮-->
     <div v-if="headShowing" class="up-to-top" @click="upToTop">
@@ -21,14 +23,16 @@
     <!--标题板块-->
     <div class="bg-blue band-with-40padding first-band">
       <!--标题-->
-      <div class="container"><div class="title-box">
-        <div class="shader shader-top"></div>
-        <div class="color-white bg-blue">
-          <h2>{{contestTitle}}</h2>
-          <span>Start Time: {{new Date(startTime).toString()}}</span>
+      <div class="container">
+        <div class="title-box">
+          <div class="shader shader-top"></div>
+          <div class="color-white bg-blue">
+            <h2>{{contestTitle}}</h2>
+            <span>Start Time: {{new Date(startTime).toString()}}</span>
+          </div>
+          <div class="shader shader-bottom"></div>
         </div>
-        <div class="shader shader-bottom"></div>
-      </div></div>
+      </div>
       <!--时间-->
       <div class="time-bar container">
         <div class="width-80-center setflex padding-t-20">
@@ -39,22 +43,30 @@
         </div>
         <div class="timers">
           <div class="timer" :class="{'timer-first':countDown.ds!=0}" v-if="countDown.ds!=0">
-            <div class="bg-white"><div>{{countDown.ds}}</div></div>
+            <div class="bg-white">
+              <div>{{countDown.ds}}</div>
+            </div>
             <span class="unit" v-if="countDown.ds!=1">days</span>
             <span class="unit" v-else>day</span>
           </div>
           <div class="timer" :class="{'timer-first':countDown.ds==0}">
-            <div class="bg-white"><div>{{countDown.hrs}}</div></div>
+            <div class="bg-white">
+              <div>{{countDown.hrs}}</div>
+            </div>
             <span class="unit" v-if="countDown.hrs!=1">hours</span>
             <span class="unit" v-else>hour</span>
           </div>
           <div class="timer">
-            <div class="bg-white"><div>{{countDown.mins}}</div></div>
+            <div class="bg-white">
+              <div>{{countDown.mins}}</div>
+            </div>
             <span class="unit" v-if="countDown.mins!=1">mins</span>
             <span class="unit" v-else>min</span>
           </div>
           <div class="timer">
-            <div class="bg-white"><div>{{countDown.secs}}</div></div>
+            <div class="bg-white">
+              <div>{{countDown.secs}}</div>
+            </div>
             <span class="unit" v-if="countDown.secs!=1">secs</span>
             <span class="unit" v-else>sec</span>
           </div>
@@ -62,51 +74,73 @@
       </div>
     </div>
 
-    <!--题目about界面-->
-    <div v-html="aboutMD"></div>
+    <!--比赛前的介绍界面-->
+    <div v-if="contestStatus==0">
+      <!--题目about界面-->
+      <div class="bg-white band-with-80padding">
+        <!--problem标题-->
+        <h3><span class="glyphicon glyphicon-list"></span>ABOUT</h3>
+        <!--题目列表-->
+        <div class="container padding-t-40">
+          <div v-html="aboutMD"></div>
+        </div>
+      </div>
 
-    <!--题目rule界面-->
-    <div v-html="ruleMD"></div>
+      <hr class="cut-off">
 
-    <!--题目板块-->
-    <div class="bg-white band-with-80padding problem-band" v-if="contestStatus==1">
-      <!--problem标题-->
-      <h3><span class="glyphicon glyphicon-list"></span>PROBLEMS</h3>
-      <!--题目列表-->
-      <div class="container padding-t-40">
-        <ul>
-          <li v-for="(problem,index) in problems" :key="problem.id">
-            <problem-list :problem-index="index" :problem-name="problem.problemName"
-             :status="problem.status"/>
-          </li>
-        </ul>
+      <!--题目rule界面-->
+      <div class="bg-white band-with-80padding">
+        <!--problem标题-->
+        <h3><span class="glyphicon glyphicon-list"></span>RULES</h3>
+        <!--题目列表-->
+        <div class="container padding-t-40">
+          <div v-html="ruleMD"></div>
+        </div>
       </div>
     </div>
 
-    <hr class="cut-off">
-
-    <!--提交状态板块-->
-    <div class="bg-white band-with-80padding" v-if="contestStatus==1">
-      <!--提交状态标题-->
-      <h3><span class="glyphicon glyphicon-stats"></span>STATUS</h3>
-      <!--提交状态列表-->
-      <div class="container padding-t-40">
-        <status :is-infinite="false" :is-filter="false" :is-btn="true" api-url="/static/status.json"/>
-        <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
+    <!--比赛中的界面-->
+    <div v-else-if="contestStatus==1">
+      <!--题目板块-->
+      <div class="bg-white band-with-80padding problem-band">
+        <!--problem标题-->
+        <h3><span class="glyphicon glyphicon-list"></span>PROBLEMS</h3>
+        <!--题目列表-->
+        <div class="container padding-t-40">
+          <ul>
+            <li v-for="(problem,index) in problems" :key="problem.id">
+              <problem-list :problem-index="index" :problem-name="problem.problemName"
+                            :status="problem.status"/>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
+      <hr class="cut-off">
 
-    <hr class="cut-off">
-
-    <!--排名板块-->
-    <div class="bg-white band-with-80padding" v-if="contestStatus==1">
-      <!--排名标题-->
-      <h3><span class=" glyphicon glyphicon-signal"></span>RANK</h3>
-      <!--排名列表-->
-      <div class="container padding-t-40">
-        <ranks/>
-        <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
+      <!--提交状态板块-->
+      <div class="bg-white band-with-80padding">
+        <!--提交状态标题-->
+        <h3><span class="glyphicon glyphicon-stats"></span>STATUS</h3>
+        <!--提交状态列表-->
+        <div class="container padding-t-40">
+          <status :is-infinite="false" :is-filter="false" :is-btn="true" api-url="/static/status.json"/>
+          <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
+        </div>
       </div>
+
+      <hr class="cut-off">
+
+      <!--排名板块-->
+      <div class="bg-white band-with-80padding">
+        <!--排名标题-->
+        <h3><span class=" glyphicon glyphicon-signal"></span>RANK</h3>
+        <!--排名列表-->
+        <div class="container padding-t-40">
+          <ranks/>
+          <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
+        </div>
+      </div>
+
     </div>
 
     <div class="footer band-with-40padding">
@@ -118,7 +152,8 @@
 
     <!--弹出框板块-->
     <login-page v-if="userPage=='login' || userPage=='signUp'" @exit="exitShow" :status="userPage"
-      @changeStatus="changeLogin"></login-page>
+                @changeStatus="changeLogin">
+    </login-page>
   </div>
 </template>
 
@@ -326,7 +361,7 @@ export default {
     background-color: #1b98e0;
 }
 .bg-white{
-    background-color: #e8f1f2;
+    background-color: white;
 }
 .band-with-40padding, .padding-t-b-40, .padding-t-40{
     padding-top: 40px;
