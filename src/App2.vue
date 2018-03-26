@@ -85,7 +85,7 @@
     <!--比赛前的介绍界面-->
     <div v-if="contestStatus==0">
       <div v-for="(text,index) in navbarItems" :key="text">
-      <div class="bg-white band-with-80padding">
+      <div class="band-with-80padding" :class="{'bg-gray':index%2==1,'bg-white':index%2==0}">
         <div class="container">
           <!--标题-->
           <h3><span class="glyphicon glyphicon-list"></span>{{text.toUpperCase()}}</h3>
@@ -93,15 +93,23 @@
         </div>
       </div>
 
-      <hr class="cut-off" v-if="index!=MDtext.length-1">
       </div>
 
+      <div class="band-with-80padding" :class="{'bg-gray':navbarItems.length%2==1,'bg-white':navbarItems.length%2==0}">
+        <div class="container register-bar">
+          <div class="text">已经看完了？或许你会想要……？</div>
+          <div class="btn-div">
+            <!--a class="btn btn-ghost" @click="userPage='dialog'">反馈或提问</a-->
+            <a class="btn btn-ghost" @click="registerAttempt">立刻报名</a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!--比赛中的界面-->
     <div v-else-if="contestStatus==1">
       <!--题目板块-->
-      <div class="bg-white band-with-80padding problem-band">
+      <div class="bg-gray band-with-80padding problem-band">
         <!--problem标题-->
         <h3><span class="glyphicon glyphicon-list"></span>PROBLEMS</h3>
         <!--题目列表-->
@@ -117,7 +125,7 @@
       <hr class="cut-off">
 
       <!--提交状态板块-->
-      <div class="bg-white band-with-80padding">
+      <div class="bg-gray band-with-80padding">
         <!--提交状态标题-->
         <h3><span class="glyphicon glyphicon-stats"></span>STATUS</h3>
         <!--提交状态列表-->
@@ -130,7 +138,7 @@
       <hr class="cut-off">
 
       <!--排名板块-->
-      <div class="bg-white band-with-80padding">
+      <div class="bg-gray band-with-80padding">
         <!--排名标题-->
         <h3><span class=" glyphicon glyphicon-signal"></span>RANK</h3>
         <!--排名列表-->
@@ -148,6 +156,9 @@
     <login-page v-if="userPage=='login' || userPage=='signUp'" @exit="exitShow" :status="userPage"
                 @changeStatus="changeLogin" @userInfo="changeUserInfo">
     </login-page>
+    <dialog-wrap v-if="userPage=='dialog'" @exit="exitShow" class="dialog">
+      <div class="text">{{dialogMessage}}</div>
+    </dialog-wrap>
   </div>
 </template>
 
@@ -156,6 +167,7 @@ import problemList from "./components/contestpage/contestOpenCompenents/problemL
 import status from "./components/statuspage/statusPage.vue";
 import ranks from "./components/contestpage/contestRank.vue";
 import loginPage from './components/dialog/loginSignUp';
+import dialogWrap from "./components/dialog/dialogWrap.vue";
 import saurusFooter from './components/footer'
 export default {
   name: 'App2',
@@ -164,7 +176,8 @@ export default {
     status,
     ranks,
     loginPage,
-    saurusFooter
+    saurusFooter,
+    dialogWrap,
   },
   data(){
     return{
@@ -211,6 +224,7 @@ export default {
       
       userPage:"None",
       userData: undefined,
+      dialogMessage: "",
     }
   },
   methods:{
@@ -314,6 +328,9 @@ export default {
               if(res.body.code===0){
                 vue.userData = res.body.data;
               }
+              else{
+                vue.userData = undefined;
+              }
             },
             res => {
               //wait to code
@@ -329,7 +346,47 @@ export default {
       return marked(text, {sanitize : true})
     },
     changeUserInfo:function (info){
+      this.initUser();
     },
+    registerAttempt: function () {
+        var vue=this;
+      if(vue.userData===undefined){
+        vue.userPage='signUp';
+      }
+      else{
+      vue.$http
+          .get(
+            `http://${noPointHost}:8000/api/user/contest/register/` + vue.contestid,
+            {
+              crossDomain: true,
+              xhrFields: { withCredentials: true },
+              timeout: "8000",
+              cache: true,
+              credentials: true
+            }
+          )
+          .then(
+            res => {
+              if(res.body.code===0){
+                vue.dialogMessage="注册成功！"
+              } else if(res.body.code===3){
+                vue.dialogMessage="您已经注册过了"
+              } else{
+                vue.dialogMessage="操作非法！"
+              }
+              vue.userPage="dialog";
+            },
+            res => {
+              //wait to code
+              var vue = this;
+            }
+          )
+          .catch(function(response) {
+            //wait to code
+            var vue = this;
+          });
+      }
+    }
   },
   mounted: function () {
     this.$nextTick(function () {
@@ -391,8 +448,11 @@ export default {
 .bg-blue, .title-box .shader{
     background-color: #1b98e0;
 }
-.bg-white{
+.bg-gray{
     background-color: #e8f1f2;
+}
+.bg-white{
+    background-color: #f6f9fa;
 }
 .band-with-40padding, .padding-t-b-40, .padding-t-40{
     padding-top: 40px;
@@ -700,6 +760,7 @@ hr.cut-off{
     left: -1px;
     width: 100%;
     z-index: -1;
+    visibility: hidden;
 }
 
 .up-to-top{
@@ -785,11 +846,51 @@ hr.cut-off{
     float: right;
 }
 
+.register-bar .text{
+	text-align: center;
+	font-size: 1.2em;
+	letter-spacing: 0.1em;
+	padding: 20px;
+}
+.register-bar .btn-div{
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    padding: 20px 0;
+}
+.register-bar .btn-div a.btn-ghost{
+    border: 2px solid #87b7cb;
+    background: transparent;
+    margin: 10px 40px;
+    border-radius: 3px;
+    width: 200px;
+    padding: 10px 0;
+    color: #87b7cb;
+    transition: all 0.3s ease;
+}
+.register-bar .btn-div a.btn-ghost:hover,
+.register-bar .btn-div a.btn-ghost:active{
+    box-shadow: none;
+    border: 2px solid #87b7cb;
+    background: #87b7cb;
+    margin: 10px 40px;
+    border-radius: 3px;
+    width: 200px;
+    padding: 10px 0;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.dialog div.text{
+    padding: 40px 0;
+    text-align: center;
+}
 
 
 .footer{
     background: #006494;
     color: #e8f1f2;
+    padding: 20px 0;
 }
 .footer div{
     width: 100%;
