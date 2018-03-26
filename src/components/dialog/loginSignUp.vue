@@ -8,22 +8,23 @@
       </div>
       <hr>
       <form class="wrapper">
+        <transition name="fade" @enter="fadeEnter" @leave="fadeLeave" :css="false">
+        <div v-if="loginStatus==0 || loginStatus==1" key="1">
         <div class="form-group" :class="{'hastext':loginAttribute.loginAccount!='','focus':focusing==1}">
           <label @click="labelClick">用户名或邮箱</label>
           <input type="text" class="form-control" v-model="loginAttribute.loginAccount" @focus="focusing=1"
-                 @blur="focusing=0">
+                 @blur="focusing=0" :disabled="loginStatus==1" :class="{'disabled':loginStatus==1}">
         </div>
         <div class="form-group" :class="{'hastext':loginAttribute.loginPassword!='','focus':focusing==2}">
           <label @click="labelClick">密码</label>
           <input type="password" class="form-control" v-model="loginAttribute.loginPassword" @focus="focusing=2"
-                 @blur="focusing=0">
+                 @blur="focusing=0" :disabled="loginStatus==1" :class="{'disabled':loginStatus==1}">
         </div>
         
             <div class="form-group captcha" v-show="!noNeedCaptcha" :class="{'hastext':loginAttribute.captcha!='','focus':focusing==4}">
               <label @click="labelClick">右图中的文字</label>
-              <input type="text" class="form-control" :class="{'disabled':isEmailSending}"
-                     v-model="loginAttribute.captcha"
-                     :disabled="isEmailSending" @focus="focusing=4" @blur="focusing=0" maxlength="6">
+              <input type="text" class="form-control" v-model="loginAttribute.captcha" :disabled="loginStatus==1"
+                :class="{'disabled':loginStatus==1}" @focus="focusing=4" @blur="focusing=0" maxlength="6">
               <img class="captcha" :src="captchaUrlLogin" @error="noNeedCaptcha=true" @load="noNeedCaptcha=false;loginAttribute.captcha=''"
                    @click="captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()"/>
             </div>
@@ -31,10 +32,21 @@
           <p>{{loginMessage}}</p>
         </div>
         <div class="form-group">
-          <button class="btn" @click.prevent="loginAttempt">登陆</button>
+          <button class="btn" @click.prevent="loginAttempt" :disabled="loginStatus==1">
+            <vue-loading type="spin" color="white" :size="{ width: '30px', height: '30px' }" v-if="loginStatus==1"></vue-loading>
+            <div v-else>登陆</div>
+          </button>
         </div>
+        </div>
+        <div v-else-if="loginStatus==2" key="2">
+            <div class="message-bar" style="height:9rem;padding-top:2rem">
+              <p>登录成功哒~</p>
+              <p>（ 窗口将在{{timeToClose}}秒后自动关闭 ）</p>
+            </div>
+        </div>
+        </transition>
       </form>
-      <div class="text">没有帐号？立刻<a @click="pageStatus='signUp'">注册</a>！</div>
+      <div class="text" v-if="loginStatus!=2">没有帐号？立刻<a @click="pageStatus='signUp'">注册</a>！</div>
     </div>
 
     <div class="login-sign-up" v-if="pageStatus=='signUp'">
@@ -165,6 +177,7 @@ export default {
         captcha:"",
       },
       loginMessage: "",
+      loginStatus: 0,
       focusing: 0,
       pageStatus: this.status,
       signupAttribute: {
@@ -195,6 +208,7 @@ export default {
   },
   methods: {
     loginpasswordEncrypt: function(password) {
+      this.loginStatus=1;
       var loginPackege = {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
@@ -214,14 +228,16 @@ export default {
         .then(res => {
           console.log(res);
           if (res.body.code === 0) {
-            this.loginMessage = "成功登陆！";
+            this.loginStatus=2;
             this.$emit("userInfo", res.body.user);
+            return;
           } else {
             this.loginMessage="";
             for (var item in res.body.error){
               this.loginMessage +=item+" "+res.body.error[item]+". ";
             }
             this.captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()
+            this.loginStatus=0;
           } 
           this.showMessageBar(".message-bar", 2);
         });
@@ -451,7 +467,7 @@ export default {
         })
         .then(res => {
           if (res.body.code === 0) {
-            this.statusMessage = "注册成功！";
+            this.$emit("userInfo", res.body.user);
             this.isSignOK = true;
             this.isSignuping = false;
             return;
@@ -481,7 +497,7 @@ export default {
       var mb = document.querySelector(classcode);
       var target= high==0?"0":"10px"
       var target2= high==0?"0":"-15px"
-      if(high!=0) high+=1
+      if(high!=0) high+=1.2
       if (mb.style.height != high + "rem") {
         Velocity(
           mb,
@@ -509,7 +525,7 @@ export default {
         form,
         { height: keep - this.tansitionHeight + target + "px" },
         {
-          duration: Math.sqrt(Math.abs(this.tansitionHeight - target))*10,
+          duration: Math.sqrt(Math.abs(this.tansitionHeight - target))*20,
           complete: function() {
             el.style.display = "block";
             form.style.height = "auto";
@@ -559,7 +575,39 @@ export default {
         );
           }
         ,300)
-        vue.timeToClose=50;
+        vue.timeToClose=5;
+        var func=function(){
+          vue.timeToClose--;
+          if(vue.timeToClose==0){
+            vue.$emit('exit');
+          }
+          else{
+            setTimeout(func, 1000);
+          }
+        }
+        setTimeout(func,1000)
+      }
+    },
+    loginStatus: function(newValue, oldValue) {
+      if (newValue==2) {
+        var vue=this;
+        var mesbar = document.querySelector(".message-bar");
+        var form = mesbar.parentElement;
+        var keep=form.offsetHeight;
+        form.style.height=keep+"px";
+        setTimeout(
+          function(){
+            Velocity(form, {height: keep-vue.tansitionHeight+20+"px"},{duration:300})
+            mesbar.style.margin="30px"
+            mesbar.style.height="4rem"
+        Velocity(
+          form,
+          { opacity:1 },
+          { duration: 300 }
+        );
+          }
+        ,300)
+        vue.timeToClose=5;
         var func=function(){
           vue.timeToClose--;
           if(vue.timeToClose==0){

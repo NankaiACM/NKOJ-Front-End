@@ -7,10 +7,18 @@
         <!--div>-before end-<br>{{endIn.hrs}}:{{endIn.mins}}:{{endIn.secs}}</div-->
         <ul>
           <li v-for="(item,index) in navbarItems" :key="item">
-            <a :class="{'hover':hoverNav==index}" @click="scrollBand(index)">{{item}}</a>
+            <a :class="{'hover':hoverNav==index}" @click="scrollBand(index)">{{item.toUpperCase()}}</a>
           </li>
-          <li><a class="btn btn-ghost" @click="userPage='login'">LOG IN</a></li>
-          <li><a class="btn btn-default" @click="userPage='signUp'">SIGN UP</a></li>
+          <li v-if="userData===undefined"><a class="btn btn-ghost" @click="userPage='login'">登录</a></li>
+          <li v-if="userData===undefined"><a class="btn btn-default" @click="userPage='signUp'">注册</a></li>
+          <li v-if="userData!==undefined">
+            <div class="avatar">
+              <div class="text">{{userData.nickname}}</div>
+              <img :src="avatarUrl">
+              <div class="menu">
+              </div>
+            </div>
+          </li>
         </ul>
       </div>
     </div>
@@ -37,8 +45,8 @@
       <div class="time-bar container">
         <div class="width-80-center setflex padding-t-20">
           <hr class="color-white hrsize-2 flex-1">
-          <div class="color-white margin-l-r-20 word" v-if="contestStatus==1">距离比赛结束</div>
-          <div class="color-white margin-l-r-20 word" v-else-if="contestStatus==0">距离比赛开始</div>
+          <div class="color-white margin-l-r-20 word" v-if="contestStatus==1">距比赛结束还有</div>
+          <div class="color-white margin-l-r-20 word" v-else-if="contestStatus==0">距比赛开始还有</div>
           <hr class="color-white hrsize-2 flex-1">
         </div>
         <div class="timers">
@@ -76,12 +84,12 @@
 
     <!--比赛前的介绍界面-->
     <div v-if="contestStatus==0">
-      <div v-for="(text,index) in MDtext" :key="text">
+      <div v-for="(text,index) in navbarItems" :key="text">
       <div class="bg-white band-with-80padding">
         <div class="container">
           <!--标题-->
-          <h3><span class="glyphicon glyphicon-list"></span>{{navbarItems[index].toUpperCase()}}</h3>
-          <div v-html="getMD(text)"></div>
+          <h3><span class="glyphicon glyphicon-list"></span>{{text.toUpperCase()}}</h3>
+          <div v-html="getMD(MDtext[index])"></div>
         </div>
       </div>
 
@@ -138,7 +146,7 @@
 
     <!--弹出框板块-->
     <login-page v-if="userPage=='login' || userPage=='signUp'" @exit="exitShow" :status="userPage"
-                @changeStatus="changeLogin">
+                @changeStatus="changeLogin" @userInfo="changeUserInfo">
     </login-page>
   </div>
 </template>
@@ -198,11 +206,11 @@ export default {
           status:2,
         },
       ],
-      userPage:"None",
       MDtext: [],
-      ruleMDtext: '',
-      aboutMDtext: '',
       navbarItems: [],
+      
+      userPage:"None",
+      userData: undefined,
     }
   },
   methods:{
@@ -235,7 +243,7 @@ export default {
     },
     scrollBand(index){
       let band = document.querySelectorAll("div.band-with-80padding");
-      Velocity(band[index],"scroll",{ duration:500 ,offset: "-60px"});
+      Velocity(band[index],"scroll",{ duration:500 ,offset: "-60px", easing: "easeOutQuart"});
     },
     upToTop(){
       Velocity(document.querySelector("body"),"scroll", { duration: 500, easing: "easeOutQuart" })
@@ -262,14 +270,16 @@ export default {
           )
           .then(
             res => {
-              var datas=res.body.data;
+              let datas=res.body.data;
               vue.startTime=datas.start;
               vue.endTime=datas.end;
               vue.contestTitle=datas.title;
               vue.navbarItems=datas.info;
-              for(var i=0;i<vue.navbarItems.length;i++){
+              vue.MDtext=new Array(vue.navbarItems.length);
+              for(let i=0;i<vue.navbarItems.length;i++){
+                vue.MDtext[i]="";
                 vue.$http.get(`http://${noPointHost}:8000/api/contest/` + this.contestid + '/' + vue.navbarItems[i]).then(res => {
-                  vue.MDtext.push(res.body)
+                  vue.MDtext.splice(i, 1, res.body)
                 })
               }
             },
@@ -286,14 +296,46 @@ export default {
         vue.nowTime=new Date();
       }, 100);
     },
+    initUser:function(){
+      var vue=this;
+      vue.$http
+          .get(
+            `http://${noPointHost}:8000/api/user/login/check`,
+            {
+              crossDomain: true,
+              xhrFields: { withCredentials: true },
+              timeout: "8000",
+              cache: true,
+              credentials: true
+            }
+          )
+          .then(
+            res => {
+              if(res.body.code===0){
+                vue.userData = res.body.data;
+              }
+            },
+            res => {
+              //wait to code
+              var vue = this;
+            }
+          )
+          .catch(function(response) {
+            //wait to code
+            var vue = this;
+          });
+    },
     getMD: function (text) {
       return marked(text, {sanitize : true})
+    },
+    changeUserInfo:function (info){
     },
   },
   mounted: function () {
     this.$nextTick(function () {
       window.addEventListener('scroll', this.handleScroll);
       this.initDatas();
+      this.initUser();
       this.changeProblemListHeight();
     })
   },
@@ -338,6 +380,9 @@ export default {
         return 0;
       }
     },
+    avatarUrl:function(){
+      return `http://${noPointHost}:8000/api/avatar/`+ this.userData.user_id
+    }
   }
 }
 </script>
@@ -537,19 +582,22 @@ hr.cut-off{
     margin: 0;
     padding: 0;
     list-style: none;
+    display: flex;
+    align-items: baseline;
 }
 .navbar ul li{
     float: left;
     display: block;
 }
 .navbar ul li a{
-    margin: 7px 1rem;
-    line-height: 36px;
+    margin: 7px 1.5rem;
+    line-height: 34px;
     font-weight: 400;
     color: #e8f1f2;
     display: block;
     text-decoration: none;
     cursor: pointer;
+    height: 36px;
 }
 .navbar ul li a:hover{
     text-decoration: none;
@@ -573,7 +621,7 @@ hr.cut-off{
     transform: scale(1,1);
 }
 .navbar ul li a.btn{
-    padding: 0 2rem;
+    padding: 0 3rem;
     position: relative;
     top: -1px;
 }
@@ -605,7 +653,54 @@ hr.cut-off{
 .navbar ul li a.btn::after{
     visibility: hidden;
 }
-
+.navbar .avatar{
+	height: 40px;
+	display: flex;
+	padding:0 25px;
+	align-content: center;
+	margin: 5px 0 5px 30px;
+    border-left: 1px solid #7bbfea;
+    position: relative;
+    transition: all 0.5s ease;
+}
+.show-head .avatar{
+    border-color:#87b7cb;
+}
+.navbar .avatar .text{
+    color: #e8f1f2;
+    line-height: 40px;
+    margin-right: 15px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    max-width: 120px;
+    cursor: pointer;
+}
+.navbar .avatar .text:hover{
+    text-decoration: underline;
+}
+.navbar .avatar img{
+	height: 34px;
+	border-radius: 34px;
+	width: 34px;
+	border: 2px solid white;
+    margin: auto;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.navbar .avatar img:hover{
+    border-color:#87b7cb;
+}
+.navbar .avatar .menu{
+    position: absolute;
+    width: 200px;
+    height: 400px;
+    background: white;
+    top: -10px;
+    left: -1px;
+    width: 100%;
+    z-index: -1;
+}
 
 .up-to-top{
     position: fixed;
@@ -642,9 +737,10 @@ hr.cut-off{
 .band-with-80padding p,
 .band-with-80padding li{
     letter-spacing: 0.08em;
+    line-height: 1.5em;
 }
 .band-with-80padding h4{
-    padding: 40px 0 0;
+    padding: 40px 0 10px;
     font-weight: bold;
     font-size: 1.2em;
 }
