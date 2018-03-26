@@ -1,13 +1,13 @@
 <template>
   <dialog-wrap @exit="$emit('exit')">
-    <transition @enter="fadeEnter" @leave="fadeLeave" :css="false">
+    <transition name="fade" @enter="fadeEnter" @leave="fadeLeave" :css="false">
     <div class="login-sign-up" v-if="pageStatus=='login'">
       <div class="title-bar">
         <div class="title">登录</div>
         <div class="subtitle">由此登录，开启今日的ACM之旅吧~</div>
       </div>
       <hr>
-      <form>
+      <form class="wrapper">
         <div class="form-group" :class="{'hastext':loginAttribute.loginAccount!='','focus':focusing==1}">
           <label @click="labelClick">用户名或邮箱</label>
           <input type="text" class="form-control" v-model="loginAttribute.loginAccount" @focus="focusing=1"
@@ -18,11 +18,20 @@
           <input type="password" class="form-control" v-model="loginAttribute.loginPassword" @focus="focusing=2"
                  @blur="focusing=0">
         </div>
-        <div class="form-group message-bar">
+        
+            <div class="form-group captcha" :class="{'hastext':signupAttribute.signupCaptcha!='','focus':focusing==4}">
+              <label @click="labelClick">右图中的文字</label>
+              <input type="text" class="form-control" :class="{'disabled':isEmailSending}"
+                     v-model="signupAttribute.signupCaptcha"
+                     :disabled="isEmailSending" @focus="focusing=4" @blur="focusing=0" maxlength="6">
+              <img class="captcha" :src="captchaUrlLogin"
+                   @click="captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()"/>
+            </div>
+        <div class="message-bar">
           <p>{{loginMessage}}</p>
         </div>
         <div class="form-group">
-          <button class="btn" v-on:click="loginAttempt">登陆</button>
+          <button class="btn" @click.prevent="loginAttempt">登陆</button>
         </div>
       </form>
       <div class="text">没有帐号？立刻<a @click="pageStatus='signUp'">注册</a>！</div>
@@ -50,7 +59,7 @@
                      v-model="signupAttribute.signupCaptcha"
                      :disabled="isEmailSending" @focus="focusing=4" @blur="focusing=0" maxlength="6">
               <img class="captcha" :src="captchaUrl"
-                   @click="captchaUrl=`http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random()"/>
+                   @click="captchaUrl=`http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random()"/>
             </div>
             <div class="message-bar">
               <p>{{statusMessage}}</p>
@@ -176,7 +185,8 @@ export default {
       noPointHost: window.noPointHost,
       emailKey: "",
       captchaUrl:
-        `http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random(),
+        `http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random(),
+      captchaUrlLogin:`http://${noPointHost}:8000/captcha/login?_t=` + Math.random(),
       sendColdTime: 60,
     };
   },
@@ -190,21 +200,22 @@ export default {
       loginPackege.password = password;
       loginPackege.user = this.loginAttribute.loginAccount;
       this.$http
-        .post(`http://${window.noPointHost}:8000/api/u/login`, loginPackege, {
+        .post(`http://${noPointHost}:8000/api/u/login`, loginPackege, {
           crossDomain: true,
           xhrFields: { withCredentials: true }
         })
         .then(res => {
           console.log(res);
-          if (res.body.code === 400) {
-            this.loginMessage = "用户名不存在";
-          } else if (res.body.code === 1) {
-            this.loginMessage = "用户名或密码错误";
-          } else if (res.body.code === 0) {
+          if (res.body.code === 0) {
             this.loginMessage = "成功登陆！";
             console.log(res.body.user);
             this.$emit("userInfo", res.body.user);
-          }
+          } else {
+            this.loginMessage="";
+            for (var item in res.body.error){
+              this.loginMessage +=item+" "+res.body.error[item]+". ";
+            }
+          } 
           this.showMessageBar(".message-bar", 2);
         });
     },
@@ -231,7 +242,7 @@ export default {
         this.isEmailSending = true;
         this.$http
           .get(
-            `http://${window.noPointHost}:8000/api/u/verify/` +
+            `http://${noPointHost}:8000/api/u/verify/` +
               this.signupAttribute.signupEmail +
               "?captcha=" +
               this.signupAttribute.signupCaptcha,
@@ -266,7 +277,7 @@ export default {
               vue.showMessageBar(".message-bar", 2);
               vue.signupAttribute.signupCaptcha = "";
               vue.captchaUrl =
-                `http://${window.noPointHost}:8000/captcha/sendmail?_t=` +
+                `http://${noPointHost}:8000/captcha/sendmail?_t=` +
                 Math.random();
               this.isEmailSending = false;
             },
@@ -284,7 +295,7 @@ export default {
                   "秒吧";
                 vue.signupAttribute.signupCaptcha = "";
                 vue.captchaUrl =
-                  `http://${window.noPointHost}:8000/captcha/sendmail?_t=` +
+                  `http://${noPointHost}:8000/captcha/sendmail?_t=` +
                   Math.random();
               } else {
                 vue.statusMessage = "电波……无法传达……（连接失败）";
@@ -306,7 +317,7 @@ export default {
       vue.isEmailSending = true;
       vue.$http
         .get(
-          `http://${window.noPointHost}:8000/api/u/verify/` +
+          `http://${noPointHost}:8000/api/u/verify/` +
             vue.emailKey +
             "/" +
             vue.signupAttribute.signupEmail,
@@ -363,7 +374,7 @@ export default {
       vue.isEmailVerifying = true;
       vue.$http
         .get(
-          `http://${window.noPointHost}:8000/api/u/verify/` +
+          `http://${noPointHost}:8000/api/u/verify/` +
             vue.emailKey +
             "/" +
             vue.signupAttribute.emailCode,
@@ -432,7 +443,7 @@ export default {
       sendPackge.gender = 1;
       console.log(sendPackge);
       this.$http
-        .post(`http://${window.noPointHost}:8000/api/u/register`, sendPackge, {
+        .post(`http://${noPointHost}:8000/api/u/register`, sendPackge, {
           crossDomain: true,
           xhrFields: { withCredentials: true },
           timeout: "8000",
@@ -526,7 +537,7 @@ export default {
       } else {
         this.signupAttribute.signupCaptcha = "";
         this.captchaUrl =
-          `http://${window.noPointHost}:8000/captcha/sendmail?_t=` + Math.random();
+          `http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random();
       }
       this.focusing = 0;
     },
@@ -561,6 +572,11 @@ export default {
         }
         setTimeout(func,1000)
       }
+    },
+    pageStatus: function (newValue,oldValue) {
+      this.$emit('changeStatus',newValue);
+      if(newValue=="signUp")this.captchaUrl=`http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random()
+      if(newValue=="login")this.captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()
     }
   }
 };
