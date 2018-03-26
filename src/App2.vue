@@ -76,7 +76,7 @@
       <h3><span class="glyphicon glyphicon-stats"></span>STATUS</h3>
       <!--提交状态列表-->
       <div class="container padding-t-40">
-        <status :is-infinite="false" :is-filter="false" :is-btn="true" api-url="/static/status.json"/>
+        <status :is-infinite="false" :is-filter="false" :is-btn="true" :api-url="statusApi"/>
         <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
       </div>
     </div>
@@ -117,6 +117,7 @@ export default {
   },
   data(){
     return{
+      statusApi: `http://${window.noPointHost}:${window.noPointPort}/api/status/list`,
       headShowing: false,
       hoverNav:3,
       nowTime: new Date(),

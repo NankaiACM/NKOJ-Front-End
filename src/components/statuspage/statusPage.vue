@@ -14,7 +14,7 @@
         <span class="caret"></span>
       </a>
         <ul class="dropdown-menu">
-          <li v-for="status in dropdata.status"><a @click="setStatus(status.value)" href="#">
+          <li v-for="status in dropdata.status" :key="status.value"><a @click="setStatus(status.value)" href="#">
             <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.status===status.value"></span>
             {{status.status}}
             </a>
@@ -31,7 +31,7 @@
         <span class="caret"></span>
       </a>
         <ul class="dropdown-menu">
-          <li v-for="lang in dropdata.lang"><a @click="setLang(lang.value)" href="#">
+          <li v-for="lang in dropdata.lang" :key="lang.value"><a @click="setLang(lang.value)" href="#">
             <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.lang===lang.value"></span>
             {{lang.lang}}
             </a>
@@ -230,8 +230,7 @@ export default {
     },
     getStatus: function() {
       var _this = this
-      this.filter.index = 0
-      console.log(this.apiUrl)
+      this.filter.index = 1
       this.$http.post(this.apiUrl, {
       /*
         "problemsID": _this.filter.problemID,
@@ -243,7 +242,7 @@ export default {
       */
         'queryleft': 1,
         'queryright': this.filter.page_length
-      }).then(function(res) {
+      }).then(function (res) {
         if (!res.body.data) {
           console.log('abort')
           console.log(res)
@@ -251,6 +250,8 @@ export default {
         }
         _this.statusList = res.body.data
         console.log(res.body.data.length)
+      },function (res) {
+        console.log(res)
       })
     },
     getStatusClass: function(status_id) {
