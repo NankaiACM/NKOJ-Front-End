@@ -577,6 +577,10 @@ hr.cut-off{
     position: relative;
     top: -1px;
 }
+.navbar ul li a.btn:focus,
+.navbar ul li a.btn:active{
+    box-shadow: none;
+}
 .navbar ul li a.btn-ghost{
     border: 2px solid #e8f1f2;
     border-color: #e8f1f2;

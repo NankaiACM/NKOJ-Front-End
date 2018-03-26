@@ -9,9 +9,9 @@
 
 <script>
   export default {
-    name: 'footer',
+    name: 'saurusFooter',
     data(){
-      return function () {
+      return {
 
       }
     }
