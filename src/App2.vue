@@ -134,12 +134,7 @@
 
     </div>
 
-    <div class="footer band-with-40padding">
-      <div class="total">NKOJ Ver 2.0.0 | FAQ | | 12 ms : 8 | PageView:24126539</div>
-      <div class="contact">NKUACM 2017 <a>[加入QQ群]</a> 南开ACM协会 <a>[加入QQ群]</a></div>
-      <div class="copyright">© Copyright 2005-2018 Sun Wei & Wang Yan & SunriseFox . All Rights Reserved.</div>
-      <div class="advert">如果您愿意加入 OJ 的开发，请联系 sunrisefox@qq.com ~</div>
-    </div>
+    <saurus-footer></saurus-footer>
 
     <!--弹出框板块-->
     <login-page v-if="userPage=='login' || userPage=='signUp'" @exit="exitShow" :status="userPage"
@@ -153,7 +148,7 @@ import problemList from "./components/contestpage/contestOpenCompenents/problemL
 import status from "./components/statuspage/statusPage.vue";
 import ranks from "./components/contestpage/contestRank.vue";
 import loginPage from './components/dialog/loginSignUp';
-
+import saurusFooter from './components/footer'
 export default {
   name: 'App2',
   components:{
@@ -161,6 +156,7 @@ export default {
     status,
     ranks,
     loginPage,
+    saurusFooter
   },
   data(){
     return{
