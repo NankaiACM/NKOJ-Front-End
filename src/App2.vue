@@ -362,7 +362,7 @@ export default {
     background-color: #1b98e0;
 }
 .bg-white{
-    background-color: white;
+    background-color: #e8f1f2;
 }
 .band-with-40padding, .padding-t-b-40, .padding-t-40{
     padding-top: 40px;
@@ -655,7 +655,11 @@ hr.cut-off{
     letter-spacing: 0.08em;
 }
 .band-with-80padding h4{
-    padding: 40px 0 10px;
+    padding: 40px 0 0;
+    font-weight: bold;
+}
+.band-with-80padding code{
+    background: white;
 }
 .band-title{
     width: 80%;
