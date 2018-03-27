@@ -187,7 +187,7 @@ export default {
   },
   data(){
     return{
-      statusApi: `http://${window.noPointHost}:${window.noPointPort}/api/status/list`,
+      statusApi: `${window.noPointHost}/api/status/list`,
       headShowing: false,
       hoverNav:3,
       nowTime: new Date(),
@@ -279,7 +279,7 @@ export default {
       var vue=this;
       vue.$http
           .get(
-            `http://${noPointHost}:8000/api/contest/` +
+            `${noPointHost}/api/contest/` +
               vue.contestid,
             {
               crossDomain: true,
@@ -299,7 +299,7 @@ export default {
               vue.MDtext=new Array(vue.navbarItems.length);
               for(let i=0;i<vue.navbarItems.length;i++){
                 vue.MDtext[i]="";
-                vue.$http.get(`http://${noPointHost}:8000/api/contest/` + this.contestid + '/' + vue.navbarItems[i]).then(res => {
+                vue.$http.get(`${noPointHost}/api/contest/` + this.contestid + '/' + vue.navbarItems[i]).then(res => {
                   vue.MDtext.splice(i, 1, res.body)
                 })
               }
@@ -321,7 +321,7 @@ export default {
       var vue=this;
       vue.$http
           .get(
-            `http://${noPointHost}:8000/api/user/login/check`,
+            `${noPointHost}/api/user/login/check`,
             {
               crossDomain: true,
               xhrFields: { withCredentials: true },
@@ -363,7 +363,7 @@ export default {
       else{
       vue.$http
           .get(
-            `http://${noPointHost}:8000/api/user/contest/register/` + vue.contestid,
+            `${noPointHost}/api/user/contest/register/` + vue.contestid,
             {
               crossDomain: true,
               xhrFields: { withCredentials: true },
@@ -396,7 +396,7 @@ export default {
     },
     logout: function (event) {
       event.preventDefault()
-      this.$http.get(`http://${noPointHost}:8000/api/user/logout`,
+      this.$http.get(`${noPointHost}/api/user/logout`,
       {
         crossDomain: true,
         xhrFields: {withCredentials: true},
@@ -466,7 +466,7 @@ export default {
       }
     },
     avatarUrl:function(){
-      return `http://${noPointHost}:8000/api/avatar/`+ this.userData.user_id
+      return `${noPointHost}/api/avatar/`+ this.userData.user_id
     }
   }
 }
