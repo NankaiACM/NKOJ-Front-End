@@ -29,7 +29,7 @@ export default new Router({
         isFilter: true,
         isInfinite: true,
         isBtn: false,
-        apiUrl: 'http://'+window.noPointHost+':'+window.noPointPort+'/api/status/list'
+        apiUrl: window.noPointHost+'/api/status/list'
       }
     },
     {path: '/discuss',component: discussPage},

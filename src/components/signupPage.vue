@@ -95,7 +95,7 @@ export default {
       sendPackge.gender = this.signupGender
       sendPackge.school = 'NanKai University'
       sendPackge.ecode = this.emailCode
-      this.$http.post(`http://${window.noPointHost}:8000/api/u/register`, sendPackge, {crossDomain : true, xhrFields: {withCredentials : true}}).then(res => {
+      this.$http.post(`${window.noPointHost}/api/u/register`, sendPackge, {crossDomain : true, xhrFields: {withCredentials : true}}).then(res => {
         console.log(res)
         if (res.body.code === 0) {
           this.errorMessage = '注册成功！'
@@ -105,8 +105,8 @@ export default {
       })
     },
     emailAttempt: function (event) {
-      console.log(`http://${window.noPointHost}:8000/api/u/verify/` + this.signupEmail)
-      this.$http.get(`http://${window.noPointHost}:8000/api/u/verify/` + this.signupEmail,  {crossDomain : true, xhrFields: {withCredentials : true}}).then((res, err) => {
+      console.log(`${window.noPointHost}/api/u/verify/` + this.signupEmail)
+      this.$http.get(`${window.noPointHost}/api/u/verify/` + this.signupEmail,  {crossDomain : true, xhrFields: {withCredentials : true}}).then((res, err) => {
         if(err){
           console.log(err)
         } else {

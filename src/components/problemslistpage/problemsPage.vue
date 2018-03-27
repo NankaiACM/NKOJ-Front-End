@@ -141,7 +141,7 @@ export default {
   methods: {
     initView: function () {
       this.$http.post(
-        `http://${window.noPointHost}:8000/api/problems/list`, {
+        `${window.noPointHost}/api/problems/list`, {
           'keywords': this.filter.keywords,
           'difficulty': this.filter.difficulty,
           'status': this.filter.status,
