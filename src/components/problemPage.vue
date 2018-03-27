@@ -6,18 +6,25 @@
   </transition>
   <transition name="fade">
     <div id="problemSubmit" v-if="isSee">
+      <transition name="fade">
+        <div class="submitInfo" v-if="isInfo">
+          <h4>提示信息</h4><hr>
+          <div class="submitInfoText">{{submitInfo}}</div>
+        </div>
+      </transition>
       <h4>Code: {{submitLan}}</h4>
       <div id="codeArea">
         <editor v-model="submitCode" @init="editorInit" lang="c_cpp" theme="terminal" height="430px"></editor>
       </div>
       <div>
-        <button class="mobileHome btn btn-default" @mouseleave="middleInfo = false" @mouseenter="middleInfo = true" >
+        <button class="mobileHome btn btn-default" @mouseleave="middleInfo = false"
+                @mouseenter="middleInfo = true" @click="submit">
           <span class="glyphicon glyphicon glyphicon-cloud-upload"></span>
         </button>
         <div class="mobileLeft dropup">
           <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
                   @mouseleave="leftInfo = false" @mouseenter="leftInfo = true">
-              <span class="glyphicon glyphicon-book" data-toggle="tooltip"  title="提交">
+              <span class="glyphicon glyphicon-book" data-toggle="tooltip">
               </span></button>
           <ul class="dropdown-menu">
             <li><a v-on:click="setLan('C++')">C++</a></li>
@@ -59,7 +66,9 @@ export default {
       isStart: false,
       middleInfo: false,
       leftInfo: false,
-      rightInfo: false
+      rightInfo: false,
+      submitInfo: 'hhhhhhhhhhhhh',
+      isInfo: false
     }
   },
   computed: {
@@ -77,10 +86,39 @@ export default {
   },
   methods: {
     initView: function () {
-      this.$http.get('http://localhost:8000/api/p/'+this.$route.params.problemId).then((res) => {
+      this.$http.get(`${window.noPointHost}/api/p/`+this.$route.params.problemId).then((res) => {
         console.log(res.body)
         this.problemMarkDownText = res.body
         this.isStart = true
+      })
+    },
+    submit: function() {
+      console.log("wtf")
+      let sendPackge = {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+      sendPackge.p = this.$route.params.problemId
+      sendPackge.lang = 0;
+      sendPackge.code = this.submitCode
+      let _this = this
+      this.$http.post(`${window.noPointHost}/api/judge`, sendPackge,
+        {crossDomain : true, credentials : true}).then(res => {
+        console.log(res)
+        _this.isInfo = true;
+        if(res.body.code === 0) {
+          _this.submitInfo = '成功提交！'
+        } else {
+          _this.submitInfo = '未知错误！'
+        }
+      }, err => {
+        _this.isInfo = true;
+        if(err.body.code === 401){
+          _this.submitInfo = '请您登陆！'
+        } else {
+          _this.submitInfo = '未知错误！'
+        }
       })
     },
     setLan: function (Lan) {
@@ -99,19 +137,22 @@ export default {
     iCanSee: function (e) {
       this.isSee = !this.isSee
       this.isStart = !this.isStart
+      this.isInfo = false
       e.preventDefault()
     },
     iCanSee2: function() {
       if(this.isSee){
         this.isSee = !this.isSee
         this.isStart = !this.isStart
+        this.isInfo = false
       }
     }
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+@import '../less/global.less';
 #problemPage pre{
   text-align: left;
   background: white;
@@ -141,7 +182,7 @@ export default {
 }
 .problemDescription{
   position: absolute;
-  margin-top: 100px;
+  margin-top: 150px;
   top: 0;
   left: 10%;
   right: 10%;
@@ -153,7 +194,7 @@ export default {
   border-radius: 10px;
 }
 .problemDescription:hover{
-  box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1), 0 -5px 5px rgba(150, 150, 150, 0.1), 5px 0 5px rgba(150, 150, 150, 0.1), -5px 0 5px rgba(150, 150, 150, 0.1);
+  box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1), 0 0px 20px rgba(150, 150, 150, 0.1), 5px 0 5px rgba(150, 150, 150, 0.1), -5px 0 5px rgba(150, 150, 150, 0.1);
 }
 #problemSubmit nav{
   padding-right: 20px;
@@ -176,17 +217,18 @@ export default {
   font-weight: 600;
 }
 #problemPage .problemPageTitle{
-  background: #2cbfec;
+  background: #fff;
+  height: @filterheight;
   position: fixed;
   z-index: 2;
-  padding-left: 20px;
+  padding-left: 6em;
   padding-top: 10px;
   padding-bottom:  10px;
   margin: 0;
   font-weight: 600;
   font-family: "inherit";
-  color: white;
-  box-shadow: 0px 5px 5px rgb(150, 150, 150);
+  color: #233;
+  border-bottom: 1px solid #eee;
 }
 
 .fade-enter-active, .fade-leave-active{
@@ -234,7 +276,9 @@ export default {
   left: 210px;
   border: none;
 }
-#problemPage .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover{
+#problemPage .navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:focus,
+.navbar-default .navbar-nav>.open>a:hover{
   background: #2cbfec;
   border-radius: 10px;
 }
@@ -270,5 +314,25 @@ export default {
 }
 .bottomInfoRight{
   left: 215px;
+}
+.submitInfo{
+  position: absolute;
+  background: white;
+  width: 150px;
+  left: 75px;
+  top: 200px;
+  border-radius: 10px;
+  z-index: 10;
+}
+.submitInfo h4{
+  padding: 5px;
+  margin: 0;
+}
+.submitInfo .submitInfoText{
+  padding: 15px;
+}
+.submitInfo hr{
+  padding: 5px;
+  margin: 0;
 }
 </style>

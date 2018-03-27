@@ -3,7 +3,7 @@
   "messages": "",
   "data": [{
       "id": "讨论item的id",
-      "imgurl": "https://pic3.zhimg.com/da8e974dc_xl.jpg",
+      "imgurl": "https://static.hdslb.com/images/member/noface.gif",
       "imgalt":"头像替代文字，一般为发起者用户",
       "node": "讨论所在版块",
       "title":"讨论的标题",
@@ -13,7 +13,7 @@
     },
     {
         "id": "1",
-        "imgurl": "https://pic3.zhimg.com/da8e974dc_xl.jpg",
+        "imgurl": "https://static.hdslb.com/images/member/noface.gif",
         "imgalt":"sakura",
         "node": "no",
         "title":"泰迪熊的体重是多少？",
@@ -23,7 +23,7 @@
     },
     {
         "id": "2",
-        "imgurl": "https://pic3.zhimg.com/da8e974dc_xl.jpg",
+        "imgurl": "https://static.hdslb.com/images/member/noface.gif",
         "imgalt":"sakura",
         "node": "no",
         "title":"泰迪熊的身高是多少？",

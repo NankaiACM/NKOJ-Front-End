@@ -1,6 +1,6 @@
 <template>
 <div id="loginPage">
-  <h2 align="left">登陆</h2><hr>
+  <div class="title">登陆</div><hr>
   <form>
     <div class="form-group">
       <h4 align="left"><label>账号</label></h4>
@@ -43,7 +43,7 @@ export default {
       }
       loginPackege.password = this.tempPassword
       loginPackege.user = this.loginAccount
-      this.$http.post('http://111.231.98.20:8000/api/u/login', loginPackege,  {crossDomain : true, credentials : true}).then( (res) => {
+      this.$http.post(`${window.noPointHost}/api/u/login`, loginPackege,  {crossDomain : true, credentials : true}).then( (res) => {
         console.log(res)
         if (res.body.code === 400) {
           this.loginMessage = '用户名不存在'
@@ -51,6 +51,7 @@ export default {
           this.loginMessage = '用户名或密码错误'
         } else if(res.body.code === 0){
           this.loginMessage = '成功登陆！'
+          console.log(res.body.user)
           this.$emit('userInfo', res.body.user)
         }
       })

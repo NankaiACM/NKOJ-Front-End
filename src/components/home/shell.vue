@@ -1,6 +1,6 @@
 <template>
 <div id="componentShell" class="col-lg-8 visible-lg home-component">
-  <img id="bangumi" src="https://www.cngal.org/static/img/spirit.png" />
+  <iframe src="http://umr6.sc2yun.com/"></iframe>
 </div>
 </template>
 <script>
@@ -15,5 +15,9 @@
   position: absolute;
   right: 1em;
   bottom: 1em;
+}
+iframe {
+  width: 100%;
+  height: 100%;
 }
 </style>

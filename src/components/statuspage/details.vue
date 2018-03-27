@@ -19,7 +19,6 @@
 </div>
 </template>
 <script>
-import status_details from './details'
 export default {
   name: 'status-details',
   props: ['run_id'],
@@ -43,7 +42,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 #status-details.modal.fade.in,
 .modal-backdrop.in {
   top: 50px;
