@@ -32,7 +32,7 @@ export default {
       let data = new FormData();
       data.append('avatar', this.$refs.input.files[0]);
       console.log(data)
-      this.$http.post(`http://${window.noPointHost}:8000/api/u/update`, data,  {crossDomain : true, credentials : true}).then( (res) => {
+      this.$http.post(`${window.noPointHost}/api/u/update`, data,  {crossDomain : true, credentials : true}).then( (res) => {
         console.log(res)
       })
       e.preventDefault()

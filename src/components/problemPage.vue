@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     initView: function () {
-      this.$http.get(`http://${window.noPointHost}:8000/api/p/`+this.$route.params.problemId).then((res) => {
+      this.$http.get(`${window.noPointHost}/api/p/`+this.$route.params.problemId).then((res) => {
         console.log(res.body)
         this.problemMarkDownText = res.body
         this.isStart = true
@@ -103,7 +103,7 @@ export default {
       sendPackge.lang = 0;
       sendPackge.code = this.submitCode
       let _this = this
-      this.$http.post(`http://${window.noPointHost}:8000/api/judge`, sendPackge,
+      this.$http.post(`${window.noPointHost}/api/judge`, sendPackge,
         {crossDomain : true, credentials : true}).then(res => {
         console.log(res)
         _this.isInfo = true;

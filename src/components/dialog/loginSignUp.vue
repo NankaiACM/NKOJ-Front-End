@@ -26,7 +26,7 @@
               <input type="text" class="form-control" v-model="loginAttribute.captcha" :disabled="loginStatus==1"
                 :class="{'disabled':loginStatus==1}" @focus="focusing=4" @blur="focusing=0" maxlength="6">
               <img class="captcha" :src="captchaUrlLogin" @error="noNeedCaptcha=true" @load="noNeedCaptcha=false;loginAttribute.captcha=''"
-                   @click="captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()"/>
+                   @click="captchaUrlLogin=`${noPointHost}/api/captcha/login?_t=` + Math.random()"/>
             </div>
         <div class="message-bar">
           <p>{{loginMessage}}</p>
@@ -71,7 +71,7 @@
                      v-model="signupAttribute.signupCaptcha"
                      :disabled="isEmailSending" @focus="focusing=4" @blur="focusing=0" maxlength="6">
               <img class="captcha" :src="captchaUrl"
-                   @click="captchaUrl=`http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random()"/>
+                   @click="captchaUrl=`${noPointHost}/api/captcha/sendmail?_t=` + Math.random()"/>
             </div>
             <div class="message-bar">
               <p>{{statusMessage}}</p>
@@ -198,8 +198,8 @@ export default {
       statusMessage: "",
       noPointHost: window.noPointHost,
       emailKey: "",
-      captchaUrl: `http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random(),
-      captchaUrlLogin:`http://${noPointHost}:8000/captcha/login?_t=` + Math.random(),
+      captchaUrl: `${noPointHost}/api/captcha/sendmail?_t=` + Math.random(),
+      captchaUrlLogin:`${noPointHost}/api/captcha/login?_t=` + Math.random(),
       sendColdTime: 0,
       timeToClose: 0,
       noNeedCaptcha: false,
@@ -217,7 +217,7 @@ export default {
       loginPackege.user = this.loginAttribute.loginAccount;
       loginPackege.captcha = this.loginAttribute.captcha;
       this.$http
-        .post(`http://${noPointHost}:8000/api/u/login`, loginPackege, {
+        .post(`${noPointHost}/api/u/login`, loginPackege, {
               crossDomain: true,
               xhrFields: { withCredentials: true },
               timeout: "8000",
@@ -235,7 +235,7 @@ export default {
             for (var item in res.body.error){
               this.loginMessage +=item+" "+res.body.error[item]+". ";
             }
-            this.captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()
+            this.captchaUrlLogin=`${noPointHost}/api/captcha/login?_t=` + Math.random()
             this.loginStatus=0;
           }
           this.showMessageBar(".message-bar", 2);
@@ -264,7 +264,7 @@ export default {
         this.isEmailSending = true;
         this.$http
           .get(
-            `http://${noPointHost}:8000/api/u/verify/` +
+            `${noPointHost}/api/u/verify/` +
               this.signupAttribute.signupEmail +
               "?captcha=" +
               this.signupAttribute.signupCaptcha,
@@ -298,7 +298,7 @@ export default {
               vue.showMessageBar(".message-bar", 2);
               vue.signupAttribute.signupCaptcha = "";
               vue.captchaUrl =
-                `http://${noPointHost}:8000/captcha/sendmail?_t=` +
+                `${noPointHost}/api/captcha/sendmail?_t=` +
                 Math.random();
               this.isEmailSending = false;
             },
@@ -315,7 +315,7 @@ export default {
                   "秒吧";
                 vue.signupAttribute.signupCaptcha = "";
                 vue.captchaUrl =
-                  `http://${noPointHost}:8000/captcha/sendmail?_t=` +
+                  `${noPointHost}/api/captcha/sendmail?_t=` +
                   Math.random();
               } else {
                 vue.statusMessage = "电波……无法传达……（连接失败）";
@@ -337,7 +337,7 @@ export default {
       vue.isEmailSending = true;
       vue.$http
         .get(
-          `http://${noPointHost}:8000/api/u/verify/` +
+          `${noPointHost}/api/u/verify/` +
             vue.emailKey +
             "/" +
             vue.signupAttribute.signupEmail,
@@ -392,7 +392,7 @@ export default {
       vue.isEmailVerifying = true;
       vue.$http
         .get(
-          `http://${noPointHost}:8000/api/u/verify/` +
+          `${noPointHost}/api/u/verify/` +
             vue.emailKey +
             "/" +
             vue.signupAttribute.emailCode,
@@ -458,7 +458,7 @@ export default {
       sendPackge.school = "Nankai University";
       sendPackge.gender = 1;
       this.$http
-        .post(`http://${noPointHost}:8000/api/u/register`, sendPackge, {
+        .post(`${noPointHost}/api/u/register`, sendPackge, {
           crossDomain: true,
           xhrFields: { withCredentials: true },
           timeout: "8000",
@@ -551,7 +551,7 @@ export default {
       } else {
         this.signupAttribute.signupCaptcha = "";
         this.captchaUrl =
-          `http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random();
+          `${noPointHost}/api/captcha/sendmail?_t=` + Math.random();
       }
       this.focusing = 0;
     },
@@ -621,8 +621,8 @@ export default {
     },
     pageStatus: function (newValue,oldValue) {
       this.$emit('changeStatus',newValue);
-      if(newValue=="signUp")this.captchaUrl=`http://${noPointHost}:8000/captcha/sendmail?_t=` + Math.random()
-      if(newValue=="login")this.captchaUrlLogin=`http://${noPointHost}:8000/captcha/login?_t=` + Math.random()
+      if(newValue==="signUp")this.captchaUrl=`${noPointHost}/api/captcha/sendmail?_t=` + Math.random()
+      if(newValue==="login")this.captchaUrlLogin=`${noPointHost}/api/captcha/login?_t=` + Math.random()
     },
   }
 };
