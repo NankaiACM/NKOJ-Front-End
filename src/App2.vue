@@ -163,7 +163,10 @@
                 @changeStatus="changeLogin" @userInfo="changeUserInfo">
     </login-page>
     <dialog-wrap v-if="userPage=='dialog'" @exit="exitShow" class="dialog">
-      <div class="text">{{dialogMessage}}</div>
+      <div class="text">
+        <vue-loading type="spin" color="black" :size="{ width: '50px', height: '50px' }" v-if="dialogMessage==''"></vue-loading>
+        <div v-else>{{dialogMessage}}</div>
+      </div>
     </dialog-wrap>
   </div>
 </template>
@@ -174,7 +177,9 @@ import status from "./components/statuspage/statusPage.vue";
 import ranks from "./components/contestpage/contestRank.vue";
 import loginPage from './components/dialog/loginSignUp';
 import dialogWrap from "./components/dialog/dialogWrap.vue";
-import saurusFooter from './components/footer'
+import saurusFooter from './components/footer';
+import vueLoading from "vue-loading-template";
+
 export default {
   name: 'App2',
   components:{
@@ -184,6 +189,7 @@ export default {
     loginPage,
     saurusFooter,
     dialogWrap,
+    vueLoading,
   },
   data(){
     return{
@@ -361,6 +367,8 @@ export default {
         vue.userPage='signUp';
       }
       else{
+        vue.dialogMessage='';
+        vue.userPage="dialog";
       vue.$http
           .get(
             `${noPointHost}/api/user/contest/register/` + vue.contestid,
@@ -375,13 +383,12 @@ export default {
           .then(
             res => {
               if(res.body.code===0){
-                vue.dialogMessage="注册成功！"
+                vue.dialogMessage="报名成功！"
               } else if(res.body.code===3){
-                vue.dialogMessage="您已经注册过了"
+                vue.dialogMessage="您已经报名过了"
               } else{
                 vue.dialogMessage="操作非法！"
               }
-              vue.userPage="dialog";
             },
             res => {
               //wait to code
@@ -396,6 +403,8 @@ export default {
     },
     logout: function (event) {
       event.preventDefault()
+        this.dialogMessage='';
+      this.userPage = 'dialog'
       this.$http.get(`${noPointHost}/api/user/logout`,
       {
         crossDomain: true,
@@ -413,7 +422,6 @@ export default {
       }, err => {
         this.dialogMessage = "注销失败"
       })
-      this.userPage = 'dialog'
     }
   },
   mounted: function () {

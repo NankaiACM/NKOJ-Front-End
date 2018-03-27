@@ -39,7 +39,7 @@
         </div>
         </div>
         <div v-else-if="loginStatus==2" key="2">
-            <div class="message-bar" style="height:9rem;padding-top:2rem">
+            <div class="message-bar" style="height:9rem;padding-top:1rem">
               <p>登录成功哒~</p>
               <p>（ 窗口将在{{timeToClose}}秒后自动关闭 ）</p>
             </div>
@@ -98,7 +98,7 @@
                      v-model="signupAttribute.emailCode"
                      :disabled="isEmailVerifying" @focus="focusing=1" @blur="focusing=0" maxlength="6">
             </div>
-            <div class="message-bar" style="height:6rem;padding-top:10px;margin-bottom:-20px">
+            <div class="message-bar" style="height:6rem;padding-top:10px;">
               <p>{{statusMessage}}</p>
               <div>
                 你还可以：
@@ -495,12 +495,11 @@ export default {
     showMessageBar(classcode, high) {
       var mb = document.querySelector(classcode);
       var target= high==0?"0":"10px"
-      var target2= high==0?"0":"-15px"
       if(high!=0) high+=1.2
       if (mb.style.height != high + "rem") {
         Velocity(
           mb,
-          { height: [high + "rem", mb.style.height],paddingTop:target,marginBottom:target2  },
+          { height: [high + "rem", mb.style.height],paddingTop:target },
           { duration: 300 }
         );
       }
@@ -510,7 +509,7 @@ export default {
     },
     setSendColdTime() {
       this.sendColdTime--;
-      if (this.sendColdTime != 0) {
+      if (this.sendColdTime != 0 && this.isEmailSend) {
         setTimeout(this.setSendColdTime, 1000);
       }
     },
@@ -734,6 +733,8 @@ export default {
   color: #2c3e50;
   line-height: 2.5rem;
   text-align: center;
+  position: relative;
+  top: 10px;
 }
 
 .dialog-field .message-bar p{
