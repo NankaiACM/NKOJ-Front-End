@@ -113,7 +113,8 @@
     </div>
 
     <!--比赛中的界面-->
-    <div v-else-if="contestStatus==1">
+    <!--<div v-else-if="contestStatus==1">-->
+    <div>  
       <!--题目板块-->
       <div class="bg-gray band-with-80padding problem-band">
         <!--problem标题-->

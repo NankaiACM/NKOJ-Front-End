@@ -3,12 +3,12 @@
   <nav aria-label="Page navigation">
     <ul class="pagination">
       <li v-if="num.viewing !== 1">
-        <a href="#" aria-label="Previous" @click="previous()">
+        <a aria-label="Previous" @click="previous()">
             上一页
         </a>
       </li>
       <li id="first-page-num" v-if="num.viewing > 5" :class="{'active': num.viewing === 1}" @click="jump(1)">
-        <a href="#">
+        <a>
           1
         </a>
       </li>
@@ -17,8 +17,8 @@
             ...
         </a>
       </li>
-      <li v-for="item in num_list" :class="{'active':num.viewing === item}"  @click="jump(item)">
-        <a href="#">
+      <li v-for="(item, index) in num_list" :key="index" :class="{'active':num.viewing === item}"  @click="jump(item)">
+        <a>
           {{item}}
         </a>
       </li>
@@ -28,12 +28,12 @@
         </a>
       </li>
       <li id="last-page-num" v-if="num.viewing < num.all_pages -5" :class="{'active':num.viewing === num.all_pages}" @click="jump(num.all_pages)">
-        <a href="#">
+        <a>
           {{num.all_pages}}
         </a>
       </li>
       <li>
-        <a href="#" aria-label="Next" v-if="num.viewing !== num.all_pages" @click="next()">
+        <a aria-label="Next" v-if="num.viewing !== num.all_pages" @click="next()">
             下一页
         </a>
       </li>
@@ -107,7 +107,6 @@ export default {
 }
 
 .pagination {
-  float: left;
   display: inline-block;
 }
 
@@ -126,5 +125,9 @@ export default {
   height: 30px;
   margin: 0 5px;
   padding: 0 10px;
+}
+
+.pagination-container a {
+  cursor: pointer;
 }
 </style>

@@ -2,11 +2,11 @@
   <div id="contest-rank-container-out" class="container-fluid">
     <div id="contest-rank-container-in" class="container-fluid">
       <div v-for="(person, index) in persons" :key="index" class="person-rank-container">
-        <img class="per-img" src="http://78.media.tumblr.com/avatar_ed13c11730b8_128.pnj"/>
+        <img class="per-img" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3374441262,1576405698&fm=27&gp=0.jpg"/>
         <div class="per-cnt-ctn media-body container">
           <div class="luck">
           <span class="line"><span class="split-mius">#</span><span :style="t()">{{index + 1}}</span></span><br>
-          <span class="line nick" :title="'nikename'"><span class="split-mius l"></span>nick name<span class="split-mius r"></span></span><br>
+          <span class="line nick" :title="'nikename'"><span class="split-mius l"></span>nick name dfadsfasdfasdfdfdfadsfasdfsdf<span class="split-mius r"></span></span><br>
           <span class="line"><span class="split-mius l"></span>solved<span class="split-mius r"></span></span><br>
           <span class="line"><span class="split-mius l"></span>fraction<span class="split-mius r"></span></span>
           </div>
@@ -25,9 +25,11 @@
         more
       </div>
     </div>
+    <problems-pagination @viewingleap="handleViewing"></problems-pagination>
   </div>
 </template>
 <script>
+import ProblemsPagination from '../problemslistpage/pagination'
 export default {
   name: 'contestRank',
   data: function () {
@@ -47,7 +49,11 @@ export default {
         {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]},
         {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]},
         {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]}
-      ]
+      ],
+      viewing: 1,
+      queryleft: 1,
+      queryright: 20,
+      pageSize: 20
     }
   },
   methods: {
@@ -58,7 +64,15 @@ export default {
       }
       console.log(b)
       return b
+    },
+    handleViewing: function (newv) {
+      this.viewing = newv.viewing
+      this.queryleft = (newv.viewing - 1) * this.pageSize + 1 +1000
+      this.queryright = this.queryleft + this.pageSize - 1
     }
+  },
+  components: {
+    ProblemsPagination
   }
 }
 </script>
@@ -99,7 +113,7 @@ export default {
 }
 
 .test1:hover {
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  clip-path: polygon(50% 0%, 100% 0, 100% 35%, 100% 70%, 100% 100%, 50% 100%, 0 100%, 0% 70%, 0% 35%, 0 0);
 }
 
 .person-rank-container {
@@ -169,8 +183,8 @@ export default {
 
 .luck .line:hover .split-mius.r::after {
   content: '<';
-  color: greenyellow;
   animation: luckright .72s ease-out 0s 1;
+  color: greenyellow;
 }
 
 .pro-table {
@@ -183,7 +197,7 @@ export default {
   line-height: 46px;
   margin: 2px;
   box-sizing: content-box;
-  outline: solid 1px #ddd;
+  outline: solid 0.1px #e8f1f2;
   border-collapse: collapse;
   float: left;
   text-align: center;
@@ -191,14 +205,19 @@ export default {
 
 .pro-item.ac {
   background: #70c1b3;
+  color: #fff;
 }
 
 @keyframes luckright {
   from {
     padding-left: 2em;
+    opacity: .1;
+    color: none;
   }
   to {
     padding-left: 0em;
+    opacity: 1;
+    color: greenyellow;
   }
 }
 </style>
