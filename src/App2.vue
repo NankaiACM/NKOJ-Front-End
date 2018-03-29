@@ -150,7 +150,7 @@
         <h3><span class=" glyphicon glyphicon-signal"></span>RANK</h3>
         <!--排名列表-->
         <div class="container padding-t-40">
-          <ranks/>
+          <ranks :userData="userData"/>
           <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
         </div>
       </div>
@@ -182,7 +182,7 @@ import saurusFooter from './components/footer';
 import vueLoading from "vue-loading-template";
 
 export default {
-  name: 'App2',
+  name: 'NKPC',
   components:{
     problemList,
     status,
@@ -433,6 +433,9 @@ export default {
       this.changeProblemListHeight();
     })
   },
+  beforeDestroy: function () {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
   computed:{
     countDown:function(){
       var targetTime = this.contestStatus==1? this.endTime : this.startTime;
@@ -481,7 +484,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .bg-blue, .title-box .shader{
     background-color: #1b98e0;
 }

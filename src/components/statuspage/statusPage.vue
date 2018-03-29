@@ -316,6 +316,10 @@ export default {
 <style lang="less">
 @import '../../less/global.less';
 
+a:focus {
+  text-decoration: none;
+}
+
 #status-page {
     text-align: left;
     background: #fff;

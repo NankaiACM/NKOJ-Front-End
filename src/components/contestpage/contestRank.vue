@@ -21,8 +21,8 @@
       <div class="clearfix"></div>
       <problems-pagination @viewingleap="handleViewing"></problems-pagination>
     </div>
-    <div id="draw-container">
-      <div class="plate test1">
+    <div id="draw-container" @click="toMyRank" v-if="userData">
+      <div class="plate">
         我的排名
       </div>
     </div>
@@ -32,6 +32,7 @@
 import ProblemsPagination from '../problemslistpage/pagination'
 export default {
   name: 'contestRank',
+  props: ['userData'],
   data: function () {
     return {
       persons: [
@@ -68,6 +69,9 @@ export default {
       this.viewing = newv.viewing
       this.queryleft = (newv.viewing - 1) * this.pageSize + 1 +1000
       this.queryright = this.queryleft + this.pageSize - 1
+    },
+    toMyRank: function() {
+      console.log(this.userData)
     }
   },
   components: {
@@ -193,27 +197,32 @@ export default {
 
 #draw-container {
   width: 100px;
-  height: 100px;
-  line-height: 100px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
   color: #fff;
   position: fixed;
-  top: 40%;
+  top: 72px;
   left: -200px;
   opacity: 0;
   transition: all 1s;
+  cursor: pointer;
+}
+
+#draw-container::after {
+  content: '>';
+  position: absolute;
+  width: 2em;
+  height: 100%;
+  top: 0;
+  left: 100%;
+  background: #3886ab;
 }
 
 .plate {
   width: 100%;
   height: 100%;
-  cursor: pointer;
-}
-
-.test1 {
-  background: #6cf;
-  border-radius: 0;
-  transition: .3s;
-  text-align: center;
+  background: #006494;
 }
 
 .test1:hover {

@@ -19,7 +19,7 @@ import signupPage from './components/signupPage'
 import headBar from './components/headBar'
 export default {
   components: {loginPage, signupPage,headBar},
-  name: 'App',
+  name: 'NKOJ',
   data: function () {
     return {
       userPage: 'None',
