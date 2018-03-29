@@ -113,8 +113,8 @@
     </div>
 
     <!--比赛中的界面-->
-    <div v-else-if="contestStatus==1">
-    <!--<div>-->
+    <!--<div v-else-if="contestStatus==1">-->
+    <div>
       <!--题目板块-->
       <div class="bg-gray band-with-80padding problem-band">
         <!--problem标题-->
@@ -137,7 +137,7 @@
         <h3><span class="glyphicon glyphicon-stats"></span>STATUS</h3>
         <!--提交状态列表-->
         <div class="container padding-t-40">
-          <status :is-infinite="false" :is-filter="false" :is-btn="true" api-url="/static/status.json"/>
+          <status :is-infinite="false" :is-filter="false" :is-btn="true" :api-url="statusApi"/>
           <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
         </div>
       </div>
@@ -145,7 +145,7 @@
       <hr class="cut-off">
 
       <!--排名板块-->
-      <div class="bg-gray band-with-80padding">
+      <div class="bg-gray band-with-80padding rank-gray">
         <!--排名标题-->
         <h3><span class=" glyphicon glyphicon-signal"></span>RANK</h3>
         <!--排名列表-->

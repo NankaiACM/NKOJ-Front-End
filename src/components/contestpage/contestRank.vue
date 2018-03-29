@@ -19,13 +19,13 @@
         <div class="clearfix"></div>
       </div>
       <div class="clearfix"></div>
+      <problems-pagination @viewingleap="handleViewing"></problems-pagination>
     </div>
     <div id="draw-container">
       <div class="plate test1">
-        more
+        我的排名
       </div>
     </div>
-    <problems-pagination @viewingleap="handleViewing"></problems-pagination>
   </div>
 </template>
 <script>
@@ -62,7 +62,6 @@ export default {
         'color':'#'+(~~(Math.random()*16777215)).toString(16),
         'fontSize': '1.41em'
       }
-      console.log(b)
       return b
     },
     handleViewing: function (newv) {
@@ -90,30 +89,6 @@ export default {
   flex-direction: column;
   color: #555;
   user-select: none;
-}
-
-#draw-container {
-  width: 100px;
-  height: 100px;
-  line-height: 100px;
-  color: #fff;
-}
-
-.plate {
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-
-.test1 {
-  background: #6cf;
-  clip-path: polygon(50% 0%, 80% 10%, 100% 35%, 100% 70%, 80% 90%, 50% 100%, 20% 90%, 0% 70%, 0% 35%, 20% 10%);
-  transition: .3s;
-  text-align: center;
-}
-
-.test1:hover {
-  clip-path: polygon(50% 0%, 100% 0, 100% 35%, 100% 70%, 100% 100%, 50% 100%, 0 100%, 0% 70%, 0% 35%, 0 0);
 }
 
 .person-rank-container {
@@ -208,6 +183,47 @@ export default {
   color: #fff;
 }
 
+#contest-rank-container-in .pagination>.active>a,
+#contest-rank-container-in .pagination>.active>a:hover,
+#contest-rank-container-in .pagination>.active>a:active,
+#contest-rank-container-in .pagination>.active>a:focus {
+  background: rgba(0, 100, 148, 0.78);
+  border: rgba(0, 100, 148, 0.5) solid 1px;
+}
+
+#draw-container {
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  color: #fff;
+  position: fixed;
+  top: 40%;
+  left: -200px;
+  opacity: 0;
+  transition: all 1s;
+}
+
+.plate {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.test1 {
+  background: #6cf;
+  border-radius: 0;
+  transition: .3s;
+  text-align: center;
+}
+
+.test1:hover {
+}
+
+.rank-gray:hover #draw-container {
+  opacity: 1;
+  left: 0;
+}
+
 @keyframes luckright {
   from {
     padding-left: 2em;
@@ -218,6 +234,15 @@ export default {
     padding-left: 0em;
     opacity: 1;
     color: greenyellow;
+  }
+}
+
+@keyframes popteam {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 </style>

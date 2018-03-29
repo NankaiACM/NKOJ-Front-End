@@ -32,13 +32,13 @@
           {{num.all_pages}}
         </a>
       </li>
-      <li>
-        <a aria-label="Next" v-if="num.viewing !== num.all_pages" @click="next()">
+      <li v-if="num.viewing !== num.all_pages" >
+        <a aria-label="Next" @click="next()">
             下一页
         </a>
       </li>
     </ul>
-    <div class="jump-pager pagination">
+    <div class="jump-pager pagination navbar-right">
       共{{num.all_pages}}页/{{num.last}}个，跳至
       <input type="text" class="jump-input" :placeholder="num.jump_input" v-model="num.jump_input" @keyup.enter="jump(num.jump_input)">
       页
@@ -83,12 +83,14 @@ export default {
   },
   computed: {
     num_list: function () {
+      console.log(this.num.viewing)
       if(this.num.viewing <= 5){
         return [1,2,3,4,5]
       }
-      if(this.num.viewing >= this.num.all_pages-5){
+      if(this.num.viewing > this.num.all_pages-5){
         return this.rang(this.num.all_pages-2)
       }
+      console.log('大坟墓守护者')
       return this.rang(this.num.viewing)
     }
   },
@@ -104,6 +106,7 @@ export default {
   line-height: 40px;
   padding: 0 2em;
   min-width: 400px;
+  width: 100%;
 }
 
 .pagination {
@@ -115,6 +118,7 @@ export default {
   font-size: 12px;
   line-height: 40px;
   color: #99a2aa;
+  float: right;
 }
 
 .jump-input {
