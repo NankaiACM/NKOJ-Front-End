@@ -127,12 +127,14 @@
   "data": [{
       "problemsID": "1001",
       "problemsName": "A+B Problem",
-      "problemsRatio": 0.96
+      "submit": 1000,
+	  "ac": 0
     },
     {
       "problemsID": "1002",
       "problemsName": "A*B Problem",
-      "problemsRatio": 0.90
+      "submit": 1000,
+	  "ac": 0
     },
     {
       "problemsID": "1003",
@@ -141,7 +143,8 @@
     }, {
       "problemsID": "1004",
       "problemsName": "A+B Problem",
-      "problemsRatio": 0.96
+      "submit": 1000,
+	  "ac": 0
     }
   ]
 }
@@ -166,22 +169,27 @@
   "data":[
     {
       "nickname": "用户nick",
+	  "imgurl": "https://static.hdslb.com/images/member/noface.gif//用户头像",
       "aclist": [0,1,2,3,4,5,6],
       "fraction": 100//分数
     },{
       "nickname": "用户nick",
+	  "imgurl": "https://static.hdslb.com/images/member/noface.gif",
       "aclist": [0,1,2,3,4,5,6],
       "fraction" 100
     },{
       "nickname": "用户nick",
+      "imgurl": "https://static.hdslb.com/images/member/noface.gif",
       "aclist": [0,1,2,3,4,5,6],
       "fraction": 100
     },{
       "nickname": "用户nick",
       "aclist": [0,1,2,3,4,5,6],
+      "imgurl": "https://static.hdslb.com/images/member/noface.gif",
       "fraction": 100
     },{
       "nickname": "用户nick",
+      "imgurl": "https://static.hdslb.com/images/member/noface.gif",
       "aclist": [0,1,2,3,4,5,6],
       "fraction": 100
     },]
