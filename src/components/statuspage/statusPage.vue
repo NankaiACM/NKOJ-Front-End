@@ -1,48 +1,5 @@
 <template>
 <div id="status-page">
-  <div class="question-filter-base container-fluid" v-if="isFilter==true">
-    <ul class="nav nav-pills">
-      <li role="presentation">
-        <input type="text" class="form-control" placeholder="problem ID" v-model="filter.problemID">
-      </li>
-      <li role="presentation">
-        <input type="text" class="form-control" placeholder="user ID" v-model="filter.userID">
-      </li>
-      <li role="presentation" class="dropdown navbar-right">
-        <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-        status
-        <span class="caret"></span>
-      </a>
-        <ul class="dropdown-menu">
-          <li v-for="status in dropdata.status" :key="status.value"><a @click="setStatus(status.value)" href="#">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.status===status.value"></span>
-            {{status.status}}
-            </a>
-          </li>
-          <li role="separator" class="divider"></li>
-          <li>
-            <a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.status}}</a>
-          </li>
-        </ul>
-      </li>
-      <li role="presentation" class="dropdown navbar-right">
-        <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-        language
-        <span class="caret"></span>
-      </a>
-        <ul class="dropdown-menu">
-          <li v-for="lang in dropdata.lang" :key="lang.value"><a @click="setLang(lang.value)" href="#">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.lang===lang.value"></span>
-            {{lang.lang}}
-            </a>
-          </li>
-          <li role="separator" class="divider"></li>
-          <li><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.lang}}</a></li>
-        </ul>
-      </li>
-      <li role="presentation" class="navbar-right"><a href="#" class="text-muted" @click="getStatus">Submit</a></li>
-    </ul>
-  </div>
   <div class="container-fluid table-container">
     <table id="statusTable" class="table table-hover">
       <caption></caption>
@@ -106,83 +63,13 @@
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
 import StatusDetails from './details.vue'
+var status_map = [...require('../../../static/status_map.json')]
 export default {
   name: 'statusPage',
   props: ['isFilter','isInfinite','isBtn','apiUrl'],
   data: function() {
-    var status_map = [{
-        "value": "107",
-        "status": "Accepted",
-        "label_class": "btn-success"
-      },
-      {
-        "value": "102",
-        "status": "Wrong Answer",
-        "label_class": "btn-danger"
-      },
-      {
-        "value": "108",
-        "status": "Presentation Error",
-        "label_class": "btn-warning"
-      },
-      {
-        "value": "101",
-        "status": "Compilation Error",
-        "label_class": "btn-danger"
-      },
-      {
-        "value": "103",
-        "status": "Runtime Error",
-        "label_class": "btn-danger"
-      },
-      {
-        "value": "105",
-        "status": "Time Limit Exceeded",
-        "label_class": "btn-warning"
-      },
-      {
-        "value": "104",
-        "status": "Memory Limit Exceeded",
-        "label_class": "btn-warning"
-      },
-      {
-        "value": "106",
-        "status": "Output Limit Exceeded",
-        "label_class": "btn-warning"
-      },
-      {
-        "value": "109",
-        "status": "Function Limit Exceeded",
-        "label_class": "btn-warning"
-      },
-      {
-        "value": "100",
-        "status": "Judging",
-        "label_class": "btn-info"
-      },
-      {
-        "value": "118",
-        "status": "System Error",
-        "label_class": "btn-warning"
-      }
-    ]
     return {
       statusList: [],
-      /* 
-        status in statusList
-        {
-          "solution_id": 1,
-          "nickname": 1,
-          "problem_id": 1001,
-          "status_id": null,
-          "language": 0,
-          "code_size": null,
-          "time": null,
-          "memory": null,
-          "when": "2018-03-25T13:34:47.887Z",
-          "ipaddr_id": 10
-        }
-      */
       status_map: status_map,
       details: {
         solution_id: "-1"
@@ -193,26 +80,8 @@ export default {
         status: '',
         lang: '',
         index: 1,
+        submit: 0,
         page_length: 20
-      },
-      dropdata: {
-        status: status_map,
-        lang: [{
-          "value": "1",
-          "lang": "C99"
-        }, {
-          "value": "2",
-          "lang": "C++ 98"
-        }, {
-          "value": "3",
-          "lang": "Free Pascal"
-        }, {
-          "value": "4",
-          "lang": "Java (JDK6)"
-        }, {
-          "value": "5",
-          "lang": "C++14"
-        }]
       }
     }
   },
@@ -220,26 +89,11 @@ export default {
     setDetailsRunId: function(solution_id) {
       this.details.solution_id = solution_id
     },
-    setStatus: function(status) {
-      if (this.filter.status === status) status = ''
-      this.filter.status = status
-    },
-    setLang: function(lang) {
-      if (this.filter.lang === lang) lang = ''
-      this.filter.lang = lang
-    },
     getStatus: function() {
+      console.log(this.filter)
       var _this = this
       this.filter.index = 1
       this.$http.post(this.apiUrl, {
-      /*
-        "problemsID": _this.filter.problemID,
-        "userID": _this.filter.userID,
-        "status": _this.filter.status,
-        "language": _this.filter.language,
-        "start": 0,
-        "end": this.filter.page_length
-      */
         'queryleft': 1,
         'queryright': this.filter.page_length
       }).then(function (res) {
@@ -276,14 +130,6 @@ export default {
       _this.filter.index++
       var _end = _this.filter.index * _this.filter.page_length
       this.$http.post(this.apiUrl,{
-      /*
-        "problemsID": _this.filter.problemID,
-        "userID": _this.filter.userID,
-        "status": _this.filter.status,
-        "lang": _this.filter.lang,
-        "start": 0,
-        "end": this.filter.page_length
-      */
          'queryleft': _start,
          'queryright': _end
       }).then(function(res) {
@@ -310,12 +156,18 @@ export default {
   components: {
     InfiniteLoading,
     StatusDetails
+  },
+  watch: {
+    '$store.state.statusFilter.submit': function (n, o) {
+        this.filter = this.$store.state.statusFilter
+    },
+    'filter.submit': function () {
+      this.getStatus()
+    }
   }
 }
 </script>
 <style lang="less">
-@import '../../less/global.less';
-
 a:focus {
   text-decoration: none;
 }
@@ -325,30 +177,6 @@ a:focus {
     background: #fff;
     padding: 0;
     min-height: 100%;
-}
-
-.question-filter-base {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: @barheight;
-    height: @filterheight;
-    border-bottom: 1px solid #e8f1f2;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-#status-page .nav {
-    background: inherit;
-    font-size: 0.5em;
-    width: 100%;
-}
-
-#status-page .nav input {
-    width: 8em;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
 }
 
 .table-container {

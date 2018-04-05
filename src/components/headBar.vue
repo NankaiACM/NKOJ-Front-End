@@ -8,7 +8,7 @@
         <li :class="{focusing:nowPage=='problems'}" v-on:click="$emit('toProblem')"><span class="glyphicon glyphicon-list"></span>题目</li>
         <li :class="{focusing:nowPage=='status'}" v-on:click="$emit('toStatus')"><span class="glyphicon glyphicon-stats"></span>评测</li>
         <li :class="{focusing:nowPage=='contest'}" v-on:click="$emit('toContest')"><span class="glyphicon glyphicon-tower"></span>比赛</li>
-        <li :class="{focusing:nowPage=='rank'}" v-on:click="$emit('toRank')"><span class="glyphicon glyphicon-signal"></span>排名</li>
+        <li :class="{focusing:nowPage=='ranklist'}" v-on:click="$emit('toRank')"><span class="glyphicon glyphicon-signal"></span>排名</li>
         <li :class="{focusing:nowPage=='discuss'}" v-on:click="$emit('toDiscuss')"><span class="glyphicon glyphicon-comment"></span>讨论</li>
       </ul>
       <div class="usersBar">
@@ -21,11 +21,9 @@
         </div>
       </div>
     </div>
-    <!--
-    <div class="head-container">
+    <div class="head-container" id="loki">
       <slot></slot>
     </div>
-    -->
   </div>
 </template>
 

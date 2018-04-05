@@ -39,7 +39,7 @@
       </li>
     </ul>
     <div class="jump-pager pagination navbar-right">
-      共{{num.all_pages}}页/{{num.last}}个，跳至
+      共{{num.all_pages}}页/{{last}}个，跳至
       <input type="text" class="jump-input" :placeholder="num.jump_input" v-model="num.jump_input" @keyup.enter="jump(num.jump_input)">
       页
     </div>
@@ -49,13 +49,13 @@
 <script>
 export default {
   name: 'problems-pagination',
+  props: ['pagesize', 'last'],
   data: function() {
     return {
       num: {
         viewing: 1,
-        jump_input: ~~(114514/20),
-        last: 114514,
-        all_pages: ~~(114514/20)
+        jump_input: this.last/this.pagesize,
+        all_pages: this.last/this.pagesize
       }
     }
   },

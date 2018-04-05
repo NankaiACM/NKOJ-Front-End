@@ -1,66 +1,5 @@
 <template>
 <div id="Problems" class="container">
-  <!--bar-->
-
-  <div class="question-filter-base container-fluid">
-    <ul class="search-bar-control nav nav-pills">
-      <li role="presentation" class="col-sm-6">
-        <input @keyup.enter="initView" v-model="filter.keywords" type="text" class="form-control" placeholder="IDs,titles,or description">
-      </li>
-      <li role="presentation" class="dropdown navbar-right">
-        <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-          Difficulty
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a @click="setDifficulty('弱虫')" href="#">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.difficulty==='弱虫'"></span>
-            弱虫
-          </a></li>
-          <li><a @click="setDifficulty('大角虫')" href="#">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.difficulty==='大角虫'"></span>
-            大角虫
-          </a></li>
-          <li><a @click="setDifficulty('王虫')" href="#">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.difficulty==='王虫'"></span>
-            王虫
-          </a></li>
-          <li role="separator" class="divider"></li>
-          <li><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.difficulty}}</a></li>
-        </ul>
-      </li>
-      <li role="presentation" class="dropdown navbar-right">
-        <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-          Status
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a @click="setStatus('todo')" href="#">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.status==='todo'"></span>
-            Todo
-          </a></li>
-          <li><a @click="setStatus('solved')" href="#">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true" v-if="filter.status==='solved'"></span>
-            Solved
-          </a></li>
-          <li role="separator" class="divider"></li>
-          <li><a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>{{filter.status}}</a></li>
-        </ul>
-      </li>
-      <li role="presentation" class="dropdown navbar-right">
-        <a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-          Tags
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a>todo</a></li>
-          <li><a>todo</a></li>
-          <li><a>todo</a></li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-  <!---->
   <div class="fat-container container-fluid col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
   <table id="ProblemTable" class="table table-hover">
     <thead>
@@ -106,22 +45,20 @@
       </tr>
     </tbody>
   </table>
-  <problems-pagination @viewingleap="handleViewing"></problems-pagination>
+  <problems-pagination @viewingleap="handleViewing" :pagesize="this.pageSize" :last="this.total"></problems-pagination>
 </div>
 </div>
 </template>
 <script>
 import ProblemsPagination from './pagination.vue'
+import questionFilter from './questionFilter.vue'
+import Vue from 'vue'
 export default {
   name: 'component-problems',
   props: ['user_pros_msg'],
   data: function() {
     return {
-      filter: {
-        difficulty: '',
-        status: '',
-        keywords: ''
-      },
+      filter: [],
       problemList: [],
       starlist: [],
       aclist: [],
@@ -129,12 +66,16 @@ export default {
       pageSize: 20,
       queryleft: 1001,
       queryright: 10020,
-      viewing: 1
+      viewing: 1,
+      total: 1
     }
   },
   mounted: function() {
     this.$nextTick(function() {
       console.info('ping!')
+      this.filter = JSON.stringify(this.$store.state.filter)
+      this.filter = this.$store.state.filter
+      console.log(this.filter)
       this.initView()
     })
   },
@@ -142,14 +83,15 @@ export default {
     initView: function () {
       this.$http.post(
         `${window.noPointHost}/api/problems/list`, {
-          'keywords': this.filter.keywords,
-          'difficulty': this.filter.difficulty,
-          'status': this.filter.status,
+          'keywords': this.filter.Keywords,
+          'difficulty': this.filter.Difficulty,
+          'status': this.filter.Status,
           'queryleft': this.queryleft,
           'queryright': this.queryright
         }).then(function(res) {
           console.log(res.body.data)
           var tmp = res.body.data
+          this.total = res.body.total
           for(var x in tmp){
             var item = tmp[x]
             tmp[x].isStar = false
@@ -167,20 +109,6 @@ export default {
           this.problemList = tmp
       })
     },
-    setDifficulty: function (difficulty) {
-      if (difficulty === this.filter.difficulty)
-        difficulty = ''
-      this.filter.difficulty = difficulty
-      this.problemList = []
-      this.initView()
-    },
-    setStatus: function (status) {
-      if (status === this.filter.status)
-        status = ''
-      this.filter.status = status
-      this.problemList = []
-      this.initView()
-    },
     handleViewing: function (newv) {
       this.viewing = newv.viewing
       this.queryleft = (newv.viewing - 1) * this.pageSize + 1 +1000
@@ -189,14 +117,23 @@ export default {
     }
   },
   watch: {
-    user_pros_msg : function (newv,oldv) {
+    user_pros_msg : function (newv, oldv) {
       this.starlist = newv.star
       this.aclist = newv.ac
       this.onlist = newv.on
+    },
+    'this.$store.state.filter': {
+      deep: true,
+      handler: function (n, o) {
+        this.filter = JSON.stringify(n)
+        this.problemList = []
+        this.initView()
+      }
     }
   },
   components: {
-    ProblemsPagination
+    ProblemsPagination,
+    questionFilter
   }
 }
 </script>
@@ -217,34 +154,6 @@ export default {
   border: 1px solid #e8f1f2;
   margin-top: @barheight+@fat-container-margin-top;
   margin-bottom: @barheight+@fat-container-margin-top;
-}
-
-.question-filter-base {
-  position: fixed;
-  display: flex;
-  align-items: center;
-  left: 0;
-  right: 0;
-  top: @barheight;
-  height: @filterheight;
-  z-index: 1;
-  background: #fff;
-  border-bottom: 1px solid #e8f1f2;
-}
-
-.search-bar-control {
-  width: 100%;
-}
-
-.search-bar-control input.form-control {
-  border: none;
-  box-shadow: none;
-  border-radius: 0;
-  transition: all 1s;
-}
-
-.search-bar-control input.form-control:focus,
-.search-bar-control input.form-control:active {
 }
 
 #Problems td a {
