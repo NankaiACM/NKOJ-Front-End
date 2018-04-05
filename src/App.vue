@@ -1,9 +1,11 @@
 <template>
 <div id="app">
   <header>
-    <head-bar @toHome='changeToHome' @logIn='changeToLogin' @signUp='changeToSignup'
-              @toProblem="changeToProblems" @toStatus="changeToStatus" @toContest="changeToContest"
-              @toRank="changeTo404" @toDiscuss="changeTo404" :nowPage=nowPageF :userPage=userPage>
+    <head-bar @toHome="localTo('home')" @logIn='changeToLogin' @signUp='changeToSignup'
+              @toProblem="localTo('problems')" @toStatus="localTo('status')" @toContest="localTo('contest')"
+              @toRank="localTo('ranklist')" @toDiscuss="changeTo404" :nowPage=nowPageF :userPage=userPage>
+              <question-filter v-if="nowPage === 'problems'"/>
+              <status-filter v-if="nowPage === 'status'"/>
     </head-bar>
   </header>
   <section id="main">
@@ -17,8 +19,11 @@
 import loginPage from './components/dialog/loginSignUp'
 import signupPage from './components/signupPage'
 import headBar from './components/headBar'
+
+import questionFilter from './components/problemslistpage/questionFilter.vue'
+import statusFilter from './components/statuspage/statusFilter.vue'
 export default {
-  components: {loginPage, signupPage,headBar},
+  components: {loginPage, signupPage, headBar, questionFilter, statusFilter},
   name: 'NKOJ',
   data: function () {
     return {
@@ -28,33 +33,16 @@ export default {
     }
   },
   methods: {
-    changeToProblems: function () {
-      this.nowPage='problems'
+    localTo: function (str) {
+      this.nowPage = str
       this.$router.push({
-        path: '/problems'
+        path: '/'+str
       })
     },
-    changeToHome: function () {
-      this.nowPage='home'
+    changeTo404: function () {
+      this.nowPage='404'
       this.$router.push({
-        path: '/home'
-      })
-    },
-    changeToStatus: function () {
-      this.nowPage='status'
-      this.$router.push({
-        path: '/status'
-      })
-    },
-    changeToContest: function () {
-      this.nowPage='contest'
-      this.$router.push({
-        path: '/contest'
-      })
-    },
-    changeToDiscuss: function () {
-      this.$router.push({
-        path: '/discuss'
+        path: '/notFound'
       })
     },
     changeToUser: function () {
@@ -68,12 +56,6 @@ export default {
     },
     changeToSignup: function () {
       this.userPage='signUp'
-    },
-    changeTo404: function () {
-      this.nowPage='404'
-      this.$router.push({
-        path: '/notFound'
-      })
     },
     exitShow: function () {
       this.userPage="None"

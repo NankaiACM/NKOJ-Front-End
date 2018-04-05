@@ -14,6 +14,7 @@ import allContest from '../components/contestpage/allContest'
 import contest from '../components/contestpage/contestDetail'
 //import codePage from '../components/codePage'
 import detailsPage from '../components/detailspage/details'
+import rankPage from '../components/ranklist/rankPage'
 Vue.use(Router)
 console.log(window.noPointHost)
 export default new Router({
@@ -38,6 +39,7 @@ export default new Router({
         }
       },
       { path: '/discuss', component: discussPage },
+      { path: '/ranklist', component: rankPage },
       { path: '/user/:id', component: userPage },
       { path: '/details/:solution_id', component: detailsPage },
       {
