@@ -59,61 +59,66 @@ export default {
   data: function() {
     return {
       filter: [],
+      rawList: [],
       problemList: [],
       starlist: [],
       aclist: [],
       onlist: [],
       pageSize: 20,
-      queryleft: 1001,
-      queryright: 10020,
-      viewing: 1,
+      queryleft: 1,
+      queryright: 150,
+      viewing: 1,//>=1
       total: 1
     }
   },
   mounted: function() {
     this.$nextTick(function() {
-      console.info('ping!')
-      this.filter = JSON.stringify(this.$store.state.filter)
       this.filter = this.$store.state.filter
-      console.log(this.filter)
       this.initView()
     })
   },
   methods: {
     initView: function () {
-      this.$http.post(
-        `${window.noPointHost}/api/problems/list`, {
-          'keywords': this.filter.Keywords,
-          'difficulty': this.filter.Difficulty,
-          'status': this.filter.Status,
-          'queryleft': this.queryleft,
-          'queryright': this.queryright
-        }).then(function(res) {
-          console.log(res.body.data)
-          var tmp = res.body.data
-          this.total = res.body.total
-          for(var x in tmp){
-            var item = tmp[x]
-            tmp[x].isStar = false
-            tmp[x].state = 'none'
-            if(this.starlist.indexOf(item.problem_id) !== -1){
-              tmp[x].isStar = true
-            }
-            if(this.aclist.indexOf(item.problem_id) !== -1){
-              item[x].state = 'ac'
-            }
-            if(this.onlist.indexOf(item.problem_id) !== -1){
-              item[x].state = 'on'
-            }
-          }
-          this.problemList = tmp
-      })
+      console.log(this.queryright)
+      this.$http.get(`${window.noPointHost}/api/problems/list?l=${this.queryleft}&r=${this.queryright}`)
+        .then(function(res) {
+          this.rawList = res.body.data.list
+          this.total = res.body.data.served
+          this.raw2listrender()
+        })
+    },
+    stateAstarRender: function (tmp) {
+      for(var x in tmp){
+        var item = tmp[x]
+        tmp[x].isStar = false
+        tmp[x].state = 'none'
+        if(this.starlist.indexOf(item.problem_id) !== -1){
+          tmp[x].isStar = true
+        }
+        if(this.aclist.indexOf(item.problem_id) !== -1){
+          item[x].state = 'ac'
+        }
+        if(this.onlist.indexOf(item.problem_id) !== -1){
+          item[x].state = 'on'
+        }
+      }
+      return tmp
+    },
+    raw2listrender: function () {
+      var left = (this.viewing - 1) * this.pageSize + 1
+      if (left > this.total) left = this.tatal
+      if (left < 1) left = 1
+      var right = (this.viewing + 0) * this.pageSize
+      if (right > this.tatal) right = this.tatal
+      if (right < 1) right = 1
+      var tmp = this.rawList.slice(left - 1, right)
+      this.problemList = this.stateAstarRender(tmp)
+      console.log(tmp)
     },
     handleViewing: function (newv) {
+      console.info(newv.viewing)
       this.viewing = newv.viewing
-      this.queryleft = (newv.viewing - 1) * this.pageSize + 1 +1000
-      this.queryright = this.queryleft + this.pageSize - 1
-      this.initView()
+      this.raw2listrender()
     }
   },
   watch: {
@@ -125,9 +130,9 @@ export default {
     'this.$store.state.filter': {
       deep: true,
       handler: function (n, o) {
-        this.filter = JSON.stringify(n)
-        this.problemList = []
-        this.initView()
+        this.filter = n
+        //this.problemList = []
+        //this.initView()
       }
     }
   },
@@ -151,7 +156,7 @@ export default {
 .fat-container {
   background: #fff;
   border-radius: 2px;
-  border: 1px solid #e8f1f2;
+  border: 2px solid #e8f1f2;
   margin-top: @barheight+@fat-container-margin-top;
   margin-bottom: @barheight+@fat-container-margin-top;
 }
