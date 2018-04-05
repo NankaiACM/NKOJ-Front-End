@@ -12,6 +12,7 @@
     <login-page v-if="userPage=='login' || userPage=='signUp'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-page>
     <router-view class="com-container"></router-view>
   </section>
+  <component-shell></component-shell>
 </div>
 </template>
 
@@ -22,8 +23,9 @@ import headBar from './components/headBar'
 
 import questionFilter from './components/problemslistpage/questionFilter.vue'
 import statusFilter from './components/statuspage/statusFilter.vue'
+import componentShell from './components/shell/mayoi.vue'
 export default {
-  components: {loginPage, signupPage, headBar, questionFilter, statusFilter},
+  components: {loginPage, signupPage, headBar, questionFilter, statusFilter,componentShell},
   name: 'NKOJ',
   data: function () {
     return {

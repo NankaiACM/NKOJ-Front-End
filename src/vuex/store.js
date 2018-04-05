@@ -28,7 +28,10 @@ export default new Vuex.Store({
       }
       state.filter[payload.key] = payload.value
     },
-    setSFilter (state, key, value) {
+    setSFilter (state, payload) {
+      var key = payload.key
+      var value = payload.value
+      console.log(key+value)
       if (value === state.statusFilter[key]) {
         value = ''
       }

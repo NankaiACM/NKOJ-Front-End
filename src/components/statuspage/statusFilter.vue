@@ -48,7 +48,15 @@ var status_map = [...require('../../../static/status_map.json')]
 export default {
   data: function () {
     return {
-      filter: [],
+      filter: {
+        problemID: '',
+        userID: '',
+        status: '',
+        lang: '',
+        index: 1,
+        submit: 0,
+        page_length: 20
+      },
       dropdata: {
         status: status_map,
         lang: [{
@@ -78,16 +86,20 @@ export default {
   },
   methods: {
     setSF: function (key,value) {
-      console.log('setSF')
-      this.$store.commit('setSFilter', key, value)
+      console.log(key+value)
+      this.$store.commit({
+        type: 'setSFilter',
+        key: key,
+        value: value
+        })
     }
   },
   watch: {
     '$store.state.statusFilter': {
       deep: true,
       handler: function (n, o) {
-        console.log('sf back')
         this.filter = n
+        console.log(this.filter.status)
       }
     }
   }

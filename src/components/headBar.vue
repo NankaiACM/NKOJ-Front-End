@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="head-wrapper" :class="{'add-shadow':isScrolled}">
     <div class="head-container">
       <div class="mainIcon"><img height="50px" src="../assets/logo_new_whitemode.png" v-on:click="$emit('toHome')">
@@ -38,13 +39,14 @@
     <div class="head-container" id="loki">
       <slot></slot>
     </div>
-    <vue-slide-up-down :active="showAnnouncement">
-      <div class="announcement">
-        2017.12.8 我们为它加入了新的语言 Python~ 欢迎尝试<br>
-        如果您对 OJ 的进一步开发，包括前端/后台/数据库设计，有兴趣，请联系 sunrisefox@qq.com ~
-      </div>
-    </vue-slide-up-down>
   </div>
+  <vue-slide-up-down :active="showAnnouncement">
+    <div class="announcement">
+      2017.12.8 我们为它加入了新的语言 Python~ 欢迎尝试<br>
+      如果您对 OJ 的进一步开发，包括前端/后台/数据库设计，有兴趣，请联系 sunrisefox@qq.com ~
+    </div>
+  </vue-slide-up-down>
+</div>
 </template>
 
 <script>

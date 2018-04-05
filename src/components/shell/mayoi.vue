@@ -204,12 +204,21 @@ history: get history cmds
 </script>
 <style>
 #mayoi {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  border-top: 14px solid #000;
   display: flex;
   text-align: left;
   flex-direction: column-reverse;
-  width:100%;
-  max-height: 300px;
+  width:480px;
+  height: auto;
+  max-height: 240px;
   overflow-y: auto;
+  background: #000;
+  color: #fff;
+  opacity: .41;
+  padding: 1em;
 }
 
 #mayoi input {
@@ -217,7 +226,7 @@ history: get history cmds
   outline: none;
   transition: all .41s;
   font-size: 13px;
-  border-left: 2px solid #ddd;
+  background: #000;
 }
 
 #mayoi input:focus {
@@ -230,5 +239,20 @@ history: get history cmds
   border: none;
   margin: 0;
   padding: 0;
+  color: #fff;
+}
+
+#mayoi::-webkit-scrollbar {
+  width: 5px;
+  height: 9px;
+}
+
+#mayoi::-webkit-scrollbar-track {
+  background: #000;
+}
+
+#mayoi::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: #fff;
 }
 </style>
