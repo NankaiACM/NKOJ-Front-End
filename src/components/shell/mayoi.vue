@@ -2,7 +2,13 @@
 <div>
   <slot>
   </slot>
-  <div id="mayoi">
+  <div id="mayoi" :class="mayoiclass">
+    <div class="btnup" @click="sCls('normal')">
+      <span class="glyphicon glyphicon-chevron-up"></span>
+    </div>
+    <div class="btnnb" @click="sCls('minb')">
+      <span class="glyphicon glyphicon-chevron-down"></span>
+    </div>
     <input @keyup.enter="hit" v-model="user_cmd_lines.inputing"/>
     <pre id="display">{{screen.display}}</pre>
   </div>
@@ -21,6 +27,7 @@ export default {
     return {
       dobikey: 'mayoi',
       version: '0.1.34279',
+      mayoiclass: 'minb',
       user_cmd_lines: {
         history: ['history'],
         staticmpt: 'mayoi:/#',
@@ -145,6 +152,9 @@ history: get history cmds
     }
   },
   methods: {
+    sCls: function (cls) {
+      this.mayoiclass = cls
+    },
     hit: function () {
       this.screen_add_str(this.user_cmd_lines.inputing+'\n')
       this.user_cmd_lines.run = this.user_cmd_lines.inputing.split(this.user_cmd_lines.prompt)[1]
@@ -207,18 +217,82 @@ history: get history cmds
   position: fixed;
   left: 0;
   bottom: 0;
-  border-top: 14px solid #000;
+  border-top: 1.82em solid #ccc;
   display: flex;
   text-align: left;
   flex-direction: column-reverse;
   width:480px;
-  height: auto;
-  max-height: 240px;
+  height: 200px;
   overflow-y: auto;
   background: #000;
   color: #fff;
   opacity: .41;
   padding: 1em;
+  transition: all 1.41s;
+}
+
+#mayoi .btnnb {
+  transition: all 1.41s;
+}
+
+#mayoi.normal {
+  min-height: 100px;
+  opacity: .82;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#mayoi.normal .btnnb {
+  position: fixed;
+  height: 1.82em;
+  margin-left: -3em;
+  margin-bottom: -1.82em;
+  left: 480px;
+  bottom: 200px;
+  background: #111;
+}
+
+#mayoi.minb {
+  overflow: hidden;
+  border: 0;
+  height: 1.82em;
+  line-height: 1em;
+  margin: 0;
+  padding: .41em 1em;
+}
+
+#mayoi.minb .btnup,
+#mayoi.normal .btnnb {
+  display: block;
+  height: 1.82em;
+  width: 3em;
+  text-align: center;
+  line-height: 1.82em;
+  cursor: pointer;
+}
+
+#mayoi.minb .btnup {
+  position: absolute;
+  background: #888;
+  bottom: 0;
+  right: 0;
+}
+
+#mayoi.minb .btnnb {
+  display: fixed;
+  visibility: hidden;
+  bottom: 0;
+  margin-bottom: -1.21em;
+  margin-left: -3em;
+  left: 480px;
+}
+
+#mayoi.minb pre {
+  display: none;
+}
+
+#mayoi.normal .btnup {
+  display: none;
 }
 
 #mayoi input {
