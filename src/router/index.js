@@ -32,7 +32,6 @@ export default new Router({
         path: '/status',
         component: statusPage,
         props: {
-          isFilter: true,
           isInfinite: true,
           isBtn: false,
           apiUrl: window.noPointHost + '/api/status/list'

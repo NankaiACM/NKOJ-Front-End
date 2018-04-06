@@ -205,7 +205,7 @@ history: get history cmds
 <style>
 #mayoi {
   position: fixed;
-  right: 0;
+  left: 0;
   bottom: 0;
   border-top: 14px solid #000;
   display: flex;

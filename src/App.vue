@@ -4,8 +4,8 @@
     <head-bar @toHome="localTo('home')" @logIn='changeToLogin' @signUp='changeToSignup'
               @toProblem="localTo('problems')" @toStatus="localTo('status')" @toContest="localTo('contest')"
               @toRank="localTo('ranklist')" @toDiscuss="changeTo404" :nowPage=nowPageF :userPage=userPage>
-              <question-filter v-if="nowPage === 'problems'"/>
-              <status-filter v-if="nowPage === 'status'"/>
+              <question-filter v-if="this.$route.path === '/problems'"/>
+              <status-filter v-if="this.$route.path === '/status'"/>
     </head-bar>
   </header>
   <section id="main">
@@ -36,10 +36,12 @@ export default {
   },
   methods: {
     localTo: function (str) {
+      console.info(this.$route.path)
       this.nowPage = str
       this.$router.push({
         path: '/'+str
       })
+      console.info(this.$route.path)
     },
     changeTo404: function () {
       this.nowPage='404'
