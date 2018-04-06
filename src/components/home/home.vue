@@ -13,7 +13,7 @@
   </div>
   <div class="row">
     <homeDiscuss/>
-    <div class="col-lg-8 visible-lg home-component"><h3 align="left">Shell</h3></div>
+    <div class="col-lg-8 home-component"><princeton></princeton></div>
   </div>
 </div>
 </div>
@@ -22,6 +22,7 @@
 import homeContest from './homeContest.vue'
 import homeDiscuss from './homeDiscuss.vue'
 import homeProblem from './homeProblems.vue'
+import princeton from '../chat/princeton.vue'
 export default {
   name: 'component-home',
   data: function() {
@@ -47,7 +48,8 @@ export default {
   components: {
     homeContest,
     homeDiscuss,
-    homeProblem
+    homeProblem,
+    princeton
   }
 }
 </script>

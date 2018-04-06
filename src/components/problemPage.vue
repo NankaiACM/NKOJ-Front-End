@@ -1,6 +1,6 @@
 <template>
 <div id="problemPage" >
-  <h2 align="left" class="col-sm-12 problemPageTitle">A+B Problem</h2>
+
   <transition name="up">
     <div class="submitGirl" v-if="isStart" @click="iCanSee"><img src="../assets/Akkarin.png" width="150px" height="150px"></div>
   </transition>
@@ -45,10 +45,12 @@
     </div>
   </transition>
   <div>
-    <div class="problemDescription" @click="iCanSee2">
-      <div align="left" v-html="problemMarkDown"></div>
+    <div class="pro-container">
+      <h2 id="pro-title" align="left" class="col-sm-12 problemPageTitle" :class="titleclass">{{o.title ? o.title : '美好的bug正在发生'}}</h2>
+      <div class="problemDescription" @click="iCanSee2">
+        <div align="left" v-html="problemMarkDown"></div>
+      </div>
     </div>
-
   </div>
 </div>
 </template>
@@ -60,6 +62,15 @@ export default {
     return {
       problemContent: '',
       problemMarkDownText: '# hahaha ',
+      o: {//现在的视图，会被initView完全覆盖
+        case: 0,
+        content: 0,
+        problem_id: 0,
+        restriction_id: 0,
+        submit_ac: 0,
+        submit_all: 0,
+        title: 0
+      },
       submitLan: 'C++',
       submitCode: '#include <iostream>',
       isSee: false,
@@ -68,7 +79,8 @@ export default {
       leftInfo: false,
       rightInfo: false,
       submitInfo: 'hhhhhhhhhhhhh',
-      isInfo: false
+      isInfo: false,
+      titleclass: 'normal'
     }
   },
   computed: {
@@ -86,11 +98,27 @@ export default {
   },
   methods: {
     initView: function () {
-      this.$http.get(`${window.noPointHost}/api/p/`+this.$route.params.problemId).then((res) => {
-        console.log(res.body)
-        this.problemMarkDownText = res.body
-        this.isStart = true
-      })
+      window.addEventListener('scroll', this.hScroll)
+      this.$http.get(`${window.noPointHost}/api/problem/`+this.$route.params.problemId).then(
+        (res) => {
+          console.log(res.body)
+          this.problemMarkDownText = res.body.data.content
+          this.o = res.body.data
+          this.isStart = true
+        },
+        (e)=> {
+          console.log(e)
+        })
+    },
+    hScroll: function () {
+      var sTop = window.pageYOffset
+      console.log(sTop)
+      var tTop = document.querySelector('#pro-title').offsetTop
+      console.log(tTop)
+      if (sTop > tTop) {//不给予回复
+        this.titleclass = 'active'
+        window.removeEventListener('scroll', this.hScroll)
+      }
     },
     submit: function() {
       console.log("wtf")
@@ -147,6 +175,13 @@ export default {
         this.isInfo = false
       }
     }
+  },
+  beforeDestroy: function () {
+    try {
+      window.removeEventListener('scroll', this.hScroll)
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 </script>
@@ -180,7 +215,7 @@ export default {
 #problemSubmit:hover{
   box-shadow: 0 5px 5px rgba(150, 150, 150, 0.4), 0 -5px 5px rgba(150, 150, 150, 0.4), 5px 0 5px rgba(150, 150, 150, 0.4), -5px 0 5px rgba(150, 150, 150, 0.4);
 }
-.problemDescription{
+.pro-container{
   position: absolute;
   margin-top: 150px;
   top: 0;
@@ -193,7 +228,7 @@ export default {
   transition: all 0.5s;
   border-radius: 10px;
 }
-.problemDescription:hover{
+.pro-container:hover{
   box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1), 0 0px 20px rgba(150, 150, 150, 0.1), 5px 0 5px rgba(150, 150, 150, 0.1), -5px 0 5px rgba(150, 150, 150, 0.1);
 }
 #problemSubmit nav{
@@ -218,17 +253,29 @@ export default {
 }
 #problemPage .problemPageTitle{
   background: #fff;
-  height: @filterheight;
-  position: fixed;
   z-index: 2;
-  padding-left: 6em;
-  padding-top: 10px;
-  padding-bottom:  10px;
-  margin: 0;
-  font-weight: 600;
-  font-family: "inherit";
+  margin: 2em 0;
+  font-family: "微软雅黑";
+  font-weight: 400;
   color: #233;
   border-bottom: 1px solid #eee;
+  transition: all 1.41s;
+}
+
+#problemPage .problemPageTitle.normal {
+  border-left: 10px solid #93a7a7;
+}
+
+#problemPage .problemPageTitle.active {
+  padding: 0;
+  margin: 0;
+  left: 0;
+  top: @barheight;
+  height: @filterheight;
+  line-height: @filterheight - 2em;
+  text-align: center;
+  position: fixed;
+  font-weight: 100;
 }
 
 .fade-enter-active, .fade-leave-active{
