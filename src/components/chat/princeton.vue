@@ -48,23 +48,28 @@ export default {
     },
     ptpong: function () {
       var slf = this
-      clearTimeout(self.princeton.rmt)
-      self.princeton.rmt = setTimeout(function () {
+      clearTimeout(slf.princeton.rmt)
+      console.log('清除了定时器')
+      slf.princeton.rmt = setTimeout(function () {
         console.log('失恋了')
         console.log(slf.princeton)
         slf.princeton.close()
         console.log('尝试重启')
         slf.ptinit()
-      },40000)
+      },30000)
     },
     ptmsg: function (evt) {
       console.log('pt msg')
       console.log('type:'+(typeof evt.data))
       if (typeof evt.data === 'string') {
         console.log('rec:' + evt.data)
-        this.dankmus.push(evt.data)
+        var dtmp = document.createElement('div')
+        dtmp.innerHTML = evt.data
+        dtmp = dtmp.innerHTML
+        console.log('after deal:' + dtmp)
+        this.dankmus.push(dtmp)
         if (this.bot.isOnHook) {
-          this.botalk(evt.data)
+          this.botalk(dtmp)
         }
       } else if (evt.data instanceof ArrayBuffer) {
         console.log('rec ArrayBuffer')
@@ -91,16 +96,21 @@ export default {
       this.princeton.send(sendmsg)
     },
     botalk: function (str) {
+      var vm = this
       console.log(str)
-      this.$http.post(this.bot.url, {
-          'key': this.bot.key,
-          'info': str,
-          'userid': '123'
+      this.$http.jsonp(vm.bot.url,{
+          params: {
+            'key': vm.bot.key,
+            'info': str,
+            'userid': '123'
+          },
+          jsonp: 'cb'
         })
         .then(function (res) {
-          var jsn = eval('(' + res.data + ')')
+          var jsn = res.data
           var ret = jsn.text
-          this.ptsend(ret)
+          console.log('bot feedback:' + ret)
+          vm.ptsend(ret)
         }, function (e) {
           console.log(e)
         })
