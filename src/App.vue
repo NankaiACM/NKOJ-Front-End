@@ -9,7 +9,7 @@
     </head-bar>
   </header>
   <section id="main">
-    <login-page v-if="userPage=='login' || userPage=='signUp'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-page>
+    <login-dialog v-if="userPage=='login'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-dialog>
     <router-view class="com-container"></router-view>
   </section>
   <component-shell></component-shell>
@@ -17,15 +17,14 @@
 </template>
 
 <script>
-import loginPage from './components/dialog/loginSignUp'
-import signupPage from './components/signupPage'
+import loginDialog from './components/dialog/loginDialog'
 import headBar from './components/headBar'
 
 import questionFilter from './components/problemslistpage/questionFilter.vue'
 import statusFilter from './components/statuspage/statusFilter.vue'
 import componentShell from './components/shell/mayoi.vue'
 export default {
-  components: {loginPage, signupPage, headBar, questionFilter, statusFilter,componentShell},
+  components: {loginDialog, headBar, questionFilter, statusFilter,componentShell},
   name: 'NKOJ',
   data: function () {
     return {
@@ -58,12 +57,14 @@ export default {
     },
     changeToSignup: function () {
       this.userPage='signUp'
+      this.$router.push({path: '/sign_up'});
     },
     exitShow: function () {
       this.userPage="None"
     },
     changeLogin:function(value){
       this.userPage=value;
+      this.$router.push({path: '/sign_up'});
     }
   },
   computed:{
