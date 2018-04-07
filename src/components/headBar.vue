@@ -27,7 +27,7 @@
       </ul>
       <div class="usersBar">
         <div class="separate"></div>
-        <div class="field" :class="{'field-focus':userPage=='signUp'}" v-on:click="$emit('signUp')">
+        <div class="field" :class="{'field-focus':nowPage=='signUp' && userPage!=='login'}" v-on:click="$emit('signUp')">
           <a> 注册<span class="glyphicon glyphicon-user"></span></a>
         </div>
         <div class="field" :class="{'field-focus':userPage=='login'}" v-on:click="$emit('logIn')">
@@ -183,6 +183,10 @@
     transition: top 0.4s ease;
   }
 
+  .usersBar .field-focus{
+    pointer-events: none;
+    cursor: default;
+  }
   .usersBar div.field:hover a,
   .usersBar div.field-focus a {
     text-decoration: none;

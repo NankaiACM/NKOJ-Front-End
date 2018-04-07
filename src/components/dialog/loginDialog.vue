@@ -543,49 +543,6 @@ export default {
     },
   },
   watch: {
-    isEmailSend: function(newValue, oldValue) {
-      if (newValue) {
-        this.sendColdTime = 61;
-        this.setSendColdTime();
-      } else {
-        this.signupAttribute.signupCaptcha = "";
-        this.captchaUrl =
-          `${noPointHost}/api/captcha/sendmail?_t=` + Math.random();
-      }
-      this.focusing = 0;
-    },
-    isSignOK: function(newValue, oldValue) {
-      if (newValue) {
-        var vue=this;
-        var mesbar = document.querySelector(".message-bar");
-        var form = mesbar.parentElement;
-        var keep=form.offsetHeight;
-        form.style.height=keep+"px";
-        setTimeout(
-          function(){
-            Velocity(form, {height: keep-vue.tansitionHeight+20+"px"},{duration:300})
-            mesbar.style.margin="30px"
-            mesbar.style.height="4rem"
-        Velocity(
-          form,
-          { opacity:1 },
-          { duration: 300 }
-        );
-          }
-        ,300)
-        vue.timeToClose=5;
-        var func=function(){
-          vue.timeToClose--;
-          if(vue.timeToClose==0){
-            vue.$emit('exit');
-          }
-          else{
-            setTimeout(func, 1000);
-          }
-        }
-        setTimeout(func,1000)
-      }
-    },
     loginStatus: function(newValue, oldValue) {
       if (newValue==2) {
         var vue=this;
@@ -619,9 +576,8 @@ export default {
       }
     },
     pageStatus: function (newValue,oldValue) {
+      this.$emit('exit');
       this.$emit('changeStatus',newValue);
-      if(newValue==="signUp")this.captchaUrl=`${noPointHost}/api/captcha/sendmail?_t=` + Math.random()
-      if(newValue==="login")this.captchaUrlLogin=`${noPointHost}/api/captcha/login?_t=` + Math.random()
     },
   }
 };

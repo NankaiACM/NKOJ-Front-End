@@ -58,14 +58,15 @@ export default {
       this.userPage='login'
     },
     changeToSignup: function () {
-      this.userPage='signUp'
+      this.nowPage='signUp'
       this.$router.push({path: '/sign_up'});
     },
     exitShow: function () {
       this.userPage="None"
     },
     changeLogin:function(value){
-      this.userPage=value;
+      this.userPage="None";
+      this.nowPage=value;
       this.$router.push({path: '/sign_up'});
     }
   },

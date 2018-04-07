@@ -17,7 +17,7 @@
             <div class="form-group" :class="{'hastext':signupAttribute.signupEmail!='','focus':focusing==1}">
               <label @click="labelClick">邮箱</label>
               <input type="text" class="form-control" :class="{'disabled':signupStatus===1||signupStatus===3}"
-                     v-model="signupAttribute.signupEmail" :disabled="signupStatus===1||signupStatus===3" 
+                     v-model="inputEmail" :disabled="signupStatus===1||signupStatus===3" 
                      @focus="focusing=1" @blur="focusing=0">
             </div>
             <div class="form-group captcha" :class="{'hastext':signupAttribute.signupCaptcha!='','focus':focusing==2}">
@@ -60,7 +60,7 @@
               <span class="glyphicon" :class="{'glyphicon-eye-close':isLookPw==='password','glyphicon-eye-open':isLookPw==='text'}"
                 @click="isLookPw=isLookPw==='text'?'password':'text'"></span>
             </div>
-            <div class="form-group" :class="{'hastext':signupAttribute.signupName!='','focus':focusing==3}">
+            <div class="form-group" :class="{'hastext':signupAttribute.signupSchool!='','focus':focusing==3}">
               <label @click="labelClick">所属学校（非必填）</label>
               <input type="text" class="form-control" :class="{'disabled':signupStatus===5}" @focus="focusing=3" @blur="focusing=0"
                      v-model="signupAttribute.signupSchool" :disabled="signupStatus===5">
@@ -114,6 +114,7 @@ export default {
   data() {
     return {
       focusing: 0,
+      inputEmail:"",
       signupAttribute: {
         signupPassword: "",
         signupName: "",
@@ -162,9 +163,11 @@ export default {
             res => {
               var vue = this;
               var resp = res.body;
+              console.log(resp)
               vue.emailSendDate = new Date(); //记录当前时间
               if (resp.code === 0) {
                 vue.signupStatus = 2;
+                vue.emailKey=resp.data.key;
                 vue.statusMessage = undefined;
               } else {
                 vue.statusMessage = resp.error;
@@ -196,11 +199,15 @@ export default {
     },
     emailVerifyAttempt() {
       let vue = this;
+      if(vue.signupStatus==0){
+        vue.statusMessage = [{ name: "错误", message: "请重新获取邮件验证码！"}];
+        return;
+      }
       vue.signupStatus = 3;
       vue.$http
         .get(
           `${noPointHost}/api/u/verify/` +
-            vue.signupAttribute.signupEmail +
+            vue.emailKey +
             "/" +
             vue.signupAttribute.emailCode,
           {
@@ -288,7 +295,6 @@ export default {
         });
     },
     signupAttempt: function(event) {
-      this.signupStatus=6;
       rsaEncrypt(
         this.signupAttribute.signupPassword,
         this.signuppasswordEncrypt
@@ -302,9 +308,18 @@ export default {
       event.target.nextElementSibling.focus();
     },
     setSendColdTime() {
-      this.sendColdTime--;
-      if (this.sendColdTime != 0 && this.signupStatus===2) {
-        setTimeout(this.setSendColdTime, 1000);
+      let vue=this;
+      vue.sendColdTime=(60 - Math.floor((new Date().getTime() - vue.emailSendDate.getTime()) /1000));
+      let func=function(){
+        vue.sendColdTime--;
+        if (vue.sendColdTime != 0 && vue.signupStatus<4) {
+          setTimeout(func, 1000);
+        }
+      }
+      if(vue.sendColdTime<=0){
+        vue.sendColdTime=0;
+      } else{
+        setTimeout(func, 1000);
       }
     },
     fadeEnter(el, done) {
@@ -317,7 +332,6 @@ export default {
   watch: {
     signupStatus: function(newValue,oldValue) {
       if(newValue===2 && oldValue===1){
-        this.sendColdTime = 61;
         this.setSendColdTime();
       } else if(newValue===6){
         var vue = this;
@@ -335,6 +349,12 @@ export default {
         setTimeout(func, 1000);
       }
     },
+    inputEmail: function(newValue,oldValue) {
+      if(newValue!==oldValue){
+        this.signupStatus=0;
+        this.signupAttribute.signupEmail=newValue;
+      }
+    }
   }
 };
 </script>
