@@ -49,7 +49,7 @@
       <div class="text" v-if="loginStatus!=2">没有帐号？立刻<a @click="pageStatus='signUp'">注册</a>！</div>
     </div>
 
-    <div class="login-sign-up" v-if="pageStatus=='signUp'">
+    <!--div class="login-sign-up" v-if="pageStatus=='signUp'">
       <div class="title-bar">
         <div class="title">注册</div>
         <div class="subtitle">由此注册，加入南开ACM大家族吧~</div>
@@ -57,7 +57,7 @@
       <hr>
       <form>
         <transition name="fade" @enter="fadeEnter" @leave="fadeLeave" :css="false">
-          <!--第一阶段，输入邮箱名-->
+          <第一阶段，输入邮箱名>
           <div key=1 class="wrapper" v-if="!isEmailSend">
             <div class="form-group" :class="{'hastext':signupAttribute.signupEmail!='','focus':focusing==3}">
               <label @click="labelClick">邮箱</label>
@@ -83,7 +83,7 @@
             </button>
             </div>
           </div>
-          <!--第二阶段，输入验证码-->
+          <第二阶段，输入验证码>
           <div key=2 class="wrapper" v-if="isEmailSend && !isEmailVerify">
             <div class="form-group" :class="{'hastext':signupAttribute.signupEmail!='','focus':focusing==3}">
               <label @click="labelClick">邮箱</label>
@@ -116,7 +116,7 @@
             </button>
             </div>
           </div>
-          <!--第三阶段，输入其他信息-->
+          <第三阶段，输入其他信息>
           <div key=3 class="wrapper" v-if="isEmailVerify && !isSignOK">
             <div class="form-group" :class="{'hastext':signupAttribute.signupName!='','focus':focusing==10}">
               <label @click="labelClick">用户名</label>
@@ -144,7 +144,7 @@
             </button>
             </div>
           </div>
-          <!--第四阶段，注册成功-->
+          <第四阶段，注册成功>
           <div key=4 class="wrapper" v-if="isSignOK">
             <div class="message-bar" style="height:9rem;padding-top:2rem">
               <p>注册成功哒~</p>
@@ -154,7 +154,7 @@
         </transition>
       </form>
       <div class="text" v-if="!isSignOK">已有帐号？立刻<a @click="pageStatus='login'">登录</a>！</div>
-    </div>
+    </div-->
     </transition>
   </dialog-wrap>
 </template>
@@ -543,49 +543,6 @@ export default {
     },
   },
   watch: {
-    isEmailSend: function(newValue, oldValue) {
-      if (newValue) {
-        this.sendColdTime = 61;
-        this.setSendColdTime();
-      } else {
-        this.signupAttribute.signupCaptcha = "";
-        this.captchaUrl =
-          `${noPointHost}/api/captcha/sendmail?_t=` + Math.random();
-      }
-      this.focusing = 0;
-    },
-    isSignOK: function(newValue, oldValue) {
-      if (newValue) {
-        var vue=this;
-        var mesbar = document.querySelector(".message-bar");
-        var form = mesbar.parentElement;
-        var keep=form.offsetHeight;
-        form.style.height=keep+"px";
-        setTimeout(
-          function(){
-            Velocity(form, {height: keep-vue.tansitionHeight+20+"px"},{duration:300})
-            mesbar.style.margin="30px"
-            mesbar.style.height="4rem"
-        Velocity(
-          form,
-          { opacity:1 },
-          { duration: 300 }
-        );
-          }
-        ,300)
-        vue.timeToClose=5;
-        var func=function(){
-          vue.timeToClose--;
-          if(vue.timeToClose==0){
-            vue.$emit('exit');
-          }
-          else{
-            setTimeout(func, 1000);
-          }
-        }
-        setTimeout(func,1000)
-      }
-    },
     loginStatus: function(newValue, oldValue) {
       if (newValue==2) {
         var vue=this;
@@ -619,9 +576,8 @@ export default {
       }
     },
     pageStatus: function (newValue,oldValue) {
+      this.$emit('exit');
       this.$emit('changeStatus',newValue);
-      if(newValue==="signUp")this.captchaUrl=`${noPointHost}/api/captcha/sendmail?_t=` + Math.random()
-      if(newValue==="login")this.captchaUrlLogin=`${noPointHost}/api/captcha/login?_t=` + Math.random()
     },
   }
 };

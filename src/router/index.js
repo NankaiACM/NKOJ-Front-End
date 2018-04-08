@@ -15,6 +15,7 @@ import contest from '../components/contestpage/contestDetail'
 //import codePage from '../components/codePage'
 import detailsPage from '../components/detailspage/details'
 import rankPage from '../components/ranklist/rankPage'
+import signupPage from '../components/signupPage'
 Vue.use(Router)
 console.log(window.noPointHost)
 export default new Router({
@@ -54,7 +55,8 @@ export default new Router({
             component: contest
           }
         ]
-      }
+      },
+      { path: '/sign_up', component: signupPage}
     ]
   }, {
     path: '/NKPC',
