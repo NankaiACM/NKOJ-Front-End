@@ -27,9 +27,10 @@ export default {
       url: 'ws://111.231.98.20:8001',
       bot:{
         url: 'http://www.tuling123.com/openapi/api',
-        key: '0c4268644cdd47169b9966949e3dd707',
+        key: '797f060721db48dca531d74bbc847af9',
         id: '',
-        isOnHook: false
+        isOnHook: false,
+        last: '锟斤拷'
       }
     }
   },
@@ -48,9 +49,12 @@ export default {
     },
     ptpong: function () {
       var slf = this
-      clearTimeout(slf.princeton.rmt)
+      for (var i in slf.princeton.rmt) {
+        clearTimeout(slf.princeton.rmt[i])
+      }
+      slf.princeton.rmt = []
       console.log('清除了定时器')
-      slf.princeton.rmt = setTimeout(function () {
+      slf.princeton.rmt.push = setTimeout(function () {
         console.log('失恋了')
         console.log(slf.princeton)
         slf.princeton.close()
@@ -69,7 +73,9 @@ export default {
         console.log('after deal:' + dtmp)
         this.dankmus.push(dtmp)
         if (this.bot.isOnHook) {
-          this.botalk(dtmp)
+          if (dtmp.indexOf(this.bot.last) === -1) {
+            setTimeout(this.botalk, 1000, dtmp)
+          }
         }
       } else if (evt.data instanceof ArrayBuffer) {
         console.log('rec ArrayBuffer')
@@ -88,24 +94,17 @@ export default {
       console.log(this.dankmu)
       console.log('maybe fail to send')
     },
-    ptsend: function () {
-      var sendmsg = this.dankmu
+    ptsend: function (str) {
+      var sendmsg = this.dankmu || str
       this.dankmu = ''
       if (sendmsg === '\n' || sendmsg === '') return 0
       console.info('tring to send:' + sendmsg)
+      this.bot.last = sendmsg
       this.princeton.send(sendmsg)
     },
     botalk: function (str) {
       var vm = this
-      console.log(str)
-      this.$http.jsonp(vm.bot.url,{
-          params: {
-            'key': vm.bot.key,
-            'info': str,
-            'userid': '123'
-          },
-          jsonp: 'cb'
-        })
+      vm.$http.get(vm.bot.url + '?key=' +vm.bot.key + '&info=' + str + '&userid=' + this.bot.id)
         .then(function (res) {
           var jsn = res.data
           var ret = jsn.text
@@ -131,10 +130,14 @@ export default {
   mounted: function (){
     this.$nextTick(function () {
       this.ptinit()
+      this.bot.id = (~~(Math.random()*(1<<24))).toString(16)
     })
   },
   beforeDestroy: function() {
     this.princeton.close()
+    for (var i in this.princeton.rmt) {
+      clearTimeout(this.princeton.rmt[i])
+    }
   }
 }
 </script>

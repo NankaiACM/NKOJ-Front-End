@@ -131,6 +131,20 @@ export default {
               console.log(`${window.noPointHost}`)
             }
           },
+          '金坷垃好处都有啥': {
+            name: '金坷垃好处都有啥',
+            func: () => {
+              [].forEach.call($('*'), function (a) {
+                a.style.outline = "1px solid #" + (~~(Math.random()*(1<<24))).toString(16)
+              })
+            }
+          },
+          '吸收地下两千米氮磷钾': {
+            name: '吸收地下两千米氮磷钾',
+            func: () => {
+              [].forEach.call($('*'), (a) => a.style.outline = '')
+            }
+          },
           'help': {
             name: 'help',
             func: (argc, argv, envp) => {
@@ -141,6 +155,8 @@ export default {
 date: get date
 echo [arg...]: echo string
 history: get history cmds
+金坷垃好处都有啥: 谁说对了就给他
+吸收地下两千米氮磷钾: 小麦亩产一千八
 `
                 vm.screen_add_str(ret)
                 return ret
@@ -205,7 +221,7 @@ history: get history cmds
     },
     'user_cmd_lines.inputing': function (newv, oldv) {
       var legal = this.user_cmd_lines.prompt
-      if (newv.toString().length < legal.toString().length) {
+      if (newv.indexOf(legal) !== 0) {
         this.user_cmd_lines.inputing = legal
       }
     }
