@@ -17,6 +17,7 @@
     "brace": "^0.11.1",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
+    "moment": "^2.22.0",
     "vue": "^2.5.2",
     "vue-infinite-loading": "^2.2.3",
     "vue-loading-template": "^0.1.7",
