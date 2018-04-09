@@ -57,7 +57,7 @@ export default {
       })
     },
     loginAttempt: function (event) {
-      rsaEncrypt(this.loginPassword, this.passwordEncrypt)
+      window.crypto.subtle ? rsaEncrypt(this.loginPassword, this.passwordEncrypt) : passwordEncrypt(this.loginPassword)
       event.preventDefault()
     }
   }
