@@ -10,6 +10,10 @@
             <div class="media-heading" :title="item.title">{{item.title}}</div>
           </router-link>
         </div>
+        <div class="main-article">
+          <markdown-box :mdstr="item.article"></markdown-box>
+          <slot name="more-art" class="media-left"></slot>
+        </div>
         <div class="icons-line media">
           <div class="media-left">
             <span class="glyphicon glyphicon-heart-empty"></span>
@@ -51,9 +55,10 @@
             username
           </div>
           <div class="media-body rep-right">
-            replyssssssssssssssssssssss
+            replyssssssssssssssssssssss<br>sdfsdf
           </div>
         </div>
+        <slot name="more-rep" class="media"></slot>
         <div class="input-line media">
           <div class="input-wrapper meida-body">
             <div class="input-hack">{{input}}</div>
@@ -68,6 +73,7 @@
 </template>
 <script>
 import moment from 'moment'
+import markdownBox from './markdownBox.vue'
 export default {
   name: 'discussCell',
   props: ['item'],
@@ -89,6 +95,9 @@ export default {
     dd: function () {
       return moment(this.item.t_ttamp, 'x').fromNow()
     }
+  },
+  components: {
+    markdownBox
   },
   mounted: function () {
     this.$nextTick(function () {
@@ -116,7 +125,6 @@ export default {
   height: 5em;
   padding: 1em 2em;
   border-bottom: 1px solid #efefef;
-  margin-bottom: .5em;
 }
 
 .onepiece .avatar-box {
@@ -138,11 +146,17 @@ export default {
 .onepiece .info-line,
 .onepiece .rep-line,
 .onepiece .input-line {
-  height: 2.5em;
+  height: 2em;
   padding: .5em 0;
   padding-bottom: 0;
   margin: 0 2em;
   line-height: 2em;
+  transition: all .41s;
+}
+
+.onepiece .rep-line {
+  min-height: 2em;
+  height: auto;
 }
 
 .onepiece .input-line {
@@ -150,6 +164,17 @@ export default {
   height: auto;
   padding-bottom: 1em;
   margin-top: .5em;
+}
+
+.onepiece .main-article {
+  text-align: left;
+  padding: 1em 0;
+  margin: 0 2em;
+  border-bottom: 1px solid #efefef;
+}
+
+.onepiece .icons-line {
+  height: 2.5em;
 }
 
 .onepiece .icons-line span {

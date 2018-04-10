@@ -2,6 +2,7 @@ list: [
   {
     id: '123',//讨论的id
     title: 'abc',
+    article: '',
     nodes: ['a','b'],
     livid: '22',//回复
     sponsor: '',//发起
