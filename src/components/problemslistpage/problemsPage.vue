@@ -157,7 +157,7 @@ export default {
   background: #fff;
   border-radius: 2px;
   border: 2px solid #e8f1f2;
-  margin-top: @barheight+@fat-container-margin-top;
+  margin-top: @barheight+@fat-container-margin-top+@filterheight;
   margin-bottom: @barheight+@fat-container-margin-top;
 }
 

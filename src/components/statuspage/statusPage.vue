@@ -1,6 +1,6 @@
 <template>
 <div id="status-page">
-  <div class="container-fluid table-container">
+  <div class="container-fluid table-container col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
     <table id="statusTable" class="table table-hover">
       <caption></caption>
       <thead>
@@ -168,6 +168,8 @@ export default {
 }
 </script>
 <style lang="less">
+@import '../../less/global.less';
+
 a:focus {
   text-decoration: none;
 }
@@ -177,12 +179,13 @@ a:focus {
     background: #fff;
     padding: 0;
     min-height: 100%;
+    padding-top: @barheight+@fat-container-margin-top+@filterheight;
 }
 
 .table-container {
-    padding: 6em 2em;
     font-size: 0.5em;
     min-width: 600px;
+    border: 2px solid #e8f1f2;
 }
 
 .table-container table.table td {
@@ -265,7 +268,6 @@ a:focus {
 
 @media (min-width: 992px) {
     .table-container {
-        padding: 6em 4em;
         font-size: inherit;
     }
     #status-page .nav {
@@ -278,7 +280,6 @@ a:focus {
 
 @media (min-width: 1200px) {
     .table-container {
-        padding: 6em 10em;
         font-size: inherit;
     }
 }
