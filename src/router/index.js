@@ -9,6 +9,7 @@ import componentContest from '../components/componentContest'
 import problemsPage from '../components/problemPage'
 import statusPage from '../components/statuspage/statusPage'
 import discussPage from '../components/discussPage'
+import postPage from '../components/discuss/post'
 import userPage from '../components/userPage'
 import allContest from '../components/contestpage/allContest'
 import contest from '../components/contestpage/contestDetail'
@@ -39,6 +40,7 @@ export default new Router({
         }
       },
       { path: '/discuss', component: discussPage },
+      { path: '/discuss/:id', component: postPage },
       { path: '/ranklist', component: rankPage },
       { path: '/user/:id', component: userPage },
       { path: '/details/:solution_id', component: detailsPage },

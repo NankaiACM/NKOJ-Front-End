@@ -1,17 +1,21 @@
 <template>
-<div id="discuss-page" class="container-fluid">
-  <div id="discuss-list" class="col-md-8 col-lg-5 col-md-offset-1 col-lg-offset-2">
-  <discuss-cell  v-for="(item, index) in list" :key="index" :item="item">
-    <div slot="more-art" class="more-art">更多</div>
-    <div slot="more-rep" class="more-rep">更多</div>
-  </discuss-cell>
-  <pagination id="discuss-nav"></pagination>
+<div id="discuss-page" class="container-fluid row">
+  <div id="discuss-list" class="col-md-5 col-lg-5 col-md-offset-1 col-lg-offset-2">
+    <discuss-cell  v-for="(item, index) in list" :key="index" :item="item">
+      <div slot="more-art" class="more-art">更多</div>
+      <div slot="more-rep" class="more-rep">更多</div>
+    </discuss-cell>
+    <pagination id="discuss-nav"></pagination>
+  </div>
+  <div id="sider-list" class="col-md-5 col-lg-3">
+    <new-post></new-post>
   </div>
 </div>
 </template>
 <script>
 import discussCell from './discuss/discussCell.vue'
 import pagination from './problemslistpage/pagination.vue'
+import newPost from './discuss/newPost.vue'
 export default {
   name: 'discussPage',
   data: function() {
@@ -55,7 +59,8 @@ export default {
   methods: {},
   components: {
     discussCell,
-    pagination
+    pagination,
+    newPost
   }
 }
 </script>
@@ -129,5 +134,9 @@ export default {
       }
     }
   }
+}
+
+#sider-list {
+  padding-top: 60px;
 }
 </style>

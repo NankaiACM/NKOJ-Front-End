@@ -6,7 +6,7 @@
               <img class="avatar" src="https://scontent-atl3-1.cdninstagram.com/vp/a20896b90863479914f873af2708210e/5B60AB24/t51.2885-19/s150x150/15803553_930150850418977_1876360934042107904_a.jpg" :alt="item.sponsor">
             </a>
           </div>
-          <router-link to="" class="title-a media-body media-middle">
+          <router-link :to="{path: 'discuss/'+item.id}" class="title-a media-body media-middle">
             <div class="media-heading" :title="item.title">{{item.title}}</div>
           </router-link>
         </div>
@@ -22,7 +22,7 @@
             <span class="glyphicon glyphicon-comment"></span>
           </div>
           <div class="v-c media-left media-bottom">
-            <span class="glyphicon glyphicon-eye-open">{{item.v_c}}</span> 
+            <span class="glyphicon glyphicon-eye-open">{{item.v_c}}</span>
           </div>
           <div class="r-c media-left media-bottom">
             <span class="glyphicon glyphicon-pencil">{{item.r_c}}</span>

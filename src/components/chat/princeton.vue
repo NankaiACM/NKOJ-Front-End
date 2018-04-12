@@ -1,15 +1,15 @@
 <template>
   <div id="princeton">
-    <div id="huiban"><div id="html-container" v-html="dankmusHTML"></div></div>
+    <div id="huiban"><div id="html-container" v-html="danmakusHTML"></div></div>
     <div id="pt-ctl">
       <div class="pt-in-ctl">
-        <textarea class="ptin" v-model="dankmu" @keyup.enter="ptsend" placeholder="DA ZE">
+        <textarea class="ptin" v-model="danmaku" @keyup.enter="ptsend" placeholder="DA ZE">
         </textarea>
-        <span class="limit-hit">{{dankmu.length}}/{{limit_hit}}</span>
+        <span class="limit-hit">{{danmaku.length}}/{{limit_hit}}</span>
       </div>
       <div class="pt-btns">
         <div class="hook-btn" :class="{'onhook': this.bot.isOnHook}" @click="bot.isOnHook = !bot.isOnHook">hook</div>
-        <div class="hit-btn" :class="{'notban': this.dankmu !== ''}" @click="ptsend">发射电波</div>
+        <div class="hit-btn" :class="{'notban': this.danmaku !== ''}" @click="ptsend">发射电波</div>
       </div>
     </div>
     <div class="clearfix"></div>
@@ -20,11 +20,12 @@ export default {
   name: 'princeton',
   data: function () {
     return {
-      dankmu: '',
-      dankmus: [],
+      danmaku: '',
+      danmakus: [],
       limit_hit: 140,
       princeton: 0,
       url: 'ws://111.231.98.20:8001',
+      hisurl: 'http://111.231.98.20:8000/api/danmaku',
       bot:{
         url: 'http://www.tuling123.com/openapi/api',
         key: '797f060721db48dca531d74bbc847af9',
@@ -42,10 +43,18 @@ export default {
       this.princeton.onclose = this.ptcls
       this.princeton.onerror = this.pterro
       this.princeton.onpong = this.ptpong
+      this.danmakus = []
     },
     ptopen: function (evt) {
       console.log('pt open')
       console.info(evt)
+      this.$http.get(this.hisurl)
+        .then(function (res) {
+          console.log(res)
+          this.danmakus = [...this.dealhis(res.body.data), ...this.danmakus]
+        }, function (e) {
+          console.log(e)
+        })
     },
     ptpong: function () {
       var slf = this
@@ -67,11 +76,9 @@ export default {
       console.log('type:'+(typeof evt.data))
       if (typeof evt.data === 'string') {
         console.log('rec:' + evt.data)
-        var dtmp = document.createElement('div')
-        dtmp.innerHTML = evt.data
-        dtmp = dtmp.innerHTML
+        var dtmp = this.dealable(evt.data)
         console.log('after deal:' + dtmp)
-        this.dankmus.push(dtmp)
+        this.danmakus.push(dtmp)
         if (this.bot.isOnHook) {
           if (dtmp.indexOf(this.bot.last) === -1) {
             setTimeout(this.botalk, 1000, dtmp)
@@ -91,12 +98,12 @@ export default {
     pterro: function (evt) {
       console.log(evt)
       console.log('the msg:')
-      console.log(this.dankmu)
+      console.log(this.danmaku)
       console.log('maybe fail to send')
     },
     ptsend: function (str) {
-      var sendmsg = this.dankmu || str
-      this.dankmu = ''
+      var sendmsg = this.danmaku || str
+      this.danmaku = ''
       if (sendmsg === '\n' || sendmsg === '') return 0
       console.info('tring to send:' + sendmsg)
       this.bot.last = sendmsg
@@ -113,17 +120,33 @@ export default {
         }, function (e) {
           console.log(e)
         })
+    },
+    dealhis: function (his) {
+      var ret = []
+      for (let i in his) {
+        var str = ''
+        str += his[i].nickname
+        str += ': '
+        str +=his[i].message
+        ret.push(str)
+      }
+      return ret
+    },
+    dealable: function (raw) {
+      var lbl = document.createElement('div')
+      lbl.innerHTML = raw
+      return lbl.innerHTML
     }
   },
   computed: {
-    dankmusHTML: function () {
-      return '<div class="dpic">' + this.dankmus.join('</div><div class="dpic">') + '</div>'
+    danmakusHTML: function () {
+      return '<div class="dpic">' + this.danmakus.join('</div><div class="dpic">') + '</div>'
     }
   },
   watch: {
-    dankmu: function (n, o) {
+    danmaku: function (n, o) {
       if (n.length > this.limit_hit) {
-        this.dankmu = o
+        this.danmaku = o
       }
     }
   },
@@ -275,5 +298,3 @@ export default {
   cursor: pointer;
 }
 </style>
-
-
