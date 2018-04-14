@@ -1,18 +1,10 @@
 <template>
   <div class="dropmenu">
     <button type="button" @click.prevent="isMenuOpen=!isMenuOpen">
-      <span class="caret"></span>
+      <span class="caret" :class="{'open':isMenuOpen}"></span>
     </button>
       <ul class="dd-menu">
-        <li class="nickname">Hi! <span>{{userData.nickname}}</span></li>
-        <li class="hr"><hr></li>
-        <li class="link"><a href="#">我出的题目</a></li>
-        <li class="link"><a href="#">我收藏的比赛</a></li>
-        <li class="hr"><hr></li>
-        <li class="link"><a href="#">用户信息与设置</a></li>
-        <li class="link"><a href="#">注销</a></li>
-        <li class="hr"><hr></li>
-        <li class="lst-login">上次登陆日期 {{new Date(userData.lastLogin).toLocaleDateString()}}</li>
+        <slot></slot>
       </ul>
   </div>
 </template>
@@ -57,6 +49,12 @@ export default {
 }
 .dropmenu button:hover{
     color: #13293d;
+}
+.dropmenu button span{
+    transition: transform 0.3s ease;
+}
+.dropmenu .open{
+    transform: rotate(180deg);
 }
 .dropmenu .dd-menu {
 	box-shadow: rgba(31,53,78,.11) 0 0 2px 1px,rgba(0,0,0,.05) 0 2px 7px;
