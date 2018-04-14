@@ -139,6 +139,7 @@ export default {
   },
   methods: {
     emailSendAttempt: function(event) {
+      console.log(this.$route.matched[0].components.default.methods.initUser())
       //邮箱检验
       if (!this.CheckMail(this.signupAttribute.signupEmail)) {
         this.statusMessage = [{ name: "邮箱", message: "格式错误，再检查一下吧" }];

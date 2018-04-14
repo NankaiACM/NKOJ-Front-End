@@ -44,15 +44,12 @@ export default {
       loginPackege.password = this.tempPassword
       loginPackege.user = this.loginAccount
       this.$http.post(`${window.noPointHost}/api/u/login`, loginPackege,  {crossDomain : true, credentials : true}).then( (res) => {
-        console.log(res)
         if (res.body.code === 400) {
           this.loginMessage = '用户名不存在'
         } else if(res.body.code === 1){
           this.loginMessage = '用户名或密码错误'
         } else if(res.body.code === 0){
           this.loginMessage = '成功登陆！'
-          console.log(res.body.user)
-          this.$emit('userInfo', res.body.user)
         }
       })
     },

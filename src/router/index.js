@@ -21,7 +21,7 @@ import adminPage from '../components/admin/admin'
 import adminProblemPage from '../components/admin/adminProblem'
 Vue.use(Router)
 console.log(window.noPointHost)
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [{
     path: '/',
@@ -75,3 +75,8 @@ export default new Router({
   }
   ]
 })
+router.beforeEach((to, from, next) => {
+  console.log("ok")
+  next()
+})
+export default router

@@ -31,6 +31,7 @@ export default {
       userPage: 'None',
       loginUserName: 'null',
       nowPage: '',
+      userData:undefined,
     }
   },
   methods: {
@@ -62,13 +63,48 @@ export default {
       this.$router.push({path: '/sign_up'});
     },
     exitShow: function () {
-      this.userPage="None"
+      this.userPage="None";
+      this.initUser();
     },
     changeLogin:function(value){
       this.userPage="None";
       this.nowPage=value;
       this.$router.push({path: '/sign_up'});
-    }
+    },
+    initUser:function(){
+      var vue=this;
+      vue.$http
+          .get(
+            `${noPointHost}/api/user/login/check`,
+            {
+              crossDomain: true,
+              xhrFields: { withCredentials: true },
+              timeout: "8000",
+              cache: true,
+              credentials: true
+            }
+          )
+          .then(
+            res => {
+              if(res.body.code===0){
+                vue.userData = res.body.data;
+              }
+              else{
+                vue.userData = undefined;
+              }
+              console.log(vue.userData)
+            },
+            res => {
+              //wait to code
+              var vue = this;
+              console.log(res)
+            }
+          )
+          .catch(function(response) {
+            //wait to code
+            var vue = this;
+          });
+    },
   },
   computed:{
     nowPageF:function(){
@@ -76,7 +112,7 @@ export default {
         return this.$router.currentRoute.fullPath.split("/")[1]
       else
         return this.nowPage
-    }
+    },
   },
 }
 </script>
