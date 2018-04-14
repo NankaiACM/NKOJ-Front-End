@@ -17,6 +17,8 @@ import contest from '../components/contestpage/contestDetail'
 import detailsPage from '../components/detailspage/details'
 import rankPage from '../components/ranklist/rankPage'
 import signupPage from '../components/signupPage'
+import adminPage from '../components/admin/admin'
+import adminProblemPage from '../components/admin/adminProblem'
 Vue.use(Router)
 console.log(window.noPointHost)
 export default new Router({
@@ -25,6 +27,13 @@ export default new Router({
     path: '/',
     component: HOME,
     children: [
+      { path: '/admin',
+        component: adminPage,
+        children: [
+          { path: '/admin/problem', component: adminProblemPage },
+          { path: '/admin', component: adminProblemPage }
+        ]
+      },
       { path: '/home', component: componentHome },
       { path: '/problems', component: componentProblems },
       { path: '/notFound', component: componentB },
