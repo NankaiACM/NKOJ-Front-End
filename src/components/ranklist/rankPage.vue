@@ -45,17 +45,21 @@
 .bar-right {
   margin: 10px;
 }
+
 .bar-right .item {
+  font-weight: 800;
+  font-size: 1;
+  font-family: '微软雅黑';
   height: 25px !important;
   line-height: 25px !important;
   border-left: 1px solid rgba(33, 150, 243, 0.6);
   border-right: 1px solid rgba(244, 67, 54, 0.6);
 }
 .bar-right .item > span:nth-of-type(odd) {
-  color: rgba(244, 67, 54, 1);
+  color: #ec8e8e;
 }
 .bar-right .item > span:nth-of-type(even) {
-  color: rgba(33, 150, 243, 1);
+  color: #a8a8a8;
 }
 #list-box {
   margin-top: 5em;
