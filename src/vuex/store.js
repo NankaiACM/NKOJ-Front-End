@@ -19,7 +19,8 @@ export default new Vuex.Store({
       submit: 0,//监听submit按钮按下
       index: 1,
       page_length: 20
-    }
+    },
+    userData: null,
   },
   mutations: {
     setXFilter (state, payload) {
@@ -36,6 +37,6 @@ export default new Vuex.Store({
         value = ''
       }
       state.statusFilter[key] = value
-    }
+    },
   }
 })

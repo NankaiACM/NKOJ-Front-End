@@ -18,7 +18,7 @@ import rankPage from '../components/ranklist/rankPage'
 import signupPage from '../components/signupPage'
 Vue.use(Router)
 console.log(window.noPointHost)
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [{
     path: '/',
@@ -64,3 +64,8 @@ export default new Router({
   }
   ]
 })
+router.beforeEach((to, from, next) => {
+  console.log("ok")
+  next()
+})
+export default router
