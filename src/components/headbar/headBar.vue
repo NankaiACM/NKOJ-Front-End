@@ -2,7 +2,7 @@
 <div>
   <div class="head-wrapper" :class="{'add-shadow':isScrolled}">
     <div class="head-container">
-      <div class="mainIcon"><img height="50px" src="../assets/logo_new_whitemode.png" v-on:click="$emit('toHome')">
+      <div class="mainIcon"><img height="50px" src="../../assets/logo_new_whitemode.png" v-on:click="$emit('toHome')">
       </div>
       <ul class="nav navbar-nav">
         <li class="separate"><span></span></li>
@@ -25,13 +25,18 @@
           class="glyphicon glyphicon-comment"></span>讨论
         </li>
       </ul>
-      <div class="usersBar">
+      <div class="usersBar" :class="{'login-usersBar':userData.isLogin}">
         <div class="separate"></div>
-        <div class="field" :class="{'field-focus':nowPage=='signUp' && userPage!=='login'}" v-on:click="$emit('signUp')">
+        <div class="field" :class="{'field-focus':nowPage=='signUp' && userPage!=='login'}" v-on:click="$emit('signUp')"       
+            v-if="userData.isLogin===false">
           <a> 注册<span class="glyphicon glyphicon-user"></span></a>
         </div>
-        <div class="field" :class="{'field-focus':userPage=='login'}" v-on:click="$emit('logIn')">
+        <div class="field" :class="{'field-focus':userPage=='login'}" v-on:click="$emit('logIn')"  v-if="userData.isLogin===false">
           <a> 登录<span class="glyphicon glyphicon-log-in"></span></a>
+        </div>
+        <div class="userdetail" v-if="userData.isLogin">
+          <img :src="avatarUrl">
+          <dropmenu v-if="userData.isLogin" :userData="userData"></dropmenu>
         </div>
       </div>
     </div>
@@ -51,16 +56,19 @@
 </template>
 
 <script>
+  import dropmenu from './dropmenu.vue'
   export default {
     name: 'headBar',
+    components:{dropmenu},
     props: {
       nowPage: String,
-      userPage: String
+      userPage: String,
     },
     data () {
       return {
         isScrolled: false,
-        showAnnouncement: true
+        showAnnouncement: true,
+        userData: {isLogin:false}
       }
     },
     methods: {
@@ -75,12 +83,21 @@
       },
       toggleAnnouncement () {
         setTimeout(() => (this.showAnnouncement = !this.showAnnouncement), 200);
+      },
+      freshUserData(){
+        this.userData=this.$store.state.userData
       }
     },
     mounted: function () {
       this.$nextTick(function () {
         window.addEventListener('scroll', this.handleScroll)
+        this.freshUserData()
       })
+    },
+    computed:{
+      avatarUrl:function(){
+        return `${noPointHost}/api/avatar/`+ this.userData.id
+      }
     }
   }
 </script>
@@ -164,6 +181,7 @@
     float: right;
     padding-right: 20px;
     height: 60px;
+    display: flex;
   }
 
   .usersBar div.field {
@@ -199,6 +217,22 @@
 
   .usersBar div.field a span {
     padding: 0 1.1rem;
+  }
+
+  .login-usersBar{
+    padding-right: 10px;
+  }
+  .userdetail{
+    display: flex;
+    padding: 15px 20px;
+    height: 60px;
+    position: relative;
+  }
+  .userdetail img{
+    height: 100%;
+    border-radius: 30px;
+    border: 3px solid #ffffff;
+    transition: border-color 0.3s ease;
   }
 
   .announcement {
