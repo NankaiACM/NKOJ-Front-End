@@ -76,7 +76,56 @@ const router = new Router({
   ]
 })
 router.beforeEach((to, from, next) => {
-  console.log("ok")
+  let store = router.app.$options.store
+  let userinfo = store.state.userData
+  if(userinfo.check===false){
+    checkUser(store)
+    store.commit({
+      type: 'setuserDate',
+      check:true
+    })
+  }
   next()
 })
+
+function checkUser(store) {
+  Vue.http
+    .get(
+      `${noPointHost}/api/user`,
+      {
+        crossDomain: true,
+        xhrFields: { withCredentials: true },
+        timeout: "8000",
+        cache: true,
+        credentials: true
+      }
+    )
+    .then(
+      res => {
+        if (res.body.code === 0) {
+          store.commit({
+            type: 'setuserDate',
+            isLogin: true,
+            id: res.body.data.user_id,
+            nickname: res.body.data.nickname,
+            lastLogin: res.body.data.last_login
+          })
+        }
+        else {
+          vue.userData = undefined;
+        }
+        console.log(vue.userData)
+      },
+      res => {
+        //wait to code
+        var vue = this;
+        console.log(res)
+      }
+    )
+    .catch(function (response) {
+      //wait to code
+      var vue = this;
+    });
+}
+
 export default router

@@ -272,6 +272,13 @@ export default {
           res => {
             if (res.body.code === 0) {
               this.signupStatus=6;
+              this.$store.commit({
+                type: 'setuserDate',
+                isLogin: true,
+                id: res.body.data.user_id,
+                nickname: res.body.data.nickname,
+                lastLogin: res.body.data.last_login
+              })
             } else {
               this.statusMessage = res.body.error;
               this.signupStatus=4;
