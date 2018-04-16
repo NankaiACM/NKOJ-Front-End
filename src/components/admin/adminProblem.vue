@@ -3,9 +3,10 @@
   <form class="form-horizontal adminForm">
     <div class="form-group adminFormGroup">
       <label class="col-sm-3 control-label">修改/上传的题号</label>
-      <div class="col-sm-6">
+      <div class="col-sm-3">
         <input class="form-control" placeholder="problem_id" v-model="pId">
       </div>
+      <button class="col-sm-3">上传数据</button>
     </div>
     <div class="form-group adminFormGroup">
       <label class="col-sm-3 control-label">题目名称</label>
@@ -172,7 +173,7 @@
         editor.customConfig.uploadFileName = 'file'
         editor.customConfig.uploadImgHooks = {
           customInsert: function (insertImg, result, editor) {
-            var url = result.data[0]
+            let url = result.data[0]
             insertImg(`${window.noPointHost}${url}`)
           }
         }
