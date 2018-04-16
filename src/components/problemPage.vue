@@ -46,7 +46,8 @@
   </transition>
   <div>
     <div class="pro-container">
-      <h2 id="pro-title" align="left" class="col-sm-12 problemPageTitle" :class="titleclass">{{o.title ? o.title : '美好的bug正在发生'}}</h2>
+      <h2 id="pro-title" align="left" class="col-sm-12 problemPageTitle" :class="titleclass">
+        {{o.title ? o.title : '美好的bug正在发生'}}</h2>
       <div class="problemDescription" @click="iCanSee2">
         <div align="left" v-html="problemMarkDown"></div>
       </div>
@@ -60,8 +61,8 @@ export default {
   name: 'problems-page',
   data: function () {
     return {
-      problemContent: '',
-      problemMarkDownText: '# hahaha ',
+      contentObj: {},
+      keyArr: [],
       o: {//现在的视图，会被initView完全覆盖
         case: 0,
         content: 0,
@@ -85,7 +86,11 @@ export default {
   },
   computed: {
     problemMarkDown: function () {
-      return marked(this.problemMarkDownText, {sanitize : true})
+      var markdown = ''
+      for(var i in this.keyArr) {
+        markdown += '### ' + i.replace(/\b\w/g, l => l.toUpperCase()) + "\n" + this.contentObj[i]  + "\n"
+      }
+      return marked(markdown, {sanitize : false})
     }
   },
   mounted: function () {
@@ -102,7 +107,8 @@ export default {
       this.$http.get(`${window.noPointHost}/api/problem/`+this.$route.params.problemId).then(
         (res) => {
           console.log(res.body)
-          this.problemMarkDownText = res.body.data.content
+          this.keyArr = res.body.data.content
+          this.contentObj = res.body.data.content
           this.o = res.body.data
           this.isStart = true
         },
