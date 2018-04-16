@@ -224,11 +224,7 @@
       },
       problemSubmit : function (e) {
         e.preventDefault()
-        let sendPackge = {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }
+        let sendPackge = {}
         sendPackge.title = this.pTitle
         sendPackge.cases = this.pCase
         sendPackge.time_limit = this.pTime
