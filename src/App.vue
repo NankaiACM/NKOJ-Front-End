@@ -1,111 +1,102 @@
 <template>
 <div id="app">
-  <div class="shadow" v-if="isLoginShow||isSignupShow" v-on:click="exitShow"></div>
   <header>
-    <div>
-      <div id="mainIcon"><img height="50px" src="./assets/logo.png"></div>
-      <div id="mainTitle" v-on:click="changeToHome">NKU Online Judge</div>
-      <ul class="nav navbar-nav navbar-right" id="headerRight">
-        <li v-on:click="changeToSignup" class="headerRight"><a><span class="glyphicon glyphicon-user"></span> 注册</a></li>
-        <li v-on:click="changeToLogin" class="headerRight"><a><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
-      </ul>
-    </div>
+    <head-bar @toHome="localTo('home')" @logIn='changeToLogin' @signUp='changeToSignup'
+              @toProblem="localTo('problems')" @toStatus="localTo('status')" @toContest="localTo('contest')"
+              @toRank="localTo('ranklist')" @toDiscuss="localTo('discuss')" :nowPage=nowPageF :userPage=userPage>
+              <question-filter v-if="this.$route.path === '/problems'"/>
+              <status-filter v-if="this.$route.path === '/status'"/>
+    </head-bar>
   </header>
-  <aside class="hidden-xs">
-    <div><img id="userPicture" src="./assets/userPicture.jpg" v-on:click="changeToUser"></div>
-    <div id="userName">User: {{loginUserName}}</div>
-    <ul class="nav nav-pills nav-stacked" id="navigation">
-      <li id="home" v-on:click="changeToHome"><span class="glyphicon glyphicon-home"></span>主页</li>
-      <li id="problems" v-on:click="changeToProblems"><span class="glyphicon glyphicon-list"></span>题目</li>
-      <li id="status" v-on:click="changeToStatus"><span class="glyphicon glyphicon-stats"></span>评测</li>
-      <li id="contest" v-on:click="changeToContest"><span class="glyphicon glyphicon-tower"></span>比赛</li>
-      <li id="ranklist" v-on:click="changeTo404"><span class="glyphicon glyphicon-signal"></span>排名</li>
-      <li id="discuss" v-on:click="changeToDiscuss"><span class="glyphicon glyphicon-comment"></span>讨论</li>
-    </ul>
-  </aside>
   <section id="main">
-    <login-page v-if="isLoginShow"></login-page>
-    <signup-page v-if="isSignupShow"></signup-page>
-    <router-view></router-view>
+    <login-dialog v-if="userPage=='login'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-dialog>
+    <router-view class="com-container"></router-view>
   </section>
+  <component-shell></component-shell>
 </div>
 </template>
 
 <script>
-import loginPage from './components/loginPage'
-import signupPage from './components/signupPage'
+import loginDialog from './components/dialog/loginDialog'
+import headBar from './components/headbar/headBar'
+
+import questionFilter from './components/problemslistpage/questionFilter.vue'
+import statusFilter from './components/statuspage/statusFilter.vue'
+import componentShell from './components/shell/mayoi.vue'
 export default {
-  components: {loginPage, signupPage},
-  name: 'App',
+  components: {loginDialog, headBar, questionFilter, statusFilter,componentShell},
+  name: 'NKOJ',
   data: function () {
     return {
-      isLoginShow: false,
-      isSignupShow: false,
-      loginUserName: 'null'
+      userPage: 'None',
+      loginUserName: 'null',
+      nowPage: '',
+      userData:undefined,
     }
   },
   methods: {
-    changeToProblems: function () {
+    localTo: function (str) {
+      console.info(this.$route.path)
+      this.nowPage = str
       this.$router.push({
-        path: '/problems'
+        path: '/'+str
       })
+      console.info(this.$route.path)
     },
-    changeToHome: function () {
+    changeTo404: function () {
+      this.nowPage='404'
       this.$router.push({
-        path: '/home'
-      })
-    },
-    changeToStatus: function () {
-      this.$router.push({
-        path: '/status'
-      })
-    },
-    changeToContest: function () {
-      this.$router.push({
-        path: '/contest'
-      })
-    },
-    changeToDiscuss: function () {
-      this.$router.push({
-        path: '/discuss'
+        path: '/notFound'
       })
     },
     changeToUser: function () {
+      this.nowPage='User'
       this.$router.push({
         path: '/user/Saurus'
       })
     },
     changeToLogin: function () {
-      this.isLoginShow = true
+      this.userPage='login'
     },
     changeToSignup: function () {
-      this.isSignupShow = true
-    },
-    changeTo404: function () {
-      this.$router.push({
-        path: '/notFound'
-      })
+      this.nowPage='signUp'
+      this.$router.push({path: '/sign_up'});
     },
     exitShow: function () {
-      this.isLoginShow = false
-      this.isSignupShow = false
-    }
-  }
+      this.userPage="None";
+    },
+    changeLogin:function(value){
+      this.userPage="None";
+      this.nowPage=value;
+      this.$router.push({path: '/sign_up'});
+    },
+  },
+  computed:{
+    nowPageF:function(){
+      if(this.nowPage=='')
+        return this.$router.currentRoute.fullPath.split("/")[1]
+      else
+        return this.nowPage
+    },
+  },
 }
 </script>
 
-<style>
+<style lang="less">
+@import './less/global.less';
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
-.headerRight:hover{
-  cursor: pointer;
+
+#app header {
+  transform: translateZ(99px);
+  z-index: 3;
 }
+
 #navigation .glyphicon {
   position: relative;
   top: 1px;
@@ -117,13 +108,7 @@ export default {
   margin-right: 15px;
   -moz-osx-font-smoothing: grayscale;
 }
-#headerRight{
-  margin-right: 5px;
-}
-#headerRight li a{
-  color:white;
-  background: none;
-}
+
 * {
   padding: 0;
   margin: 0;
@@ -132,100 +117,20 @@ export default {
 
 header {
   width: 100%;
-  height: 50px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: #16aad8;
-  color: #fff;
+  position: fixed;
+  top: 0px;
+  z-index: 1;
 }
 
-aside {
-  width: 150px;
-  position: absolute;
-  top: 50px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgb(55, 55, 55);
+
+.com-container {
+  width: 100%;
+  min-height: 100%;
 }
 
-section>div:first-child {
-  /*use in the main components load in the section#main*/
-  overflow: auto;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-
-.shadow{
-  position: absolute;
-  left: 150px;
-  top: 50px;
-  right: 0;
-  bottom: 0;
-  opacity: 0.6;
-  background: black;
-  z-index: 3;
-}
-#navigation li {
-  padding-top: 12px;
-  padding-bottom: 12px;
-}
-
-#navigation {
-  margin-top: 30px;
-}
-
-#problems,
-#home,
-#status,
-#contest,
-#ranklist,
-#discuss {
-  background-size: 30px;
-  background-position: 25px;
-  background-repeat: no-repeat;
-  font-size: 15px;
-  vertical-align: middle;
-  cursor: pointer;
-  color: lightsteelblue;
-  font-weight: bold;
-  overflow: auto;
-}
-
-/*
-#problems{
-  background-image: url(assets/problemSet.png);
-}
-#home{
-  background-image: url(assets/home.png);
-}
-#status{
-  background-image: url(assets/status.png);
-}
-#contest{
-  background-image: url(assets/contest.png);
-}
-#ranklist{
-  background-image: url(assets/rankList.png);
-}
-#discuss{
-  background-image: url(assets/discuss.png);
-}
-*/
-
-#problems:hover,
-#home:hover,
-#status:hover,
-#contest:hover,
-#ranklist:hover,
-#discuss:hover {
-  background-color: black;
-  color: white;
+#head-filter {
+  clear: both;
+  width:100%;
 }
 
 #userPicture {
@@ -245,44 +150,11 @@ section>div:first-child {
   margin-top: 5px;
 }
 
-#mainIcon {
-  height: 50px;
-  padding-left: 20px;
-  padding-right: 20px;
-  float: left;
-}
-
-#mainTitle {
-  color: white;
-  font-size: 30px;
-  font-family: "Adobe Arabic";
-  padding: 10px 0;
-  margin: 0;
-  float: left;
-  cursor: pointer;
-}
-
 #main {
   position: absolute;
-  left: 150px;
-  top: 50px;
-  right: 0;
+  margin-top: @barheight;
+  width: 100%;
+  top: 0;
   bottom: 0;
-  overflow: hidden;
-  background: rgb(230, 230, 230);
-}
-
-#con {
-  height: 100%;
-  background-color: white;
-  color: #fff;
-  overflow: scroll;
-}
-
-@media (max-width: 768px) {
-  #main {
-    left:0;
-    right:0;
-  }
 }
 </style>

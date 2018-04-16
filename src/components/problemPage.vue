@@ -1,23 +1,30 @@
 <template>
 <div id="problemPage" >
-  <h2 align="left" class="col-sm-12 problemPageTitle">A+B Problem</h2>
+
   <transition name="up">
     <div class="submitGirl" v-if="isStart" @click="iCanSee"><img src="../assets/Akkarin.png" width="150px" height="150px"></div>
   </transition>
   <transition name="fade">
     <div id="problemSubmit" v-if="isSee">
+      <transition name="fade">
+        <div class="submitInfo" v-if="isInfo">
+          <h4>提示信息</h4><hr>
+          <div class="submitInfoText">{{submitInfo}}</div>
+        </div>
+      </transition>
       <h4>Code: {{submitLan}}</h4>
       <div id="codeArea">
         <editor v-model="submitCode" @init="editorInit" lang="c_cpp" theme="terminal" height="430px"></editor>
       </div>
       <div>
-        <button class="mobileHome btn btn-default" @mouseleave="middleInfo = false" @mouseenter="middleInfo = true" >
+        <button class="mobileHome btn btn-default" @mouseleave="middleInfo = false"
+                @mouseenter="middleInfo = true" @click="submit">
           <span class="glyphicon glyphicon glyphicon-cloud-upload"></span>
         </button>
         <div class="mobileLeft dropup">
           <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
                   @mouseleave="leftInfo = false" @mouseenter="leftInfo = true">
-              <span class="glyphicon glyphicon-book" data-toggle="tooltip"  title="提交">
+              <span class="glyphicon glyphicon-book" data-toggle="tooltip">
               </span></button>
           <ul class="dropdown-menu">
             <li><a v-on:click="setLan('C++')">C++</a></li>
@@ -38,10 +45,13 @@
     </div>
   </transition>
   <div>
-    <div class="problemDescription" @click="iCanSee2">
-      <div align="left" v-html="problemMarkDown"></div>
+    <div class="pro-container">
+      <h2 id="pro-title" align="left" class="col-sm-12 problemPageTitle" :class="titleclass">
+        {{o.title ? o.title : '美好的bug正在发生'}}</h2>
+      <div class="problemDescription" @click="iCanSee2">
+        <div align="left" v-html="problemMarkDown"></div>
+      </div>
     </div>
-
   </div>
 </div>
 </template>
@@ -51,20 +61,36 @@ export default {
   name: 'problems-page',
   data: function () {
     return {
-      problemContent: '',
-      problemMarkDownText: '# hahaha ',
+      contentObj: {},
+      keyArr: [],
+      o: {//现在的视图，会被initView完全覆盖
+        case: 0,
+        content: 0,
+        problem_id: 0,
+        restriction_id: 0,
+        submit_ac: 0,
+        submit_all: 0,
+        title: 0
+      },
       submitLan: 'C++',
       submitCode: '#include <iostream>',
       isSee: false,
       isStart: false,
       middleInfo: false,
       leftInfo: false,
-      rightInfo: false
+      rightInfo: false,
+      submitInfo: 'hhhhhhhhhhhhh',
+      isInfo: false,
+      titleclass: 'normal'
     }
   },
   computed: {
     problemMarkDown: function () {
-      return marked(this.problemMarkDownText, {sanitize : true})
+      var markdown = ''
+      for(var i in this.keyArr) {
+        markdown += '### ' + i.replace(/\b\w/g, l => l.toUpperCase()) + "\n" + this.contentObj[i]  + "\n"
+      }
+      return marked(markdown, {sanitize : false})
     }
   },
   mounted: function () {
@@ -77,10 +103,56 @@ export default {
   },
   methods: {
     initView: function () {
-      this.$http.get('http://localhost:8000/api/p/'+this.$route.params.problemId).then((res) => {
-        console.log(res.body)
-        this.problemMarkDownText = res.body
-        this.isStart = true
+      window.addEventListener('scroll', this.hScroll)
+      this.$http.get(`${window.noPointHost}/api/problem/`+this.$route.params.problemId).then(
+        (res) => {
+          console.log(res.body)
+          this.keyArr = res.body.data.content
+          this.contentObj = res.body.data.content
+          this.o = res.body.data
+          this.isStart = true
+        },
+        (e)=> {
+          console.log(e)
+        })
+    },
+    hScroll: function () {
+      var sTop = window.pageYOffset
+      console.log(sTop)
+      var tTop = document.querySelector('#pro-title').offsetTop
+      console.log(tTop)
+      if (sTop > tTop) {//不给予回复
+        this.titleclass = 'active'
+        window.removeEventListener('scroll', this.hScroll)
+      }
+    },
+    submit: function() {
+      console.log("wtf")
+      let sendPackge = {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+      sendPackge.p = this.$route.params.problemId
+      sendPackge.lang = 0;
+      sendPackge.code = this.submitCode
+      let _this = this
+      this.$http.post(`${window.noPointHost}/api/judge`, sendPackge,
+        {crossDomain : true, credentials : true}).then(res => {
+        console.log(res)
+        _this.isInfo = true;
+        if(res.body.code === 0) {
+          _this.submitInfo = '成功提交！'
+        } else {
+          _this.submitInfo = '未知错误！'
+        }
+      }, err => {
+        _this.isInfo = true;
+        if(err.body.code === 401){
+          _this.submitInfo = '请您登陆！'
+        } else {
+          _this.submitInfo = '未知错误！'
+        }
       })
     },
     setLan: function (Lan) {
@@ -99,19 +171,29 @@ export default {
     iCanSee: function (e) {
       this.isSee = !this.isSee
       this.isStart = !this.isStart
+      this.isInfo = false
       e.preventDefault()
     },
     iCanSee2: function() {
       if(this.isSee){
         this.isSee = !this.isSee
         this.isStart = !this.isStart
+        this.isInfo = false
       }
+    }
+  },
+  beforeDestroy: function () {
+    try {
+      window.removeEventListener('scroll', this.hScroll)
+    } catch (e) {
+      console.log(e)
     }
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+@import '../less/global.less';
 #problemPage pre{
   text-align: left;
   background: white;
@@ -139,9 +221,9 @@ export default {
 #problemSubmit:hover{
   box-shadow: 0 5px 5px rgba(150, 150, 150, 0.4), 0 -5px 5px rgba(150, 150, 150, 0.4), 5px 0 5px rgba(150, 150, 150, 0.4), -5px 0 5px rgba(150, 150, 150, 0.4);
 }
-.problemDescription{
+.pro-container{
   position: absolute;
-  margin-top: 100px;
+  margin-top: 150px;
   top: 0;
   left: 10%;
   right: 10%;
@@ -152,8 +234,8 @@ export default {
   transition: all 0.5s;
   border-radius: 10px;
 }
-.problemDescription:hover{
-  box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1), 0 -5px 5px rgba(150, 150, 150, 0.1), 5px 0 5px rgba(150, 150, 150, 0.1), -5px 0 5px rgba(150, 150, 150, 0.1);
+.pro-container:hover{
+  box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1), 0 0px 20px rgba(150, 150, 150, 0.1), 5px 0 5px rgba(150, 150, 150, 0.1), -5px 0 5px rgba(150, 150, 150, 0.1);
 }
 #problemSubmit nav{
   padding-right: 20px;
@@ -176,17 +258,30 @@ export default {
   font-weight: 600;
 }
 #problemPage .problemPageTitle{
-  background: #2cbfec;
-  position: fixed;
+  background: #fff;
   z-index: 2;
-  padding-left: 20px;
-  padding-top: 10px;
-  padding-bottom:  10px;
+  margin: 2em 0;
+  font-family: "微软雅黑";
+  font-weight: 400;
+  color: #233;
+  border-bottom: 1px solid #eee;
+  transition: all 1.41s;
+}
+
+#problemPage .problemPageTitle.normal {
+  border-left: 10px solid #93a7a7;
+}
+
+#problemPage .problemPageTitle.active {
+  padding: 0;
   margin: 0;
-  font-weight: 600;
-  font-family: "inherit";
-  color: white;
-  box-shadow: 0px 5px 5px rgb(150, 150, 150);
+  left: 0;
+  top: @barheight;
+  height: @filterheight;
+  line-height: @filterheight - 2em;
+  text-align: center;
+  position: fixed;
+  font-weight: 100;
 }
 
 .fade-enter-active, .fade-leave-active{
@@ -234,7 +329,9 @@ export default {
   left: 210px;
   border: none;
 }
-#problemPage .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover{
+#problemPage .navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:focus,
+.navbar-default .navbar-nav>.open>a:hover{
   background: #2cbfec;
   border-radius: 10px;
 }
@@ -270,5 +367,25 @@ export default {
 }
 .bottomInfoRight{
   left: 215px;
+}
+.submitInfo{
+  position: absolute;
+  background: white;
+  width: 150px;
+  left: 75px;
+  top: 200px;
+  border-radius: 10px;
+  z-index: 10;
+}
+.submitInfo h4{
+  padding: 5px;
+  margin: 0;
+}
+.submitInfo .submitInfoText{
+  padding: 15px;
+}
+.submitInfo hr{
+  padding: 5px;
+  margin: 0;
 }
 </style>

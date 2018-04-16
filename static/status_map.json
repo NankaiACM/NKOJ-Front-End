@@ -1,0 +1,57 @@
+[
+  {
+    "value": "107",
+    "status": "Accepted",
+    "label_class": "btn-success"
+  },
+  {
+    "value": "102",
+    "status": "Wrong Answer",
+    "label_class": "btn-danger"
+  },
+  {
+    "value": "108",
+    "status": "Presentation Error",
+    "label_class": "btn-warning"
+  },
+  {
+    "value": "101",
+    "status": "Compilation Error",
+    "label_class": "btn-danger"
+  },
+  {
+    "value": "103",
+    "status": "Runtime Error",
+    "label_class": "btn-danger"
+  },
+  {
+    "value": "105",
+    "status": "Time Limit Exceeded",
+    "label_class": "btn-warning"
+  },
+  {
+    "value": "104",
+    "status": "Memory Limit Exceeded",
+    "label_class": "btn-warning"
+  },
+  {
+    "value": "106",
+    "status": "Output Limit Exceeded",
+    "label_class": "btn-warning"
+  },
+  {
+    "value": "109",
+    "status": "Function Limit Exceeded",
+    "label_class": "btn-warning"
+  },
+  {
+    "value": "100",
+    "status": "Judging",
+    "label_class": "btn-info"
+  },
+  {
+    "value": "118",
+    "status": "System Error",
+    "label_class": "btn-warning"
+  }
+]
