@@ -148,6 +148,8 @@
     height: 100%;
     display: block;
     line-height: 50px;
+    float: left;
+    margin: 0;
   }
 
   .head-wrapper .separate {

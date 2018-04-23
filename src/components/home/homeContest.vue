@@ -1,25 +1,28 @@
 <template>
-<div id="homeContest" class="col-sm-8 col-xs-12 home-component">
-  <h3 align="left">近期比赛</h3>
-  <div id="new-contest-container">
-    <div class="col-sm-6" v-for="contest in newContests" :key="contest.id">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          <router-link :to="{path:'contest/'+contest.contestID}">
-            {{contest.contestTitle}}
-          </router-link>
+<div id="homeContest" class="home-component">
+  <home-component :title="'近期比赛'">
+    <ul>
+      <li v-for="contest in newContests" :key="contest.id">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <router-link :to="{path:'contest/'+contest.contestID}">
+              {{contest.contestTitle}}
+            </router-link>
+          </div>
+          <div class="panel-body">
+            {{contest.contestContent}}
+          </div>
         </div>
-        <div class="panel-body">
-          {{contest.contestContent}}
-        </div>
-      </div>
-    </div>
-  </div>
+      </li>
+    </ul>
+  </home-component>
 </div>
 </template>
 <script>
+import homeComponent from './homeComponent.vue'
 export default {
   name: "component-home-contest",
+  components:{homeComponent},
   data() {
     return {
       newContests: []

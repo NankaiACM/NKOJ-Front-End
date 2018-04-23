@@ -1,34 +1,39 @@
 <template>
-<div id="homeDiscuss" class="col-sm-12 col-lg-10 home-component">
-  <h3>最新讨论</h3>
-  <div class="media" v-for="talk in newDiscuss" :key="talk.id">
-    <div class="media-left">
-      <router-link :to="{path:'member/'+talk.sponsor}">
-        <img class="media-object leftimg" :src="talk.imgurl" :alt="talk.imgalt">
-      </router-link>
-    </div>
-    <div class="media-body text-muted">
-      <router-link :to="{path:'discuss/'+talk.id}" class="meadia-heading btn-link node">
-        <h4>{{talk.title}}</h4>
-      </router-link>
-      <router-link :to="{path:'discussnode/'+talk.node}" class="btn btn-xs btn-default node">
-        {{talk.node}}
-      </router-link>
-      •
-      <router-link :to="{path:'member/'+talk.sponsor}" class="member-link">
-        {{talk.sponsor}}
-      </router-link>
-      • {{stamp2str(talk.timestamp)}} • 最后回复来自
-      <router-link :to="{path:'member/'+talk.terminator}" class="member-link">
-        {{talk.terminator}}
-      </router-link>
-    </div>
-  </div>
+<div id="homeDiscuss" class=" home-component">
+  <home-component :title="'最新讨论'">
+    <ul>
+      <li class="media" v-for="talk in newDiscuss" :key="talk.id">
+        <div class="media-left">
+          <router-link :to="{path:'member/'+talk.sponsor}">
+            <img class="media-object leftimg" :src="talk.imgurl" :alt="talk.imgalt">
+          </router-link>
+        </div>
+        <div class="media-body text-muted">
+          <router-link :to="{path:'discuss/'+talk.id}" class="meadia-heading btn-link node">
+            <h4>{{talk.title}}</h4>
+          </router-link>
+          <router-link :to="{path:'discussnode/'+talk.node}" class="btn btn-xs btn-default node">
+            {{talk.node}}
+          </router-link>
+          •
+          <router-link :to="{path:'member/'+talk.sponsor}" class="member-link">
+            {{talk.sponsor}}
+          </router-link>
+          • {{stamp2str(talk.timestamp)}} • 最后回复来自
+          <router-link :to="{path:'member/'+talk.terminator}" class="member-link">
+            {{talk.terminator}}
+          </router-link>
+        </div>
+      </li>
+    </ul>
+  </home-component>
 </div>
 </template>
 <script>
+import homeComponent from './homeComponent.vue'
 export default {
   name: "component-home-discuss",
+  components:{homeComponent},
   data() {
     return {
       newDiscuss: []
@@ -92,5 +97,10 @@ export default {
 .member-link:active {
   color: #555;
   text-decoration: none;
+}
+
+.media{
+  margin: 0;
+  padding: 10px 5px;
 }
 </style>

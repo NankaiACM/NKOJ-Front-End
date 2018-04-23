@@ -1,21 +1,19 @@
 <template>
 <div id="component-home" class="container-fluid">
-  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-  <div class="row">
-    <div id="announcement" class="col-sm-12 home-component">
-      <h3 align="left">公告</h3>
-      <pre id="announcementText" v-text="announcement" class="alert" role="alert"></pre>
-    </div>
-  </div>
+  <div class="mainbar">
   <div class="row">
     <homeContest/>
+  </div>
+  <div class="row">
     <homeProblem/>
   </div>
   <div class="row">
     <homeDiscuss/>
-    <div class="col-lg-8 home-component"><princeton></princeton></div>
   </div>
 </div>
+  <div class="sidebar">
+    <div class="home-component"><princeton></princeton></div>
+  </div>
 </div>
 </template>
 <script>
@@ -49,7 +47,7 @@ export default {
     homeContest,
     homeDiscuss,
     homeProblem,
-    princeton
+    princeton,
   }
 }
 </script>
@@ -60,10 +58,21 @@ export default {
   padding: 2em;
   text-align: left;
   min-height: 100%;
+  display: flex;
 }
 
-.row {
-  display: flex;
+.mainbar{
+  flex-grow: 1;
+}
+
+.sidebar{
+  flex: 0 0 auto;
+  width: 300px;
+  margin-left: 30px;
+}
+
+.row>:first-child {
+  width: 100%;
 }
 
 .row h3 {
@@ -101,6 +110,9 @@ export default {
   #component-home.container-fluid{
     padding: 2em 6em;
   }
+  .sidebar{
+    width: 30%;
+  }
 }
 
 @media (max-width: 768px) {
@@ -109,6 +121,9 @@ export default {
   }
   .home-component {
     margin: 0;
+  }
+  .sidebar{
+    display: none;
   }
 }
 </style>

@@ -1,19 +1,22 @@
 <template>
-<div id="homeProblem" class="col-sm-4 col-xs-12 home-component">
-  <h3 align="left">新增题目</h3>
-  <div id="new-pros-container">
-    <div class="list-group">
-      <router-link class="list-group-item" v-for="problem in newProblems" :key="problem.id" :to="{path:'problem/'+problem.problemsID}">
-        {{problem.problemsName}}
-        <span class="badge visible-lg">{{problem.problemsRatio}}</span>
-      </router-link>
-    </div>
-  </div>
+<div id="homeProblem" class="home-component">
+  <home-component :title="'新增题目'">
+    <ul id="new-pros-container">
+      <li class="list-group">
+        <router-link class="list-group-item" v-for="problem in newProblems" :key="problem.id" :to="{path:'problem/'+problem.problemsID}">
+          {{problem.problemsName}}
+          <span class="badge visible-lg">{{problem.problemsRatio}}</span>
+        </router-link>
+      </li>
+    </ul>
+  </home-component>
 </div>
 </template>
 <script>
+import homeComponent from './homeComponent.vue'
 export default {
   name: "component-home-problem",
+  components:{homeComponent},
   data() {
     return {
       newProblems: []
