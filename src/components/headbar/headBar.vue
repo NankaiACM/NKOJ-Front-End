@@ -113,14 +113,13 @@
   }
 </script>
 
-<style>
+<style lang="less">
   .head-wrapper {
     display: table;
     width: 100%;
     transition: box-shadow 0.3s ease;
     box-shadow: 0 2px 6px 0 rgba(7, 17, 27, 0);
-  }
-
+}
   .add-shadow {
     box-shadow: 0 2px 6px 0 rgba(7, 17, 27, 0.1);
   }
