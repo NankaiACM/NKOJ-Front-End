@@ -19,6 +19,7 @@ import rankPage from '../components/ranklist/rankPage'
 import signupPage from '../components/signupPage'
 import adminPage from '../components/admin/admin'
 import adminProblemPage from '../components/admin/adminProblem'
+import adminContest from '../components/admin/adminContest'
 Vue.use(Router)
 console.log(window.noPointHost)
 const router = new Router({
@@ -31,7 +32,8 @@ const router = new Router({
         component: adminPage,
         children: [
           { path: '/admin/problem', component: adminProblemPage },
-          { path: '/admin', component: adminProblemPage }
+          { path: '/admin', component: adminProblemPage },
+          { path: '/admin/contest', component: adminContest }
         ]
       },
       { path: '/home', component: componentHome },
