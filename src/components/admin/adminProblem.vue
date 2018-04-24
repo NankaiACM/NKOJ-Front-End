@@ -127,6 +127,7 @@
       <hr>
       <button type="submit" class="btn btn-default" @click="problemSubmit">{{buttonInfo}}</button>
       <div style="margin-top: 20px"><label v-if="isInfo">{{submitInfo}}</label></div>
+      <div></div>
     </div>
   </form>
 </div>
