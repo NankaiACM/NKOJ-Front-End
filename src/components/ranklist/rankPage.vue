@@ -1,7 +1,7 @@
 <template>
 <div id="rankPage" class="container-fulid row">
   <rank-table v-if="viewBy === 'table'" :rankdata="ranklist"></rank-table>
-  <rank-chart v-if="viewBy === 'bar3d'"></rank-chart>
+  <rank-chart v-if="viewBy === 'bar3d'" :rawdata="chartlist"></rank-chart>
 </div>
 </template>
 <style lang="less">
@@ -19,6 +19,7 @@ export default {
         ratio:[]
         },
       ranklist: [],
+      chartlist: [],
       viewBy: 'table'
     }
   },
@@ -50,10 +51,18 @@ export default {
       //在后端完成排序功能前用这个模拟下
       this.ranklist.sort(function (a, b) {
         if(n === 'ratio')
-          return -a.solved/a.submit + b.solved/b.submit
+          return - a.solved / a.submit + b.solved / b.submit
         return -a[n] + b[n]
       })
-      return this.ranklist
+      this.chartlist = this.ranklist.map(function (i) {
+        if (n === 'ratio') {
+          i[n] = (i.solved / i.submit) * 10000
+          i[n] = parseInt(i[n]) / 100
+        }
+        console.log(i[n])
+        return {nickname: i.nickname, data: i[n]}
+      })
+      this.chartlist.sort(() => {return Math.random() > .5 ? -1 : 1})
     }
   },
   mounted: function () {

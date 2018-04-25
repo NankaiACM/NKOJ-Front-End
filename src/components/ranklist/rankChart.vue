@@ -10,11 +10,13 @@ import echarts from 'echarts'
 import 'echarts-gl'
 export default {
   name: 'rankChart',
+  props: ['rawdata'],
   data: function () {
     return {
-      rawdata: [],
-      isloop: true,
+      isloop: false,
+      loopnum: 0,
       dom: 0,
+      title: {},
       options: {
         visualMap: {
           max: 141,
@@ -24,7 +26,6 @@ export default {
         },
         tooltip: {
           formatter: (a) => {
-            console.log(a.data)
             return `name: ${a.data.name}<br>data: ${a.data.data}`
           }
         },
@@ -36,8 +37,8 @@ export default {
         },
         zAxis3D: {},
         grid3D: {
-          boxWidth: 141,
-          boxDepth: 141
+          boxWidth: 141 / 2,
+          boxDepth: 141 / 2
         },
         animation: true,
         animationYhreshold: false,
@@ -61,36 +62,54 @@ export default {
   methods: {
     init: function () {
       this.dom = echarts.init(document.querySelector('#cmain'))
-      console.log('chart init()')
-      this.$http.get('http://rapapi.org/mockjsdata/33622/bars')
-        .then(function (e) {
-          var bars = e.body.bars
-          this.rawdata = bars
-          for (let x = 0; x <= 41 / 2; x++) {
-            this.options.xAxis3D.data.push(x)
-            this.options.yAxis3D.data.push(x)
-          }
-          this.loop()
-        })
+      this.opinit()
+    },
+    opinit: function () {
+      if (!this.rawdata) return
+      var len = Math.sqrt(this.rawdata.length) + 1
+      this.options.xAxis3D.data = []
+      this.options.yAxis3D.data = []
+      for (let x = 0; x <= len; x++) {
+        this.options.xAxis3D.data.push(x)
+        this.options.yAxis3D.data.push(x)
+      }
+      this.loop()
     },
     loop: function () {
       var d = ~~(Math.random() * 10)
-      this.options.series[0].data = this.rawdata.map(function (i) {
-        i=i.o3
-        return {
-          value: [i.x, i.y, i.z + d],
-          name: 'kikc',
-          data: i.z
-          }
-      })
+      var len = Math.sqrt(this.rawdata.length)
+      len = parseInt(len)
+      var tmp = new Array()
+      var maxn = -1
+      for (var i in this.rawdata) {
+        tmp.push({
+          value: [i/len, i%len, this.rawdata[i].data + d],
+          name: this.rawdata[i].nickname,
+          data: this.rawdata[i].data
+        })
+        maxn = maxn > this.rawdata[i].data ? maxn : this.rawdata[i].data
+      }
+      this.options.series[0].data = tmp
+      this.options.visualMap.max = maxn
       this.dom.setOption(this.options)
-      if (this.isloop) setTimeout(this.loop, 1100)
+      if (this.isloop) this.loopnum = setTimeout(this.loop, 1100)
     }
   },
   mounted: function () {
     this.$nextTick(function () {
       this.init()
     })
+  },
+  computed: {
+    sortHack: function () {
+      return this.$store.getters.rankSortGet
+    }
+  },
+  watch: {
+    sortHack: function (n, o) {
+      if (this.isloop) clearTimeout(this.loopnum)
+      this.opinit()
+    }
   }
 }
 </script>
