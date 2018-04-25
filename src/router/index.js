@@ -19,6 +19,7 @@ import rankPage from '../components/ranklist/rankPage'
 import signupPage from '../components/signupPage'
 import adminPage from '../components/admin/admin'
 import adminProblemPage from '../components/admin/adminProblem'
+import test from '../components/ranklist/rankChart'
 Vue.use(Router)
 console.log(window.noPointHost)
 const router = new Router({
@@ -68,6 +69,10 @@ const router = new Router({
         ]
       },
       { path: '/sign_up', component: signupPage}
+      ,{
+        path: '/test',
+        component: test
+      }
     ]
   }, {
     path: '/NKPC',

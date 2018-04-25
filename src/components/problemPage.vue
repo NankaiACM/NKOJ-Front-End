@@ -259,7 +259,6 @@ export default {
 }
 #problemPage .problemPageTitle{
   background: #fff;
-  z-index: 2;
   margin: 2em 0;
   font-family: "微软雅黑";
   font-weight: 400;

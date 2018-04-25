@@ -21,31 +21,48 @@ export default new Vuex.Store({
       index: 1,
       page_length: 20
     },
+    rankFilter: {
+      sortBy: 'solved',
+      viewBy: 'table'
+    },
     userData: {
-      isLogin:false,
-      id:"",
-      nickname:"",
-      lastLogin: "",
+      isLogin: false,
+      id: '',
+      nickname: '',
+      lastLogin: '',
       check: false
     },
   },
+  getters: {
+    rankSortGet: function (state) {
+      return state.rankFilter.sortBy
+    },
+    rankViewGet: function (state) {
+      return state.rankFilter.viewBy
+    }
+  },
   mutations: {
-    setXFilter (state, payload) {
+    setXFilter (state, payload) {//problems filter
       if (payload.value === state.filter[payload.key]) {
         payload.value = ''
       }
       state.filter[payload.key] = payload.value
     },
-    setSFilter (state, payload) {
+    setSFilter (state, payload) {//status filter
       var key = payload.key
       var value = payload.value
-      console.log(key+value)
       if (value === state.statusFilter[key]) {
         value = ''
       }
       state.statusFilter[key] = value
     },
-    setuserDate(state,payload){
+    setRFilter (state, payload) {
+      if (payload.value === state.rankFilter[payload.key]) {
+        if (payload.key !== 'viewBy') payload.value = ''
+      }
+      state.rankFilter[payload.key] = payload.value
+    },
+    setuserDate(state, payload){
       if(payload.check===true){
         state.userData.check=true
       }
