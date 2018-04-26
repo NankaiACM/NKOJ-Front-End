@@ -39,8 +39,8 @@ export default {
         },
         zAxis3D: {},
         grid3D: {
-          boxWidth: 141 / 2,
-          boxDepth: 141 / 2
+          boxWidth: 100,
+          boxDepth: 10000
         },
         animation: true,
         animationYhreshold: false,
@@ -68,13 +68,16 @@ export default {
     },
     opinit: function () {
       if (!this.rawdata) return
-      var len = Math.sqrt(this.rawdata.length)
-      this.options.xAxis3D.data = []
+      this.options.xAxis3D.data = [0, 1, 2, 3, 4, 5, 6]
       this.options.yAxis3D.data = []
-      for (let x = 0; x < len; x++) {
-        this.options.xAxis3D.data.push(x)
-        this.options.yAxis3D.data.push(x)
+      var maxn = -1
+      for (let i in this.rawdata) {
+        if (maxn <= this.rawdata[i].posy) maxn = this.rawdata[i].posy
       }
+      for (var i = 0; i < maxn; i ++) {
+        this.options.yAxis3D.data.push(i)
+      }
+      this.options.grid3D.boxDepth = maxn * 10
       this.loop()
     },
     loop: function () {
@@ -83,13 +86,15 @@ export default {
       len = parseInt(len)
       var tmp = new Array()
       var maxn = -1
-      for (var i in this.rawdata) {
+      var rwd = this.rawdata
+      for (var i in rwd) {
         tmp.push({
-          value: [i/len, i%len, this.rawdata[i].data + d],
-          name: this.rawdata[i].nickname,
-          data: this.rawdata[i].data
+          value: [rwd[i].posx, rwd[i].posy, rwd[i].data + d],
+          name: rwd[i].nickname,
+          data: rwd[i].data
         })
-        maxn = maxn > this.rawdata[i].data ? maxn : this.rawdata[i].data
+        console.log(tmp[tmp.length-1].value)
+        maxn = maxn > rwd[i].data ? maxn : rwd[i].data
       }
       this.options.series[0].data = tmp
       this.options.visualMap.max = maxn
