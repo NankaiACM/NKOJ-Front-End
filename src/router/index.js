@@ -19,7 +19,7 @@ import rankPage from '../components/ranklist/rankPage'
 import signupPage from '../components/signupPage'
 import adminPage from '../components/admin/admin'
 import adminProblemPage from '../components/admin/adminProblem'
-import test from '../components/ranklist/rankChart'
+import test from '../components/wallpaper/wallpaper.vue'
 Vue.use(Router)
 console.log(window.noPointHost)
 const router = new Router({

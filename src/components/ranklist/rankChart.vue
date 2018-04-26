@@ -1,5 +1,6 @@
 <template>
   <div id="rank-chart">
+    <bg></bg>
     <div id="cmain">
     </div>
   </div>
@@ -7,6 +8,7 @@
 
 <script>
 import echarts from 'echarts'
+import bg from '../wallpaper/wallpaper.vue'
 import 'echarts-gl'
 export default {
   name: 'rankChart',
@@ -110,6 +112,9 @@ export default {
       if (this.isloop) clearTimeout(this.loopnum)
       this.opinit()
     }
+  },
+  components: {
+    bg
   }
 }
 </script>
