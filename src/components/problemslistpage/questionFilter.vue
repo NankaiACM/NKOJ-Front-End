@@ -45,7 +45,6 @@ export default {
   },
   methods: {
     setFilter: function (key, value) {
-      console.log(value)
       this.$store.commit({
         type: 'setXFilter',
         key: key,
@@ -55,7 +54,6 @@ export default {
   },
   mouted: function () {
     this.$nextTick(()=>{
-      console.log('dfsdf')
     })
   }
 }

@@ -6,6 +6,7 @@
               @toRank="localTo('ranklist')" @toDiscuss="localTo('discuss')" :nowPage=nowPageF :userPage=userPage>
               <question-filter v-if="this.$route.path === '/problems'"/>
               <status-filter v-if="this.$route.path === '/status'"/>
+              <rank-filter v-if="this.$route.path === '/ranklist'"></rank-filter>
     </head-bar>
   </header>
   <section id="main">
@@ -22,9 +23,10 @@ import headBar from './components/headbar/headBar'
 
 import questionFilter from './components/problemslistpage/questionFilter.vue'
 import statusFilter from './components/statuspage/statusFilter.vue'
+import rankFilter from './components/ranklist/rankFilter.vue'
 import componentShell from './components/shell/mayoi.vue'
 export default {
-  components: {loginDialog, headBar, questionFilter, statusFilter,componentShell},
+  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell},
   name: 'NKOJ',
   data: function () {
     return {
