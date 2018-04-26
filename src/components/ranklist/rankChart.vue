@@ -68,10 +68,10 @@ export default {
     },
     opinit: function () {
       if (!this.rawdata) return
-      var len = Math.sqrt(this.rawdata.length) + 1
+      var len = Math.sqrt(this.rawdata.length)
       this.options.xAxis3D.data = []
       this.options.yAxis3D.data = []
-      for (let x = 0; x <= len; x++) {
+      for (let x = 0; x < len; x++) {
         this.options.xAxis3D.data.push(x)
         this.options.yAxis3D.data.push(x)
       }

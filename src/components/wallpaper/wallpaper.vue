@@ -7,7 +7,7 @@
 <script>
 let _r = Math.random
 let _p = parseInt
-let _t = () => _p((_r() - .5) * 8)
+let _t = () => _p((_r() - .5) * 5)
 let _u = () => _p(_r() * 255)
 let _v = () => _r() - .2
 let _s = (x, y) => `${x + _t()}% ${y + _t()}%,${x + _t()}% ${y + _t()}%,${x + _t()}% ${y + _t()}%`
