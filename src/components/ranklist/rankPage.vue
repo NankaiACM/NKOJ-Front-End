@@ -59,7 +59,6 @@ export default {
           i[n] = (i.solved / i.submit) * 10000
           i[n] = parseInt(i[n]) / 100
         }
-        console.log(i[n])
         return {nickname: i.nickname, data: i[n]}
       })
       this.chartlist.sort(() => {return Math.random() > .5 ? -1 : 1})
@@ -80,6 +79,7 @@ export default {
   },
   watch: {
     sortHack: function (n, o) {
+      console.log(n)
       this.updataSort(n)
     },
     viewHack: function (n, o) {

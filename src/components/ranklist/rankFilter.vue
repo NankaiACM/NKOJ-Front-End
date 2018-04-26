@@ -25,7 +25,7 @@ export default {
           key: 'sortBy',
           option: [
             {text: 'amount of submission', key: 'submit'},
-            {text: 'amount of Acceptance', key: 'accept'},
+            {text: 'amount of Acceptance', key: 'solved'},
             {text: 'Ratio', key: 'ratio'}
           ]
         },
