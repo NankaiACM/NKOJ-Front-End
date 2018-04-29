@@ -20,14 +20,10 @@ export default {
   data: function () {
     return {
       menu: {
-        sort: {
-          text: 'Sort By',
-          key: 'sortBy',
-          option: [
-            {text: 'amount of submission', key: 'submit'},
-            {text: 'amount of Acceptance', key: 'solved'},
-            {text: 'Ratio', key: 'ratio'}
-          ]
+        time: {
+          text: 'Time Filter',
+          key: 'timeBy',//sortby
+          option: []
         },
         view: {
           text: 'View By',
@@ -61,6 +57,16 @@ export default {
       var UILS = ['NULL', 'null', 'undefined']
       var rndIndx = Math.floor(Math.random() * UILS.length + 1) - 1
       return UILS[rndIndx]
+    }
+  },
+  computed: {
+    TFOps: function () {
+      return this.$store.getters.rankFTOpsGet
+    }
+  },
+  watch: {
+    TFOps: function (n, o) {
+      this.menu.time.option = n
     }
   }
 }

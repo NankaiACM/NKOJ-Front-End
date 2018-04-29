@@ -13,57 +13,78 @@ export default {
   name: "rankPage",
   data: function () {
     return {
-      rankdata: {
-        solved:[],
-        submit:[],
-        ratio:[],
-        standard: []
-        },
       ranklist: [],
       chartlist: [],
-      viewBy: 'table'
+      rawdata: [],
+      viewBy: 'table',
+      timeBy: '',
     }
   },
   methods: {
     getData: function () {
-      var list=['solved', 'submit', 'ratio', 'myrank']
-      for (let i in list) {
-        var params = {'sort': list[i]}
-        this.$http.get('http://rapapi.org/mockjsdata/33622/rank',params)
-          .then(function (e) {
-            if (!e.body) return
-            if (!e.body.ranklist) return
-            this.rankdata[list[i]]=e.body.ranklist
-            this.updataSort(this.$store.state.rankFilter.sortBy)
-          })
-      }
-    },
-    updataSort: function (n) {
-      if (!this.rankdata[n]) return []
-      this.ranklist = this.rankdata[n]
-      /* 也许有一天会需要这个吧
-      if (n === 'nickname') {
-        this.ranklist.sort(function (a, b) {
-          return ( a.nickname > b.nickname ) ? 1 : ( (a.nickname < b.nickname ) ? -1 : 0 )
+      this.$http.get('http://rapapi.org/mockjsdata/33622/nrank')
+        .then(function (e) {
+          if (!e.body) return
+          if (!e.body.track) return
+          this.rawdata = e.body.track
+          this.chartlist = this.getChartList(this.rawdata)
+          this.getTrackFilterOption(this.rawdata)
         })
-        return
+    },
+    getTrackFilterOption: function (pies) {//获取filter的参数
+      var ops = []
+      for (let i in pies) {
+        var key = pies[i].key
+        var text  = pies[i].text
+        ops.push({key: key, text: text})
       }
-      */
-      // 在后端完成排序功能前用这个模拟下
-      this.ranklist.sort(function (a, b) {
-        if(n === 'ratio')
-          return - a.solved / a.submit + b.solved / b.submit
-        return -a[n] + b[n]
+      this.pushFilterCommit(ops)
+      if (this.timeBy === '') this.$store.commit({
+        type: 'setRFilter',
+        key: 'timeBy',
+        value: ops[0].key
       })
-      /* 后端完成后按需传入posx，posy即可 */
-      this.chartlist = this.ranklist.map(function (i) {
-        if (n === 'ratio') {
-          i[n] = (i.solved / i.submit) * 10000
-          i[n] = parseInt(i[n]) / 100
+    },
+    getRankList: function (n) {
+      var res = this.rawdata.filter((item) => {
+        return item.key === n
+      })
+      res = res[0]
+      res = res.data
+      return res
+    },
+    getChartList: function (raw) {
+      var listdata = []
+      var xdata = []
+      var ydata = []
+      var ymaxn = -1
+      for (let i in raw) {
+        let track = raw[i]
+        xdata.push(track.text)
+        if (track.data.length > ymaxn) ymaxn = track.data.length
+        for (let j in track.data) {
+          let item = track.data[j]
+          var p = {
+            posx: track.text,
+            posy: j * 1, 
+            rank: item.rank,
+            faction: item.faction,
+            nickname: item.nickname,
+            solved: item.solved,
+            submit: item.submit,
+          }
+          listdata.push(p)
         }
-        return {nickname: i.nickname, data: i[n], posx: i.posx, posy: i.posy}
+      }
+      for (let i = 1; i <= ymaxn; i++) ydata.push(i)
+      return {listdata, xdata, ydata}
+    },
+    pushFilterCommit: function (ops) {//向store中推送时间选项参数
+      this.$store.commit({
+        type: 'pushRFOption',
+        key: 'ops',
+        value: ops
       })
-      // this.chartlist.sort(() => {return Math.random() > .5 ? -1 : 1})
     }
   },
   mounted: function () {
@@ -72,17 +93,17 @@ export default {
     })
   },
   computed: {
-    sortHack: function () {
-      return this.$store.getters.rankSortGet
+    timeHack: function () {
+      return this.$store.getters.rankTimeGet
     },
     viewHack: function () {
       return this.$store.getters.rankViewGet
     }
   },
   watch: {
-    sortHack: function (n, o) {
-      console.log(n)
-      this.updataSort(n)
+    timeHack: function (n, o) {
+      this.timeBy = n
+      this.ranklist = this.getRankList(n)
     },
     viewHack: function (n, o) {
       this.viewBy = n

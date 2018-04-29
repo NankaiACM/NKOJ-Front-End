@@ -7,7 +7,7 @@
 <script>
 let _r = Math.random
 let _p = parseInt
-let _t = () => _p((_r() - .5) * 5)
+let _t = (v = 5) => _p((_r() - .5) * v)
 let _u = () => _p(_r() * 255)
 let _v = () => _r() - .2
 let _s = (x, y) => `${x + _t()}% ${y + _t()}%,${x + _t()}% ${y + _t()}%,${x + _t()}% ${y + _t()}%`
@@ -36,8 +36,8 @@ export default {
         var rawstyle = `clip-path: polygon(${_s(d.x, d.y)});background:rgba(${_u()},${_u()},${_u()},${a < 0 ? .2 : a});`
         var k = {
           style: rawstyle,
-          x: d.x,
-          y: d.y
+          x: d.x + _t(10),
+          y: d.y + _t(10)
           }
         this.trangles.push(k)
       }

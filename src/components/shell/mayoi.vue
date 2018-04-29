@@ -135,7 +135,7 @@ export default {
             name: '金坷垃好处都有啥',
             func: () => {
               [].forEach.call($('*'), function (a) {
-                a.style.outline = "1px solid #" + (~~(Math.random()*(1<<24))).toString(16)
+                a.style.outline = '1px solid #' + (~~(Math.random()*(1<<24))).toString(16)
               })
             }
           },
