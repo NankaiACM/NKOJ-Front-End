@@ -1,7 +1,7 @@
 <template>
   <div id="rank-filter-base" class="container-fluid">
     <ul class="nav nav-pills" id="rank-bar-control">
-      <li class="navbar-right"><a>my rank</a></li>
+      <li class="navbar-right" @click="filterCommit('viewBy','me')"><a>my rank</a></li>
       <li  v-for="(item, index) in menu" :key="index" class="navbar-right"><a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{item.text}}<span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li v-for="(ii, kk) in item.option" :key="kk" @click="filterCommit(item.key,ii.key)"><a>

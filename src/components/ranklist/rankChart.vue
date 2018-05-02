@@ -8,8 +8,8 @@
 
 <script>
 import echarts from 'echarts'
-import bg from '../wallpaper/wallpaper.vue'
 import 'echarts-gl'
+import bg from '../wallpaper/wallpaper.vue'
 let _er = (i) => ('FF' + i.toString(16)).substr(-2)
 export default {
   name: 'rankChart',
@@ -80,7 +80,7 @@ export default {
               var er = _er(params.data.rank)
               return '#' + er + er + er
             },
-            borderWidth: 1,
+            borderWidth: 100,
             borderColor: '#fff',
           },
           emphasis: {

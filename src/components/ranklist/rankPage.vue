@@ -2,6 +2,7 @@
 <div id="rankPage" class="container-fulid row">
   <rank-table v-if="viewBy === 'table'" :rankdata="ranklist"></rank-table>
   <rank-chart v-if="viewBy === 'bar3d'" :rawdata="chartlist"></rank-chart>
+  <rank-me v-if="viewBy === 'me'"></rank-me>
 </div>
 </template>
 <style lang="less">
@@ -9,6 +10,7 @@
 <script>
 import rankTable from './rankTable.vue'
 import rankChart from './rankChart.vue'
+import rankMe from './rankMe.vue'
 export default {
   name: "rankPage",
   data: function () {
@@ -112,7 +114,8 @@ export default {
   },
   components: {
     rankTable,
-    rankChart
+    rankChart,
+    rankMe
   }
 }
 </script>
