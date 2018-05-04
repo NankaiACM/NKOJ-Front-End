@@ -45,10 +45,10 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: '/var/www/app/data/dist/index.html',
+    index: '/var/www/front/dist/index.html',
 
     // Paths
-    assetsRoot: '/var/www/app/data/dist',
+    assetsRoot: '/var/www/front/dist',
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 
