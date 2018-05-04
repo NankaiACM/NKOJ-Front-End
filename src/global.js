@@ -1,4 +1,4 @@
 //window.noPointHost = 'localhost'
-window.noPointHost = window.location.host
+window.noPointHost = ''
 window.noPointPort = ''
 console.log('set')
