@@ -2,7 +2,7 @@
 <div id="Problems" class="container">
   <div class="fat-container container-fluid col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
   <table id="ProblemTable" class="table table-hover">
-    <thead>
+    <thead class="thread-height">
       <tr>
         <th class="problem-status"></th>
         <th class="problemTableHeaderCol1">编号</th>
@@ -174,13 +174,7 @@ export default {
 }
 
 #ProblemTable thead tr th {
-  color: #2cbfec;
   font-size: 1.4em;
-  font-weight: 300;
-  font-family: '微软雅黑';
-  border: 0;
-  height: 6rem;
-  text-align: center;
 }
 
 #ProblemTable tbody tr td:first-child {

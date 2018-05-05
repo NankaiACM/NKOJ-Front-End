@@ -98,6 +98,7 @@ export default {
     init: function () {
       this.dom = echarts.init(document.querySelector('#cmain'))
       this.opinit()
+      window.onresize = this.dom.resize()
     },
     opinit: function () {
       if (!this.rawdata) return

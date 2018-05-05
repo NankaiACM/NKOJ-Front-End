@@ -1,8 +1,10 @@
 <template>
-<div id="rankPage" class="container-fulid row">
-  <rank-table v-if="viewBy === 'table'" :rankdata="ranklist"></rank-table>
-  <rank-chart v-if="viewBy === 'bar3d'" :rawdata="chartlist"></rank-chart>
-  <rank-me v-if="viewBy === 'me'"></rank-me>
+<div id="rankPage" class="container-fulid">
+  <div class="view-container container-fluid col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
+    <rank-table v-if="viewBy === 'table'" :rankdata="ranklist"></rank-table>
+    <rank-chart v-if="viewBy === 'bar3d'" :rawdata="chartlist"></rank-chart>
+    <rank-me v-if="viewBy === 'me'"></rank-me>
+  </div>
 </div>
 </template>
 <style lang="less">
@@ -119,3 +121,17 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+@import '../../less/global.less';
+@rtop: @barheight+@fat-container-margin-top+@filterheight;
+#rankPage {
+  .view-container {
+    border-radius: 2px;
+    border: 2px solid #e8f1f2;
+    margin-top: @rtop;
+    margin-bottom: @barheight+@fat-container-margin-top;
+    //min-height: calc(~"100vh - @{rtop}");
+    min-height: calc(100vh - calc(@rtop));
+  }
+}
+</style>

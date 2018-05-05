@@ -1,5 +1,5 @@
 <template>
-  <div id="rank-me">
+  <div id="rank-me" class="container-fluid">
     <div id="imain">
     </div>
   </div>
@@ -42,6 +42,7 @@ export default {
     init: function () {
       this.dom = echarts.init(document.querySelector('#imain'))
       this.opinit()
+      window.onresize = this.dom.resize
     },
     opinit: function () {
       this.$http.get('http://rapapi.org/mockjsdata/33622/rankme')
@@ -78,9 +79,14 @@ export default {
 </script>
 <style lang="less" scoped>
 #rank-me {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   #imain {
-    width: 1000px;
-    height: 800px;
+    width: 100%;
+    height: 100%;
   }
 }
 </style>
