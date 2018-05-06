@@ -145,6 +145,27 @@ export default {
               [].forEach.call($('*'), (a) => a.style.outline = '')
             }
           },
+          'wallpaper': {
+            name: 'wallpaper',
+            func: function (argc, argv, envp) {
+              if (argc > 2) return
+              switch (argv[1]) {
+                case 'stop':
+                  window.localStorage.setItem('wallpaper-run', 'false')
+                  if (! window.pJSDom[0]) break
+                  window.pJSDom[0].pJS.fn.vendors.destroypJS()
+                  window['pJSDom'] = []
+                  break
+                case 'start':
+                window.localStorage.setItem('wallpaper-run', 'true')
+                  window.Alex()
+                  break
+                default:
+                  break
+              }
+              return 0
+            }
+          },
           'help': {
             name: 'help',
             func: (argc, argv, envp) => {

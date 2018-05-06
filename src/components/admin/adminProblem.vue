@@ -229,7 +229,7 @@
         sendPackge.cases = this.pCase
         sendPackge.time_limit = this.pTime
         sendPackge.memory_limit = this.pMemory
-        sendPackge.type = 1
+        sendPackge.type = 0
         sendPackge.special_judge = this.pSpj
         sendPackge.detail_judge = this.pDM
         sendPackge.tags = this.pTag.split('=')
@@ -240,6 +240,7 @@
         sendPackge.sample_output = this.pSOutput
         sendPackge.hint = this.pHint
         sendPackge.level = this.pLevel
+        console.log(JSON.stringify(sendPackge))
         let _this = this
         this.$http.post(this.isModify ? `${window.noPointHost}/api/admin/problem/update/${this.pId}`
             : `${window.noPointHost}/api/admin/problem/add`, sendPackge,

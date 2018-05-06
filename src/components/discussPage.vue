@@ -1,13 +1,13 @@
 <template>
 <div id="discuss-page" class="container-fluid row">
-  <div id="discuss-list" class="col-md-5 col-lg-5 col-md-offset-1 col-lg-offset-2">
+  <div id="discuss-list" class="col-md-9">
     <discuss-cell  v-for="(item, index) in list" :key="index" :item="item">
       <div slot="more-art" class="more-art">更多</div>
       <div slot="more-rep" class="more-rep">更多</div>
     </discuss-cell>
     <pagination id="discuss-nav"></pagination>
   </div>
-  <div id="sider-list" class="col-md-5 col-lg-3">
+  <div id="sider-list" class="col-md-3">
     <new-post></new-post>
   </div>
 </div>

@@ -26,7 +26,7 @@
     <div>
       <h3><span class="glyphicon glyphicon-th"></span>测试点信息</h3>
       <div class="clearfix">
-      <div v-for="(item, index) in evaluate_nodes" class="eva-node alert alert-info">
+      <div v-for="(item, index) in evaluate_nodes" class="eva-node alert alert-info" :key="index">
         <div>
           {{index}}
           <div>{{item.status_str}}</div>

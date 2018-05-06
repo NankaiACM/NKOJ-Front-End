@@ -1,6 +1,6 @@
 <template>
 <div id="status-page">
-  <div class="container-fluid table-container col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
+  <div class="container-fluid table-container">
     <table id="statusTable" class="table table-hover">
       <thead class="thread-height">
         <tr>
@@ -180,7 +180,6 @@ a:focus {
     background: #fff;
     padding: 0;
     min-height: 100%;
-    padding-top: @barheight+@fat-container-margin-top+@filterheight;
 }
 
 .table-container {

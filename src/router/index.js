@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HOME from '../App'
-import NKPC from "../App2"
+import HOME from '../NKOJ'
+import NKPC from "../NKPC"
 import componentProblems from '../components/problemslistpage/problemsPage'
 import componentHome from '../components/home/home'
 import componentB from '../components/componentB'
@@ -19,7 +19,7 @@ import rankPage from '../components/ranklist/rankPage'
 import signupPage from '../components/signupPage'
 import adminPage from '../components/admin/admin'
 import adminProblemPage from '../components/admin/adminProblem'
-import test from '../components/wallpaper/wallpaper.vue'
+import test from '../components/wallpaper/wallpaper'
 Vue.use(Router)
 console.log(window.noPointHost)
 const router = new Router({

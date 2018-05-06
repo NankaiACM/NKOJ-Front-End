@@ -1,6 +1,6 @@
 <template>
 <div id="Problems" class="container">
-  <div class="fat-container container-fluid col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
+  <div class="fat-container container-fluid">
   <table id="ProblemTable" class="table table-hover">
     <thead class="thread-height">
       <tr>
@@ -157,8 +157,6 @@ export default {
   background: #fff;
   border-radius: 2px;
   border: 2px solid #e8f1f2;
-  margin-top: @barheight+@fat-container-margin-top+@filterheight;
-  margin-bottom: @barheight+@fat-container-margin-top;
 }
 
 #Problems td a {

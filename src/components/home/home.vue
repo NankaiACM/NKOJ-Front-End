@@ -1,18 +1,22 @@
 <template>
-<div id="component-home" class="container-fluid">
-  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div id="component-home">
+  <div>
+    <!--
   <div class="row">
     <div id="announcement" class="col-sm-12 home-component">
       <h3 align="left">公告</h3>
       <pre id="announcementText" v-text="announcement" class="alert" role="alert"></pre>
     </div>
   </div>
+    -->
   <div class="row">
-    <homeContest/>
-    <homeProblem/>
+    <home-contest></home-contest>
   </div>
   <div class="row">
-    <homeDiscuss/>
+    <home-problem></home-problem>
+  </div>
+  <div class="row">
+    <home-discuss></home-discuss>
     <div class="col-lg-8 home-component"><princeton></princeton></div>
   </div>
 </div>
@@ -27,7 +31,7 @@ export default {
   name: 'component-home',
   data: function() {
     return {
-      announcement: '',
+      //announcement: '',
       homeContestList: [],
       newProblems: [],
       newContests: []
@@ -39,11 +43,13 @@ export default {
     })
   },
   methods: {
+    /*
     initView: function() {
       this.$http.get('/static/announcement.json').then(function(res) {
         this.announcement = res.body.data
       })
     }
+    */
   },
   components: {
     homeContest,
@@ -56,8 +62,8 @@ export default {
 
 <style lang="less">
 @import '../../less/global.less';
-#component-home.container-fluid {
-  padding: 2em;
+#component-home{
+  background: none;
   text-align: left;
   min-height: 100%;
 }
@@ -72,12 +78,12 @@ export default {
 }
 
 .home-component {
-  background: #fff;
   height: auto;
   margin: 1em;
   padding: 1em;
 }
 
+/*
 #announcement {
   cursor: pointer;
 }
@@ -96,6 +102,7 @@ export default {
   word-break: break-word;
   border: @home-com-border;
 }
+*/
 
 @media (min-width: 1241px) {
   #component-home.container-fluid{

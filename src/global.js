@@ -1,4 +1,3 @@
-//window.noPointHost = 'localhost'
-window.noPointHost = 'http://111.231.98.20'
+window.noPointHost = 'http://oj.vampire.rip'
 window.noPointPort = ''
 console.log('set')

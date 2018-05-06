@@ -1,6 +1,6 @@
 <template>
 <div id="rankPage" class="container-fulid">
-  <div class="view-container container-fluid col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
+  <div class="view-container container-fluid">
     <rank-table v-if="viewBy === 'table'" :rankdata="ranklist"></rank-table>
     <rank-chart v-if="viewBy === 'bar3d'" :rawdata="chartlist"></rank-chart>
     <rank-me v-if="viewBy === 'me'"></rank-me>
@@ -128,9 +128,6 @@ export default {
   .view-container {
     border-radius: 2px;
     border: 2px solid #e8f1f2;
-    margin-top: @rtop;
-    margin-bottom: @barheight+@fat-container-margin-top;
-    //min-height: calc(~"100vh - @{rtop}");
     min-height: calc(100vh - calc(@rtop));
   }
 }

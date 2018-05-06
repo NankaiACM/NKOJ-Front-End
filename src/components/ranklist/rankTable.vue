@@ -1,5 +1,5 @@
 <template>
-  <div id="list-box" class="media-list col-md-10 col-md-offset-1">
+  <div id="list-box" class="media-list">
   <div class="user-cell media bar-cell thread-height">
     <div class="media-left media-middle">
       <div class="bar-img-place" @click="css.tablesort = 'myrank'">

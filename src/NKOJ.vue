@@ -9,9 +9,10 @@
               <rank-filter v-if="this.$route.path === '/ranklist'"></rank-filter>
     </head-bar>
   </header>
-  <section id="main">
+  <wall-paper></wall-paper>
+  <section id="main" class="container-fluid">
     <login-dialog v-if="userPage=='login'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-dialog>
-    <router-view class="com-container"></router-view>
+    <router-view class="com-container col-md-10 col-md-offset-1" ></router-view>
   </section>
   <component-shell></component-shell>
 </div>
@@ -25,8 +26,10 @@ import questionFilter from './components/problemslistpage/questionFilter.vue'
 import statusFilter from './components/statuspage/statusFilter.vue'
 import rankFilter from './components/ranklist/rankFilter.vue'
 import componentShell from './components/shell/mayoi.vue'
+import wallPaper from './components/wallpaper/wallpaper.vue'
+
 export default {
-  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell},
+  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell, wallPaper},
   name: 'NKOJ',
   data: function () {
     return {
@@ -90,11 +93,12 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  //text-align: center; ぱが！
   color: #2c3e50;
 }
 
 #app header {
+  text-align: center;
   transform: translateZ(99px);
   z-index: 3;
 }
@@ -126,8 +130,9 @@ header {
 
 
 .com-container {
-  width: 100%;
   min-height: 100%;
+  margin-top: @filterheight;
+  margin-bottom: @fat-container-margin-top;
 }
 
 #head-filter {
