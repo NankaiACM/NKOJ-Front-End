@@ -2,10 +2,10 @@
 <div v-if="isAdmin">
   <nav class="navbar navbar-default sidebar">
     <ul class="nav navbar-nav">
-      <li role="presentation"><a href="#">Problems</a></li>
-      <li role="presentation"><a href="#">Contests</a></li>
-      <li role="presentation"><a href="#">Users</a></li>
-      <li role="presentation"><a href="#">Status</a></li>
+      <li role="presentation"><a href="/admin/problem">Problems</a></li>
+      <li role="presentation"><a href="/admin/contest">Contests</a></li>
+      <li role="presentation"><a href="/admin/user">Users</a></li>
+      <li role="presentation"><a href="/admin/status">Status</a></li>
     </ul>
   </nav>
   <router-view></router-view>

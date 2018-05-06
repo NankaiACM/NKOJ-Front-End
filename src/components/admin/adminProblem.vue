@@ -127,6 +127,7 @@
       <hr>
       <button type="submit" class="btn btn-default" @click="problemSubmit">{{buttonInfo}}</button>
       <div style="margin-top: 20px"><label v-if="isInfo">{{submitInfo}}</label></div>
+      <div></div>
     </div>
   </form>
 </div>
@@ -229,7 +230,7 @@
         sendPackge.cases = this.pCase
         sendPackge.time_limit = this.pTime
         sendPackge.memory_limit = this.pMemory
-        sendPackge.type = 1
+        sendPackge.type = "0"
         sendPackge.special_judge = this.pSpj
         sendPackge.detail_judge = this.pDM
         sendPackge.tags = this.pTag.split('=')
@@ -263,7 +264,7 @@
       createEditor: function (x, y) {
         let editor = new Editor(x)
         editor.customConfig.onchange = (html) => {
-          y = html
+          this[y] = html
         }
         editor.customConfig.uploadImgServer = `${window.noPointHost}/api/admin/upload`
         editor.customConfig.uploadFileName = 'file'
@@ -274,15 +275,15 @@
           }
         }
         editor.create()
-        editor.txt.html(y)
+        editor.txt.html(this[y])
       },
       initView: function () {
-        this.createEditor(this.$refs.pDescription, this.pDescription)
-        this.createEditor(this.$refs.pInput, this.pInput)
-        this.createEditor(this.$refs.pOutput, this.pOutput)
-        this.createEditor(this.$refs.pSInput, this.pSInput)
-        this.createEditor(this.$refs.pSOutput, this.pSOutput)
-        this.createEditor(this.$refs.pHint, this.pHint)
+        this.createEditor(this.$refs.pDescription, "pDescription")
+        this.createEditor(this.$refs.pInput, "pInput")
+        this.createEditor(this.$refs.pOutput, "pOutput")
+        this.createEditor(this.$refs.pSInput, "pSInput")
+        this.createEditor(this.$refs.pSOutput, "pSOutput")
+        this.createEditor(this.$refs.pHint, "pHint")
       }
     },
     mounted() {

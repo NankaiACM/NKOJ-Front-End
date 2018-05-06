@@ -605,7 +605,7 @@ var config = {
     }],
 
     // 编辑区域的 z-index
-    zIndex: 10000,
+    zIndex: 0,
 
     // 是否开启 debug 模式（debug 模式下错误会 throw error 形式抛出）
     debug: false,
@@ -683,7 +683,7 @@ var config = {
     // 自定义上传图片超时时间 ms
     uploadImgTimeout: 10000,
 
-    // 上传图片 hook 
+    // 上传图片 hook
     uploadImgHooks: {
         // customInsert: function (insertLinkImg, result, editor) {
         //     console.log('customInsert')
