@@ -113,7 +113,8 @@ function checkUser(store) {
             isLogin: true,
             id: res.body.data.user_id,
             nickname: res.body.data.nickname,
-            lastLogin: res.body.data.last_login
+            lastLogin: res.body.data.last_login,
+            perm: res.body.data.perm
           })
         }
         else {

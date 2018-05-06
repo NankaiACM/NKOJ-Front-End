@@ -100,7 +100,7 @@ export default {
               credentials: true
         })
         .then(res => {
-          console.log(res);
+          console.log(JSON.stringify(res));
           if (res.body.code === 0) {
             this.loginStatus=2;
             this.$store.commit({
@@ -108,7 +108,8 @@ export default {
               isLogin: true,
               id: res.body.data.user_id,
               nickname: res.body.data.nickname,
-              lastLogin: res.body.data.last_login
+              lastLogin: res.body.data.last_login,
+              perm: res.body.data.perm
             })
             return;
           } else {

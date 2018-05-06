@@ -36,10 +36,15 @@
             cache: true,
             credentials: true
           }).then((res) => {
-          if (res.body.code === 0) {
-            this.isAdmin = true
-          }
-        })
+            if (res.body.code === 0) {
+              this.isAdmin = true
+            }
+          }, (err) => {
+            if (err.body.code === 401) {
+              alert('访问不可达')
+              this.$router.push('/')
+            }
+          })
       }
     }
   }

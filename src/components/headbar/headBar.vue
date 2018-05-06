@@ -39,11 +39,12 @@
           <dropmenu v-if="userData.isLogin" :userData="userData">
             <li class="nickname">Hi! <span>{{userData.nickname}}</span></li>
             <li class="hr"><hr></li>
-            <li class="link"><a href="#">我出的题目</a></li>
-            <li class="link"><a href="#">我收藏的比赛</a></li>
+            <li class="link forbiden"><a href="#">我出的题目</a></li>
+            <li class="link forbiden"><a href="#">我收藏的比赛</a></li>
             <li class="hr"><hr></li>
-            <li class="link"><a href="#">用户信息与设置</a></li>
-            <li class="link"><a href="#">注销</a></li>
+            <li class="link"><router-link :to="'/user/'+$store.state.userData.id">用户信息与设置</router-link></li>
+            <li class="link" v-if="proAdd"><router-link to="/admin">出题</router-link></li>
+            <li class="link" v-if="usrLog"><a href="#" @click="logout()">注销</a></li>
             <li class="hr"><hr></li>
             <li class="lst-login">上次登陆日期 {{new Date(userData.lastLogin).toLocaleDateString()}}</li>
           </dropmenu>
@@ -97,6 +98,17 @@
       },
       freshUserData(){
         this.userData=this.$store.state.userData
+      },
+      logout: function () {
+        this.$http.get(this.logoutUrl,{credentials: true})
+          .then(function () {
+            console.log(this.logoutUrl)
+            console.log('注销成功')
+            window.location.reload()
+          }, function (e) {
+            console.log('erro')
+            console.log(e)
+          })
       }
     },
     mounted: function () {
@@ -106,19 +118,31 @@
       })
     },
     computed:{
-      avatarUrl:function(){
+      logoutUrl: function () {
+        return `${noPointHost}/api/u/logout`
+      },
+      avatarUrl:function() {
         return `${noPointHost}/api/avatar/`+ this.userData.id
+      },
+      proAdd: function () {
+        return this.$store.getters.proAddGet
+      },
+      usrLog: function () {
+        return this.$store.getters.usrLogGet
       }
     }
   }
 </script>
 
 <style lang="less">
-  .head-wrapper {
-    display: table;
-    width: 100%;
-    transition: box-shadow 0.3s ease;
-    box-shadow: 0 2px 6px 0 rgba(7, 17, 27, 0);
+.forbiden {
+  cursor: not-allowed;
+}
+.head-wrapper {
+  display: table;
+  width: 100%;
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px 0 rgba(7, 17, 27, 0);
 }
   .add-shadow {
     box-shadow: 0 2px 6px 0 rgba(7, 17, 27, 0.1);

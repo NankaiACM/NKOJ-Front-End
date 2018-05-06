@@ -74,7 +74,7 @@
           <a class="navbar-brand">AC题目</a>
         </div>
       </nav>
-      <div v-for="problem in userACproblems" id="acProblems">{{problem}}</div>
+      <div v-for="(problem, index) in userACproblems" :key="index" id="acProblems">{{problem}}</div>
     </div>
   </div>
 </div>

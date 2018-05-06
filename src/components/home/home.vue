@@ -8,7 +8,6 @@
       <pre id="announcementText" v-text="announcement" class="alert" role="alert"></pre>
     </div>
   </div>
-    -->
   <div class="row">
     <home-contest></home-contest>
   </div>
@@ -17,7 +16,10 @@
   </div>
   <div class="row">
     <home-discuss></home-discuss>
-    <div class="col-lg-8 home-component"><princeton></princeton></div>
+  </div>
+    -->
+  <div class="row">
+    <div class="home-component"><princeton></princeton></div>
   </div>
 </div>
 </div>
@@ -39,7 +41,7 @@ export default {
   },
   mounted: function() {
     this.$nextTick(function() {
-      this.initView()
+      //this.initView()
     })
   },
   methods: {

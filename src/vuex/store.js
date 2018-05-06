@@ -31,7 +31,8 @@ export default new Vuex.Store({
       id: '',
       nickname: '',
       lastLogin: '',
-      check: false
+      check: false,
+      perm: 'abc'
     }
   },
   getters: {
@@ -43,6 +44,15 @@ export default new Vuex.Store({
     },
     rankFTOpsGet: function (state) {
       return state.rankFilter.timeOps
+    },
+    proAddGet: function (state) {
+      if (!state.userData.perm) return false
+      if (! state.userData.perm.ADD_PROBLEM) return false
+      console.log(state.userData.perm.ADD_PROBLEM)
+      return state.userData.perm.ADD_PROBLEM === '1'
+    },
+    usrLogGet: function (state) {
+      return state.userData.isLogin
     }
   },
   mutations: {
@@ -74,15 +84,18 @@ export default new Vuex.Store({
       else{
         if (payload.isLogin === false) {
           state.userData.isLogin = false
-          state.userDate.id = ""
-          state.userDate.nickname = ""
-          state.userData.lastLogin = ""
+          state.userDate.id = ''
+          state.userDate.nickname = ''
+          state.userData.lastLogin = ''
+          state.userData.perm = []
         }
         else {
           state.userData.isLogin = true
           state.userData.id = payload.id
           state.userData.nickname = payload.nickname
           state.userData.lastLogin = payload.lastLogin
+          state.userData.perm = payload.perm
+          console.log(state)
         }
       }
     },

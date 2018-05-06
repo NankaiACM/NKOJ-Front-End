@@ -1,5 +1,5 @@
 <template>
-<div id="homeContest" class="col-sm-8 col-xs-12 home-component">
+<div id="homeContest" class="col-sm-12 home-component">
   <h3 align="left">近期比赛</h3>
   <div id="new-contest-container">
     <div class="col-sm-6" v-for="contest in newContests" :key="contest.id">
