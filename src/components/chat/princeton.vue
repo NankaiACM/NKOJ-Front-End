@@ -1,6 +1,6 @@
 <template>
   <div id="princeton">
-    <div id="huiban"><div id="html-container" v-html="danmakusHTML"></div></div>
+    <div id="huiban"><div id="html-container" class="ptin" v-html="danmakusHTML"></div></div>
     <div id="pt-ctl">
       <div class="pt-in-ctl">
         <textarea class="ptin" v-model="danmaku" @keyup.enter="ptsend" placeholder="DA ZE">
@@ -240,6 +240,7 @@ export default {
   word-wrap: break-word;
   overflow-y: visible;
   color: #233;
+  height: 300px;
 }
 
 #huiban #html-container div.dpic {

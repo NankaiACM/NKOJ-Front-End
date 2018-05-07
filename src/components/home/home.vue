@@ -12,7 +12,7 @@
   </div>
 </div>
   <div class="sidebar">
-    <!--div class="home-component"><princeton></princeton></div-->
+    <div class="home-component"><princeton></princeton></div>
   </div>
   <div style="clear:both;"></div>
 </div>
@@ -62,12 +62,13 @@ export default {
 
 .mainbar{
   float: left;
-  width: 70%;
+  width: 60%;
 }
 
 .sidebar{
   float: right;
-  width: 30%;
+  width: 40%;
+  padding-left: 30px;
 }
 
 .row>:first-child {

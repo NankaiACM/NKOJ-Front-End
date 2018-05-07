@@ -9,7 +9,7 @@
         <div>状态</div>
       </li>
       <li v-for="contest in newContests" :key="contest.id">
-        <div>{{contest.contestID}}</div>
+        <div><span>{{contest.contestID}}</span></div>
         <div>
           <router-link :to="{path:'contest/'+contest.contestID}">
             {{contest.contestTitle}}
@@ -52,10 +52,10 @@ export default {
 #new-contest-container {
   margin: 0 -15px;
 }
-li{
+#homeContest li{
   display: flex;
   width: 100%;
-  line-height: 225%;
+  line-height: 30px;
   div{
     text-align: center;
     &:nth-child(2){
@@ -76,20 +76,23 @@ li{
     }
   }
   &:nth-child(1){
+    color: #999;
     div:nth-child(2){
       padding-left: 5px;
+    }
+  }
+  &:nth-child(n+2){
+    div{
+      &:nth-child(2n+1){
+        color: #999;
+      }
+      &:nth-child(2) a{
+        color: inherit;
+      }
     }
   }
   &:nth-child(n+2):hover{
     background-color: rgba(0, 0, 0, 0.05);
   }
-}
-.panel {
-  margin-top: 2rem;
-  border: @home-com-border;
-}
-.panel-info>.panel-heading {
-  background: #fff;
-  border-bottom: @home-com-border;
 }
 </style>
