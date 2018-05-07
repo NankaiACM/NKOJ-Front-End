@@ -1,5 +1,5 @@
 <template>
-<div id="component-home" class="container-fluid">
+<div id="component-home">
   <div class="mainbar">
   <div class="row">
     <homeContest/>
@@ -12,8 +12,9 @@
   </div>
 </div>
   <div class="sidebar">
-    <div class="home-component"><princeton></princeton></div>
+    <!--div class="home-component"><princeton></princeton></div-->
   </div>
+  <div style="clear:both;"></div>
 </div>
 </template>
 <script>
@@ -54,21 +55,19 @@ export default {
 
 <style lang="less">
 @import '../../less/global.less';
-#component-home.container-fluid {
-  padding: 2em;
+#component-home {
   text-align: left;
   min-height: 100%;
-  display: flex;
 }
 
 .mainbar{
-  flex-grow: 1;
+  float: left;
+  width: 70%;
 }
 
 .sidebar{
-  flex: 0 0 auto;
-  width: 300px;
-  margin-left: 30px;
+  float: right;
+  width: 30%;
 }
 
 .row>:first-child {
@@ -83,7 +82,6 @@ export default {
 .home-component {
   background: #fff;
   height: auto;
-  margin: 1em;
   padding: 1em;
 }
 

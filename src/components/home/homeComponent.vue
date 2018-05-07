@@ -2,10 +2,10 @@
   <div class="hc-wrapper">
     <div class="title-wrapper">
       <div class="title-bar">
-        <div v-for="text in titletext" :key="text.id">{{text}}</div>
+        {{title}}
       </div>
       <div class="navbutton">
-        <span class="glyphicon glyphicon-arrow-right"></span>
+        <span class="glyphicon glyphicon-list"></span>
       </div>
     </div>
     <div class="content-bar">
@@ -23,42 +23,37 @@ export default {
 
     }
   },
-  computed:{
-    titletext(){
-      let ret=new Array()
-      for(let i=0;i<this.title.length;i++){
-        ret.push(this.title.charAt(i))
-      }
-      console.log(ret)
-      return ret
-    }
-  }
 }
 </script>
 
 <style lang="less">
 .hc-wrapper{
   display: flex;
+  flex-direction: column;
   &:hover .title-wrapper .navbutton{
-    left: 12px;
+    display: none;
   }
 }
 .hc-wrapper .title-wrapper{
-  background-color: #56718f;
-  border-radius: 5px;
-  margin-right: 20px;
   position: relative;
 
   .title-bar {
-    font-size: 175%;
+    font-size: 150%;
+    line-height: 40px;
     font-family: "等线";
-    height: 60%;
     display: flex;
-    flex-direction: column;
     padding: 10px;
-    color: white;
-    margin-top: 10px;
-    justify-content: space-between;
+    justify-content: flex-start;
+    padding: 0;
+    height: auto;
+    &::before{
+      content: '';
+      width: 5px;
+      height: 16px;
+      margin: 12px 10px;
+      background-color: #87CEEB;
+      display: inline-block;
+    }
   }
 
   .navbutton{
@@ -77,11 +72,12 @@ export default {
 .hc-wrapper .content-bar ul{
   list-style: none;
   margin: 0;
-  li{
-    border-bottom: 2px solid #e8f1f2;
+  padding: 0 2px;
+  &>*{
+    border-bottom: 1px solid #e6e5eb;
   }
-  li:first-child{
-    border-top: 2px solid #e8f1f2;
+  &>:first-child{
+    border-top: 1px solid #cccccc;
   }
 }
 </style>

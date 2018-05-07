@@ -1,9 +1,9 @@
 <template>
 <div id="homeProblem" class="home-component">
   <home-component :title="'新增题目'">
-    <ul id="new-pros-container">
-      <li class="list-group">
-        <router-link class="list-group-item" v-for="problem in newProblems" :key="problem.id" :to="{path:'problem/'+problem.problemsID}">
+    <ul>
+      <li v-for="problem in newProblems" :key="problem.id">
+        <router-link class="problem-list" :to="{path:'problem/'+problem.problemsID}">
           {{problem.problemsName}}
           <span class="badge visible-lg">{{problem.problemsRatio}}</span>
         </router-link>
@@ -39,13 +39,9 @@ export default {
 }
 </script>
 <style lang="less">
-@import '../../less/global.less';
-#new-pros-container {
-  padding-top: 2rem;
-}
-
-.list-group>.list-group-item {
-  border: @home-com-border;
+.problem-list{
+  display: flex;
+  
 }
 
 .list-group .label {
