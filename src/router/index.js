@@ -123,9 +123,13 @@ function checkUser(store) {
         console.log(vue.userData)
       },
       res => {
+        /*
         //wait to code
         var vue = this;
         console.log(res)
+        */
+       
+        
       }
     )
     .catch(function (response) {

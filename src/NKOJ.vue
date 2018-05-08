@@ -4,15 +4,15 @@
     <head-bar @toHome="localTo('home')" @logIn='changeToLogin' @signUp='changeToSignup'
               @toProblem="localTo('problems')" @toStatus="localTo('status')" @toContest="localTo('contest')"
               @toRank="localTo('ranklist')" @toDiscuss="localTo('discuss')" :nowPage=nowPageF :userPage=userPage>
-              <question-filter v-if="this.$route.path === '/problems'"/>
-              <status-filter v-if="this.$route.path === '/status'"/>
-              <rank-filter v-if="this.$route.path === '/ranklist'"></rank-filter>
+              <question-filter v-if="this.$route.path === '/problems'" class="abb"></question-filter>
+              <status-filter v-if="this.$route.path === '/status'" class="abb"></status-filter>
+              <rank-filter v-if="this.$route.path === '/ranklist'" class="abb"></rank-filter>
     </head-bar>
   </header>
   <wall-paper></wall-paper>
   <section id="main" class="container-fluid">
     <login-dialog v-if="userPage=='login'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-dialog>
-    <router-view class="com-container col-md-10 col-md-offset-1" ></router-view>
+    <router-view :class="xclass" ></router-view>
   </section>
   <component-shell></component-shell>
 </div>
@@ -77,18 +77,35 @@ export default {
     },
   },
   computed:{
-    nowPageF:function(){
+    nowPageF: function () {
       if(this.nowPage=='')
         return this.$router.currentRoute.fullPath.split("/")[1]
       else
         return this.nowPage
     },
+    xclass: function () {
+      var clear = ['/home', '/contest']
+      var xroute = this.$route.path
+      var special = clear.indexOf(xroute)
+      special = special + 1
+      return {
+        'com-container col-md-10 col-md-offset-1': ! special,
+        'xclear': special
+      }
+    }
   },
 }
 </script>
 
 <style lang="less">
 @import './less/global.less';
+
+* {
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -115,12 +132,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  padding: 0;
-  margin: 0;
-  border: none;
-}
-
 header {
   width: 100%;
   position: fixed;
@@ -128,11 +139,21 @@ header {
   z-index: 1;
 }
 
+.abb {
+  border-bottom: 1px solid #d3dcdc;
+}
 
 .com-container {
   min-height: 100%;
+  height: 100%;
   margin-top: @filterheight;
   margin-bottom: @fat-container-margin-top;
+}
+
+.xclear {
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 #head-filter {
@@ -159,9 +180,9 @@ header {
 
 #main {
   position: absolute;
-  margin-top: @barheight;
   width: 100%;
-  top: 0;
-  bottom: 0;
+  height: 100%;
+  padding: 0;
+  margin: 0;
 }
 </style>

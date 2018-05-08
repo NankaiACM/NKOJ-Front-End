@@ -1,123 +1,155 @@
 <template>
 <div id="component-home">
-  <div>
-    <!--
-  <div class="row">
-    <div id="announcement" class="col-sm-12 home-component">
-      <h3 align="left">公告</h3>
-      <pre id="announcementText" v-text="announcement" class="alert" role="alert"></pre>
-    </div>
+  <alex></alex>
+  <tlex></tlex>
+  <div id="moka" @mousemove="moka" :style="mksty">
+    <div id="mo">ACM-ICPC</div>
+    <div id="ka">ACM-ICPC</div>
   </div>
-  <div class="row">
-    <home-contest></home-contest>
+  <div id="princeton">
+    <princeton></princeton>
   </div>
-  <div class="row">
-    <home-problem></home-problem>
+  <div id="btns">
+    <span class="glyphicon glyphicon-cog" id="set"></span>
+    <span class="glyphicon glyphicon-console" id="cmd"></span>
+    <span class="glyphicon glyphicon-comment" id="chat"></span>
   </div>
-  <div class="row">
-    <home-discuss></home-discuss>
-  </div>
-    -->
-  <div class="row">
-    <div class="home-component"><princeton></princeton></div>
-  </div>
-</div>
 </div>
 </template>
 <script>
-import homeContest from './homeContest.vue'
-import homeDiscuss from './homeDiscuss.vue'
-import homeProblem from './homeProblems.vue'
 import princeton from '../chat/princeton.vue'
+import alex from '../wallpaper/alex.vue'
+import tlex from '../wallpaper/tlex.vue'
 export default {
   name: 'component-home',
   data: function() {
     return {
-      //announcement: '',
-      homeContestList: [],
-      newProblems: [],
-      newContests: []
+      mk: {
+        x: 0,
+        y: 0,
+        z: 0
+      }
     }
   },
   mounted: function() {
     this.$nextTick(function() {
-      //this.initView()
     })
   },
   methods: {
-    /*
-    initView: function() {
-      this.$http.get('/static/announcement.json').then(function(res) {
-        this.announcement = res.body.data
-      })
+    moka: function (e) {
+      const w = 210
+      const h = 35
+      var x = e.layerX - w
+      x = x / w
+      this.mk.y = x * 30
+      var y = e.layerY - h
+      y = y / h
+      this.mk.x = - y * 30
     }
-    */
+  },
+  computed: {
+    mksty: function () {
+      return {
+        'transform': 'rotateX(' + this.mk.x + 'deg) rotateY(' + this.mk.y + 'deg)'
+      }
+    }
   },
   components: {
-    homeContest,
-    homeDiscuss,
-    homeProblem,
-    princeton
+    princeton,
+    alex,
+    tlex
   }
 }
 </script>
-
 <style lang="less">
 @import '../../less/global.less';
-#component-home{
+#component-home {
   background: none;
   text-align: left;
-  min-height: 100%;
-}
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
 
-.row {
-  display: flex;
-}
+  #moka {
+    display: none;
+    font-size: 50px;
+    line-height: 50px;
+    font-family: "微软雅黑";
+    position: absolute;
+    right: 30px;
+    top: 100px;
+    width: 8em;
+    height: 50px;
+    margin-left: -120px;
+    margin-top: -25px;
+    text-align: center;
 
-.row h3 {
-  margin-top: 0;
-  font-family: '微软雅黑';
-}
+    #mo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      color: #d52a1a;
+      font-family: cursive;
+    }
+    #mo::after {
+      display: block;
+      content: ' ';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: #fff;
+    }
 
-.home-component {
-  height: auto;
-  margin: 1em;
-  padding: 1em;
-}
-
-/*
-#announcement {
-  cursor: pointer;
-}
-
-#announcement h2 {
-  margin-top: 0;
-}
-
-#announcementText {
-  padding: 1em;
-  margin: 0;
-  font-size: 1.2em;
-  background: #fff;
-  text-align: left;
-  white-space: pre-wrap;
-  word-break: break-word;
-  border: @home-com-border;
-}
-*/
-
-@media (min-width: 1241px) {
-  #component-home.container-fluid{
-    padding: 2em 6em;
+    #ka {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: #0fa5d2;
+      height: 25px;
+      width: 100%;
+      overflow: hidden;
+    }
   }
-}
 
-@media (max-width: 768px) {
-  .row:nth-child(2) {
-    flex-direction: column;
+  #moka::before {
+    content: ' ';
+    display: inline-block;
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: content-box;
+    transition: all 1.41s;
   }
-  .home-component {
-    margin: 0;
+
+  #princeton {
+    display: none;
+  }
+  
+  #btns {
+    position: absolute;
+    bottom: 1em;
+    left: 2em;
+    height: 25px;
+    width: 200px;
+
+    span {
+      cursor: pointer;
+      float: left;
+      font-size: 25px;
+      margin-right: 25px;
+      color: #ccc;
+      transition: all .41s;
+    }
+
+    span:hover {
+      color: #233;
+    }
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-<div>
+<div id="mayoict">
   <slot>
   </slot>
   <div id="mayoi" :class="mayoiclass">
@@ -250,6 +250,10 @@ history: get history cmds
 }
 </script>
 <style>
+#mayoict {
+  display: none;
+}
+
 #mayoi {
   position: fixed;
   left: 0;
