@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="head-wrapper" :class="{'add-shadow':isScrolled}">
+  <div class="head-wrapper" :class="{'add-shadow':isScrolled, 'opa': this.$route.path === '/home'}">
     <div class="head-container">
       <div class="mainIcon"><img height="50px" src="../../assets/logo_new_whitemode.png" v-on:click="$emit('toHome')">
       </div>
@@ -146,6 +146,7 @@
 .head-wrapper {
   display: table;
   width: 100%;
+  background: #fff;
   transition: box-shadow 0.3s ease;
   box-shadow: 0 2px 6px 0 rgba(7, 17, 27, 0);
 }
@@ -158,7 +159,6 @@
   width: 100%;
   clear: both;
   display: table;
-  background-color: #fff;
   border-bottom: 1px solid #d3dcdc;
 }
 
@@ -211,6 +211,17 @@
 .navbar-nav li:hover {
   background-color: #e8f1f2;
   color: #687683;
+}
+
+.opa.head-wrapper {
+  background: none;
+}
+
+.opa .navbar-nav li.focusing {
+  background: rgba(242, 247, 247, 0.7);
+}
+.opa .navbar-nav li:hover {
+  background: rgba(232, 241, 242, 0.3);
 }
 
 .navbar-nav li span {

@@ -1,6 +1,8 @@
 <template>
+<div>
   <div id="tlexcon">
   </div>
+</div>
 </template>
 <script>
 import * as three from 'three.js'
@@ -35,7 +37,6 @@ export default {
       })
       for (var i = 0; i < n; i ++) p.push(i)
       for (var i = 0; i < m; i ++) {
-        console.log(edges[i])
         var u = find(edges[i].u)
         var v = find(edges[i].v)
         if (u === v) continue;
@@ -50,9 +51,8 @@ export default {
         for (var j = i + 1; j < this.cuben; j ++) {
           var l = this.cubepos[i]
           var r = this.cubepos[j]
-          console.log(j)
           var [dx, dy, dz] = [l.x - r.x, l.y - r.y, l.z - r.z]
-          [dx, dy, dz] = [dx * dx, dy * dy, dz * dz]
+          var [dx, dy, dz] = [dx * dx, dy * dy, dz * dz]
           var d = Math.sqrt(dx + dy + dz)
           edges.push({
             w: d,
@@ -82,16 +82,31 @@ export default {
       this.cin()
     },
     cubeGet: function () {
-      var geom = new three.CubeGeometry(5, 5, 5, 1)
-      //var geom = new three.BoxGeometry(10, 10, 10)
-      //var mate = new three.MeshStandardMaterial({color: 0x66ccff})
+      var r = Math.random
+      var k = 5 * r() + 5
+      // var geom = new three.CubeGeometry(5, 5, 5, 1)
+      var geom = new three.BoxGeometry(k, k, k)
+      // var mate = new three.MeshStandardMaterial({color: 0x66ccff})
       var mate = new three.MeshNormalMaterial()
+      /*
+      let mate = new three.MeshPhongMaterial({
+        color: 'rgba(51,133,255, .41)',
+        opacity: Math.random() * .5 + .5,
+        transparent: true
+      })
+      */
       return new three.Mesh(geom, mate)
     },
     lineGet: function (len) {
-      var [rt, rb, h] = [.3, .3, len]
+      var r = .5
+      var [rt, rb, h] = [r, r, len]
       var geom = new three.CylinderGeometry(rt, rb, h)
-      var mate = new three.MeshNormalMaterial()
+      // let mate = new three.MeshNormalMaterial()
+      var mate = new three.MeshStandardMaterial({
+        color: 0xCCCCCC,
+        opacity: Math.random() * .5,
+        transparent: true
+      })
       return new three.Mesh(geom, mate)
     },
     roxGet: function (ax, bx) {
@@ -129,7 +144,7 @@ export default {
         var b = this.path[i].v
         var l = this.cubepos[a]
         var r = this.cubepos[b]
-        var ax = new three.Vector3(l.x - r.x, l.y - r.y, l.z - r.z)
+        var ax = new three.Vector3(r.x - l.x, r.y - l.y, r.z - l.z)
         var bx = new three.Vector3(0, 1, 0)
         var rox = this.roxGet(ax, bx)
         rox.multiply(this.cubes[b].matrix)
@@ -153,6 +168,7 @@ export default {
       this.dom = document.querySelector('#tlexcon')
       this.getScenn()
       this.scene = new three.Scene()
+      //this.scene.fog = new three.FogExp2(0xffffff, .0008)
       this.camera = new three.PerspectiveCamera(20, window.innerWidth / window.innerHeight)
       this.camera.position.set(this.scenn.width * 1, this.scenn.height * 1, this.scenn.z * 1)
       this.camera.position.r = 0
@@ -162,12 +178,13 @@ export default {
       // this.renderer.setPixelRatio(window.devicePixelRatio ?? 1)  //垃圾es6没支持
       this.renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1)  //调整物理像素与绘制像素 1 : 1
       this.dom.appendChild(this.renderer.domElement)
-      this.light = new three.AmbientLight(0xffffff, 1)
-      this.slight = new three.DirectionalLight(0xffffff, 1)
+      this.light = new three.AmbientLight(0xe5c1f2, 1)
+      this.slight = new three.DirectionalLight(0xe5c1f2, 1)
       this.slight.shadow.camera.near = 1
-      this.slight.shadow.camera.far = 1000
+      this.slight.shadow.camera.far = 10000
       this.slight.shadow.mapSize.width = 2048
       this.slight.shadow.mapSize.height = 2048
+
       this.scene.add(this.camera)
       this.scene.add(this.light)
       this.scene.add(this.slight)
@@ -194,7 +211,12 @@ export default {
         var l = this.cubepos[a]
         var r = this.cubepos[b]
         var rox = new three.Vector3(l.x - r.x, l.y - r.y, l.z - r.z)
-        this.cubes[b].rotateOnAxis(rox, .00001)
+        //this.cubes[b].rotateOnAxis(rox, .001)
+        var rot = new three.Matrix4()
+        rot.makeRotationAxis(rox, .001)
+        rot.multiply(this.cubes[b].matrix)
+        this.cubes[b].matrix = rot
+        this.cubes[b].rotation.setFromRotationMatrix(rot)
       }
     }
   },
@@ -204,9 +226,18 @@ export default {
     })
   },
   beforeDestroy: function () {
+    window.K = []
     window.removeEventListener('resize', this.handleWRize)
   }
 }
 </script>
 <style lang="less" scoped>
+#tlexcon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 </style>

@@ -143,7 +143,7 @@ export default {
       float: left;
       font-size: 25px;
       margin-right: 25px;
-      color: #ccc;
+      color: #bbb;
       transition: all .41s;
     }
 
