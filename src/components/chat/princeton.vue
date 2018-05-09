@@ -24,7 +24,7 @@ export default {
       danmakus: [],
       limit_hit: 140,
       princeton: 0,
-      url: 'ws://111.231.98.20:8001',
+      url: 'ws://localhost:8001',
       hisurl: 'http://111.231.98.20/api/danmaku',
       bot:{
         url: 'http://www.tuling123.com/openapi/api',
@@ -37,12 +37,13 @@ export default {
   },
   methods: {
     ptinit: function () {
-      this.princeton = new WebSocket(this.url)
-      this.princeton.onopen = this.ptopen
-      this.princeton.onmessage = this.ptmsg
-      this.princeton.onclose = this.ptcls
-      this.princeton.onerror = this.pterro
-      this.princeton.onpong = this.ptpong
+      const ws = new WebSocket(this.url)
+      ws.binaryType = 'arraybuffer'
+      ws.onopen = this.ptopen
+      ws.onmessage = this.ptmsg
+      ws.onclose = this.ptcls
+      ws.onerror = this.pterro
+      this.princeton = ws
       this.danmakus = []
     },
     ptopen: function (evt) {
@@ -86,11 +87,11 @@ export default {
         }
       } else if (evt.data instanceof ArrayBuffer) {
         console.log('rec ArrayBuffer')
+        this.formMessage(evt.data)
       } else if (evt.data instanceof Blob) {
         console.log('rec Blob')
-        console.info(new Date())
-        this.ptpong()
       }
+      this.ptpong()
     },
     ptcls: function (evt) {
       console.log('pt close')
@@ -136,6 +137,20 @@ export default {
       var lbl = document.createElement('div')
       lbl.innerHTML = raw
       return lbl.innerHTML
+    },
+    formMessage: function (arr) {
+      var blob = new Uint8Array(arr)
+      var type = blob[0]
+      if (type !== 0x02) return
+      var admin = blob[1]
+      var color = blob[2]
+      var ulen = blob[3]
+      var mlen = blob[3 + ulen]
+      var decoder = new TextDecoder('utf-8')
+      var user = decoder.decode(blob.slice(4, 4 + ulen))
+      var message = this.dealable(decoder.decode(blob.slice(5 + ulen, 5 + ulen + mlen)))
+      this.danmakus.push(`<span class="user-${color}">${admin ? '[管]' : ''}${user}</span>: ${message}`)
+      // Color Schema: https://github.com/hukl/Smyck-Color-Scheme/blob/master/colors
     }
   },
   computed: {
@@ -296,5 +311,69 @@ export default {
 
 .hook-btn {
   cursor: pointer;
+}
+
+.user-0 {
+  color: #000000;
+}
+
+.user-1 {
+  color: #C75646;
+}
+
+.user-2 {
+  color: #8EB33B;
+}
+
+.user-3 {
+  color: #D0B03C;
+}
+
+.user-4 {
+  color: #4E90A7;
+}
+
+.user-5 {
+  color: #C8A0D1;
+}
+
+.user-6 {
+  color: #218693;
+}
+
+.user-7 {
+  color: #B0B0B0;
+}
+
+.user-8 {
+  color: #5D5D5D;
+}
+
+.user-9 {
+  color: #E09690;
+}
+
+.user-10 {
+  color: #CDEE69;
+}
+
+.user-11 {
+  color: #FFE377;
+}
+
+.user-12 {
+  color: #9CD9F0;
+}
+
+.user-13 {
+  color: #FBB1F9;
+}
+
+.user-14 {
+  color: #77DFD8;
+}
+
+.user-15 {
+  color: #F7F7F7;
 }
 </style>
