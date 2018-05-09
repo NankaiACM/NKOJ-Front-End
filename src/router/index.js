@@ -19,7 +19,6 @@ import rankPage from '../components/ranklist/rankPage'
 import signupPage from '../components/signupPage'
 import adminPage from '../components/admin/admin'
 import adminProblemPage from '../components/admin/adminProblem'
-import test from '../components/ranklist/rankChart'
 import adminContest from '../components/admin/adminContest'
 import test from '../components/wallpaper/wallpaper'
 Vue.use(Router)
