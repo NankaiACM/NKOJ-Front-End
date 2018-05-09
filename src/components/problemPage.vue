@@ -118,10 +118,8 @@ export default {
     },
     hScroll: function () {
       var sTop = window.pageYOffset
-      console.log(sTop)
       var tTop = document.querySelector('#pro-title').offsetTop
-      console.log(tTop)
-      if (sTop > tTop) {//不给予回复
+      if (sTop > tTop) {//不给予恢复
         this.titleclass = 'active'
         window.removeEventListener('scroll', this.hScroll)
       }

@@ -102,6 +102,7 @@ export default {
       console.log('maybe fail to send')
     },
     ptsend: function (str) {
+      if (typeof str !== 'string') str = ''
       var sendmsg = this.danmaku || str
       this.danmaku = ''
       if (sendmsg === '\n' || sendmsg === '') return 0

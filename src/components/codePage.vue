@@ -1,6 +1,6 @@
 <template>
   <div id="code-page" class="container-fluid">
-    <div class="editor-container col-md-12 animated jello">
+    <div class="editor-container animated jello">
       <editor v-model="code" @init="editorInit" :lang="lang" theme="github" width="100%" height="100%"></editor>
     </div>
   </div>

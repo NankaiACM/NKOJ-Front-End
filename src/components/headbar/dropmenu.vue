@@ -46,6 +46,7 @@ export default {
     height: 30px;
     color: #939da6;
     transition: color 0.3s ease;
+    outline: none;
 }
 .dropmenu button:hover{
     color: #13293d;

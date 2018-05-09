@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HOME from '../App'
-import NKPC from "../App2"
+import HOME from '../NKOJ'
+import NKPC from "../NKPC"
 import componentProblems from '../components/problemslistpage/problemsPage'
 import componentHome from '../components/home/home'
 import componentB from '../components/componentB'
@@ -21,7 +21,7 @@ import adminPage from '../components/admin/admin'
 import adminProblemPage from '../components/admin/adminProblem'
 import test from '../components/ranklist/rankChart'
 import adminContest from '../components/admin/adminContest'
-import test from '../components/wallpaper/wallpaper.vue'
+import test from '../components/wallpaper/wallpaper'
 Vue.use(Router)
 console.log(window.noPointHost)
 const router = new Router({
@@ -116,7 +116,8 @@ function checkUser(store) {
             isLogin: true,
             id: res.body.data.user_id,
             nickname: res.body.data.nickname,
-            lastLogin: res.body.data.last_login
+            lastLogin: res.body.data.last_login,
+            perm: res.body.data.perm
           })
         }
         else {
@@ -125,9 +126,13 @@ function checkUser(store) {
         console.log(vue.userData)
       },
       res => {
+        /*
         //wait to code
         var vue = this;
         console.log(res)
+        */
+       
+        
       }
     )
     .catch(function (response) {

@@ -241,6 +241,7 @@
         sendPackge.sample_output = this.pSOutput
         sendPackge.hint = this.pHint
         sendPackge.level = this.pLevel
+        console.log(JSON.stringify(sendPackge))
         let _this = this
         this.$http.post(this.isModify ? `${window.noPointHost}/api/admin/problem/update/${this.pId}`
             : `${window.noPointHost}/api/admin/problem/add`, sendPackge,

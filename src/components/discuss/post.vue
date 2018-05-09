@@ -1,6 +1,6 @@
 <template>
   <div id="post" class="container-fluid ">
-    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
+    <div>
       <post-cell :item=tmp></post-cell>
     </div>
   </div>
@@ -31,7 +31,4 @@ export default {
 }
 </script>
 <style lang="less">
-#post {
-  padding-top: 60px;
-}
 </style>
