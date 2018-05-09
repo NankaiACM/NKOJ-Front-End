@@ -1,7 +1,7 @@
 <template>
   <div id="rank-filter-base" class="container-fluid">
     <ul class="nav nav-pills" id="rank-bar-control">
-      <li class="navbar-right"><a>my rank</a></li>
+      <li class="navbar-right" @click="filterCommit('viewBy','me')"><a>my rank</a></li>
       <li  v-for="(item, index) in menu" :key="index" class="navbar-right"><a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{item.text}}<span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li v-for="(ii, kk) in item.option" :key="kk" @click="filterCommit(item.key,ii.key)"><a>
@@ -20,14 +20,10 @@ export default {
   data: function () {
     return {
       menu: {
-        sort: {
-          text: 'Sort By',
-          key: 'sortBy',
-          option: [
-            {text: 'amount of submission', key: 'submit'},
-            {text: 'amount of Acceptance', key: 'accept'},
-            {text: 'Ratio', key: 'ratio'}
-          ]
+        time: {
+          text: 'Time Filter',
+          key: 'timeBy',//sortby
+          option: []
         },
         view: {
           text: 'View By',
@@ -61,6 +57,16 @@ export default {
       var UILS = ['NULL', 'null', 'undefined']
       var rndIndx = Math.floor(Math.random() * UILS.length + 1) - 1
       return UILS[rndIndx]
+    }
+  },
+  computed: {
+    TFOps: function () {
+      return this.$store.getters.rankFTOpsGet
+    }
+  },
+  watch: {
+    TFOps: function (n, o) {
+      this.menu.time.option = n
     }
   }
 }

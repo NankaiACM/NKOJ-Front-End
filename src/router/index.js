@@ -21,6 +21,7 @@ import adminPage from '../components/admin/admin'
 import adminProblemPage from '../components/admin/adminProblem'
 import test from '../components/ranklist/rankChart'
 import adminContest from '../components/admin/adminContest'
+import test from '../components/wallpaper/wallpaper.vue'
 Vue.use(Router)
 console.log(window.noPointHost)
 const router = new Router({

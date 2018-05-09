@@ -22,8 +22,9 @@ export default new Vuex.Store({
       page_length: 20
     },
     rankFilter: {
-      sortBy: 'solved',
-      viewBy: 'table'
+      timeBy: '',
+      viewBy: 'table',
+      timeOps: []
     },
     userData: {
       isLogin: false,
@@ -31,14 +32,17 @@ export default new Vuex.Store({
       nickname: '',
       lastLogin: '',
       check: false
-    },
+    }
   },
   getters: {
-    rankSortGet: function (state) {
-      return state.rankFilter.sortBy
+    rankTimeGet: function (state) {
+      return state.rankFilter.timeBy
     },
     rankViewGet: function (state) {
       return state.rankFilter.viewBy
+    },
+    rankFTOpsGet: function (state) {
+      return state.rankFilter.timeOps
     }
   },
   mutations: {
@@ -57,10 +61,11 @@ export default new Vuex.Store({
       state.statusFilter[key] = value
     },
     setRFilter (state, payload) {
-      if (payload.value === state.rankFilter[payload.key]) {
-        if (payload.key !== 'viewBy') payload.value = ''
-      }
       state.rankFilter[payload.key] = payload.value
+    },
+    pushRFOption (state, payload) {//push option into rank filter time menu
+      if (payload.key !== 'ops') return
+      state.rankFilter.timeOps = payload.value
     },
     setuserDate(state, payload){
       if(payload.check===true){

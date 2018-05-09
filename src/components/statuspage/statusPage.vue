@@ -2,17 +2,18 @@
 <div id="status-page">
   <div class="container-fluid table-container col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-xs-12">
     <table id="statusTable" class="table table-hover">
-      <caption></caption>
-      <thead>
-        <th class="hidden-xs">run id</th>
-        <th>user id</th>
-        <th>problem id</th>
-        <th>result</th>
-        <th>language</th>
-        <th>memory</th>
-        <th>time</th>
-        <th>code length</th>
-        <th>submit time</th>
+      <thead class="thread-height">
+        <tr>
+          <th class="hidden-xs">run id</th>
+          <th>user id</th>
+          <th>problem id</th>
+          <th>result</th>
+          <th>language</th>
+          <th>memory</th>
+          <th>time</th>
+          <th>code length</th>
+          <th>submit time</th>
+        </tr>
       </thead>
       <tbody>
         <tr v-for="status in statusList" :key="status.solution_id">
@@ -199,7 +200,6 @@ a:focus {
     border-bottom: 0;
     height: 3em;
     text-align: center;
-    font-weight: 200;
 }
 
 .table-container table.table tr {
