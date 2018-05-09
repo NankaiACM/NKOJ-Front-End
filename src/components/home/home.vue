@@ -1,25 +1,46 @@
 <template>
-<div id="component-home">
-  <alex></alex>
-  <tlex></tlex>
-  <div id="moka" @mousemove="moka" :style="mksty">
-    <div id="mo">ACM-ICPC</div>
-    <div id="ka">ACM-ICPC</div>
+<div id="home">
+  <div id="alpha">
+    <alex></alex>
+    <tlex></tlex>
+    <div id="moka" @mousemove="moka" :style="mksty">
+      <div id="mo">ACM-ICPC</div>
+      <div id="ka">ACM-ICPC</div>
+    </div>
+    <div id="btns">
+      <span class="glyphicon glyphicon-cog" id="set"></span>
+      <span class="glyphicon glyphicon-console" id="cmd"></span>
+      <span class="glyphicon glyphicon-comment" id="chat"></span>
+    </div>
   </div>
-  <div id="princeton">
-    <princeton></princeton>
-  </div>
-  <div id="btns">
-    <span class="glyphicon glyphicon-cog" id="set"></span>
-    <span class="glyphicon glyphicon-console" id="cmd"></span>
-    <span class="glyphicon glyphicon-comment" id="chat"></span>
+  <div id="beta">
+    <div class="mainbar">
+      <div class="row">
+        <home-contest></home-contest>
+      </div>
+      <div class="row">
+        <home-problem></home-problem>
+      </div>
+      <div class="row">
+        <home-discuss></home-discuss>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="home-component">
+        <princeton></princeton>
+      </div>
+    </div>
+    <div style="clear:both;"></div>
   </div>
 </div>
 </template>
 <script>
-import princeton from '../chat/princeton.vue'
-import alex from '../wallpaper/alex.vue'
-import tlex from '../wallpaper/tlex.vue'
+import princeton         from '../chat/princeton.vue'
+import alex              from '../wallpaper/alex.vue'
+import tlex              from '../wallpaper/tlex.vue'
+import homeContest       from './homeContest.vue'
+import homeDiscuss       from './homeDiscuss.vue'
+import homeProblem       from './homeProblems.vue'
 export default {
   name: 'component-home',
   data: function() {
@@ -57,17 +78,30 @@ export default {
   components: {
     princeton,
     alex,
-    tlex
+    tlex,
+    homeContest,
+    homeDiscuss,
+    homeProblem
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 @import '../../less/global.less';
-#component-home {
+
+#home {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+#alpha {
+  position: relative;
   background: none;
   text-align: left;
-  height: 100%;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   overflow-x: hidden;
 
   #moka {
@@ -92,6 +126,7 @@ export default {
       color: #d52a1a;
       font-family: cursive;
     }
+
     #mo::after {
       display: block;
       content: ' ';
@@ -127,10 +162,6 @@ export default {
     transition: all 1.41s;
   }
 
-  #princeton {
-    display: none;
-  }
-  
   #btns {
     position: absolute;
     bottom: 1em;
@@ -150,6 +181,31 @@ export default {
     span:hover {
       color: #233;
     }
+  }
+}
+
+#beta {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+
+  .mainbar{
+    float: left;
+    width: 60%;
+
+    .row>:first-child {
+      width: 100%;
+    }
+
+    .row h3 {
+      margin-top: 0;
+      font-family: '微软雅黑';
+    }
+  }
+  .sidebar{
+    float: right;
+    width: 40%;
+    padding-left: 30px;
   }
 }
 </style>

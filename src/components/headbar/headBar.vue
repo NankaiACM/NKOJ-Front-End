@@ -169,6 +169,14 @@
   cursor: pointer;
 }
 
+.navbar-nav {
+  height: 100%;
+  display: block;
+  line-height: 50px;
+  float: left;
+  margin: 0;
+}
+
 .mainIcon img {
   height: 50px;
 }
