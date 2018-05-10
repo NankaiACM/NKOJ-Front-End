@@ -9,7 +9,7 @@
               <rank-filter v-if="this.$route.path === '/ranklist'" class="abb"></rank-filter>
     </head-bar>
   </header>
-  <wall-paper></wall-paper>
+  <!--wall-paper></wall-paper-->
   <section id="main" class="container-fluid">
     <login-dialog v-if="userPage=='login'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-dialog>
     <router-view :class="xclass" ></router-view>

@@ -2,7 +2,7 @@
 <div id="home">
   <div id="alpha">
     <alex></alex>
-    <tlex></tlex>
+    <!--tlex></tlex>
     <div id="moka" @mousemove="moka" :style="mksty">
       <div id="mo">ACM-ICPC</div>
       <div id="ka">ACM-ICPC</div>
@@ -11,7 +11,7 @@
       <span class="glyphicon glyphicon-cog" id="set"></span>
       <span class="glyphicon glyphicon-console" id="cmd"></span>
       <span class="glyphicon glyphicon-comment" id="chat"></span>
-    </div>
+    </div-->
   </div>
   <div id="beta">
     <div class="mainbar">
@@ -20,9 +20,11 @@
       <home-discuss></home-discuss>
     </div>
     <div class="sidebar">
-      <div class="home-component">
-        <princeton></princeton>
-      </div>
+      <home-component :title="'占位符'">
+        <hr class=".hr">
+        这儿应该有一个很大的图片
+      </home-component>
+      <princeton></princeton>
     </div>
     <div style="clear:both;"></div>
   </div>
@@ -35,6 +37,7 @@ import tlex              from '../wallpaper/tlex.vue'
 import homeContest       from './homeContest.vue'
 import homeDiscuss       from './homeDiscuss.vue'
 import homeProblem       from './homeProblems.vue'
+import HomeComponent from './homeComponent'
 export default {
   name: 'component-home',
   data: function() {
@@ -70,6 +73,7 @@ export default {
     }
   },
   components: {
+    HomeComponent,
     princeton,
     alex,
     tlex,
@@ -92,6 +96,7 @@ export default {
   width: 100vw;
   height: 100vh;
   overflow-x: hidden;
+  z-index: -1;
 
   #moka {
     display: none;
@@ -175,7 +180,6 @@ export default {
 
 #beta {
   position: relative;
-  margin-top: 100vh;
 
   .mainbar{
     float: left;

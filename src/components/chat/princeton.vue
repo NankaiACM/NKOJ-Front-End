@@ -1,23 +1,33 @@
 <template>
-  <div id="princeton">
-    <div id="huiban"><div id="html-container" class="ptin" v-html="danmakusHTML"></div></div>
-    <div id="pt-ctl">
-      <div class="pt-in-ctl">
+  <div id="princeton" class="home-component">
+    <home-component :title="'聊天室'">
+      <hr class="hr">
+      <div class="danmaku-wrapper">
+        <div id="huiban">
+          <div id="html-container" class="ptin" v-html="danmakusHTML"></div>
+        </div>
+        <div id="pt-ctl">
+          <div class="pt-in-ctl">
         <textarea class="ptin" v-model="danmaku" @keyup.enter="ptsend" placeholder="DA ZE">
         </textarea>
-        <span class="limit-hit">{{danmaku.length}}/{{limit_hit}}</span>
+            <span class="limit-hit">{{danmaku.length}}/{{limit_hit}}</span>
+          </div>
+          <div class="pt-btns">
+            <div class="hook-btn" :class="{'onhook': this.bot.isOnHook}" @click="bot.isOnHook = !bot.isOnHook">hook
+            </div>
+            <div class="hit-btn" :class="{'notban': this.danmaku !== ''}" @click="ptsend">发射电波</div>
+          </div>
+        </div>
       </div>
-      <div class="pt-btns">
-        <div class="hook-btn" :class="{'onhook': this.bot.isOnHook}" @click="bot.isOnHook = !bot.isOnHook">hook</div>
-        <div class="hit-btn" :class="{'notban': this.danmaku !== ''}" @click="ptsend">发射电波</div>
-      </div>
-    </div>
-    <div class="clearfix"></div>
+      <div class="clearfix"></div>
+    </home-component>
   </div>
 </template>
 <script>
+  import homeComponent from '../home/homeComponent.vue'
 export default {
   name: 'princeton',
+  components: {homeComponent},
   data: function () {
     return {
       danmaku: '',
@@ -181,10 +191,12 @@ export default {
 }
 </script>
 <style>
-#princeton {
-  background: #f8f8f8;
+  .danmaku-wrapper {
+    opacity: 0.9;
   border-radius: .41em;
   padding: 2em;
+    max-width: 380px;
+    margin: auto;
 }
 
 #pt-ctl {
@@ -200,8 +212,7 @@ export default {
   width: 100%;
   height: 56px;
   border: 1px solid #eaeaea;
-  background: #fff;
-  border-radius: 4px;
+  background: none;
   padding: .41em;
   overflow: hidden;
   font-size: 12px;
@@ -284,9 +295,11 @@ export default {
   text-align: center;
   font-size: 12px;
   clear: both;
-  background: #ccc;
-  color: #fff;
-  border-radius: .41em;
+  background: none;
+  font-weight: 500;
+  color: #rgb(44, 62, 80);
+  border: 1px #6cf solid;
+  border-radius: 0.41em;
   transition: all .41s;
   cursor: not-allowed;
 }
@@ -304,11 +317,11 @@ export default {
 }
 
 .hit-btn.notban,.hook-btn.onhook {
-  background: #5cf;
+  background: #8df;
 }
 
 .hit-btn.notban:hover,.hook-btn.onhook:hover {
-  background: #6cf;
+  background: #6df;
 }
 
 .hook-btn {
