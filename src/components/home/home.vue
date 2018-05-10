@@ -15,15 +15,9 @@
   </div>
   <div id="beta">
     <div class="mainbar">
-      <div class="row">
-        <home-contest></home-contest>
-      </div>
-      <div class="row">
-        <home-problem></home-problem>
-      </div>
-      <div class="row">
-        <home-discuss></home-discuss>
-      </div>
+      <home-contest></home-contest>
+      <home-problem></home-problem>
+      <home-discuss></home-discuss>
     </div>
     <div class="sidebar">
       <div class="home-component">
@@ -88,16 +82,11 @@ export default {
 <style lang="less" scoped>
 @import '../../less/global.less';
 
-#home {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  flex-direction: column;
-  overflow-x: hidden;
-}
 
 #alpha {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   background: none;
   text-align: left;
   width: 100vw;
@@ -186,18 +175,13 @@ export default {
 
 #beta {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  margin-top: 100vh;
 
   .mainbar{
     float: left;
     width: 60%;
 
-    .row>:first-child {
-      width: 100%;
-    }
-
-    .row h3 {
+    h3 {
       margin-top: 0;
       font-family: '微软雅黑';
     }

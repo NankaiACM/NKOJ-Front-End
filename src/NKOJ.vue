@@ -87,7 +87,7 @@ export default {
       var clear = ['/home', '/contest']
       var xroute = this.$route.path
       var special = clear.indexOf(xroute)
-      special = special + 1
+      special = false //special + 1
       return {
         'com-container col-md-10 col-md-offset-1': ! special,
         'xclear': special
@@ -148,6 +148,7 @@ header {
   height: 100%;
   margin-top: @filterheight;
   margin-bottom: @fat-container-margin-top;
+  background-color: rgba(255,255,255,0.5);
 }
 
 .xclear {
