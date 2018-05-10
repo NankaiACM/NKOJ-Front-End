@@ -22,7 +22,7 @@
 export default {
   name: 'status-details',
   props: ['run_id'],
-  data: function() {
+  data: function () {
     return {
       title: 'title',
       markdown_body: ''
@@ -30,14 +30,13 @@ export default {
   },
   methods: {},
   watch: {
-    run_id: function(){
-      var run_id = this.run_id
+    run_id: function () {
+      var runId = this.run_id
       this.$http.get('/static/status_details.json',{
-        run_id:run_id
-      })
-      .then(res=>{
+        run_id: runId
+      }).then(res => {
         this.markdown_body = res.body.data.markdown_body
-      },error=>console.info(error))
+      }, error => console.info(error))
     }
   }
 }

@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import ProblemsPagination from '../problemslistpage/pagination'
+import ProblemsPagination from '../problem/pagination'
 export default {
   name: 'contestRank',
   props: ['userData'],

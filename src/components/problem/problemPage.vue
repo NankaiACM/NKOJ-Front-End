@@ -1,8 +1,9 @@
 <template>
 <div id="problemPage" >
-
   <transition name="up">
-    <div class="submitGirl" v-if="isStart" @click="iCanSee"><img src="../assets/Akkarin.png" width="150px" height="150px"></div>
+    <div class="submitGirl" v-if="isStart" @click="iCanSee">
+      <img src="../../assets/Akkarin.png" width="150px" height="150px">
+    </div>
   </transition>
   <transition name="fade">
     <div id="problemSubmit" v-if="isSee">
@@ -37,7 +38,11 @@
           </ul>
         </div>
         <button class="mobileRight btn btn-default" @click="iCanSee"
-                @mouseleave="rightInfo = false" @mouseenter="rightInfo = true" data-toggle="tooltip"  title="返回"><span class="glyphicon glyphicon-share-alt"></span></button>
+                @mouseleave="rightInfo = false"
+                @mouseenter="rightInfo = true"
+                data-toggle="tooltip"  title="返回">
+          <span class="glyphicon glyphicon-share-alt"></span>
+        </button>
       </div>
       <transition name="fade"><label class="bottomInfo bottomInfoLeft" v-if="leftInfo">Language</label></transition>
       <transition name="fade"><label class="bottomInfo" v-if="middleInfo">Submit</label></transition>
@@ -49,6 +54,16 @@
       <h2 id="pro-title" align="left" class="col-sm-12 problemPageTitle" :class="titleclass">
         {{o.title ? o.title : '美好的bug正在发生'}}</h2>
       <div class="problemDescription" @click="iCanSee2">
+        <div>
+          <div class="ac">ac:{{this.o.ac}}</div>
+          <div class="all">all submit:{{this.o.all}}</div>
+          <div class="special-judge">special judge:{{this.o.special_judge}}</div>
+          <div class="detail-judge">detail judge{{this.o.detail_judge}}</div>
+          <div class="cases">cases:{{this.o.cases}}</div>
+          <div class="tl">time limit:{{this.o.time_limit}}</div>
+          <div class="ml">memory limit:{{this.o.memory_limit}}</div>
+          <div class="level">level:{{this.o.level}}</div>
+        </div>
         <div align="left" v-html="problemMarkDown"></div>
       </div>
     </div>
@@ -111,6 +126,7 @@ export default {
           this.contentObj = res.body.data.content
           this.o = res.body.data
           this.isStart = true
+          console.log(JSON.stringify(this.o))
         },
         (e)=> {
           console.log(e)
@@ -191,7 +207,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import '../less/global.less';
+@import '../../less/global.less';
 #problemPage pre{
   text-align: left;
   background: white;

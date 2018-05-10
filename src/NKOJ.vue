@@ -4,15 +4,17 @@
     <head-bar @toHome="localTo('home')" @logIn='changeToLogin' @signUp='changeToSignup'
               @toProblem="localTo('problems')" @toStatus="localTo('status')" @toContest="localTo('contest')"
               @toRank="localTo('ranklist')" @toDiscuss="localTo('discuss')" :nowPage=nowPageF :userPage=userPage>
-              <question-filter v-if="this.$route.path === '/problems'" class="abb"></question-filter>
-              <status-filter v-if="this.$route.path === '/status'" class="abb"></status-filter>
-              <rank-filter v-if="this.$route.path === '/ranklist'" class="abb"></rank-filter>
+    <question-filter v-if="this.$route.path === '/problems'" class="abb"></question-filter>
+    <status-filter v-if="this.$route.path === '/status'" class="abb"></status-filter>
+    <rank-filter v-if="this.$route.path === '/ranklist'" class="abb"></rank-filter>
     </head-bar>
   </header>
   <wall-paper></wall-paper>
   <section id="main" class="container-fluid">
     <login-dialog v-if="userPage=='login'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-dialog>
-    <router-view :class="xclass" ></router-view>
+    <div id="depatch" :class="xclass" >
+      <router-view></router-view>
+    </div>
   </section>
   <component-shell></component-shell>
 </div>
@@ -22,7 +24,7 @@
 import loginDialog from './components/dialog/loginDialog'
 import headBar from './components/headbar/headBar'
 
-import questionFilter from './components/problemslistpage/questionFilter.vue'
+import questionFilter from './components/problem/questionFilter.vue'
 import statusFilter from './components/statuspage/statusFilter.vue'
 import rankFilter from './components/ranklist/rankFilter.vue'
 import componentShell from './components/shell/mayoi.vue'
@@ -84,13 +86,13 @@ export default {
         return this.nowPage
     },
     xclass: function () {
-      var clear = ['/home', '/contest']
+      var clear = ['/home']
       var xroute = this.$route.path
       var special = clear.indexOf(xroute)
       special = special + 1
       return {
         'com-container col-md-10 col-md-offset-1': ! special,
-        'xclear': special
+        'xclear': special,
       }
     }
   },
@@ -146,8 +148,7 @@ header {
 .com-container {
   min-height: 100%;
   height: 100%;
-  margin-top: @filterheight;
-  margin-bottom: @fat-container-margin-top;
+  padding-top: @filterheight + @barheight + @fat-container-margin-top;
 }
 
 .xclear {

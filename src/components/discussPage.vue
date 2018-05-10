@@ -14,11 +14,11 @@
 </template>
 <script>
 import discussCell from './discuss/discussCell.vue'
-import pagination from './problemslistpage/pagination.vue'
+import pagination from './problem/pagination.vue'
 import newPost from './discuss/newPost.vue'
 export default {
   name: 'discussPage',
-  data: function() {
+  data: function () {
     return {
       list: [{
         id: '123',//讨论的id

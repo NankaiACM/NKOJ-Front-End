@@ -149,6 +149,7 @@ export default {
   background: none;
   color: #233;
   padding:0;
+  width: 100%;
   min-height: 100%;
   transition: all 1s;
 }
@@ -173,6 +174,7 @@ export default {
 
 #ProblemTable thead tr th {
   font-size: 1.4em;
+  text-align: left;
 }
 
 #ProblemTable tbody tr td:first-child {
