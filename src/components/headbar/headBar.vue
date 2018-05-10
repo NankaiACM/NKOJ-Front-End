@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="head-wrapper" :class="{'add-shadow':isScrolled, 'opa': this.$route.path === '/home'}">
+  <div class="head-wrapper" :class="{'hasScroll':isScrolled}">
     <div class="head-container">
       <div class="mainIcon"><img height="50px" src="../../assets/logo_new_whitemode.png" v-on:click="$emit('toHome')">
       </div>
@@ -146,20 +146,28 @@
 .head-wrapper {
   display: table;
   width: 100%;
-  background: #fff;
-  transition: box-shadow 0.3s ease;
+  transition: all 0.5s ease;
   box-shadow: 0 2px 6px 0 rgba(7, 17, 27, 0);
 }
 
-.add-shadow {
+.hasScroll {
   box-shadow: 0 2px 6px 0 rgba(7, 17, 27, 0.1);
+  background-color: white;
+  .head-container{
+    border-bottom: 1px solid #d3dcdc;
+  }
+  .navbar-nav li.focusing {
+    background-color: #f2f7f7;
+  }
+  .navbar-nav li:hover {
+    background-color: #e8f1f2;
+  }
 }
 
 .head-container {
   width: 100%;
   clear: both;
   display: table;
-  border-bottom: 1px solid #d3dcdc;
 }
 
 .mainIcon {
@@ -198,41 +206,25 @@
 
 .navbar-nav li {
   color: #939da6;
-  padding: 5px 1rem;
+  padding: 5px 2rem;
   font-size: 1.5rem;
-  width: 10rem;
   height: 100%;
   overflow: hidden;
   cursor: pointer;
   display: inline-block;
   white-space: nowrap;
   transition: all 0.3s ease;
+  &.focusing {
+    color: #13293d;
+    cursor: default;
+    pointer-events: none;
+  }
+  &:hover {
+    color: #687683;
+  }
 }
 
-.navbar-nav li.focusing {
-  background-color: #f2f7f7;
-  color: #13293d;
-  cursor: default;
-  pointer-events: none;
-}
-
-.navbar-nav li:hover {
-  background-color: #e8f1f2;
-  color: #687683;
-}
-
-.opa.head-wrapper {
-  background: none;
-}
-
-.opa .navbar-nav li.focusing {
-  background: rgba(242, 247, 247, 0.7);
-}
-.opa .navbar-nav li:hover {
-  background: rgba(232, 241, 242, 0.3);
-}
-
-.navbar-nav li span {
+.navbar-nav li span{
   margin-right: 5px;
 }
 

@@ -1,5 +1,6 @@
 <template>
 <div id="app">
+  <alex></alex>
   <header>
     <head-bar @toHome="localTo('home')" @logIn='changeToLogin' @signUp='changeToSignup'
               @toProblem="localTo('problems')" @toStatus="localTo('status')" @toContest="localTo('contest')"
@@ -9,10 +10,10 @@
               <rank-filter v-if="this.$route.path === '/ranklist'" class="abb"></rank-filter>
     </head-bar>
   </header>
-  <wall-paper></wall-paper>
+  <!--wall-paper></wall-paper-->
   <section id="main" class="container-fluid">
     <login-dialog v-if="userPage=='login'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-dialog>
-    <router-view :class="xclass" ></router-view>
+    <router-view :class="xclass"></router-view>
   </section>
   <component-shell></component-shell>
 </div>
@@ -27,9 +28,10 @@ import statusFilter from './components/statuspage/statusFilter.vue'
 import rankFilter from './components/ranklist/rankFilter.vue'
 import componentShell from './components/shell/mayoi.vue'
 import wallPaper from './components/wallpaper/wallpaper.vue'
+import alex              from './components/wallpaper/alex.vue'
 
 export default {
-  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell, wallPaper},
+  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell, wallPaper,alex},
   name: 'NKOJ',
   data: function () {
     return {
@@ -105,6 +107,16 @@ export default {
   margin: 0;
   border: none;
 }
+#alex{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: none;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  z-index: -1;
+}
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -144,11 +156,11 @@ header {
 }
 
 .com-container {
-  min-height: 100%;
-  height: 100%;
-  margin-top: @filterheight;
+  margin-top: @filterheight+10px;
   margin-bottom: @fat-container-margin-top;
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255,255,255,0.8);
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 .xclear {
@@ -186,4 +198,5 @@ header {
   padding: 0;
   margin: 0;
 }
+
 </style>

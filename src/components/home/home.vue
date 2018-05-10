@@ -1,6 +1,6 @@
 <template>
 <div id="home">
-  <div id="alpha">
+  <!--div id="alpha">
     <alex></alex>
     <tlex></tlex>
     <div id="moka" @mousemove="moka" :style="mksty">
@@ -12,7 +12,7 @@
       <span class="glyphicon glyphicon-console" id="cmd"></span>
       <span class="glyphicon glyphicon-comment" id="chat"></span>
     </div>
-  </div>
+  </div-->
   <div id="beta">
     <div class="mainbar">
       <home-contest></home-contest>
@@ -92,6 +92,7 @@ export default {
   width: 100vw;
   height: 100vh;
   overflow-x: hidden;
+  z-index: -1;
 
   #moka {
     display: none;
@@ -174,8 +175,7 @@ export default {
 }
 
 #beta {
-  position: relative;
-  margin-top: 100vh;
+  padding: 0 1.5%;
 
   .mainbar{
     float: left;
@@ -189,7 +189,7 @@ export default {
   .sidebar{
     float: right;
     width: 40%;
-    padding-left: 30px;
+    padding-left: 5%;
   }
 }
 </style>
