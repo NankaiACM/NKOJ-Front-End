@@ -149,7 +149,6 @@ export default {
   background: none;
   color: #233;
   padding:0;
-  min-height: 100%;
   transition: all 1s;
 }
 

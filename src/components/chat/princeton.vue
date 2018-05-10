@@ -297,7 +297,7 @@ export default {
   clear: both;
   background: none;
   font-weight: 500;
-  color: #rgb(44, 62, 80);
+  color: rgb(44, 62, 80);
   border: 1px #6cf solid;
   border-radius: 0.41em;
   transition: all .41s;
@@ -318,10 +318,12 @@ export default {
 
 .hit-btn.notban,.hook-btn.onhook {
   background: #8df;
+  color: white;
 }
 
 .hit-btn.notban:hover,.hook-btn.onhook:hover {
   background: #6df;
+  color: white;
 }
 
 .hook-btn {

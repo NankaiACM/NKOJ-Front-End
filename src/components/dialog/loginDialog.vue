@@ -1,7 +1,7 @@
 <template>
   <dialog-wrap @exit="$emit('exit')">
     <transition name="fade" @enter="fadeEnter" @leave="fadeLeave" :css="false">
-    <div class="-sign-up" v-if="pageStatus=='login'">
+    <div class="login-sign-up" v-if="pageStatus=='login'">
       <div class="title-bar">
         <div class="title">登录</div>
         <div class="subtitle">由此登录，开启今日的ACM之旅吧~</div>

@@ -1,8 +1,8 @@
 <template>
 <div id="home">
-  <div id="alpha">
+  <!--div id="alpha">
     <alex></alex>
-    <!--tlex></tlex>
+    <tlex></tlex>
     <div id="moka" @mousemove="moka" :style="mksty">
       <div id="mo">ACM-ICPC</div>
       <div id="ka">ACM-ICPC</div>
@@ -11,20 +11,22 @@
       <span class="glyphicon glyphicon-cog" id="set"></span>
       <span class="glyphicon glyphicon-console" id="cmd"></span>
       <span class="glyphicon glyphicon-comment" id="chat"></span>
-    </div-->
-  </div>
+    </div>
+  </div-->
   <div id="beta">
     <div class="mainbar">
-      <home-contest></home-contest>
       <home-problem></home-problem>
+      <home-contest></home-contest>
       <home-discuss></home-discuss>
     </div>
     <div class="sidebar">
-      <home-component :title="'占位符'">
-        <hr class=".hr">
-        这儿应该有一个很大的图片
-      </home-component>
-      <princeton></princeton>
+      <div class="wrapper">
+        <home-component :title="'占位符'">
+          <hr class=".hr">
+          这儿应该有一个很大的图片
+        </home-component>
+        <princeton></princeton>
+      </div>
     </div>
     <div style="clear:both;"></div>
   </div>
@@ -180,6 +182,7 @@ export default {
 
 #beta {
   position: relative;
+  padding: 0 1.5%;
 
   .mainbar{
     float: left;
@@ -189,11 +192,23 @@ export default {
       margin-top: 0;
       font-family: '微软雅黑';
     }
+    div:nth-child(n+2){
+      margin-top: 30px; 
+    }
   }
   .sidebar{
     float: right;
-    width: 40%;
-    padding-left: 30px;
+    width: 35%;
+    margin-left: 2%;
+    padding-left: 3%;
+    border-left: 1px solid #eee;
+    .wrapper{
+      max-width: 350px;
+      margin: auto;
+    }
+    div:nth-child(n+2){
+      margin-top: 30px; 
+    }
   }
 }
 </style>

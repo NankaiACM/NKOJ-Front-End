@@ -1,5 +1,7 @@
 <template>
 <div id="app">
+  <alex></alex>
+  <login-dialog v-if="userPage=='login'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-dialog>
   <header>
     <head-bar @toHome="localTo('home')" @logIn='changeToLogin' @signUp='changeToSignup'
               @toProblem="localTo('problems')" @toStatus="localTo('status')" @toContest="localTo('contest')"
@@ -10,10 +12,10 @@
     </head-bar>
   </header>
   <!--wall-paper></wall-paper-->
-  <section id="main" class="container-fluid">
-    <login-dialog v-if="userPage=='login'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-dialog>
-    <router-view :class="xclass" ></router-view>
-  </section>
+  <div class="struct">
+    <router-view :class="xclass"></router-view>
+    <foot></foot>
+  </div>
   <component-shell></component-shell>
 </div>
 </template>
@@ -27,9 +29,11 @@ import statusFilter from './components/statuspage/statusFilter.vue'
 import rankFilter from './components/ranklist/rankFilter.vue'
 import componentShell from './components/shell/mayoi.vue'
 import wallPaper from './components/wallpaper/wallpaper.vue'
+import alex              from './components/wallpaper/alex.vue'
+import foot              from './components/footer.vue'
 
 export default {
-  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell, wallPaper},
+  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell, wallPaper,alex,foot},
   name: 'NKOJ',
   data: function () {
     return {
@@ -105,6 +109,16 @@ export default {
   margin: 0;
   border: none;
 }
+#alex{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: none;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  z-index: -1;
+}
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -144,11 +158,13 @@ header {
 }
 
 .com-container {
-  min-height: 100%;
-  height: 100%;
-  margin-top: @filterheight;
-  margin-bottom: @fat-container-margin-top;
-  background-color: rgba(255,255,255,0.5);
+  margin-top: @filterheight+30px;
+  margin-bottom: 20px;
+  background-color: rgba(255,255,255,0.8);
+  padding-top: 40px;
+  padding-bottom: 60px;
+  flex: 1;
+  border-radius: 5px;
 }
 
 .xclear {
@@ -186,4 +202,11 @@ header {
   padding: 0;
   margin: 0;
 }
+
+.struct{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 </style>
