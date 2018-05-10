@@ -2,7 +2,7 @@
 <div id="home">
   <div id="alpha">
     <alex></alex>
-    <tlex></tlex>
+    <!--tlex></tlex>
     <div id="moka" @mousemove="moka" :style="mksty">
       <div id="mo">ACM-ICPC</div>
       <div id="ka">ACM-ICPC</div>
@@ -11,24 +11,20 @@
       <span class="glyphicon glyphicon-cog" id="set"></span>
       <span class="glyphicon glyphicon-console" id="cmd"></span>
       <span class="glyphicon glyphicon-comment" id="chat"></span>
-    </div>
+    </div-->
   </div>
   <div id="beta">
     <div class="mainbar">
-      <div class="row">
-        <home-contest></home-contest>
-      </div>
-      <div class="row">
-        <home-problem></home-problem>
-      </div>
-      <div class="row">
-        <home-discuss></home-discuss>
-      </div>
+      <home-contest></home-contest>
+      <home-problem></home-problem>
+      <home-discuss></home-discuss>
     </div>
     <div class="sidebar">
-      <div class="home-component">
-        <princeton></princeton>
-      </div>
+      <home-component :title="'占位符'">
+        <hr class=".hr">
+        这儿应该有一个很大的图片
+      </home-component>
+      <princeton></princeton>
     </div>
     <div style="clear:both;"></div>
   </div>
@@ -41,6 +37,7 @@ import tlex              from '../wallpaper/tlex.vue'
 import homeContest       from './homeContest.vue'
 import homeDiscuss       from './homeDiscuss.vue'
 import homeProblem       from './homeProblems.vue'
+import HomeComponent from './homeComponent'
 export default {
   name: 'component-home',
   data: function() {
@@ -76,6 +73,7 @@ export default {
     }
   },
   components: {
+    HomeComponent,
     princeton,
     alex,
     tlex,
@@ -88,21 +86,17 @@ export default {
 <style lang="less" scoped>
 @import '../../less/global.less';
 
-#home {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  flex-direction: column;
-  overflow-x: hidden;
-}
 
 #alpha {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   background: none;
   text-align: left;
   width: 100vw;
   height: 100vh;
   overflow-x: hidden;
+  z-index: -1;
 
   #moka {
     display: none;
@@ -186,18 +180,12 @@ export default {
 
 #beta {
   position: relative;
-  width: 100vw;
-  height: 100vh;
 
   .mainbar{
     float: left;
     width: 60%;
 
-    .row>:first-child {
-      width: 100%;
-    }
-
-    .row h3 {
+    h3 {
       margin-top: 0;
       font-family: '微软雅黑';
     }

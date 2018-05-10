@@ -9,7 +9,7 @@
     <rank-filter v-if="this.$route.path === '/ranklist'" class="abb"></rank-filter>
     </head-bar>
   </header>
-  <wall-paper></wall-paper>
+  <!--wall-paper></wall-paper-->
   <section id="main" class="container-fluid">
     <login-dialog v-if="userPage=='login'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-dialog>
     <div id="depatch" :class="xclass" >
@@ -38,7 +38,7 @@ export default {
       userPage: 'None',
       loginUserName: 'null',
       nowPage: '',
-      userData:undefined,
+      userData: undefined
     }
   },
   methods: {
@@ -46,56 +46,57 @@ export default {
       console.info(this.$route.path)
       this.nowPage = str
       this.$router.push({
-        path: '/'+str
+        path: '/' + str
       })
       console.info(this.$route.path)
     },
     changeTo404: function () {
-      this.nowPage='404'
+      this.nowPage = '404'
       this.$router.push({
         path: '/notFound'
       })
     },
     changeToUser: function () {
-      this.nowPage='User'
+      this.nowPage = 'User'
       this.$router.push({
         path: '/user/Saurus'
       })
     },
     changeToLogin: function () {
-      this.userPage='login'
+      this.userPage = 'login'
     },
     changeToSignup: function () {
-      this.nowPage='signUp'
-      this.$router.push({path: '/sign_up'});
+      this.nowPage = 'signUp'
+      this.$router.push({path: '/sign_up'})
     },
     exitShow: function () {
-      this.userPage="None";
+      this.userPage = 'None'
     },
-    changeLogin:function(value){
-      this.userPage="None";
-      this.nowPage=value;
-      this.$router.push({path: '/sign_up'});
-    },
+    changeLogin: function (value) {
+      this.userPage = 'None'
+      this.nowPage = value
+      this.$router.push({path: '/sign_up'})
+    }
   },
-  computed:{
+  computed: {
     nowPageF: function () {
-      if(this.nowPage=='')
-        return this.$router.currentRoute.fullPath.split("/")[1]
-      else
+      if (this.nowPage === '') {
+        return this.$router.currentRoute.fullPath.split('/')[1]
+      } else {
         return this.nowPage
+      }
     },
     xclass: function () {
       var clear = ['/home']
       var xroute = this.$route.path
       var special = clear.indexOf(xroute)
-      special = special + 1
+      special = false // special + 1
       return {
-        'com-container col-md-10 col-md-offset-1': ! special,
-        'xclear': special,
+        'com-container col-md-10 col-md-offset-1': !special,
+        'xclear': special
       }
     }
-  },
+  }
 }
 </script>
 
@@ -148,7 +149,9 @@ header {
 .com-container {
   min-height: 100%;
   height: 100%;
-  padding-top: @filterheight + @barheight + @fat-container-margin-top;
+  margin-top: @filterheight;
+  margin-bottom: @fat-container-margin-top;
+  background-color: rgba(255,255,255,0.5);
 }
 
 .xclear {
