@@ -160,11 +160,21 @@ header {
 .com-container {
   margin-top: @filterheight+30px;
   margin-bottom: 20px;
-  background-color: rgba(255,255,255,0.8);
-  padding-top: 40px;
+  background-color: rgba(255,255,255,0.7);
+  padding-top: 2vw;
   padding-bottom: 60px;
   flex: 1;
-  border-radius: 5px;
+  border-radius: 2px;
+  &::before{
+    background-color: white;
+    width: 100%;
+    height: 5vw;
+    display: block;
+    background: linear-gradient(rgba(255, 255, 255, 0),rgba(255, 255, 255, 0.8));
+    position: absolute;
+    top: -5vw;
+    left: 0;
+  }
 }
 
 .xclear {
