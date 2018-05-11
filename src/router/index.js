@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HOME from '../NKOJ'
-import NKPC from "../NKPC"
+import NKPC from '../NKPC'
 import componentProblems from '../components/problem/problemsPage'
 import componentHome from '../components/home/home'
 import componentB from '../components/componentB'
@@ -13,7 +13,7 @@ import postPage from '../components/discuss/post'
 import userPage from '../components/userPage'
 import allContest from '../components/contestpage/allContest'
 import contest from '../components/contestpage/contestDetail'
-//import codePage from '../components/codePage'
+// import codePage from '../components/codePage'
 import detailsPage from '../components/detailspage/details'
 import rankPage from '../components/ranklist/rankPage'
 import signupPage from '../components/signupPage'
@@ -48,7 +48,7 @@ const router = new Router({
         props: {
           isInfinite: true,
           isBtn: false,
-          apiUrl: window.noPointHost + '/api/status/list'
+          apiUrl: window.noPointHost + '/api/status'
         }
       },
       { path: '/discuss', component: discussPage },
@@ -70,8 +70,9 @@ const router = new Router({
           }
         ]
       },
-      { path: '/sign_up', component: signupPage}
-      ,{
+      {
+        path: '/sign_up', component: signupPage},
+      {
         path: '/test',
         component: test
       }
@@ -85,24 +86,24 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   let store = router.app.$options.store
   let userinfo = store.state.userData
-  if(userinfo.check===false){
+  if (userinfo.check === false) {
     checkUser(store)
     store.commit({
       type: 'setuserDate',
-      check:true
+      check: true
     })
   }
   next()
 })
 
-function checkUser(store) {
+function checkUser (store) {
   Vue.http
     .get(
       `${noPointHost}/api/user`,
       {
         crossDomain: true,
         xhrFields: { withCredentials: true },
-        timeout: "8000",
+        timeout: '8000',
         cache: true,
         credentials: true
       }
@@ -118,9 +119,8 @@ function checkUser(store) {
             lastLogin: res.body.data.last_login,
             perm: res.body.data.perm
           })
-        }
-        else {
-          vue.userData = undefined;
+        } else {
+          vue.userData = undefined
         }
         console.log(vue.userData)
       },
@@ -133,9 +133,9 @@ function checkUser(store) {
       }
     )
     .catch(function (response) {
-      //wait to code
-      var vue = this;
-    });
+      // wait to code
+      var vue = this
+    })
 }
 
 export default router

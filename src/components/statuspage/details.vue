@@ -4,11 +4,10 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          {{title}} {{run_id}}
+          {{title}}
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
-        <div class="modal-body">
-          {{markdown_body}}
+        <div class="modal-body" v-html="markdownBody">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">你猜这是不是关闭按钮</button>
@@ -21,22 +20,33 @@
 <script>
 export default {
   name: 'status-details',
-  props: ['run_id'],
+  props: ['datas'],
   data: function () {
     return {
-      title: 'title',
-      markdown_body: ''
+      markdownBody: 'null',
+      title: '404'
     }
   },
-  methods: {},
   watch: {
-    run_id: function () {
-      var runId = this.run_id
-      this.$http.get('/static/status_details.json',{
-        run_id: runId
-      }).then(res => {
-        this.markdown_body = res.body.data.markdown_body
-      }, error => console.info(error))
+    datas: function (n, o) {
+      console.log(n)
+      let data = n
+      if (!data) return
+      var ret = `
+        problem id: ${data.problem_id}
+        solution id: ${data.solution_id}
+        user: ${data.user_id}
+        language: ${data.language}
+        code size: ${data.code_size}
+        time: ${data.time}
+        memory: ${data.memory}
+        when: ${data.when}
+        msg: ${data.msg_short}
+        msg en: ${data.msg_en}
+        msg cn: ${data.msg_cn}
+      `
+      this.markdownBody = marked(ret)
+      this.title = data.solution_id
     }
   }
 }

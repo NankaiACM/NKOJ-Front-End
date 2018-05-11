@@ -16,7 +16,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="status in statusList" :key="status.solution_id">
+        <tr v-for="(status, index) in statusList" :key="index">
           <td class="hidden-xs">{{status.solution_id}}</td>
           <td>
             <router-link :to="{path:'user/'+status.nickname}">
@@ -29,8 +29,13 @@
             </router-link>
           </td>
           <td>
-            <button :class="['btn btn-sm',getStatusClass(status.status_id)]" type="button" class="btn btn-primary" data-toggle="modal" data-target="#status-details" @click="setDetailsRunId(status.solution_id)">
-                {{getStatusText(status.status_id)}}
+            <button
+              :class="['btn btn-sm',getStatusClass(status.status_id)]"
+              type="button" class="btn btn-primary"
+              data-toggle="modal" data-target="#status-details"
+              @click="setDetails(status)"
+            >
+              {{getStatusText(status.status_id)}}
             </button>
           </td>
           <td>{{status.language}}</td>
@@ -54,11 +59,11 @@
           </span>
     </infinite-loading>
     <div id="load-btn-box" v-if="isBtn">
-      <div class="load-btn" @click="getStatus"><span class="glyphicon glyphicon-refresh"></span>
+      <div class="load-btn"><span class="glyphicon glyphicon-refresh"></span>
       </div>
     </div>
   </div>
-  <status-details :solution_id="details.solution_id"></status-details>
+  <status-details :datas="details.datas"></status-details>
 </div>
 </template>
 <script>
@@ -74,66 +79,21 @@ export default {
       statusList: [],
       status_map: statusMap,
       details: {
-        solution_id: '-1'
+        datas: []
       },
       filter: {
         problemID: '',
         userID: '',
         status: '',
         lang: '',
-        pckgln: 410, // 单次请求最大量
-        l: 1, // min id
-        r: 4 // max id
-      },
-      max: -1
+        limit: 150, // 单次请求最大量
+        last: -1
+      }
     }
   },
   methods: {
-    hookmax: function () {
-      let vm = this
-      vm.$http.post(vm.apiUrl, {
-        queryleft: 41,
-        queryright: 42
-      }).then(function (res) {
-        let x = res.body.max
-        console.log(vm.x)
-        if (x === vm.filter.max) return
-        vm.max = x
-      }, function (e) {
-        console.log('fatal erro')
-      })
-    },
-    setDetailsRunId: function (solutionId) {
-      this.details.solution_id = solutionId
-    },
-    getStatus: function (left, right) {
-      let vm = this
-      if (left <= 0) {
-        left = 1
-      }
-      vm.$http.post(vm.apiUrl, {
-        'queryleft': left,
-        'queryright': right
-      }).then(function (res) {
-        if (!res.body.data) {
-          console.log('状态魔法机返回错误')
-          console.info(left, right)
-          console.log(JSON.stringify(res))
-          return -1
-        }
-        // ID应从大到小排序
-        var tmp = this.statusList.concat(res.body.data)
-        tmp = tmp.sort((l, r) => r.solution_id - l.solution_id)
-        vm.statusList = tmp
-        vm.filter.l = Math.min(left, vm.filter.l)
-        vm.filter.r = Math.max(right, vm.filter.r)
-        return 0
-      }, function (e) {
-        console.log('发向状态魔法机的请求错误')
-        console.log(JSON.stringify(e))
-        return -1
-      })
-      // 应当将两个回调函数返回值返回
+    setDetails: function (solution) {
+      this.details.datas = solution
     },
     getStatusClass: function (statusId) {
       var res = 'label-default'
@@ -154,31 +114,72 @@ export default {
       return res
     },
     infiniteHandler: function ($state) {
-      // 获取更小id的status
-      var vm = this
-      var left = vm.filter.l - vm.filter.pckgln
-      var right = vm.filter.l - 1
-      if (left <= 0) left = 1
-      if (right < left) return $state.complete()
-      if (vm.getStatus(left, right) === -1) { // 事实上并不会产生 -1
-        if ($state.complete) $state.complete() // 有待考究
-      } else {
-        if ($state.loaded) $state.loaded()
+      // if ($state.complete) $state.complete()
+      // if ($state.loaded) $state.loaded()
+      let vm = this
+      if (vm.statusList.length === 0) {
+        console.log('第一次向魔法机发起状态请求')
+        vm.$http.get(vm.apiUrl)
+          .then(function (res) {
+            if (!res.body.data) {
+              console.log('init feedback erro')
+              return -1
+            }
+            vm.statusList = res.body.data
+            if ($state.loaded) $state.loaded()
+          }, function (e) {
+            console.log('init get erro')
+          })
+        return 0
       }
+      let from = vm.statusList.length
+      let limit = vm.filter.limit
+      console.log('向魔法机请求更久远的数据')
+      vm.$http.get(vm.apiUrl + '/' + from + '/' + limit)
+        .then(function (res) {
+          var tmp = vm.statusList
+          if (!res.body.data) {
+            console.log('infinite feedback erro')
+            return -1
+          }
+          tmp = tmp.concat(res.body.data)
+          vm.statusList = tmp
+          if ($state.loaded) $state.loaded()
+        }, function (e) {
+          console.log('infinite erro')
+        })
+    },
+    hook: function () {
+      let vm = this
+      if (vm.statusList.length === 0) return -1
+      let till = vm.statusList[0].solution_id
+      vm.$http.get(vm.apiUrl + '/' + till)
+        .then(function (res) {
+          if (!res.body.data) {
+            console.log('没有新的更新')
+            return 0
+          }
+          var tmp = res.body.data
+          tmp = tmp.concat(vm.statusList)
+          vm.statusList = tmp
+          console.log('魔法状态更新')
+        }, function (e) {
+          console.log(JSON.stringify(e))
+        })
     }
   },
   mounted: function () {
+    let vm = this
     this.$nextTick(function () {
-      let vm = this
-      vm.getStatus()
-      vm.pool.psuh(setInterval(vm.hookmax, 5000))
+      vm.pool.push(window.setInterval(vm.hook, 10000))
     })
   },
   beforeDestroy: function () {
     let vm = this
+    console.log('清理魔法池')
+    console.log(vm.pool)
     for (let i in vm.pool) {
-      console.log('clear hook' + vm.pool[i])
-      clearInterval(vm.pool[i])
+      window.clearInterval(vm.pool[i])
     }
   },
   components: {
@@ -190,15 +191,6 @@ export default {
       this.filter = this.$store.state.statusFilter
     },
     'filter.submit': function () {
-      this.getStatus()
-    },
-    max: function (n, o) {
-      if (n < o) {
-        console.log('魔法机抛出魔法错误') // 这个输出应该只会在数据库清空时有可能出现
-      }
-      // 获取更大id的status
-      console.log('响应魔法机的魔力更新')
-      this.getStatus(this.filter.l, n)
     }
   }
 }
