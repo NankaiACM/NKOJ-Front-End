@@ -70,6 +70,7 @@ export default {
   props: ['isFilter', 'isInfinite', 'isBtn', 'apiUrl'],
   data: function () {
     return {
+      pool: [],
       statusList: [],
       status_map: statusMap,
       details: {
@@ -95,6 +96,7 @@ export default {
         queryright: 42
       }).then(function (res) {
         let x = res.body.max
+        console.log(vm.x)
         if (x === vm.filter.max) return
         vm.max = x
       }, function (e) {
@@ -169,11 +171,15 @@ export default {
     this.$nextTick(function () {
       let vm = this
       vm.getStatus()
-      setInterval(vm.hookmax, 3000)
+      vm.pool.psuh(setInterval(vm.hookmax, 5000))
     })
   },
   beforeDestroy: function () {
-    clearInterval(this.hookmax)
+    let vm = this
+    for (let i in vm.pool) {
+      console.log('clear hook' + vm.pool[i])
+      clearInterval(vm.pool[i])
+    }
   },
   components: {
     InfiniteLoading,
@@ -205,53 +211,54 @@ a:focus {
 }
 
 #status-page {
-    text-align: left;
-    background: #fff;
-    padding: 0;
-    min-height: 100%;
+  text-align: left;
+  background: #fff;
+  padding: 0;
+  min-height: 100%;
+  margin-top: @filterheight;
 }
 
 .table-container {
-    font-size: 0.5em;
-    min-width: 600px;
-    border: 2px solid #e8f1f2;
+  font-size: 0.5em;
+  min-width: 600px;
+  border: 2px solid #e8f1f2;
 }
 
 .table-container table.table td {
-    vertical-align: middle;
-    border: none;
-    text-align: center;
+  vertical-align: middle;
+  border: none;
+  text-align: center;
 }
 
 #statusTable th {
-    font-size: 1.2em;
-    border-bottom: 0;
-    height: 3em;
-    text-align: center;
+  font-size: 1.2em;
+  border-bottom: 0;
+  height: 3em;
+  text-align: center;
 }
 
 .table-container table.table tr {
-    transition: all 0.41s;
+  transition: all 0.41s;
 }
 
 #statusTable td a:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .table-container td span.label {
-    padding: 0.2em 0.6em;
-    font-size: 100%;
+  padding: 0.2em 0.6em;
+  font-size: 100%;
 }
 
 .table-container td button.btn {
-    font-size: 80%;
-    border-radius: 0.25em;
-    font-weight: 700;
-    transition: all 1.41s,outline 0.1s;
+  font-size: 80%;
+  border-radius: 0.25em;
+  font-weight: 700;
+  transition: all 1.41s,outline 0.1s;
 }
 
 .table-container td button.btn:hover {
-    outline: 3px solid #ccc;
+  outline: 3px solid #ccc;
 }
 
 .infinite-loading-container {

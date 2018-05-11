@@ -149,8 +149,7 @@ header {
 .com-container {
   min-height: 100%;
   height: 100%;
-  margin-top: @filterheight;
-  margin-bottom: @fat-container-margin-top;
+  padding-top: @barheight + @fat-container-margin-top;
   background-color: rgba(255,255,255,0.5);
 }
 

@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-  import homeComponent from '../home/homeComponent.vue'
+import homeComponent from '../home/homeComponent.vue'
 export default {
   name: 'princeton',
   components: {homeComponent},
@@ -80,11 +80,11 @@ export default {
         slf.princeton.close()
         console.log('尝试重启')
         slf.ptinit()
-      },30000)
+      }, 30000)
     },
     ptmsg: function (evt) {
       console.log('pt msg')
-      console.log('type:'+(typeof evt.data))
+      console.log('type:' + (typeof evt.data))
       if (typeof evt.data === 'string') {
         console.log('rec:' + evt.data)
         var dtmp = this.dealable(evt.data)
@@ -123,7 +123,7 @@ export default {
     },
     botalk: function (str) {
       var vm = this
-      vm.$http.get(vm.bot.url + '?key=' +vm.bot.key + '&info=' + str + '&userid=' + this.bot.id)
+      vm.$http.get(vm.bot.url + '?key=' + vm.bot.key + '&info=' + str + '&userid=' + this.bot.id)
         .then(function (res) {
           var jsn = res.data
           var ret = jsn.text
@@ -139,7 +139,7 @@ export default {
         var str = ''
         str += his[i].nickname
         str += ': '
-        str +=his[i].message
+        str += his[i].message
         ret.push(str)
       }
       return ret
@@ -176,13 +176,13 @@ export default {
       }
     }
   },
-  mounted: function (){
+  mounted: function () {
     this.$nextTick(function () {
       this.ptinit()
-      this.bot.id = (~~(Math.random()*(1<<24))).toString(16)
+      this.bot.id = (~~(Math.random() * (1 << 24))).toString(16)
     })
   },
-  beforeDestroy: function() {
+  beforeDestroy: function () {
     this.princeton.close()
     for (var i in this.princeton.rmt) {
       clearTimeout(this.princeton.rmt[i])
@@ -191,12 +191,12 @@ export default {
 }
 </script>
 <style>
-  .danmaku-wrapper {
-    opacity: 0.9;
+.danmaku-wrapper {
+  opacity: 0.9;
   border-radius: .41em;
   padding: 2em;
-    max-width: 380px;
-    margin: auto;
+  max-width: 380px;
+  margin: auto;
 }
 
 #pt-ctl {

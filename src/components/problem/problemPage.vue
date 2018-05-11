@@ -51,18 +51,58 @@
   </transition>
   <div>
     <div class="pro-container">
-      <h2 id="pro-title" align="left" class="col-sm-12 problemPageTitle" :class="titleclass">
-        {{o.title ? o.title : '美好的bug正在发生'}}</h2>
+      <h2 id="pro-title" align="left" class="problemPageTitle" :class="titleclass">
+        {{o.title ? o.title : '美好的bug正在发生'}}
+      </h2>
       <div class="problemDescription" @click="iCanSee2">
         <div>
-          <div class="ac">ac:{{this.o.ac}}</div>
-          <div class="all">all submit:{{this.o.all}}</div>
-          <div class="special-judge">special judge:{{this.o.special_judge}}</div>
-          <div class="detail-judge">detail judge{{this.o.detail_judge}}</div>
-          <div class="cases">cases:{{this.o.cases}}</div>
-          <div class="tl">time limit:{{this.o.time_limit}}</div>
-          <div class="ml">memory limit:{{this.o.memory_limit}}</div>
-          <div class="level">level:{{this.o.level}}</div>
+        <div class="details">
+          <div class="i ac"><div class="l">Ac</div><div class="r">{{o.ac}}</div></div>
+          <div class="i all"><div class="l">All submit</div><div class="r">{{o.all}}</div></div>
+        </div>
+        <div class="details">
+          <div class="i level"><div class="l">Level</div><div class="r">{{o.level}}</div></div>
+          <div class="i tl"><div class="l">Time Limit</div><div class="r">{{o.time_limit}} ms</div></div>
+          <div class="i ml"><div class="l">Memory Limit</div><div class="r">{{o.memory_limit}} kB</div></div>
+        </div>
+        <div class="details">
+          <div class="i sj">
+            <div class="l">
+              special judge
+            </div>
+            <div class="r">
+              {{o.special_judge}}
+            </div>
+          </div>
+          <div class="i dj">
+            <div class="l">
+              detail judge
+            </div>
+            <div class="r">
+              {{o.detail_judge}}
+            </div>
+          </div>
+          <div class="i cases">
+            <div class="l">
+              cases
+            </div>
+            <div class="r">
+              {{o.cases}}
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="tags">
+          <div class="t">Tags:</div>
+          <div
+            class="t"
+            v-for="(item, index) in this.o.tags" :key="index">
+            {{item.name}}
+            <div class="c" v-if="!item.c">
+              <div class="y" @click="yes(item)">vote</div>
+              <div class="n" @click="no(item)">no</div>
+            </div>
+          </div>
         </div>
         <div align="left" v-html="problemMarkDown"></div>
       </div>
@@ -78,7 +118,7 @@ export default {
     return {
       contentObj: {},
       keyArr: [],
-      o: {//现在的视图，会被initView完全覆盖
+      o: { // 现在的视图，会被initView完全覆盖
         case: 0,
         content: 0,
         problem_id: 0,
@@ -102,10 +142,10 @@ export default {
   computed: {
     problemMarkDown: function () {
       var markdown = ''
-      for(var i in this.keyArr) {
-        markdown += '### ' + i.replace(/\b\w/g, l => l.toUpperCase()) + "\n" + this.contentObj[i]  + "\n"
+      for (var i in this.keyArr) {
+        markdown += '### ' + i.replace(/\b\w/g, l => l.toUpperCase()) + '\n' + this.contentObj[i]  + '\n'
       }
-      return marked(markdown, {sanitize : false})
+      return marked(markdown, {sanitize: false})
     }
   },
   mounted: function () {
@@ -117,9 +157,12 @@ export default {
     editor: require('vue2-ace-editor')
   },
   methods: {
+    no: function (e) {
+      console.log(e)
+    },
     initView: function () {
       window.addEventListener('scroll', this.hScroll)
-      this.$http.get(`${window.noPointHost}/api/problem/`+this.$route.params.problemId).then(
+      this.$http.get(`${window.noPointHost}/api/problem/` + this.$route.params.problemId).then(
         (res) => {
           console.log(res.body)
           this.keyArr = res.body.data.content
@@ -128,41 +171,41 @@ export default {
           this.isStart = true
           console.log(JSON.stringify(this.o))
         },
-        (e)=> {
+        (e) => {
           console.log(e)
         })
     },
     hScroll: function () {
       var sTop = window.pageYOffset
       var tTop = document.querySelector('#pro-title').offsetTop
-      if (sTop > tTop) {//不给予恢复
+      if (sTop > tTop) { // 不给予恢复
         this.titleclass = 'active'
         window.removeEventListener('scroll', this.hScroll)
       }
     },
-    submit: function() {
-      console.log("wtf")
+    submit: function () {
+      console.log('wtf')
       let sendPackge = {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }
       sendPackge.p = this.$route.params.problemId
-      sendPackge.lang = 0;
+      sendPackge.lang = 0
       sendPackge.code = this.submitCode
       let _this = this
       this.$http.post(`${window.noPointHost}/api/judge`, sendPackge,
-        {crossDomain : true, credentials : true}).then(res => {
+        {crossDomain: true, credentials: true}).then(res => {
         console.log(res)
-        _this.isInfo = true;
-        if(res.body.code === 0) {
+        _this.isInfo = true
+        if (res.body.code === 0) {
           _this.submitInfo = '成功提交！'
         } else {
           _this.submitInfo = '未知错误！'
         }
       }, err => {
-        _this.isInfo = true;
-        if(err.body.code === 401){
+        _this.isInfo = true
+        if (err.body.code === 401) {
           _this.submitInfo = '请您登陆！'
         } else {
           _this.submitInfo = '未知错误！'
@@ -188,8 +231,8 @@ export default {
       this.isInfo = false
       e.preventDefault()
     },
-    iCanSee2: function() {
-      if(this.isSee){
+    iCanSee2: function () {
+      if (this.isSee) {
         this.isSee = !this.isSee
         this.isStart = !this.isStart
         this.isInfo = false
@@ -208,16 +251,20 @@ export default {
 
 <style scoped lang="less">
 @import '../../less/global.less';
-#problemPage pre{
+
+html {
+#problemPage pre {
   text-align: left;
   background: white;
   margin-bottom: 30px;
   border: none;
   color: #13293D;
 }
-#problemPage{
+
+#problemPage {
   padding-bottom: 30px;
 }
+
 #problemSubmit {
   background: white;
   position: fixed;
@@ -232,26 +279,12 @@ export default {
   border-radius: 10px;
   box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1), 0 -5px 5px rgba(150, 150, 150, 0.1), 5px 0 5px rgba(150, 150, 150, 0.1), -5px 0 5px rgba(150, 150, 150, 0.1);
 }
-#problemSubmit:hover{
+
+#problemSubmit:hover {
   box-shadow: 0 5px 5px rgba(150, 150, 150, 0.4), 0 -5px 5px rgba(150, 150, 150, 0.4), 5px 0 5px rgba(150, 150, 150, 0.4), -5px 0 5px rgba(150, 150, 150, 0.4);
 }
-.pro-container{
-  position: absolute;
-  margin-top: 150px;
-  top: 0;
-  left: 10%;
-  right: 10%;
-  margin-bottom: 60px;
-  background: white;
-  padding: 40px 60px;
-  overflow: auto;
-  transition: all 0.5s;
-  border-radius: 10px;
-}
-.pro-container:hover{
-  box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1), 0 0px 20px rgba(150, 150, 150, 0.1), 5px 0 5px rgba(150, 150, 150, 0.1), -5px 0 5px rgba(150, 150, 150, 0.1);
-}
-#problemSubmit nav{
+
+#problemSubmit nav {
   padding-right: 20px;
   margin: 0;
   background: #16aad8;
@@ -259,63 +292,46 @@ export default {
   border: none;
   border-radius: 0;
 }
-#problemSubmit h4{
+
+#problemSubmit h4 {
   font-weight: 600;
   color: #16aad8;
   overflow: hidden;
 }
-#codeArea{
-  border: 1px solid rgba(151,159,175,0.8);
+
+#codeArea {
+  border: 1px solid rgba(151, 159, 175, 0.8);
   border-radius: 2px;
 }
-#problemPage h1, h2, h3{
+
+#problemPage h1, h2, h3 {
   font-weight: 600;
 }
-#problemPage .problemPageTitle{
-  background: #fff;
-  margin: 2em 0;
-  font-family: "微软雅黑";
-  font-weight: 400;
-  color: #233;
-  border-bottom: 1px solid #eee;
-  transition: all 1.41s;
+
+.fade-enter-active, .fade-leave-active {
+  transition: all .5s;
 }
 
-#problemPage .problemPageTitle.normal {
-  border-left: 10px solid #93a7a7;
-}
-
-#problemPage .problemPageTitle.active {
-  padding: 0;
-  margin: 0;
-  left: 0;
-  top: @barheight;
-  height: @filterheight;
-  line-height: @filterheight - 2em;
-  text-align: center;
-  position: fixed;
-  font-weight: 100;
-}
-
-.fade-enter-active, .fade-leave-active{
-   transition: all .5s;
- }
-.fade-enter, .fade-leave-to{
+.fade-enter, .fade-leave-to {
   opacity: 0;
   transform: scale(1.2, 1.2);
 }
-.up-enter-active, .up-leave-active{
+
+.up-enter-active, .up-leave-active {
   transition: all 1s ease;
 }
-.up-enter{
+
+.up-enter {
   opacity: 0;
   transform: translateY(100px);
 }
-.up-leave-to{
+
+.up-leave-to {
   opacity: 0;
   transform: translateY(100px);
 }
-#problemPage button, .mobileLeft{
+
+#problemPage button, .mobileLeft {
   margin-top: 10px;
   position: absolute;
   left: 130px;
@@ -326,62 +342,74 @@ export default {
   border-radius: 100px;
   transition: all 0.5s;
 }
-#problemPage button:focus, button:hover{
+
+#problemPage button:focus, button:hover {
   outline: none;
 }
-#problemPage .mobileLeft button{
+
+#problemPage .mobileLeft button {
   left: 0;
   margin-top: 0;
   border: none;
 }
-#problemPage .mobileLeft{
+
+#problemPage .mobileLeft {
   left: 50px;
   border: none;
 }
-#problemPage .mobileRight{
+
+#problemPage .mobileRight {
   left: 210px;
   border: none;
 }
-#problemPage .navbar-default .navbar-nav>.open>a,
-.navbar-default .navbar-nav>.open>a:focus,
-.navbar-default .navbar-nav>.open>a:hover{
+
+#problemPage .navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:focus,
+.navbar-default .navbar-nav > .open > a:hover {
   background: #2cbfec;
   border-radius: 10px;
 }
-#problemPage .submitGirl{
+
+#problemPage .submitGirl {
   position: fixed;
   bottom: -25px;
   left: 75%;
   z-index: 2;
   opacity: 0.65;
 }
-#problemPage .submitGirl:hover{
+
+#problemPage .submitGirl:hover {
   bottom: 0;
   opacity: 1;
   transition: all 0.5s;
   cursor: pointer;
 }
 
-#problemPage .navbar-header{
+#problemPage .navbar-header {
   font-weight: bold;
 }
-#problemPage .navbar-text{
+
+#problemPage .navbar-text {
   color: white;
 }
-.bottomInfo{
+
+.bottomInfo {
   font-family: inherit;
   font-size: 0.8em;
   bottom: 0;
   left: 130px;
   position: absolute;
 }
-.bottomInfoLeft{
+
+.bottomInfoLeft {
   left: 45px
 }
-.bottomInfoRight{
+
+.bottomInfoRight {
   left: 215px;
 }
-.submitInfo{
+
+.submitInfo {
   position: absolute;
   background: white;
   width: 150px;
@@ -390,15 +418,181 @@ export default {
   border-radius: 10px;
   z-index: 10;
 }
-.submitInfo h4{
+
+.submitInfo h4 {
   padding: 5px;
   margin: 0;
 }
-.submitInfo .submitInfoText{
+
+.submitInfo .submitInfoText {
   padding: 15px;
 }
-.submitInfo hr{
+
+.submitInfo hr {
   padding: 5px;
   margin: 0;
+}
+
+} // work tmp, after work break out
+.pro-container {
+  position: absolute;
+  margin-top: 150px;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  margin-bottom: 60px;
+  background: white;
+  padding: 40px 60px;
+  overflow: auto;
+  transition: all 0.5s;
+  // border-radius: 10px;
+  .problemPageTitle {
+    background: #fff;
+    margin: 2em 0;
+    font-family: "微软雅黑";
+    font-weight: 400;
+    color: #233;
+    border-bottom: 1px solid #eee;
+    transition: all 1.41s;
+  }
+  .problemPageTitle.normal {
+    border-left: 10px solid #93a7a7;
+  }
+  .problemPageTitle.active {
+    padding: 0;
+    margin: 0;
+    left: 0;
+    right: 0;
+    top: @barheight;
+    height: @filterheight;
+    line-height: @filterheight - 2em;
+    text-align: center;
+    position: fixed;
+    font-weight: 100;
+  }
+  .details {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1em;
+    transform: scale(1);
+    .i {
+      border: solid 1px;
+      border-radius: 4px;
+      margin-right: 1em;
+      .l, .r {
+        display: inline-block;
+        padding: .41em 1em;
+      }
+      .l {
+        border-right: 1px solid;
+      }
+    }
+    .ac, .all {
+      .r {
+        position: relative;
+      }
+      .r::before {
+        position: absolute;
+        content: ' ';
+        width: .6em;
+        height: .6em;
+        background: #fff;
+        transform: translateX(-50%) translateY(-50%) rotate(45deg);
+        left: 0;
+        top: 50%;
+      }
+    }
+    .ac {
+      color: #db2828;
+      border-color: #db2828;
+      .l {
+        color: #fff;
+        background: #db2828;
+      }
+    }
+    .all {
+      color: #1e70bf;
+      border-color: #1e70bf;
+      .l {
+        color: #fff;
+        background: #1e70bf;
+      }
+    }
+    .tl {
+      color: #16ab39;
+      border-color: #16ab39;
+    }
+    .ml {
+      color: #1678c2;
+      border-color: #1678c2;
+    }
+    .level {
+      color: #2cbfec;
+      border-color: #2cbfec;
+    }
+    .sj {
+      color: #eaae00;
+      border-color: #eaae00;
+    }
+    .dj {
+      color: #9627ba;
+      border-color: #a333c8;
+    }
+  }
+  .tags {
+    display: flex;
+    flex-direction: row;
+    .t {
+      color: #1678c2;
+      border: 1px solid #1678c2;
+      border-radius: 4px;
+      padding: .41em 1em;
+      margin-right: 1em;
+      position: relative;
+      transition: all .41s;
+      .c {
+        display: inline-block;
+        transition: all .41s;
+        .y, .n {
+          display: inherit;
+          position: relative;
+          padding: .2em .4em;
+          cursor: pointer;
+          transition: all .41s;
+        }
+        .y:hover, .n:hover {
+        }
+        .y {
+          background: #db2828;
+          color: #fff;
+          border-radius: 4px 0 0 4px;
+        }
+        .n {
+          background: #1e70bf;
+          color: #fff;
+          border-radius: 0 4px 4px 0;
+        }
+        .n::before {
+          content: ' ';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          margin-top: -.5em;
+          margin-left: -.7em;
+          width: 1em;
+          height: 1em;
+          border-radius: 50%;
+          background: #fff;
+        }
+      }
+    }
+  }
+}
+
+.pro-container:hover {
+  box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1),
+              0 0px 20px rgba(150, 150, 150, 0.1),
+              5px 0 5px rgba(150, 150, 150, 0.1),
+              -5px 0 5px rgba(150, 150, 150, 0.1);
 }
 </style>
