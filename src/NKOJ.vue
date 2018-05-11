@@ -6,9 +6,9 @@
     <head-bar @toHome="localTo('home')" @logIn='changeToLogin' @signUp='changeToSignup'
               @toProblem="localTo('problems')" @toStatus="localTo('status')" @toContest="localTo('contest')"
               @toRank="localTo('ranklist')" @toDiscuss="localTo('discuss')" :nowPage=nowPageF :userPage=userPage>
-              <question-filter v-if="this.$route.path === '/problems'" class="abb"></question-filter>
-              <status-filter v-if="this.$route.path === '/status'" class="abb"></status-filter>
-              <rank-filter v-if="this.$route.path === '/ranklist'" class="abb"></rank-filter>
+    <question-filter v-if="this.$route.path === '/problems'" class="abb"></question-filter>
+    <status-filter v-if="this.$route.path === '/status'" class="abb"></status-filter>
+    <rank-filter v-if="this.$route.path === '/ranklist'" class="abb"></rank-filter>
     </head-bar>
   </header>
   <!--wall-paper></wall-paper-->
@@ -24,7 +24,7 @@
 import loginDialog from './components/dialog/loginDialog'
 import headBar from './components/headbar/headBar'
 
-import questionFilter from './components/problemslistpage/questionFilter.vue'
+import questionFilter from './components/problem/questionFilter.vue'
 import statusFilter from './components/statuspage/statusFilter.vue'
 import rankFilter from './components/ranklist/rankFilter.vue'
 import componentShell from './components/shell/mayoi.vue'
@@ -40,7 +40,7 @@ export default {
       userPage: 'None',
       loginUserName: 'null',
       nowPage: '',
-      userData:undefined,
+      userData: undefined
     }
   },
   methods: {
@@ -48,56 +48,57 @@ export default {
       console.info(this.$route.path)
       this.nowPage = str
       this.$router.push({
-        path: '/'+str
+        path: '/' + str
       })
       console.info(this.$route.path)
     },
     changeTo404: function () {
-      this.nowPage='404'
+      this.nowPage = '404'
       this.$router.push({
         path: '/notFound'
       })
     },
     changeToUser: function () {
-      this.nowPage='User'
+      this.nowPage = 'User'
       this.$router.push({
         path: '/user/Saurus'
       })
     },
     changeToLogin: function () {
-      this.userPage='login'
+      this.userPage = 'login'
     },
     changeToSignup: function () {
-      this.nowPage='signUp'
-      this.$router.push({path: '/sign_up'});
+      this.nowPage = 'signUp'
+      this.$router.push({path: '/sign_up'})
     },
     exitShow: function () {
-      this.userPage="None";
+      this.userPage = 'None'
     },
-    changeLogin:function(value){
-      this.userPage="None";
-      this.nowPage=value;
-      this.$router.push({path: '/sign_up'});
-    },
+    changeLogin: function (value) {
+      this.userPage = 'None'
+      this.nowPage = value
+      this.$router.push({path: '/sign_up'})
+    }
   },
-  computed:{
+  computed: {
     nowPageF: function () {
-      if(this.nowPage=='')
-        return this.$router.currentRoute.fullPath.split("/")[1]
-      else
+      if (this.nowPage === '') {
+        return this.$router.currentRoute.fullPath.split('/')[1]
+      } else {
         return this.nowPage
+      }
     },
     xclass: function () {
-      var clear = ['/home', '/contest']
+      var clear = ['/home']
       var xroute = this.$route.path
       var special = clear.indexOf(xroute)
-      special = false //special + 1
+      special = false // special + 1
       return {
-        'com-container col-md-10 col-md-offset-1': ! special,
+        'com-container col-md-10 col-md-offset-1': !special,
         'xclear': special
       }
     }
-  },
+  }
 }
 </script>
 

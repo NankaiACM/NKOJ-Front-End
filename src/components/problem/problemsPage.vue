@@ -52,11 +52,10 @@
 <script>
 import ProblemsPagination from './pagination.vue'
 import questionFilter from './questionFilter.vue'
-import Vue from 'vue'
 export default {
   name: 'component-problems',
   props: ['user_pros_msg'],
-  data: function() {
+  data: function () {
     return {
       filter: [],
       rawList: [],
@@ -67,7 +66,7 @@ export default {
       pageSize: 20,
       queryleft: 1,
       queryright: 150,
-      viewing: 1,//>=1
+      viewing: 1, // >=1
       total: 1
     }
   },
@@ -81,24 +80,24 @@ export default {
     initView: function () {
       console.log(this.queryright)
       this.$http.get(`${window.noPointHost}/api/problems/list?l=${this.queryleft}&r=${this.queryright}`)
-        .then(function(res) {
+        .then(function (res) {
           this.rawList = res.body.data.list
           this.total = res.body.data.served
           this.raw2listrender()
         })
     },
     stateAstarRender: function (tmp) {
-      for(var x in tmp){
+      for (var x in tmp) {
         var item = tmp[x]
         tmp[x].isStar = false
         tmp[x].state = 'none'
-        if(this.starlist.indexOf(item.problem_id) !== -1){
+        if (this.starlist.indexOf(item.problem_id) !== -1) {
           tmp[x].isStar = true
         }
-        if(this.aclist.indexOf(item.problem_id) !== -1){
+        if (this.aclist.indexOf(item.problem_id) !== -1) {
           item[x].state = 'ac'
         }
-        if(this.onlist.indexOf(item.problem_id) !== -1){
+        if (this.onlist.indexOf(item.problem_id) !== -1) {
           item[x].state = 'on'
         }
       }
@@ -122,7 +121,7 @@ export default {
     }
   },
   watch: {
-    user_pros_msg : function (newv, oldv) {
+    user_pros_msg: function (newv, oldv) {
       this.starlist = newv.star
       this.aclist = newv.ac
       this.onlist = newv.on
@@ -131,8 +130,8 @@ export default {
       deep: true,
       handler: function (n, o) {
         this.filter = n
-        //this.problemList = []
-        //this.initView()
+        // this.problemList = []
+        // this.initView()
       }
     }
   },
@@ -150,6 +149,7 @@ export default {
   color: #233;
   padding:0;
   transition: all 1s;
+  margin-top: @filterheight;
 }
 
 .fat-container {
@@ -172,6 +172,7 @@ export default {
 
 #ProblemTable thead tr th {
   font-size: 1.4em;
+  text-align: left;
 }
 
 #ProblemTable tbody tr td:first-child {

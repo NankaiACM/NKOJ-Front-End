@@ -14,7 +14,7 @@ import rankTable from './rankTable.vue'
 import rankChart from './rankChart.vue'
 import rankMe from './rankMe.vue'
 export default {
-  name: "rankPage",
+  name: 'rankPage',
   data: function () {
     return {
       ranklist: [],
@@ -35,19 +35,21 @@ export default {
           this.getTrackFilterOption(this.rawdata)
         })
     },
-    getTrackFilterOption: function (pies) {//获取filter的参数
+    getTrackFilterOption: function (pies) { // 获取filter的参数
       var ops = []
       for (let i in pies) {
         var key = pies[i].key
-        var text  = pies[i].text
+        var text = pies[i].text
         ops.push({key: key, text: text})
       }
       this.pushFilterCommit(ops)
-      if (this.timeBy === '') this.$store.commit({
-        type: 'setRFilter',
-        key: 'timeBy',
-        value: ops[0].key
-      })
+      if (this.timeBy === '') {
+        this.$store.commit({
+          type: 'setRFilter',
+          key: 'timeBy',
+          value: ops[0].key
+        })
+      }
     },
     getRankList: function (n) {
       var res = this.rawdata.filter((item) => {
@@ -70,7 +72,7 @@ export default {
           let item = track.data[j]
           var p = {
             posx: track.text,
-            posy: j * 1, 
+            posy: j * 1,
             rank: item.rank,
             faction: item.faction,
             nickname: item.nickname,
@@ -83,7 +85,7 @@ export default {
       for (let i = 1; i <= ymaxn; i++) ydata.push(i)
       return {listdata, xdata, ydata}
     },
-    pushFilterCommit: function (ops) {//向store中推送时间选项参数
+    pushFilterCommit: function (ops) { // 向store中推送时间选项参数
       this.$store.commit({
         type: 'pushRFOption',
         key: 'ops',
@@ -125,6 +127,7 @@ export default {
 @import '../../less/global.less';
 @rtop: @barheight+@fat-container-margin-top+@filterheight;
 #rankPage {
+  margin-top: @filterheight;
   .view-container {
     border-radius: 2px;
     border: 2px solid #e8f1f2;

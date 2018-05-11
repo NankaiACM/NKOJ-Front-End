@@ -45,10 +45,10 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: '/var/www/front/dist/index.html',
+    index: path.resolve(__dirname, '../../front/dist/index.html'),
 
     // Paths
-    assetsRoot: '/var/www/front/dist',
+    assetsRoot: path.resolve(__dirname, '../../front/dist/'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 

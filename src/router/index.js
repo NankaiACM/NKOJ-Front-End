@@ -2,11 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HOME from '../NKOJ'
 import NKPC from "../NKPC"
-import componentProblems from '../components/problemslistpage/problemsPage'
+import componentProblems from '../components/problem/problemsPage'
 import componentHome from '../components/home/home'
 import componentB from '../components/componentB'
 import componentContest from '../components/componentContest'
-import problemsPage from '../components/problemPage'
+import problemsPage from '../components/problem/problemPage'
 import statusPage from '../components/statuspage/statusPage'
 import discussPage from '../components/discussPage'
 import postPage from '../components/discuss/post'
@@ -130,8 +130,6 @@ function checkUser(store) {
         var vue = this;
         console.log(res)
         */
-       
-        
       }
     )
     .catch(function (response) {
