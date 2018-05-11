@@ -34,8 +34,8 @@ export default {
       danmakus: [],
       limit_hit: 140,
       princeton: 0,
-      url: 'ws://localhost:8001',
-      hisurl: 'http://111.231.98.20/api/danmaku',
+      url: 'ws://localhost:80',
+      hisurl: 'http://localhost/api/danmaku',
       bot:{
         url: 'http://www.tuling123.com/openapi/api',
         key: '797f060721db48dca531d74bbc847af9',
