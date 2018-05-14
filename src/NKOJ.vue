@@ -17,6 +17,7 @@
     </div>
   </section>
   <component-shell></component-shell>
+  <ver></ver>
 </div>
 </template>
 
@@ -29,9 +30,10 @@ import statusFilter from './components/statuspage/statusFilter.vue'
 import rankFilter from './components/ranklist/rankFilter.vue'
 import componentShell from './components/shell/mayoi.vue'
 import wallPaper from './components/wallpaper/wallpaper.vue'
+import ver from './components/ver/ver.vue'
 
 export default {
-  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell, wallPaper},
+  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell, wallPaper, ver},
   name: 'NKOJ',
   data: function () {
     return {
