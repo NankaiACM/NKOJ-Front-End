@@ -270,6 +270,7 @@ export default {
         })
         .then(
           res => {
+            console.log(res)
             if (res.body.code === 0) {
               this.signupStatus=6;
               this.$store.commit({
