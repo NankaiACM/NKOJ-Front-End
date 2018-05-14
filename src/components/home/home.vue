@@ -20,16 +20,14 @@
       <home-discuss></home-discuss>
     </div>
     <div class="sidebar">
-      <div class="wrapper">
-        <home-component :title="'占位符'">
-          <hr class=".hr">
-          这儿应该有一个很大的图片
-        </home-component>
-        <princeton></princeton>
-      </div>
+      <home-component :title="'占位符'">
+        <hr class=".hr">
+      </home-component>
+      <princeton></princeton>
     </div>
     <div style="clear:both;"></div>
   </div>
+  <urgent></urgent>
 </div>
 </template>
 <script>
@@ -39,20 +37,22 @@ import tlex              from '../wallpaper/tlex.vue'
 import homeContest       from './homeContest.vue'
 import homeDiscuss       from './homeDiscuss.vue'
 import homeProblem       from './homeProblems.vue'
-import HomeComponent from './homeComponent'
+import HomeComponent     from './homeComponent'
+import urgent            from '../urgent/urgent.vue'
 export default {
   name: 'component-home',
-  data: function() {
+  data: function () {
     return {
       mk: {
         x: 0,
         y: 0,
         z: 0
-      }
+      },
+      btns: false
     }
   },
-  mounted: function() {
-    this.$nextTick(function() {
+  mounted: function () {
+    this.$nextTick(function () {
     })
   },
   methods: {
@@ -64,7 +64,7 @@ export default {
       this.mk.y = x * 30
       var y = e.layerY - h
       y = y / h
-      this.mk.x = - y * 30
+      this.mk.x = -y * 30
     }
   },
   computed: {
@@ -75,6 +75,7 @@ export default {
     }
   },
   components: {
+    urgent,
     HomeComponent,
     princeton,
     alex,

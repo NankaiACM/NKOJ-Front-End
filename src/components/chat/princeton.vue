@@ -3,8 +3,8 @@
     <home-component :title="'聊天室'">
       <hr class="hr">
       <div class="danmaku-wrapper">
-        <div id="huiban">
-          <div id="html-container" class="ptin" v-html="danmakusHTML"></div>
+        <div>
+          <div id="huiban" class="ptin html-container" v-html="danmakusHTML"></div>
         </div>
         <div id="pt-ctl">
           <div class="pt-in-ctl">
@@ -34,9 +34,9 @@ export default {
       danmakus: [],
       limit_hit: 140,
       princeton: 0,
-      url: 'ws://acm.nankai.edu.cn:8080',
-      hisurl: 'http://acm.nankai.edu.cn:8080/api/danmaku',
-      bot:{
+      url: 'ws://acm.nankai.edu.cn:80',
+      hisurl: 'http://acm.nankai.edu.cn:80/api/danmaku',
+      bot: {
         url: 'http://www.tuling123.com/openapi/api',
         key: '797f060721db48dca531d74bbc847af9',
         id: '',
@@ -63,6 +63,7 @@ export default {
         .then(function (res) {
           console.log(res)
           this.danmakus = [...this.dealhis(res.body.data), ...this.danmakus]
+          this.danmakus = this.danmakus.reverse()
         }, function (e) {
           console.log(e)
         })
@@ -160,7 +161,8 @@ export default {
       var decoder = new TextDecoder('utf-8')
       var user = decoder.decode(blob.slice(4, 4 + ulen))
       var message = this.dealable(decoder.decode(blob.slice(5 + ulen, 5 + ulen + mlen)))
-      this.danmakus.push(`<span class="user-${color}">${admin ? '[管]' : ''}${user}</span>: ${message}`)
+      let n = `<span class="user-${color}">${admin ? '[管]' : ''}${user}</span>: ${message}`
+      this.danmakus = [n, ...this.danmakus]
       // Color Schema: https://github.com/hukl/Smyck-Color-Scheme/blob/master/colors
     }
   },
@@ -260,7 +262,7 @@ export default {
   background: #bbb;
 }
 
-#huiban #html-container {
+#huiban.html-container {
   padding: 1em;
   font-size: 14px;
   word-break: break-all;
@@ -270,11 +272,11 @@ export default {
   height: 300px;
 }
 
-#huiban #html-container div.dpic {
+#huiban.html-container div.dpic {
   transition: all .41s;
 }
 
-#huiban #html-container div.dpic:hover {
+#huiban.html-container div.dpic:hover {
   cursor: pointer;
   background: #eee;
   border-radius: .41em;

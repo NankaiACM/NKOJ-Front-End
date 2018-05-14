@@ -171,7 +171,7 @@ export default {
             func: (argc, argv, envp) => {
               var vm = envp[0]
               if (argc === 1) {
-                var ret = 
+                var ret =
 `clear: clear screen
 date: get date
 echo [arg...]: echo string
@@ -251,7 +251,7 @@ history: get history cmds
 </script>
 <style>
 #mayoict {
-  display: none;
+  display: block;
 }
 
 #mayoi {

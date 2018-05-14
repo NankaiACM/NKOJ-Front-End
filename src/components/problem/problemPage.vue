@@ -98,9 +98,9 @@
             class="t"
             v-for="(item, index) in this.o.tags" :key="index">
             {{item.name}}
-            <div class="c" v-if="!item.c">
-              <div class="y" @click="yes(item)">vote</div>
-              <div class="n" @click="no(item)">no</div>
+            <div class="c">
+              <div class="y" @click="yes(item, $event)">vote</div>
+              <div class="n" @click="no(item, $event)">no</div>
             </div>
           </div>
         </div>
@@ -157,8 +157,15 @@ export default {
     editor: require('vue2-ace-editor')
   },
   methods: {
-    no: function (e) {
-      console.log(e)
+    hideDiv: function (node) {
+      node.style.display = 'none'
+    },
+    no: function (it, e) {
+      this.hideDiv(e.target.parentElement)
+      console.log(e.target.parentElement.style.display)
+    },
+    yes: function (it, e) {
+      this.hideDiv(e.target.parentElement)
     },
     initView: function () {
       window.addEventListener('scroll', this.hScroll)

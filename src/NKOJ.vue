@@ -17,6 +17,7 @@
     <foot></foot>
   </div>
   <component-shell></component-shell>
+  <ver></ver>
 </div>
 </template>
 
@@ -31,9 +32,10 @@ import componentShell from './components/shell/mayoi.vue'
 import wallPaper from './components/wallpaper/wallpaper.vue'
 import alex              from './components/wallpaper/alex.vue'
 import foot              from './components/footer.vue'
+import ver from './components/ver/ver.vue'
 
 export default {
-  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell, wallPaper,alex,foot},
+  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell, wallPaper,alex,foot, ver},
   name: 'NKOJ',
   data: function () {
     return {
