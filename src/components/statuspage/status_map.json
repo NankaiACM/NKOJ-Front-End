@@ -54,6 +54,11 @@
       "value": "118",
       "status": "System Error",
       "label_class": "btn-warning"
+    },
+    {
+      "value": "120",
+      "status": "Compiling status",
+      "label_class": "btn-info"
     }
   ]
 }

@@ -32,7 +32,6 @@
             <button
               :class="['btn btn-sm',getStatusClass(status.status_id)]"
               type="button" class="btn btn-primary"
-              data-toggle="modal" data-target="#status-details"
               @click="setDetails(status)"
             >
               {{getStatusText(status.status_id)}}
@@ -63,7 +62,7 @@
       </div>
     </div>
   </div>
-  <status-details :datas="details.datas"></status-details>
+  <status-details :datas="details.datas" v-if="showdt" @rmdt="showdt = false"></status-details>
 </div>
 </template>
 <script>
@@ -88,14 +87,17 @@ export default {
         lang: '',
         limit: 150, // 单次请求最大量
         last: -1
-      }
+      },
+      showdt: false
     }
   },
   methods: {
     setDetails: function (solution) {
       this.details.datas = solution
+      this.showdt = true
     },
     getStatusClass: function (statusId) {
+      statusId = statusId.toString()
       var res = 'label-default'
       this.status_map.map(item => {
         if (item.value === statusId) {
@@ -106,6 +108,7 @@ export default {
     },
     getStatusText: function (statusId) {
       var res = 'unknow'
+      statusId = statusId.toString()
       this.status_map.map(item => {
         if (item.value === statusId) {
           res = item.status
