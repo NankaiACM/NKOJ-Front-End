@@ -34,8 +34,8 @@ export default {
       danmakus: [],
       limit_hit: 140,
       princeton: 0,
-      url: 'ws://acm.nankai.edu.cn:8080',
-      hisurl: 'http://acm.nankai.edu.cn:8080/api/danmaku',
+      url: 'ws://acm.nankai.edu.cn:80',
+      hisurl: 'http://acm.nankai.edu.cn:80/api/danmaku',
       bot: {
         url: 'http://www.tuling123.com/openapi/api',
         key: '797f060721db48dca531d74bbc847af9',
