@@ -139,7 +139,7 @@ export default {
   },
   methods: {
     emailSendAttempt: function(event) {
-      console.log(this.$route.matched[0].components.default.methods.initUser())
+      //console.log(this.$route.matched[0].components.default)
       //邮箱检验
       if (!this.CheckMail(this.signupAttribute.signupEmail)) {
         this.statusMessage = [{ name: "邮箱", message: "格式错误，再检查一下吧" }];
@@ -369,7 +369,7 @@ export default {
 
 <style scoped>
 .sign-up {
-  padding: 20px 0 40px;
+  padding: 20px 0;
   max-width: 500px;
 }
 .sign-up .title-bar {
@@ -399,6 +399,7 @@ export default {
   box-shadow: none;
   padding: 2.8rem 20px 0.7rem;
   height: auto;
+  background: none;
 }
 .sign-up input:focus {
   box-shadow: none;
@@ -501,11 +502,11 @@ export default {
 .sign-up .email-code button {
   width: 49%;
   border: 1px solid #d3dcdc;
-  background-color: #f2f7f7;
+  background-color: rgba(242,247,247,0.5);
   transition: all 0.3s ease;
 }
 .sign-up .email-code button:hover {
-  background-color: #e8f1f2;
+  background-color: rgba(232,241,242,0.8);
 }
 .sign-up .email-code button.disabled{
   pointer-events: none;

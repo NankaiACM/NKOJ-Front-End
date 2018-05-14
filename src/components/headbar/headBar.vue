@@ -148,13 +148,12 @@
   width: 100%;
   transition: all 0.5s ease;
   box-shadow: 0 2px 6px 0 rgba(7, 17, 27, 0);
-  padding: 10px 0;
+  padding: 0;
 }
 
 .hasScroll {
   box-shadow: 0 2px 6px 0 rgba(7, 17, 27, 0.1);
   background-color: white;
-  padding: 0;
   .navbar-nav li.focusing {
     background-color: #f2f7f7;
   }

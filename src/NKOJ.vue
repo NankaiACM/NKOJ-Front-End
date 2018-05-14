@@ -161,7 +161,7 @@ header {
 }
 
 .com-container {
-  margin-top: @filterheight+30px;
+  margin-top: @filterheight+10px;
   margin-bottom: 20px;
   background-color: rgba(255,255,255,0.7);
   padding-top: 2vw;
