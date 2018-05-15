@@ -1,13 +1,17 @@
 <template>
   <div id="ver">
-    前端版本: {{frontend}}
+    The Project is under development
     <br>
-    后端版本: {{backend}}
+    frontend version: beta.{{frontend}}
+    <br>
+    backend version: beta.{{backend}}
   </div>
 </template>
 <style lang="less" scoped>
 </style>
 <script>
+import moment from 'moment'
+
 export default {
   name: 'ver',
   data: function () {
@@ -19,14 +23,14 @@ export default {
   },
   methods: {
     getCommit: function (str) {
-      str = str.split('commit')[1]
+      str = str.split('commit ')[1]
       str = str.split('\nAuthor')[0]
       return str
     },
     getDate: function (str) {
       str = str.split('Date:   ')[1]
       str = str.split('\n\n    ')[0]
-      return new Date(str).toLocaleDateString()
+      return moment(Date(str)).format()
     }
   },
   mounted: function () {
@@ -54,7 +58,8 @@ export default {
   position: fixed;
   right: 0;
   bottom: 0;
-  color: #ccc;
+  color: #000;
   pointer-events: none;
+  text-align: right;
 }
 </style>
