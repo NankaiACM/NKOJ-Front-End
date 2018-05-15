@@ -30,7 +30,7 @@ export default {
     getDate: function (str) {
       str = str.split('Date:   ')[1]
       str = str.split('\n\n    ')[0]
-      return moment(Date(str)).format()
+      return moment(new Date(str)).format()
     }
   },
   mounted: function () {
