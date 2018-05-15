@@ -66,7 +66,6 @@ export default {
   align-items: center;
   height: @filterheight;
   z-index: 1;
-  background: #fff;
 }
 
 .search-bar-control {
@@ -78,6 +77,7 @@ export default {
   box-shadow: none;
   border-radius: 0;
   transition: all 1s;
+  background: none;
 }
 
 .search-bar-control input.form-control:focus,

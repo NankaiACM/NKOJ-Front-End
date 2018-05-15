@@ -13,7 +13,9 @@
   </header>
   <!--wall-paper></wall-paper-->
   <div class="struct">
-    <router-view :class="xclass"></router-view>
+    <div :class="xclass">
+      <router-view></router-view>
+    </div>
     <foot></foot>
   </div>
   <component-shell></component-shell>
@@ -30,8 +32,8 @@ import statusFilter from './components/statuspage/statusFilter.vue'
 import rankFilter from './components/ranklist/rankFilter.vue'
 import componentShell from './components/shell/mayoi.vue'
 import wallPaper from './components/wallpaper/wallpaper.vue'
-import alex              from './components/wallpaper/alex.vue'
-import foot              from './components/footer.vue'
+import alex from './components/wallpaper/alex.vue'
+import foot from './components/footer.vue'
 import ver from './components/ver/ver.vue'
 
 export default {
@@ -94,10 +96,9 @@ export default {
       var clear = ['/home']
       var xroute = this.$route.path
       var special = clear.indexOf(xroute)
-      special = false // special + 1
       return {
-        'com-container col-md-10 col-md-offset-1': !special,
-        'xclear': special
+        'com-container col-md-10 col-md-offset-1': true,
+        'xbgc': special + 1
       }
     }
   }
@@ -163,7 +164,7 @@ header {
 .com-container {
   margin-top: @filterheight+10px;
   margin-bottom: 20px;
-  background-color: rgba(255,255,255,0.7);
+  background: none;
   padding-top: 2vw;
   padding-bottom: 60px;
   flex: 1;
@@ -180,10 +181,8 @@ header {
   }
 }
 
-.xclear {
-  width: 100%;
-  margin: 0;
-  padding: 0;
+.xbgc {
+  background: rgba(255,255,255,0.7);
 }
 
 #head-filter {

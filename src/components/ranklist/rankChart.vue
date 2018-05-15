@@ -1,6 +1,6 @@
 <template>
   <div id="rank-chart">
-    <bg></bg>
+    <bg id="bg"></bg>
     <div id="cmain">
     </div>
   </div>
@@ -73,15 +73,14 @@ export default {
         animationDuration: 1000,
         series: [{
           type: 'bar3D',
-          shading: 'color',//not should
           itemStyle: {
-            opacity: .8,
+            opacity: 0.8,
             color: function (params) {
               var er = _er(params.data.rank)
               return '#' + er + er + er
             },
             borderWidth: 100,
-            borderColor: '#fff',
+            borderColor: '#fff'
           },
           emphasis: {
             itemStyle: {
@@ -151,16 +150,19 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="less" scoped>
 #rank-chart {
   width: 100%;
   height: 100%;
   position: absolute;
   bottom: 0;
   top: 0;
-}
-#cmain {
-  width: 100%;
-  height: 100%;
+  #bg {
+    background: rgba(255,255,255,.8);
+  }
+  #cmain {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

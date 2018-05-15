@@ -21,7 +21,7 @@ export default {
       chartlist: [],
       rawdata: [],
       viewBy: 'table',
-      timeBy: '',
+      timeBy: ''
     }
   },
   methods: {
@@ -128,7 +128,10 @@ export default {
 @rtop: @barheight+@fat-container-margin-top+@filterheight;
 #rankPage {
   margin-top: @filterheight;
+  position: relative;
   .view-container {
+    position: relative;
+    padding: 0;
     border-radius: 2px;
     border: 2px solid #e8f1f2;
     min-height: calc(100vh - calc(@rtop));

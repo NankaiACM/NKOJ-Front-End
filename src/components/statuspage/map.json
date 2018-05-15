@@ -1,5 +1,5 @@
 {
-  "map": [
+  "statusMap": [
     {
       "value": "107",
       "status": "Accepted",
@@ -60,5 +60,21 @@
       "status": "Compiling status",
       "label_class": "btn-info"
     }
-  ]
+  ],
+  "langMap": [{
+    "value": "1",
+    "lang": "C99"
+  }, {
+    "value": "2",
+    "lang": "C++ 98"
+  }, {
+    "value": "3",
+    "lang": "Free Pascal"
+  }, {
+    "value": "4",
+    "lang": "Java (JDK6)"
+  }, {
+    "value": "5",
+    "lang": "C++14"
+  }]
 }

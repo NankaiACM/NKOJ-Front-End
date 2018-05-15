@@ -1,5 +1,5 @@
 <template>
-<div id="Problems" class="container">
+<div id="Problems" class="container-fulid">
   <div class="fat-container container-fluid">
   <table id="ProblemTable" class="table table-hover">
     <thead class="thread-height">

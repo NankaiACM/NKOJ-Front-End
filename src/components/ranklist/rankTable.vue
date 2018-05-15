@@ -11,7 +11,7 @@
       :class="[item.cclass, css.tablesort === item.text ? 'rainbow' : '']"
       :title="item.text"
       v-html="getItemHtml(item.text)">
-      </div> 
+      </div>
     </div>
   </div>
   <div class="user-cell media" v-for="(cell, index) in rankdata" :key="index">
@@ -43,7 +43,7 @@
 export default {
   name: 'rankTable',
   props: ['rankdata'],
-  data: function() {
+  data: function () {
     return {
       tableHead: [
         { cclass: 'item no', text: '#', key: 'null' },
@@ -52,7 +52,7 @@ export default {
         { cclass: 'item submit', text: 'submit', key: 'submit' },
         { cclass: 'item ratio', text: 'ratio', key: 'ratio' }
       ],
-      css: {tablesort:'solved'}
+      css: {tablesort: 'solved'}
     }
   },
   mounted: function () {
@@ -61,8 +61,8 @@ export default {
   },
   methods: {
     getItemHtml: function (str) {
-      var ret=str.split('').join('</span><span>');
-      return '<span>'+ret+'</span>'
+      var ret = str.split('').join('</span><span>')
+      return '<span>' + ret + '</span>'
     }
   }
 }
