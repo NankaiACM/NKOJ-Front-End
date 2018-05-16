@@ -122,7 +122,7 @@ export default {
         inputs[i].disabled = true;
         inputs[i].style.backgroundColor = "#ededed";
       }
-      var message = this.signupAttribute.signupPassword
+      var message = this.loginAttribute.loginPassword
       var publicKey = forge.pki.publicKeyFromPem('-----BEGIN PUBLIC KEY-----' +
         'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgiSx01fTZ5E6v5fjWEUG' +
         'r31+rkBO5vxKvTI4EWojeboXNI39tzUZsdqwu6h6VYx90HGZtU3pvVXoZUc2Qrtt' +
