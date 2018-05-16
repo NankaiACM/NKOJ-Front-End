@@ -17,13 +17,13 @@
             <div class="form-group" :class="{'hastext':signupAttribute.signupEmail!='','focus':focusing==1}">
               <label @click="labelClick">邮箱</label>
               <input type="text" class="form-control" :class="{'disabled':signupStatus===1||signupStatus===3}"
-                     v-model="inputEmail" :disabled="signupStatus===1||signupStatus===3" 
+                     v-model="inputEmail" :disabled="signupStatus===1||signupStatus===3"
                      @focus="focusing=1" @blur="focusing=0">
             </div>
             <div class="form-group captcha" :class="{'hastext':signupAttribute.signupCaptcha!='','focus':focusing==2}">
               <label @click="labelClick">右图中的文字</label>
               <input type="text" class="form-control" :class="{'disabled':signupStatus===1||signupStatus===3}"
-                     v-model="signupAttribute.signupCaptcha" :disabled="signupStatus===1||signupStatus===3" 
+                     v-model="signupAttribute.signupCaptcha" :disabled="signupStatus===1||signupStatus===3"
                      @focus="focusing=2" @blur="focusing=0" maxlength="6">
               <img class="captcha" :src="captchaUrl"
                    @click="captchaUrl=`${noPointHost}/api/captcha/sendmail?_t=` + Math.random()"/>
@@ -31,7 +31,7 @@
             <div class="form-group email-code" :class="{'hastext':signupAttribute.emailCode!='','focus':focusing==3}">
               <label @click="labelClick">邮箱验证码</label>
               <input type="text" class="form-control" :class="{'disabled':signupStatus===1||signupStatus===3}"
-                     v-model="signupAttribute.emailCode" :disabled="signupStatus===1||signupStatus===3" 
+                     v-model="signupAttribute.emailCode" :disabled="signupStatus===1||signupStatus===3"
                      @focus="focusing=3" @blur="focusing=0" maxlength="6">
               <button v-on:click.prevent="emailSendAttempt()" :disabled="signupStatus===1 || signupStatus===3 || sendColdTime!==0"
                   :class="{'disabled':signupStatus===1 || signupStatus===3 || sendColdTime!==0}">
@@ -105,7 +105,7 @@
 
 <script>
 import vueLoading from "vue-loading-template";
-import '../../bin/rsa-wrapper.min.js';
+import forge from '../../bin/forge.min.js'
 import dialogWrap from "./dialog/dialogWrap";
 
 export default {
@@ -143,7 +143,6 @@ export default {
       //邮箱检验
       if (!this.CheckMail(this.signupAttribute.signupEmail)) {
         this.statusMessage = [{ name: "邮箱", message: "格式错误，再检查一下吧" }];
-        return;
       } else {
         this.signupStatus = 1;
         this.$http
@@ -153,11 +152,7 @@ export default {
               "?captcha=" +
               this.signupAttribute.signupCaptcha,
             {
-              crossDomain: true,
-              xhrFields: { withCredentials: true },
-              timeout: "8000",
-              cache: true,
-              credentials: true
+              timeout: '8000'
             }
           )
           .then(
@@ -200,7 +195,7 @@ export default {
     },
     emailVerifyAttempt() {
       let vue = this;
-      if(vue.signupStatus==0){
+      if (vue.signupStatus === 0) {
         vue.statusMessage = [{ name: "错误", message: "请重新获取邮件验证码！"}];
         return;
       }
@@ -212,11 +207,7 @@ export default {
             "/" +
             vue.signupAttribute.emailCode,
           {
-            crossDomain: true,
-            xhrFields: { withCredentials: true },
-            timeout: "8000",
-            cache: true,
-            credentials: true
+            timeout: '8000'
           }
         )
         .then(
@@ -253,9 +244,7 @@ export default {
     signuppasswordEncrypt: function(password) {
       this.signupStatus=5;
       var attr = this.signupAttribute;
-      var sendPackge = {
-        headers: { "Content-Type": "application/x-www-form-urlencoded"}
-      };
+      var sendPackge = {}
       sendPackge.password = password;
       sendPackge.nickname = attr.signupName;
       sendPackge.email = attr.signupEmail;
@@ -263,10 +252,7 @@ export default {
       sendPackge.gender = attr.signupGender;
       this.$http
         .post(`${noPointHost}/api/u/register`, sendPackge, {
-          crossDomain: true,
-          xhrFields: { withCredentials: true },
-          timeout: "8000",
-          credentials: true
+          timeout: '8000'
         })
         .then(
           res => {
@@ -304,10 +290,20 @@ export default {
         });
     },
     signupAttempt: function(event) {
-      rsaEncrypt(
-        this.signupAttribute.signupPassword,
-        this.signuppasswordEncrypt
-      );
+      var message = this.signupAttribute.signupPassword
+      var publicKey = forge.pki.publicKeyFromPem('-----BEGIN PUBLIC KEY-----' +
+        'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgiSx01fTZ5E6v5fjWEUG' +
+        'r31+rkBO5vxKvTI4EWojeboXNI39tzUZsdqwu6h6VYx90HGZtU3pvVXoZUc2Qrtt' +
+        'haFQSPCMnlRfOBAoON8/VPaAth79wAbeSpn3l6okHNJNy8EzPMqB87fL5K1WaDh2' +
+        '8uRsUtusu/H5WUgHLOort4YYtWXkzhhRer3f8lcWHAPM34EgIX4TZcPp1X6WFTwQ' +
+        'MunFq1L6WaWoQE7e8sSuCzUV5iRCaVQpTkkveAqhYi4ZL8X9fX5WKviOXuC4T50y' +
+        'OWbRO/ehU7iZj3sPEGHOZtaHzlEa+AvtF1UCEOQ8zB/QJx6/3khfg56JQhow06HQ' +
+        'mwIDAQAB' +
+        '-----END PUBLIC KEY-----')
+
+      var encrypted = publicKey.encrypt(message)
+      var base64 = forge.util.encode64(encrypted)
+      this.signuppasswordEncrypt(base64)
     },
     CheckMail(mail) {
       var filter = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
@@ -321,7 +317,7 @@ export default {
       vue.sendColdTime=(60 - Math.floor((new Date().getTime() - vue.emailSendDate.getTime()) /1000));
       let func=function(){
         vue.sendColdTime--;
-        if (vue.sendColdTime != 0 && vue.signupStatus<4) {
+        if (vue.sendColdTime !== 0 && vue.signupStatus < 4) {
           setTimeout(func, 1000);
         }
       }
@@ -348,7 +344,7 @@ export default {
         vue.dialogShow=true;
         var func = function() {
           vue.timeToClose--;
-          if (vue.timeToClose == 0) {
+          if (vue.timeToClose === 0) {
             vue.dialogShow=false;
             vue.$router.push({path: '/home'});
           } else {
