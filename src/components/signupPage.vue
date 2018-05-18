@@ -17,13 +17,13 @@
             <div class="form-group" :class="{'hastext':signupAttribute.signupEmail!='','focus':focusing==1}">
               <label @click="labelClick">邮箱</label>
               <input type="text" class="form-control" :class="{'disabled':signupStatus===1||signupStatus===3}"
-                     v-model="inputEmail" :disabled="signupStatus===1||signupStatus===3" 
+                     v-model="inputEmail" :disabled="signupStatus===1||signupStatus===3"
                      @focus="focusing=1" @blur="focusing=0">
             </div>
             <div class="form-group captcha" :class="{'hastext':signupAttribute.signupCaptcha!='','focus':focusing==2}">
               <label @click="labelClick">右图中的文字</label>
               <input type="text" class="form-control" :class="{'disabled':signupStatus===1||signupStatus===3}"
-                     v-model="signupAttribute.signupCaptcha" :disabled="signupStatus===1||signupStatus===3" 
+                     v-model="signupAttribute.signupCaptcha" :disabled="signupStatus===1||signupStatus===3"
                      @focus="focusing=2" @blur="focusing=0" maxlength="6">
               <img class="captcha" :src="captchaUrl"
                    @click="captchaUrl=`${noPointHost}/api/captcha/sendmail?_t=` + Math.random()"/>
@@ -31,7 +31,7 @@
             <div class="form-group email-code" :class="{'hastext':signupAttribute.emailCode!='','focus':focusing==3}">
               <label @click="labelClick">邮箱验证码</label>
               <input type="text" class="form-control" :class="{'disabled':signupStatus===1||signupStatus===3}"
-                     v-model="signupAttribute.emailCode" :disabled="signupStatus===1||signupStatus===3" 
+                     v-model="signupAttribute.emailCode" :disabled="signupStatus===1||signupStatus===3"
                      @focus="focusing=3" @blur="focusing=0" maxlength="6">
               <button v-on:click.prevent="emailSendAttempt()" :disabled="signupStatus===1 || signupStatus===3 || sendColdTime!==0"
                   :class="{'disabled':signupStatus===1 || signupStatus===3 || sendColdTime!==0}">
@@ -174,8 +174,10 @@ export default {
                 vue.statusMessage = resp.error;
                 this.signupStatus = 0;
               }
-              vue.signupAttribute.signupCaptcha = "";
-              vue.captchaUrl = `${noPointHost}/api/captcha/sendmail?_t=` + Math.random();
+              // 取消图片验证码清空
+              // 免使看起来需要输入两次验证码
+              // vue.signupAttribute.signupCaptcha = "";
+              // vue.captchaUrl = `${noPointHost}/api/captcha/sendmail?_t=` + Math.random();
             },
             res => {
               var vue = this;
