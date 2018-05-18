@@ -104,52 +104,52 @@
 </template>
 
 <script>
-import vueLoading from "vue-loading-template";
+import vueLoading from 'vue-loading-template'
 import forge from '../../bin/forge.min.js'
-import dialogWrap from "./dialog/dialogWrap";
+import dialogWrap from './dialog/dialogWrap'
 
 export default {
-  name: "signupPage",
-  components: { vueLoading,dialogWrap},
-  data() {
+  name: 'signupPage',
+  components: { vueLoading, dialogWrap},
+  data () {
     return {
       focusing: 0,
-      inputEmail:"",
+      inputEmail: '',
       signupAttribute: {
-        signupPassword: "",
-        signupName: "",
-        signupEmail: "",
-        signupCaptcha: "",
-        emailCode: "",
-        signupGender: "1",
-        signupSchool: "",
+        signupPassword: '',
+        signupName: '',
+        signupEmail: '',
+        signupCaptcha: '',
+        emailCode: '',
+        signupGender: '1',
+        signupSchool: ''
       },
       signupStatus: 0,
-      //0:none 1:sending 2:send 3:verifying 4:verify 5:signuping 6:ok
-      isLookPw: "password",
+      // 0:none 1:sending 2:send 3:verifying 4:verify 5:signuping 6:ok
+      isLookPw: 'password',
       emailSendDate: new Date(),
       statusMessage: undefined,
       noPointHost: window.noPointHost,
-      emailKey: "",
+      emailKey: '',
       captchaUrl: `${noPointHost}/api/captcha/sendmail?_t=` + Math.random(),
       sendColdTime: 0,
       timeToClose: 0,
-      dialogShow: false,
-    };
+      dialogShow: false
+    }
   },
   methods: {
-    emailSendAttempt: function(event) {
-      //console.log(this.$route.matched[0].components.default)
-      //邮箱检验
+    emailSendAttempt: function (event) {
+      // console.log(this.$route.matched[0].components.default)
+      // 邮箱检验
       if (!this.CheckMail(this.signupAttribute.signupEmail)) {
-        this.statusMessage = [{ name: "邮箱", message: "格式错误，再检查一下吧" }];
+        this.statusMessage = [{ name: '邮箱', message: '格式错误，再检查一下吧' }]
       } else {
-        this.signupStatus = 1;
+        this.signupStatus = 1
         this.$http
           .get(
             `${noPointHost}/api/u/verify/` +
               this.signupAttribute.signupEmail +
-              "?captcha=" +
+              '?captcha=' +
               this.signupAttribute.signupCaptcha,
             {
               timeout: '8000'
@@ -157,17 +157,17 @@ export default {
           )
           .then(
             res => {
-              var vue = this;
-              var resp = res.body;
+              var vue = this
+              var resp = res.body
               console.log(resp)
-              vue.emailSendDate = new Date(); //记录当前时间
+              vue.emailSendDate = new Date() // 记录当前时间
               if (resp.code === 0) {
-                vue.signupStatus = 2;
-                vue.emailKey=resp.data.key;
-                vue.statusMessage = undefined;
+                vue.signupStatus = 2
+                vue.emailKey = resp.data.key
+                vue.statusMessage = undefined
               } else {
-                vue.statusMessage = resp.error;
-                this.signupStatus = 0;
+                vue.statusMessage = resp.error
+                this.signupStatus = 0
               }
               // 取消图片验证码清空
               // 免使看起来需要输入两次验证码
@@ -175,38 +175,39 @@ export default {
               // vue.captchaUrl = `${noPointHost}/api/captcha/sendmail?_t=` + Math.random();
             },
             res => {
-              var vue = this;
+              var vue = this
               if (res.status === 429) {
-                vue.statusMessage = [{name: "错误",message:
-                  "请求过于频繁啦，再等" +(60 - Math.floor((new Date().getTime() - vue.emailSendDate.getTime()) /1000)) +"秒吧"
-                }];
-                vue.signupAttribute.signupCaptcha = "";
-                vue.captchaUrl = `${noPointHost}/api/captcha/sendmail?_t=` + Math.random();
+                vue.statusMessage = [{name: '错误',
+                  message:
+                  '请求过于频繁啦，再等' + (60 - Math.floor((new Date().getTime() - vue.emailSendDate.getTime()) / 1000)) + '秒吧'
+                }]
+                vue.signupAttribute.signupCaptcha = ''
+                vue.captchaUrl = `${noPointHost}/api/captcha/sendmail?_t=` + Math.random()
               } else {
-                vue.statusMessage = [{ name: "错误", message: "电波……无法传达……（连接失败）"}];
+                vue.statusMessage = [{ name: '错误', message: '电波……无法传达……（连接失败）'}]
               }
-              this.signupStatus = 0;
+              this.signupStatus = 0
             }
           )
-          .catch(function(response) {
-            var vue = this;
-            vue.statusMessage = [{ name: "错误", message: "未知错误！如果方便的话可以反馈一下！"}];
-            this.signupStatus = 0;
-          });
+          .catch(function (response) {
+            var vue = this
+            vue.statusMessage = [{ name: '错误', message: '未知错误！如果方便的话可以反馈一下！'}]
+            this.signupStatus = 0
+          })
       }
     },
-    emailVerifyAttempt() {
-      let vue = this;
+    emailVerifyAttempt () {
+      let vue = this
       if (vue.signupStatus === 0) {
-        vue.statusMessage = [{ name: "错误", message: "请重新获取邮件验证码！"}];
-        return;
+        vue.statusMessage = [{ name: '错误', message: '请重新获取邮件验证码！'}]
+        return
       }
-      vue.signupStatus = 3;
+      vue.signupStatus = 3
       vue.$http
         .get(
           `${noPointHost}/api/u/verify/` +
             vue.emailKey +
-            "/" +
+            '/' +
             vue.signupAttribute.emailCode,
           {
             timeout: '8000'
@@ -214,44 +215,44 @@ export default {
         )
         .then(
           res => {
-            var vue = this;
-            var resp = res.body;
-            console.log(resp);
+            var vue = this
+            var resp = res.body
+            console.log(resp)
             if (resp.code === 0) {
-              vue.signupStatus = 4;
-              vue.statusMessage = undefined;
+              vue.signupStatus = 4
+              vue.statusMessage = undefined
             } else {
-              vue.statusMessage = resp.error;
-              vue.signupStatus = 2;
+              vue.statusMessage = resp.error
+              vue.signupStatus = 2
             }
           },
           res => {
-            var vue = this;
+            var vue = this
             if (res.status === 429) {
-              vue.statusMessage = [{name: "错误",
-                message:"请求过于频繁啦，再等" +(60 -Math.floor((new Date().getTime() - vue.emailSendDate.getTime()) /1000)) + "秒吧"
-              }];
+              vue.statusMessage = [{name: '错误',
+                message: '请求过于频繁啦，再等' + (60 - Math.floor((new Date().getTime() - vue.emailSendDate.getTime()) / 1000)) + '秒吧'
+              }]
             } else {
-              vue.statusMessage = [{ name: "错误", message: "电波……无法传达……（连接失败）" }];
+              vue.statusMessage = [{ name: '错误', message: '电波……无法传达……（连接失败）' }]
             }
-            vue.signupStatus = 2;
+            vue.signupStatus = 2
           }
         )
-        .catch(function(response) {
-          var vue = this;
-          vue.statusMessage = [{ name: "错误", message: "未知错误！如果方便的话可以反馈一下！" }];
-          signupStatus = 2;
-        });
+        .catch(function (response) {
+          var vue = this
+          vue.statusMessage = [{ name: '错误', message: '未知错误！如果方便的话可以反馈一下！' }]
+          signupStatus = 2
+        })
     },
-    signuppasswordEncrypt: function(password) {
-      this.signupStatus=5;
-      var attr = this.signupAttribute;
+    signuppasswordEncrypt: function (password) {
+      this.signupStatus = 5
+      var attr = this.signupAttribute
       var sendPackge = {}
-      sendPackge.password = password;
-      sendPackge.nickname = attr.signupName;
-      sendPackge.email = attr.signupEmail;
-      sendPackge.school = attr.signupSchool;
-      sendPackge.gender = attr.signupGender;
+      sendPackge.password = password
+      sendPackge.nickname = attr.signupName
+      sendPackge.email = attr.signupEmail
+      sendPackge.school = attr.signupSchool
+      sendPackge.gender = attr.signupGender
       this.$http
         .post(`${noPointHost}/api/u/register`, sendPackge, {
           timeout: '8000'
@@ -260,7 +261,7 @@ export default {
           res => {
             console.log(res)
             if (res.body.code === 0) {
-              this.signupStatus=6;
+              this.signupStatus = 6
               this.$store.commit({
                 type: 'setuserDate',
                 isLogin: true,
@@ -269,30 +270,29 @@ export default {
                 lastLogin: res.body.data.last_login
               })
             } else {
-              this.statusMessage = res.body.error;
-              this.signupStatus=4;
+              this.statusMessage = res.body.error
+              this.signupStatus = 4
             }
           },
           res => {
-            var vue = this;
+            var vue = this
             if (res.status === 429) {
-              vue.statusMessage = [{name: "错误",
-                message:"请求过于频繁啦，再等" +(60 -Math.floor((new Date().getTime() - vue.emailSendDate.getTime()) /1000)) +"秒吧"
-              }];
+              vue.statusMessage = [{name: '错误',
+                message: '请求过于频繁啦，再等' + (60 - Math.floor((new Date().getTime() - vue.emailSendDate.getTime()) / 1000)) + '秒吧'
+              }]
             } else {
-              vue.statusMessage = [{ name: "错误", message: "电波……无法传达……（连接失败）" }];
+              vue.statusMessage = [{ name: '错误', message: '电波……无法传达……（连接失败）' }]
             }
-            vue.signupStatus = 4;
+            vue.signupStatus = 4
           }
         )
-        .catch(function(response) {
-          var vue = this;
-          vue.statusMessage = [{ name: "错误", message: "未知错误！如果方便的话可以反馈一下！" }];
-          vue.signupStatus = 4;
-        });
+        .catch(function (response) {
+          var vue = this
+          vue.statusMessage = [{ name: '错误', message: '未知错误！如果方便的话可以反馈一下！' }]
+          vue.signupStatus = 4
+        })
     },
-    signupAttempt: function(event) {
-      var message = this.signupAttribute.signupPassword
+    encryptMsg: function (message) {
       var publicKey = forge.pki.publicKeyFromPem('-----BEGIN PUBLIC KEY-----' +
         'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgiSx01fTZ5E6v5fjWEUG' +
         'r31+rkBO5vxKvTI4EWojeboXNI39tzUZsdqwu6h6VYx90HGZtU3pvVXoZUc2Qrtt' +
@@ -304,66 +304,70 @@ export default {
         '-----END PUBLIC KEY-----')
 
       var encrypted = publicKey.encrypt(message)
-      var base64 = forge.util.encode64(encrypted)
+      return forge.util.encode64(encrypted)
+    },
+    signupAttempt: function (event) {
+      const message = this.signupAttribute.signupPassword
+      const base64 = this.encryptMsg(message)
       this.signuppasswordEncrypt(base64)
     },
-    CheckMail(mail) {
-      var filter = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
-      return filter.test(mail);
+    CheckMail (mail) {
+      var filter = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/
+      return filter.test(mail)
     },
-    labelClick(event) {
-      event.target.nextElementSibling.focus();
+    labelClick (event) {
+      event.target.nextElementSibling.focus()
     },
-    setSendColdTime() {
-      let vue=this;
-      vue.sendColdTime=(60 - Math.floor((new Date().getTime() - vue.emailSendDate.getTime()) /1000));
-      let func=function(){
-        vue.sendColdTime--;
+    setSendColdTime () {
+      let vue = this
+      vue.sendColdTime = (60 - Math.floor((new Date().getTime() - vue.emailSendDate.getTime()) / 1000))
+      let func = function () {
+        vue.sendColdTime--
         if (vue.sendColdTime !== 0 && vue.signupStatus < 4) {
-          setTimeout(func, 1000);
+          setTimeout(func, 1000)
         }
       }
-      if(vue.sendColdTime<=0){
-        vue.sendColdTime=0;
-      } else{
-        setTimeout(func, 1000);
+      if (vue.sendColdTime <= 0) {
+        vue.sendColdTime = 0
+      } else {
+        setTimeout(func, 1000)
       }
     },
-    fadeEnter(el, done) {
-      done();
+    fadeEnter (el, done) {
+      done()
     },
-    fadeLeave(el, done) {
-      done();
+    fadeLeave (el, done) {
+      done()
     }
   },
   watch: {
-    signupStatus: function(newValue,oldValue) {
-      if(newValue===2 && oldValue===1){
-        this.setSendColdTime();
-      } else if(newValue===6){
-        var vue = this;
-        vue.timeToClose = 5;
-        vue.dialogShow=true;
-        var func = function() {
-          vue.timeToClose--;
+    signupStatus: function (newValue, oldValue) {
+      if (newValue === 2 && oldValue === 1) {
+        this.setSendColdTime()
+      } else if (newValue === 6) {
+        var vue = this
+        vue.timeToClose = 5
+        vue.dialogShow = true
+        var func = function () {
+          vue.timeToClose--
           if (vue.timeToClose === 0) {
-            vue.dialogShow=false;
-            vue.$router.push({path: '/home'});
+            vue.dialogShow = false
+            vue.$router.push({path: '/home'})
           } else {
-            setTimeout(func, 1000);
+            setTimeout(func, 1000)
           }
-        };
-        setTimeout(func, 1000);
+        }
+        setTimeout(func, 1000)
       }
     },
-    inputEmail: function(newValue,oldValue) {
-      if(newValue!==oldValue){
-        this.signupStatus=0;
-        this.signupAttribute.signupEmail=newValue;
+    inputEmail: function (newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.signupStatus = 0
+        this.signupAttribute.signupEmail = newValue
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -415,7 +419,6 @@ export default {
   border-color: #ccc;
 }
 
-
 .sign-up a.disabled,
 .sign-up a.disabled:hover,
 .sign-up a.disabled:focus,
@@ -427,7 +430,6 @@ export default {
   pointer-events: none;
   color: #aaa;
 }
-
 
 .sign-up .form-group label {
   font-weight: normal;
@@ -554,7 +556,6 @@ export default {
   background-color: #73abc2;
   color: white;
 }
-
 
 .dialog-wrapper{
   padding-top: 40px;
