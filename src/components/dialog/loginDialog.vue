@@ -56,6 +56,7 @@
 <script>
 import dialogWrap from "./dialogWrap";
 import vueLoading from "vue-loading-template";
+import forge from '../../../bin/forge.min.js'
 
 export default {
   name: "loginSignUp",
@@ -83,21 +84,13 @@ export default {
   methods: {
     loginpasswordEncrypt: function(password) {
       this.loginStatus=1;
-      var loginPackege = {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
-      };
+      var loginPackege = {}
       loginPackege.password = password;
       loginPackege.user = this.loginAttribute.loginAccount;
       loginPackege.captcha = this.loginAttribute.captcha;
       this.$http
         .post(`${noPointHost}/api/u/login`, loginPackege, {
-              crossDomain: true,
-              xhrFields: { withCredentials: true },
-              timeout: "8000",
-              cache: true,
-              credentials: true
+          timeout: '8000'
         })
         .then(res => {
           console.log(JSON.stringify(res));
@@ -129,7 +122,21 @@ export default {
         inputs[i].disabled = true;
         inputs[i].style.backgroundColor = "#ededed";
       }
-      this.loginpasswordEncrypt(this.loginAttribute.loginPassword)
+      var message = this.loginAttribute.loginPassword
+      var publicKey = forge.pki.publicKeyFromPem('-----BEGIN PUBLIC KEY-----' +
+        'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgiSx01fTZ5E6v5fjWEUG' +
+        'r31+rkBO5vxKvTI4EWojeboXNI39tzUZsdqwu6h6VYx90HGZtU3pvVXoZUc2Qrtt' +
+        'haFQSPCMnlRfOBAoON8/VPaAth79wAbeSpn3l6okHNJNy8EzPMqB87fL5K1WaDh2' +
+        '8uRsUtusu/H5WUgHLOort4YYtWXkzhhRer3f8lcWHAPM34EgIX4TZcPp1X6WFTwQ' +
+        'MunFq1L6WaWoQE7e8sSuCzUV5iRCaVQpTkkveAqhYi4ZL8X9fX5WKviOXuC4T50y' +
+        'OWbRO/ehU7iZj3sPEGHOZtaHzlEa+AvtF1UCEOQ8zB/QJx6/3khfg56JQhow06HQ' +
+        'mwIDAQAB' +
+        '-----END PUBLIC KEY-----')
+
+      var encrypted = publicKey.encrypt(message)
+      var base64 = forge.util.encode64(encrypted)
+
+      this.loginpasswordEncrypt(base64)
       // rsaEncrypt(this.loginAttribute.loginPassword, this.loginpasswordEncrypt);
       for (var i = 0; i < inputs.length; i++) {
         inputs[i].disabled = false;

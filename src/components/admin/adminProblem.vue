@@ -197,8 +197,8 @@
             this.pSOutput = res.body.data.content.sample_output
             this.pHint = res.body.data.content.hint
             this.pTitle = res.body.data.title
-            //this.pMemory = res.body.data.memory
-            //this.pTime = res.body.data.time
+            this.pMemory = res.body.data.memory_limit
+            this.pTime = res.body.data.time_limit
             this.pCase = res.body.data.cases
             this.pSpj = res.body.data.special_judge
             this.pDM = res.body.data.detail_judge
