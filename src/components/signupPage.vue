@@ -105,12 +105,12 @@
 
 <script>
 import vueLoading from 'vue-loading-template'
-import forge from '../../bin/forge.min.js'
 import dialogWrap from './dialog/dialogWrap'
+import encryptMsg from '../encrypt/encryptMsg.js'
 
 export default {
   name: 'signupPage',
-  components: { vueLoading, dialogWrap},
+  components: {vueLoading, dialogWrap},
   data () {
     return {
       focusing: 0,
@@ -131,7 +131,7 @@ export default {
       statusMessage: undefined,
       noPointHost: window.noPointHost,
       emailKey: '',
-      captchaUrl: `${noPointHost}/api/captcha/sendmail?_t=` + Math.random(),
+      captchaUrl: `${window.noPointHost}/api/captcha/sendmail?_t=` + Math.random(),
       sendColdTime: 0,
       timeToClose: 0,
       dialogShow: false
@@ -147,7 +147,7 @@ export default {
         this.signupStatus = 1
         this.$http
           .get(
-            `${noPointHost}/api/u/verify/` +
+            `${window.noPointHost}/api/u/verify/` +
               this.signupAttribute.signupEmail +
               '?captcha=' +
               this.signupAttribute.signupCaptcha,
@@ -182,16 +182,16 @@ export default {
                   '请求过于频繁啦，再等' + (60 - Math.floor((new Date().getTime() - vue.emailSendDate.getTime()) / 1000)) + '秒吧'
                 }]
                 vue.signupAttribute.signupCaptcha = ''
-                vue.captchaUrl = `${noPointHost}/api/captcha/sendmail?_t=` + Math.random()
+                vue.captchaUrl = `${window.noPointHost}/api/captcha/sendmail?_t=` + Math.random()
               } else {
-                vue.statusMessage = [{ name: '错误', message: '电波……无法传达……（连接失败）'}]
+                vue.statusMessage = [{name: '错误', message: '电波……无法传达……（连接失败）'}]
               }
               this.signupStatus = 0
             }
           )
           .catch(function (response) {
             var vue = this
-            vue.statusMessage = [{ name: '错误', message: '未知错误！如果方便的话可以反馈一下！'}]
+            vue.statusMessage = [{name: '错误', message: '未知错误！如果方便的话可以反馈一下！'}]
             this.signupStatus = 0
           })
       }
@@ -205,7 +205,7 @@ export default {
       vue.signupStatus = 3
       vue.$http
         .get(
-          `${noPointHost}/api/u/verify/` +
+          `${window.noPointHost}/api/u/verify/` +
             vue.emailKey +
             '/' +
             vue.signupAttribute.emailCode,
@@ -241,7 +241,7 @@ export default {
         .catch(function (response) {
           var vue = this
           vue.statusMessage = [{ name: '错误', message: '未知错误！如果方便的话可以反馈一下！' }]
-          signupStatus = 2
+          vue.signupStatus = 2
         })
     },
     signuppasswordEncrypt: function (password) {
@@ -254,7 +254,7 @@ export default {
       sendPackge.school = attr.signupSchool
       sendPackge.gender = attr.signupGender
       this.$http
-        .post(`${noPointHost}/api/u/register`, sendPackge, {
+        .post(`${window.noPointHost}/api/u/register`, sendPackge, {
           timeout: '8000'
         })
         .then(
@@ -292,23 +292,9 @@ export default {
           vue.signupStatus = 4
         })
     },
-    encryptMsg: function (message) {
-      var publicKey = forge.pki.publicKeyFromPem('-----BEGIN PUBLIC KEY-----' +
-        'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgiSx01fTZ5E6v5fjWEUG' +
-        'r31+rkBO5vxKvTI4EWojeboXNI39tzUZsdqwu6h6VYx90HGZtU3pvVXoZUc2Qrtt' +
-        'haFQSPCMnlRfOBAoON8/VPaAth79wAbeSpn3l6okHNJNy8EzPMqB87fL5K1WaDh2' +
-        '8uRsUtusu/H5WUgHLOort4YYtWXkzhhRer3f8lcWHAPM34EgIX4TZcPp1X6WFTwQ' +
-        'MunFq1L6WaWoQE7e8sSuCzUV5iRCaVQpTkkveAqhYi4ZL8X9fX5WKviOXuC4T50y' +
-        'OWbRO/ehU7iZj3sPEGHOZtaHzlEa+AvtF1UCEOQ8zB/QJx6/3khfg56JQhow06HQ' +
-        'mwIDAQAB' +
-        '-----END PUBLIC KEY-----')
-
-      var encrypted = publicKey.encrypt(message)
-      return forge.util.encode64(encrypted)
-    },
     signupAttempt: function (event) {
       const message = this.signupAttribute.signupPassword
-      const base64 = this.encryptMsg(message)
+      const base64 = encryptMsg(message)
       this.signuppasswordEncrypt(base64)
     },
     CheckMail (mail) {

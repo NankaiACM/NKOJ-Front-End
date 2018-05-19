@@ -135,7 +135,7 @@ export default {
             name: '金坷垃好处都有啥',
             func: () => {
               [].forEach.call($('*'), function (a) {
-                a.style.outline = '1px solid #' + (~~(Math.random()*(1<<24))).toString(16)
+                a.style.outline = '1px solid #' + (~~(Math.random() * (1 << 24))).toString(16)
               })
             }
           },
@@ -152,12 +152,12 @@ export default {
               switch (argv[1]) {
                 case 'stop':
                   window.localStorage.setItem('wallpaper-run', 'false')
-                  if (! window.pJSDom[0]) break
+                  if (!window.pJSDom[0]) break
                   window.pJSDom[0].pJS.fn.vendors.destroypJS()
                   window['pJSDom'] = []
                   break
                 case 'start':
-                window.localStorage.setItem('wallpaper-run', 'true')
+                  window.localStorage.setItem('wallpaper-run', 'true')
                   window.Alex()
                   break
                 default:

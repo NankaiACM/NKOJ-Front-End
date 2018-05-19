@@ -20,7 +20,10 @@ import signupPage from '../components/signupPage'
 import adminPage from '../components/admin/admin'
 import adminProblemPage from '../components/admin/adminProblem'
 import adminContest from '../components/admin/adminContest'
-import test from '../components/wallpaper/wallpaper'
+
+import test from '../components/userPageAvatar'
+import test1 from '../components/userPage'
+
 Vue.use(Router)
 console.log(window.noPointHost)
 const router = new Router({
@@ -75,6 +78,10 @@ const router = new Router({
       {
         path: '/test',
         component: test
+      },
+      {
+        path: '/test1',
+        component: test1
       }
     ]
   }, {
@@ -87,7 +94,7 @@ router.beforeEach((to, from, next) => {
   let store = router.app.$options.store
   let userinfo = store.state.userData
   if (userinfo.check === false) {
-    checkUser(store)
+    router.checkUser(store)
     store.commit({
       type: 'setuserDate',
       check: true
@@ -95,47 +102,43 @@ router.beforeEach((to, from, next) => {
   }
   next()
 })
-
-function checkUser (store) {
-  Vue.http
-    .get(
-      `${noPointHost}/api/user`,
-      {
-        crossDomain: true,
-        xhrFields: { withCredentials: true },
-        timeout: '8000',
-        cache: true,
-        credentials: true
-      }
-    )
-    .then(
-      res => {
-        if (res.body.code === 0) {
-          store.commit({
-            type: 'setuserDate',
-            isLogin: true,
-            id: res.body.data.user_id,
-            nickname: res.body.data.nickname,
-            lastLogin: res.body.data.last_login,
-            perm: res.body.data.perm
-          })
-        } else {
-          vue.userData = undefined
+router.checkUser = function (store, resolvion, rejection) {
+  new Promise(function (resolve, reject) {
+    Vue.http
+      .get(
+        `${window.noPointHost}/api/user`,
+        {
+          crossDomain: true,
+          xhrFields: { withCredentials: true },
+          timeout: '8000',
+          cache: true,
+          credentials: true
         }
-        console.log(vue.userData)
-      },
-      res => {
-        /*
-        //wait to code
-        var vue = this;
-        console.log(res)
-        */
-      }
-    )
-    .catch(function (response) {
-      // wait to code
-      var vue = this
-    })
+      )
+      .then(
+        function (res) {
+          if (res.body.code === 0) {
+            store.commit({
+              type: 'setuserDate',
+              isLogin: true,
+              id: res.body.data.user_id,
+              nickname: res.body.data.nickname,
+              lastLogin: res.body.data.last_login,
+              perm: res.body.data.perm,
+              o: res.body.data
+            })
+            console.log('成功获取用户数据')
+          } else {
+            vue.userData = undefined
+            console.log('用户数据清空')
+          }
+          console.log('呼叫resolve函数')
+          resolve()
+        }, function (e) {
+          reject()
+        }
+      )
+  }).then(resolvion).catch(rejection)
 }
 
 export default router

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { truncate } from 'fs';
+// import { truncate } from 'fs'
 
 Vue.use(Vuex)
 
@@ -17,7 +17,7 @@ export default new Vuex.Store({
       userID: '',
       status: '',
       lang: '',
-      submit: 0,//监听submit按钮按下
+      submit: 0, // 监听submit按钮按下
       index: 1,
       page_length: 20
     },
@@ -32,7 +32,8 @@ export default new Vuex.Store({
       nickname: '',
       lastLogin: '',
       check: false,
-      perm: 'abc'
+      perm: 'abc',
+      o: []
     }
   },
   getters: {
@@ -47,7 +48,7 @@ export default new Vuex.Store({
     },
     proAddGet: function (state) {
       if (!state.userData.perm) return false
-      if (! state.userData.perm.ADD_PROBLEM) return false
+      if (!state.userData.perm.ADD_PROBLEM) return false
       console.log(state.userData.perm.ADD_PROBLEM)
       return state.userData.perm.ADD_PROBLEM === '1'
     },
@@ -56,13 +57,13 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    setXFilter (state, payload) {//problems filter
+    setXFilter (state, payload) { // problems filter
       if (payload.value === state.filter[payload.key]) {
         payload.value = ''
       }
       state.filter[payload.key] = payload.value
     },
-    setSFilter (state, payload) {//status filter
+    setSFilter (state, payload) { // status filter
       var key = payload.key
       var value = payload.value
       if (value === state.statusFilter[key]) {
@@ -73,28 +74,28 @@ export default new Vuex.Store({
     setRFilter (state, payload) {
       state.rankFilter[payload.key] = payload.value
     },
-    pushRFOption (state, payload) {//push option into rank filter time menu
+    pushRFOption (state, payload) { // push option into rank filter time menu
       if (payload.key !== 'ops') return
       state.rankFilter.timeOps = payload.value
     },
-    setuserDate(state, payload){
-      if(payload.check===true){
-        state.userData.check=true
-      }
-      else{
+    setuserDate (state, payload) {
+      if (payload.check === true) {
+        state.userData.check = true
+      } else {
         if (payload.isLogin === false) {
           state.userData.isLogin = false
           state.userDate.id = ''
           state.userDate.nickname = ''
           state.userData.lastLogin = ''
           state.userData.perm = []
-        }
-        else {
+          state.userData.o = []
+        } else {
           state.userData.isLogin = true
           state.userData.id = payload.id
           state.userData.nickname = payload.nickname
           state.userData.lastLogin = payload.lastLogin
           state.userData.perm = payload.perm
+          state.userData.o = payload.o
           console.log(state)
         }
       }
