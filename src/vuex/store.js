@@ -28,12 +28,12 @@ export default new Vuex.Store({
     },
     userData: {
       isLogin: false,
-      id: '',
+      'user_id': '',
       nickname: '',
       lastLogin: '',
       check: false,
-      perm: 'abc',
-      o: []
+      perm: {},
+      o: {}
     }
   },
   getters: {
@@ -49,7 +49,6 @@ export default new Vuex.Store({
     proAddGet: function (state) {
       if (!state.userData.perm) return false
       if (!state.userData.perm.ADD_PROBLEM) return false
-      console.log(state.userData.perm.ADD_PROBLEM)
       return state.userData.perm.ADD_PROBLEM === '1'
     },
     usrLogGet: function (state) {
@@ -84,19 +83,20 @@ export default new Vuex.Store({
       } else {
         if (payload.isLogin === false) {
           state.userData.isLogin = false
-          state.userDate.id = ''
-          state.userDate.nickname = ''
+          state.userData['user_id'] = ''
+          state.userData.nickname = ''
           state.userData.lastLogin = ''
-          state.userData.perm = []
-          state.userData.o = []
+          state.userData.perm = {}
+          state.userData.o = {}
+          console.log('清空用户数据')
+          console.log(JSON.stringify(state.userData))
         } else {
           state.userData.isLogin = true
-          state.userData.id = payload.id
+          state.userData['user_id'] = payload['user_id']
           state.userData.nickname = payload.nickname
           state.userData.lastLogin = payload.lastLogin
           state.userData.perm = payload.perm
           state.userData.o = payload.o
-          console.log(state)
         }
       }
     },

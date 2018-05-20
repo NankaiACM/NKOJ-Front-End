@@ -45,7 +45,6 @@
 </template>
 <script>
 var {statusMap, langMap} = require('./map.json')
-console.log(statusMap)
 export default {
   data: function () {
     return {

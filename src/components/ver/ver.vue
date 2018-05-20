@@ -36,7 +36,6 @@ export default {
   mounted: function () {
     let slf = this
     slf.$nextTick(function () {
-      console.log('mounted')
       slf.$http.get(window.noPointHost + slf.apiUrl)
         .then(function (res) {
           console.log('向魔法机请求魔法阶级情报')

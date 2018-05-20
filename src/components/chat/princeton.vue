@@ -58,10 +58,10 @@ export default {
     },
     ptopen: function (evt) {
       console.log('pt open')
-      console.info(evt)
+      // console.info(evt)
       this.$http.get(this.hisurl)
         .then(function (res) {
-          console.log(res)
+          // console.log(res)
           this.danmakus = [...this.dealhis(res.body.data), ...this.danmakus]
           this.danmakus = this.danmakus.reverse()
         }, function (e) {

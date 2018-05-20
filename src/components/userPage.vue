@@ -1,7 +1,9 @@
 <template>
 <div id="userPage" class="container-fluid">
-  <div class="shadow" v-if="isUpdateAvatar" v-on:click="exitShow"></div>
-  <user-page-avatar v-if="isUpdateAvatar"></user-page-avatar>
+  <div class="uA" v-if="isUpdateAvatar">
+    <div class="shadow" v-on:click="exitShow"></div>
+    <user-page-avatar></user-page-avatar>
+  </div>
   <div class="row">
     <div class="userPageInfo col-sm-12">
       <nav class="navbar col-sm-12" role="navigation">
@@ -15,7 +17,7 @@
       </nav>
       <div class="row">
         <div class="col-sm-3 col-sm-offset-1 picol">
-          <img src="../assets/userPicture.jpg"
+          <img :src="avatarUrl"
                id="userPagePicture" @click="updateAvatar">
           <div class="k s"><div class="l">ac</div><div class="r">{{ac}}</div></div>
           <div class="k a"><div class="l">all submit</div><div class="r">{{all}}</div></div>
@@ -47,7 +49,7 @@
               <label class="col-sm-3 control-label">性别</label>
               <div class="col-sm-5">
                 <label v-for="(item, index) in genderlist" :key="index" class="radio-inline">
-                  <input type="radio" :value="index" v-model="n.gender">{{item.text}}
+                  <input type="radio" :value="index" v-model="n.gender" :disabled="!isEdit">{{item.text}}
                 </label>
               </div>
             </div>
@@ -101,7 +103,7 @@ export default {
       ac: 0,
       all: 0,
       isEdit: false,
-      o: [],
+      o: {},
       n: {
         nickname: '',
         words: '',
@@ -196,12 +198,19 @@ export default {
       // 重新请求用户数据
       const vm = this
       this.$router.checkUser(vm.$store, function () {
+        // 成功获取用户数据
         console.log('似乎完成了用户数据请求')
         console.log(vm.$store.state.userData)
         vm.init()
         console.log('更新数据成功')
-      }, function () {
-        console.log('更新数据失败')
+      }, function (e) {
+        // 用户未登录
+        console.log('用户未登录')
+        console.log(JSON.stringify(e))
+      }, function (e) {
+        // api请求失败
+        console.log('api 请求失败')
+        console.log(e)
       })
     },
     init: function () {
@@ -225,6 +234,11 @@ export default {
     this.$nextTick(function () {
       this.init()
     })
+  },
+  computed: {
+    avatarUrl: function () {
+      return `${window.noPointHost}/api/avatar/` + this.o['user_id']
+    }
   }
 }
 </script>
@@ -287,7 +301,7 @@ export default {
       border-radius: 50%;
       border: 2px solid darkgray;
       cursor: pointer;
-      background-position: center;
+      object-fit: cover;
       margin: 4em;
     }
   }
@@ -320,14 +334,26 @@ export default {
   border-radius: 4px;
   border: 1px solid #ccc;
 }
-.shadow{
-  position: absolute;
+.uA {
+  display: flex;
+  position: fixed;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
-  opacity: 0.6;
-  background: black;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   z-index: 3;
+  .shadow{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.6;
+    background: black;
+    z-index: 3;
+  }
 }
 </style>

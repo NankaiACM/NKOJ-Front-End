@@ -93,7 +93,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   let store = router.app.$options.store
   let userinfo = store.state.userData
-  if (userinfo.check === false) {
+  if (userinfo.check === false) { // 仅在第一次加载页面checkUser(), 但不包含主动checkUser()
     router.checkUser(store)
     store.commit({
       type: 'setuserDate',
@@ -102,43 +102,46 @@ router.beforeEach((to, from, next) => {
   }
   next()
 })
-router.checkUser = function (store, resolvion, rejection) {
-  new Promise(function (resolve, reject) {
-    Vue.http
-      .get(
-        `${window.noPointHost}/api/user`,
-        {
-          crossDomain: true,
-          xhrFields: { withCredentials: true },
-          timeout: '8000',
-          cache: true,
-          credentials: true
-        }
-      )
-      .then(
-        function (res) {
-          if (res.body.code === 0) {
-            store.commit({
-              type: 'setuserDate',
-              isLogin: true,
-              id: res.body.data.user_id,
-              nickname: res.body.data.nickname,
-              lastLogin: res.body.data.last_login,
-              perm: res.body.data.perm,
-              o: res.body.data
-            })
-            console.log('成功获取用户数据')
-          } else {
-            vue.userData = undefined
-            console.log('用户数据清空')
-          }
-          console.log('呼叫resolve函数')
-          resolve()
-        }, function (e) {
-          reject()
-        }
-      )
-  }).then(resolvion).catch(rejection)
+router.checkUser = function (store, logined, notLogging, catchError) {
+  Vue.http.get(`${window.noPointHost}/api/user`, {
+    crossDomain: true,
+    xhrFields: { withCredentials: true },
+    timeout: '8000',
+    cache: true,
+    credentials: true
+  }).then(function (res) {
+    if (res.body.code === 0) {
+      store.commit({
+        type: 'setuserDate',
+        isLogin: true,
+        'user_id': res.body.data.user_id,
+        nickname: res.body.data.nickname,
+        lastLogin: res.body.data.last_login,
+        perm: res.body.data.perm,
+        o: res.body.data
+      })
+      console.log('成功获取用户数据')
+      if (!logined) return
+      logined() // 成功时的回调
+    } else {
+      console.log('未知状态')
+      console.log(res)
+    }
+  }, function (e) {
+    if (e.body.code === 401) {
+      console.log('未登录')
+      store.commit({
+        type: 'setuserDate',
+        isLogin: false
+      })
+      if (!notLogging) return
+      notLogging(e) // 未登录时回调
+      return
+    }
+    console.log('api get error')
+    if (!catchError) return
+    catchError(e) // 失败时的回调
+  })
 }
 
 export default router

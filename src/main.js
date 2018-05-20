@@ -12,7 +12,6 @@ Vue.config.productionTip = false
 Vue.use(VueResource)
 Vue.component('vue-slide-up-down', SlideUpDown)
 /* eslint-disable no-new */
-console.log(router)
 new Vue({
   el: '#NKOJ',
   router,

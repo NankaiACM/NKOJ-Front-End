@@ -23,25 +23,25 @@
 <script>
 import homeComponent from './homeComponent.vue'
 export default {
-  name: "component-home-problem",
-  components:{homeComponent},
-  data() {
+  name: 'component-home-problem',
+  components: {homeComponent},
+  data () {
     return {
       newProblems: []
     }
   },
-  mounted: function() {
-    this.$nextTick(function() {
-      this.initView();
-    });
+  mounted: function () {
+    this.$nextTick(function () {
+      this.initView()
+    })
   },
   methods: {
-    initView: function() {
-      var _this = this;
-      this.$http.get('../../static/newProblems.json').then(function(res) {
-        console.log(res.body)
-        _this.newProblems = res.body.data;
-      });
+    initView: function () {
+      var _this = this
+      this.$http.get('../../static/newProblems.json').then(function (res) {
+        console.log('加载homeProblems数据')
+        _this.newProblems = res.body.data
+      })
     }
   }
 }

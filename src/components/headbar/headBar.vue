@@ -35,15 +35,15 @@
           <a> 登录<span class="glyphicon glyphicon-log-in"></span></a>
         </div>
         <div class="userdetail" v-if="userData.isLogin">
-          <img :src="avatarUrl">
+          <img class="img-circle" :src="avatarUrl">
           <dropmenu v-if="userData.isLogin" :userData="userData">
             <li class="nickname">Hi! <span>{{userData.nickname}}</span></li>
             <li class="hr"><hr></li>
-            <li class="link forbiden"><a href="#">我出的题目</a></li>
             <li class="link forbiden"><a href="#">我收藏的比赛</a></li>
             <li class="hr"><hr></li>
             <li class="link"><router-link :to="'/user/'+$store.state.userData.id">用户信息与设置</router-link></li>
             <li class="link" v-if="proAdd"><router-link to="/admin">出题</router-link></li>
+            <li class="link forbiden" v-if="proAdd"><a href="#">我出的题目</a></li>
             <li class="link" v-if="usrLog"><a href="#" @click="logout()">注销</a></li>
             <li class="hr"><hr></li>
             <li class="lst-login">上次登陆日期 {{new Date(userData.lastLogin).toLocaleDateString()}}</li>
@@ -68,70 +68,70 @@
 </template>
 
 <script>
-  import dropmenu from './dropmenu.vue'
-  export default {
-    name: 'headBar',
-    components:{dropmenu},
-    props: {
-      nowPage: String,
-      userPage: String,
-    },
-    data () {
-      return {
-        isScrolled: false,
-        showAnnouncement: false,
-        userData: {isLogin:false}
-      }
-    },
-    methods: {
-      handleScroll () {
-        let scrolled =
+import dropmenu from './dropmenu.vue'
+export default {
+  name: 'headBar',
+  components: {dropmenu},
+  props: {
+    nowPage: String,
+    userPage: String
+  },
+  data () {
+    return {
+      isScrolled: false,
+      showAnnouncement: false,
+      userData: {isLogin: false}
+    }
+  },
+  methods: {
+    handleScroll () {
+      let scrolled =
           document.documentElement.scrollTop || document.body.scrollTop
-        if (scrolled > 0) {
-          if (!this.isScrolled) this.isScrolled = true
-        } else {
-          if (this.isScrolled) this.isScrolled = false
-        }
-      },
-      toggleAnnouncement () {
-        setTimeout(() => (this.showAnnouncement = !this.showAnnouncement), 200);
-      },
-      freshUserData(){
-        this.userData=this.$store.state.userData
-      },
-      logout: function () {
-        this.$http.get(this.logoutUrl,{credentials: true})
-          .then(function () {
-            console.log(this.logoutUrl)
-            console.log('注销成功')
-            window.location.reload()
-          }, function (e) {
-            console.log('erro')
-            console.log(e)
-          })
+      if (scrolled > 0) {
+        if (!this.isScrolled) this.isScrolled = true
+      } else {
+        if (this.isScrolled) this.isScrolled = false
       }
     },
-    mounted: function () {
-      this.$nextTick(function () {
-        window.addEventListener('scroll', this.handleScroll)
-        this.freshUserData()
-      })
+    toggleAnnouncement () {
+      setTimeout(() => (this.showAnnouncement = !this.showAnnouncement), 200)
     },
-    computed:{
-      logoutUrl: function () {
-        return `${noPointHost}/api/u/logout`
-      },
-      avatarUrl:function() {
-        return `${noPointHost}/api/avatar/`+ this.userData.id
-      },
-      proAdd: function () {
-        return this.$store.getters.proAddGet
-      },
-      usrLog: function () {
-        return this.$store.getters.usrLogGet
-      }
+    freshUserData () {
+      this.userData = this.$store.state.userData
+    },
+    logout: function () {
+      this.$http.get(this.logoutUrl, {credentials: true})
+        .then(function () {
+          console.log(this.logoutUrl)
+          console.log('注销成功')
+          window.location.reload()
+        }, function (e) {
+          console.log('erro')
+          console.log(e)
+        })
+    }
+  },
+  mounted: function () {
+    this.$nextTick(function () {
+      window.addEventListener('scroll', this.handleScroll)
+      this.freshUserData()
+    })
+  },
+  computed: {
+    logoutUrl: function () {
+      return `${window.noPointHost}/api/u/logout`
+    },
+    avatarUrl: function () {
+      return `${window.noPointHost}/api/avatar/` + this.userData['user_id']
+    },
+    proAdd: function () {
+      return this.$store.getters.proAddGet
+    },
+    usrLog: function () {
+      return this.$store.getters.usrLogGet
     }
   }
+}
 </script>
 
 <style lang="less">
@@ -284,10 +284,12 @@
   position: relative;
 }
 .userdetail img{
-  height: 100%;
-  border-radius: 30px;
+  margin-top: -10px;
+  margin-left: -10px;
+  height: 50px;
+  width: 50px;
   border: 3px solid #ffffff;
-  transition: border-color 0.3s ease;
+  object-fit: cover;
 }
 
 .announcement {
