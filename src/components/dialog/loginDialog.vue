@@ -1,7 +1,7 @@
 <template>
   <dialog-wrap @exit="$emit('exit')">
     <transition name="fade" @enter="fadeEnter" @leave="fadeLeave" :css="false">
-    <div class="-sign-up" v-if="pageStatus=='login'">
+    <div class="login-sign-up" v-if="pageStatus=='login'">
       <div class="title-bar">
         <div class="title">登录</div>
         <div class="subtitle">由此登录，开启今日的ACM之旅吧~</div>
@@ -54,176 +54,174 @@
 </template>
 
 <script>
-import dialogWrap from "./dialogWrap";
-import vueLoading from "vue-loading-template";
+import dialogWrap from './dialogWrap'
+import vueLoading from 'vue-loading-template'
+import encryptMsg from '../../encrypt/encryptMsg.js'
 
 export default {
-  name: "loginSignUp",
+  name: 'loginSignUp',
   props: {
     status: String
   },
   components: { dialogWrap, vueLoading },
-  data() {
+  data () {
     return {
       loginAttribute: {
-        loginAccount: "",
-        loginPassword: "",
-        captcha:"",
+        loginAccount: '',
+        loginPassword: '',
+        captcha: ''
       },
-      loginMessage: "",
+      loginMessage: '',
       loginStatus: 0,
       focusing: 0,
       pageStatus: this.status,
       noPointHost: window.noPointHost,
-      captchaUrlLogin:`${noPointHost}/api/captcha/login?_t=` + Math.random(),
+      captchaUrlLogin: `${window.noPointHost}/api/captcha/login?_t=` + Math.random(),
       timeToClose: 0,
-      noNeedCaptcha: true,
-    };
+      noNeedCaptcha: true
+    }
   },
   methods: {
-    loginpasswordEncrypt: function(password) {
-      this.loginStatus=1;
-      var loginPackege = {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
-      };
-      loginPackege.password = password;
-      loginPackege.user = this.loginAttribute.loginAccount;
-      loginPackege.captcha = this.loginAttribute.captcha;
+    loginpasswordEncrypt: function (password) {
+      this.loginStatus = 1
+      var loginPackege = {}
+      loginPackege.password = password
+      loginPackege.user = this.loginAttribute.loginAccount
+      loginPackege.captcha = this.loginAttribute.captcha
       this.$http
-        .post(`${noPointHost}/api/u/login`, loginPackege, {
-              crossDomain: true,
-              xhrFields: { withCredentials: true },
-              timeout: "8000",
-              cache: true,
-              credentials: true
+        .post(`${window.noPointHost}/api/u/login`, loginPackege, {
+          timeout: '8000'
         })
         .then(res => {
-          console.log(JSON.stringify(res));
+          console.log(JSON.stringify(res))
           if (res.body.code === 0) {
-            this.loginStatus=2;
+            this.loginStatus = 2
+            console.log('获取用户数据')
+            console.log(JSON.stringify(res))
             this.$store.commit({
               type: 'setuserDate',
               isLogin: true,
               id: res.body.data.user_id,
               nickname: res.body.data.nickname,
               lastLogin: res.body.data.last_login,
-              perm: res.body.data.perm
+              perm: res.body.data.perm,
+              o: res.body.data
             })
-            return;
+            return
           } else {
-            this.loginMessage="";
-            for (var item in res.body.error){
-              this.loginMessage +=res.body.error[item].name+" "+res.body.error[item].message+". ";
+            this.loginMessage = ''
+            for (var item in res.body.error) {
+              this.loginMessage += res.body.error[item].name + ' ' + res.body.error[item].message + '. '
             }
-            this.captchaUrlLogin=`${noPointHost}/api/captcha/login?_t=` + Math.random()
-            this.loginStatus=0;
+            this.captchaUrlLogin = `${window.noPointHost}/api/captcha/login?_t=` + Math.random()
+            this.loginStatus = 0
           }
-          this.showMessageBar(".message-bar", 2);
-        });
+          this.showMessageBar('.message-bar', 2)
+        })
     },
-    loginAttempt: function(event) {
-      var inputs = document.querySelectorAll(".appear input");
+    loginAttempt: function (event) {
+      var inputs = document.querySelectorAll('.appear input')
       for (var i = 0; i < inputs.length; i++) {
-        inputs[i].disabled = true;
-        inputs[i].style.backgroundColor = "#ededed";
+        inputs[i].disabled = true
+        inputs[i].style.backgroundColor = '#ededed'
       }
-      this.loginpasswordEncrypt(this.loginAttribute.loginPassword)
+      const message = this.loginAttribute.loginPassword
+      const base64 = encryptMsg(message)
+      this.loginpasswordEncrypt(base64)
       // rsaEncrypt(this.loginAttribute.loginPassword, this.loginpasswordEncrypt);
       for (var i = 0; i < inputs.length; i++) {
-        inputs[i].disabled = false;
-        inputs[i].style.backgroundColor = "#ffffff";
+        inputs[i].disabled = false
+        inputs[i].style.backgroundColor = '#ffffff'
       }
-      event.preventDefault();
+      event.preventDefault()
     },
-    CheckMail(mail) {
-      var filter = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
-      return filter.test(mail);
+
+    CheckMail (mail) {
+      var filter = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/
+      return filter.test(mail)
     },
-    showMessageBar(classcode, high) {
-      var mb = document.querySelector(classcode);
-      var target= high==0?"0":"10px"
-      if(high!=0) high+=1.2
-      if (mb.style.height != high + "rem") {
+    showMessageBar (classcode, high) {
+      var mb = document.querySelector(classcode)
+      var target = high === 0 ? '0' : '10px'
+      if (high !== 0) high += 1.2
+      if (mb.style.height !== high + 'rem') {
         Velocity(
           mb,
-          { height: [high + "rem", mb.style.height],paddingTop:target },
+          { height: [high + 'rem', mb.style.height], paddingTop: target },
           { duration: 300 }
-        );
+        )
       }
     },
-    labelClick(event) {
-      event.target.nextElementSibling.focus();
+    labelClick (event) {
+      event.target.nextElementSibling.focus()
     },
-    fadeEnter(el, done) {
-      var target = el.offsetHeight;
-      el.style.display = "none";
-      var form = el.parentElement;
-      var keep = form.offsetHeight;
-      form.style.height = keep + "px";
+    fadeEnter (el, done) {
+      var target = el.offsetHeight
+      el.style.display = 'none'
+      var form = el.parentElement
+      var keep = form.offsetHeight
+      form.style.height = keep + 'px'
       Velocity(
         form,
-        { height: keep - this.tansitionHeight + target + "px" },
+        { height: keep - this.tansitionHeight + target + 'px' },
         {
-          duration: Math.sqrt(Math.abs(this.tansitionHeight - target))*20,
-          complete: function() {
-            el.style.display = "block";
-            form.style.height = "auto";
-            done();
+          duration: Math.sqrt(Math.abs(this.tansitionHeight - target)) * 20,
+          complete: function () {
+            el.style.display = 'block'
+            form.style.height = 'auto'
+            done()
           }
         }
-      );
-      Velocity(el.parentElement, { opacity: 1 }, { duration: 300 });
+      )
+      Velocity(el.parentElement, { opacity: 1 }, { duration: 300 })
     },
-    fadeLeave(el, done) {
-      this.tansitionHeight = el.offsetHeight;
+    fadeLeave (el, done) {
+      this.tansitionHeight = el.offsetHeight
       Velocity(
         el.parentElement,
         { opacity: 0 },
         { duration: 300, complete: done }
-      );
-    },
+      )
+    }
   },
   watch: {
-    loginStatus: function(newValue, oldValue) {
-      if (newValue==2) {
-        var vue=this;
-        var mesbar = document.querySelector(".message-bar");
-        var form = mesbar.parentElement;
-        var keep=form.offsetHeight;
-        form.style.height=keep+"px";
+    loginStatus: function (newValue, oldValue) {
+      if (newValue === 2) {
+        var vue = this
+        var mesbar = document.querySelector('.message-bar')
+        var form = mesbar.parentElement
+        var keep = form.offsetHeight
+        form.style.height = keep + 'px'
         setTimeout(
-          function(){
-            Velocity(form, {height: keep-vue.tansitionHeight+20+"px"},{duration:300})
-            mesbar.style.margin="30px"
-            mesbar.style.height="4rem"
-        Velocity(
-          form,
-          { opacity:1 },
-          { duration: 300 }
-        );
+          function () {
+            Velocity(form, {height: keep - vue.tansitionHeight + 20 + 'px'}, {duration: 300})
+            mesbar.style.margin = '30px'
+            mesbar.style.height = '4rem'
+            Velocity(
+              form,
+              { opacity: 1 },
+              { duration: 300 }
+            )
           }
-        ,300)
-        vue.timeToClose=5;
-        var func=function(){
-          vue.timeToClose--;
-          if(vue.timeToClose==0){
-            vue.$emit('exit');
-          }
-          else{
-            setTimeout(func, 1000);
+          , 300)
+        vue.timeToClose = 5
+        var func = function () {
+          vue.timeToClose--
+          if (vue.timeToClose === 0) {
+            vue.$emit('exit')
+          } else {
+            setTimeout(func, 1000)
           }
         }
-        setTimeout(func,1000)
+        setTimeout(func, 1000)
       }
     },
-    pageStatus: function (newValue,oldValue) {
-      this.$emit('exit');
-      this.$emit('changeStatus',newValue);
-    },
+    pageStatus: function (newValue, oldValue) {
+      this.$emit('exit')
+      this.$emit('changeStatus', newValue)
+    }
   }
-};
+}
 </script>
 
 <style>

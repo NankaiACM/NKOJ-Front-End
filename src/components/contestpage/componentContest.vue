@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import contestPage from './contestpage/contest.vue'
-import Breadcrumb from './contestpage/breadcrumb'
-import contestSideBar from './contestpage/contestSideBar'
-import allContest from "./contestpage/allContest";
-import contestDetail from "./contestpage/contestDetail";
-import contestOpen from "./contestpage/contestOpen";
+import contestPage from './contest.vue'
+import Breadcrumb from './breadcrumb'
+import contestSideBar from './contestSideBar'
+import allContest from "./allContest";
+import contestDetail from "./contestDetail";
+import contestOpen from "./contestOpen";
 
 export default {
   name: 'component-contest',
@@ -35,7 +35,7 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    background: white;
+    background: rgba(255,255,255,.8);
     font-size: 16px;
   }
   @media screen and (min-width: 1281px){

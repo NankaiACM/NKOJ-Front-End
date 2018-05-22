@@ -22,7 +22,7 @@ export default {
       menu: {
         time: {
           text: 'Time Filter',
-          key: 'timeBy',//sortby
+          key: 'timeBy', // sortby
           option: []
         },
         view: {
@@ -79,7 +79,6 @@ export default {
   align-items: center;
   height: @filterheight;
   z-index: 1;
-  background: #fff;
   #rank-bar-control {
     width: 100%;
     a {

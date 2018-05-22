@@ -1,20 +1,30 @@
 <template>
 <div id="app">
+  <alex></alex>
+  <login-dialog v-if="userPage=='login'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-dialog>
   <header>
+    <!--
     <head-bar @toHome="localTo('home')" @logIn='changeToLogin' @signUp='changeToSignup'
               @toProblem="localTo('problems')" @toStatus="localTo('status')" @toContest="localTo('contest')"
               @toRank="localTo('ranklist')" @toDiscuss="localTo('discuss')" :nowPage=nowPageF :userPage=userPage>
-              <question-filter v-if="this.$route.path === '/problems'" class="abb"></question-filter>
-              <status-filter v-if="this.$route.path === '/status'" class="abb"></status-filter>
-              <rank-filter v-if="this.$route.path === '/ranklist'" class="abb"></rank-filter>
+    -->
+    <head-bar @toHome="localTo('home')" @logIn='changeToLogin' @signUp='changeToSignup'
+              @toProblem="localTo('problems')" @toStatus="localTo('status')" @toContest="localTo('contest')"
+              :nowPage=nowPageF :userPage=userPage>
+    <question-filter v-if="this.$route.path === '/problems'" class="abb"></question-filter>
+    <status-filter v-if="this.$route.path === '/status'" class="abb"></status-filter>
+    <rank-filter v-if="this.$route.path === '/ranklist'" class="abb"></rank-filter>
     </head-bar>
   </header>
-  <wall-paper></wall-paper>
-  <section id="main" class="container-fluid">
-    <login-dialog v-if="userPage=='login'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-dialog>
-    <router-view :class="xclass" ></router-view>
-  </section>
+  <!--wall-paper></wall-paper-->
+  <div class="struct">
+    <div :class="xclass">
+      <router-view></router-view>
+    </div>
+    <foot></foot>
+  </div>
   <component-shell></component-shell>
+  <ver></ver>
 </div>
 </template>
 
@@ -22,21 +32,24 @@
 import loginDialog from './components/dialog/loginDialog'
 import headBar from './components/headbar/headBar'
 
-import questionFilter from './components/problemslistpage/questionFilter.vue'
+import questionFilter from './components/problem/questionFilter.vue'
 import statusFilter from './components/statuspage/statusFilter.vue'
 import rankFilter from './components/ranklist/rankFilter.vue'
 import componentShell from './components/shell/mayoi.vue'
 import wallPaper from './components/wallpaper/wallpaper.vue'
+import alex from './components/wallpaper/alex.vue'
+import foot from './components/footer.vue'
+import ver from './components/ver/ver.vue'
 
 export default {
-  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell, wallPaper},
+  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell, wallPaper,alex,foot, ver},
   name: 'NKOJ',
   data: function () {
     return {
       userPage: 'None',
       loginUserName: 'null',
       nowPage: '',
-      userData:undefined,
+      userData: undefined
     }
   },
   methods: {
@@ -44,56 +57,56 @@ export default {
       console.info(this.$route.path)
       this.nowPage = str
       this.$router.push({
-        path: '/'+str
+        path: '/' + str
       })
       console.info(this.$route.path)
     },
     changeTo404: function () {
-      this.nowPage='404'
+      this.nowPage = '404'
       this.$router.push({
         path: '/notFound'
       })
     },
     changeToUser: function () {
-      this.nowPage='User'
+      this.nowPage = 'User'
       this.$router.push({
         path: '/user/Saurus'
       })
     },
     changeToLogin: function () {
-      this.userPage='login'
+      this.userPage = 'login'
     },
     changeToSignup: function () {
-      this.nowPage='signUp'
-      this.$router.push({path: '/sign_up'});
+      this.nowPage = 'signUp'
+      this.$router.push({path: '/sign_up'})
     },
     exitShow: function () {
-      this.userPage="None";
+      this.userPage = 'None'
     },
-    changeLogin:function(value){
-      this.userPage="None";
-      this.nowPage=value;
-      this.$router.push({path: '/sign_up'});
-    },
-  },
-  computed:{
-    nowPageF: function () {
-      if(this.nowPage=='')
-        return this.$router.currentRoute.fullPath.split("/")[1]
-      else
-        return this.nowPage
-    },
-    xclass: function () {
-      var clear = ['/home', '/contest']
-      var xroute = this.$route.path
-      var special = clear.indexOf(xroute)
-      special = special + 1
-      return {
-        'com-container col-md-10 col-md-offset-1': ! special,
-        'xclear': special
-      }
+    changeLogin: function (value) {
+      this.userPage = 'None'
+      this.nowPage = value
+      this.$router.push({path: '/sign_up'})
     }
   },
+  computed: {
+    nowPageF: function () {
+      if (this.nowPage === '') {
+        return this.$router.currentRoute.fullPath.split('/')[1]
+      } else {
+        return this.nowPage
+      }
+    },
+    xclass: function () {
+      var clear = ['/home']
+      var xroute = this.$route.path
+      var special = clear.indexOf(xroute)
+      return {
+        'com-container col-md-10 col-md-offset-1': true,
+        'xbgc': special + 1
+      }
+    }
+  }
 }
 </script>
 
@@ -104,6 +117,16 @@ export default {
   padding: 0;
   margin: 0;
   border: none;
+}
+#alex{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: none;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  z-index: -1;
 }
 
 #app {
@@ -144,16 +167,27 @@ header {
 }
 
 .com-container {
-  min-height: 100%;
-  height: 100%;
-  margin-top: @filterheight;
-  margin-bottom: @fat-container-margin-top;
+  margin-top: @filterheight+10px;
+  margin-bottom: 20px;
+  background: none;
+  padding-top: 2vw;
+  padding-bottom: 60px;
+  flex: 1;
+  border-radius: 2px;
+  &::before{
+    background-color: white;
+    width: 100%;
+    height: 5vw;
+    display: block;
+    background: linear-gradient(rgba(255, 255, 255, 0),rgba(255, 255, 255, 0.8));
+    position: absolute;
+    top: -5vw;
+    left: 0;
+  }
 }
 
-.xclear {
-  width: 100%;
-  margin: 0;
-  padding: 0;
+.xbgc {
+  background: rgba(255,255,255,0.7);
 }
 
 #head-filter {
@@ -185,4 +219,11 @@ header {
   padding: 0;
   margin: 0;
 }
+
+.struct{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 </style>

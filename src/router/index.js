@@ -1,26 +1,29 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HOME from '../NKOJ'
-import NKPC from "../NKPC"
-import componentProblems from '../components/problemslistpage/problemsPage'
+import NKPC from '../NKPC'
+import componentProblems from '../components/problem/problemsPage'
 import componentHome from '../components/home/home'
 import componentB from '../components/componentB'
-import componentContest from '../components/componentContest'
-import problemsPage from '../components/problemPage'
+import problemsPage from '../components/problem/problemPage'
 import statusPage from '../components/statuspage/statusPage'
-import discussPage from '../components/discussPage'
+import discussPage from '../components/discuss/discussPage'
 import postPage from '../components/discuss/post'
 import userPage from '../components/userPage'
+import componentContest from '../components/contestpage/componentContest'
 import allContest from '../components/contestpage/allContest'
-import contest from '../components/contestpage/contestDetail'
-//import codePage from '../components/codePage'
+import contest from '../components/contestpage/contest'
+// import codePage from '../components/codePage'
 import detailsPage from '../components/detailspage/details'
 import rankPage from '../components/ranklist/rankPage'
 import signupPage from '../components/signupPage'
 import adminPage from '../components/admin/admin'
 import adminProblemPage from '../components/admin/adminProblem'
 import adminContest from '../components/admin/adminContest'
-import test from '../components/wallpaper/wallpaper'
+
+import test from '../components/userPageAvatar'
+import test1 from '../components/userPage'
+
 Vue.use(Router)
 console.log(window.noPointHost)
 const router = new Router({
@@ -48,7 +51,7 @@ const router = new Router({
         props: {
           isInfinite: true,
           isBtn: false,
-          apiUrl: window.noPointHost + '/api/status/list'
+          apiUrl: window.noPointHost + '/api/status'
         }
       },
       { path: '/discuss', component: discussPage },
@@ -70,10 +73,15 @@ const router = new Router({
           }
         ]
       },
-      { path: '/sign_up', component: signupPage}
-      ,{
+      {
+        path: '/sign_up', component: signupPage},
+      {
         path: '/test',
         component: test
+      },
+      {
+        path: '/test1',
+        component: test1
       }
     ]
   }, {
@@ -85,59 +93,55 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   let store = router.app.$options.store
   let userinfo = store.state.userData
-  if(userinfo.check===false){
-    checkUser(store)
+  if (userinfo.check === false) { // 仅在第一次加载页面checkUser(), 但不包含主动checkUser()
+    router.checkUser(store)
     store.commit({
       type: 'setuserDate',
-      check:true
+      check: true
     })
   }
   next()
 })
-
-function checkUser(store) {
-  Vue.http
-    .get(
-      `${noPointHost}/api/user`,
-      {
-        crossDomain: true,
-        xhrFields: { withCredentials: true },
-        timeout: "8000",
-        cache: true,
-        credentials: true
-      }
-    )
-    .then(
-      res => {
-        if (res.body.code === 0) {
-          store.commit({
-            type: 'setuserDate',
-            isLogin: true,
-            id: res.body.data.user_id,
-            nickname: res.body.data.nickname,
-            lastLogin: res.body.data.last_login,
-            perm: res.body.data.perm
-          })
-        }
-        else {
-          vue.userData = undefined;
-        }
-        console.log(vue.userData)
-      },
-      res => {
-        /*
-        //wait to code
-        var vue = this;
-        console.log(res)
-        */
-       
-        
-      }
-    )
-    .catch(function (response) {
-      //wait to code
-      var vue = this;
-    });
+router.checkUser = function (store, logined, notLogging, catchError) {
+  Vue.http.get(`${window.noPointHost}/api/user`, {
+    crossDomain: true,
+    xhrFields: { withCredentials: true },
+    timeout: '8000',
+    cache: true,
+    credentials: true
+  }).then(function (res) {
+    if (res.body.code === 0) {
+      store.commit({
+        type: 'setuserDate',
+        isLogin: true,
+        'user_id': res.body.data.user_id,
+        nickname: res.body.data.nickname,
+        lastLogin: res.body.data.last_login,
+        perm: res.body.data.perm,
+        o: res.body.data
+      })
+      console.log('成功获取用户数据')
+      if (!logined) return
+      logined() // 成功时的回调
+    } else {
+      console.log('未知状态')
+      console.log(res)
+    }
+  }, function (e) {
+    if (e.body.code === 401) {
+      console.log('未登录')
+      store.commit({
+        type: 'setuserDate',
+        isLogin: false
+      })
+      if (!notLogging) return
+      notLogging(e) // 未登录时回调
+      return
+    }
+    console.log('api get error')
+    if (!catchError) return
+    catchError(e) // 失败时的回调
+  })
 }
 
 export default router

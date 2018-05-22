@@ -13,12 +13,12 @@
 </div>
 </template>
 <script>
-import discussCell from './discuss/discussCell.vue'
-import pagination from './problemslistpage/pagination.vue'
-import newPost from './discuss/newPost.vue'
+import discussCell from './discussCell.vue'
+import pagination from '../problem/pagination.vue'
+import newPost from './newPost.vue'
 export default {
   name: 'discussPage',
-  data: function() {
+  data: function () {
     return {
       list: [{
         id: '123',//讨论的id
@@ -66,7 +66,8 @@ export default {
 </script>
 <style lang="less">
 #discuss-page {
-  background: #fdfdfd;
+  background: rgb(253,253,253);
+  box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.2);
 }
 
 #discuss-list {

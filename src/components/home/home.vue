@@ -1,6 +1,6 @@
 <template>
 <div id="home">
-  <div id="alpha">
+  <!--div id="alpha">
     <alex></alex>
     <tlex></tlex>
     <div id="moka" @mousemove="moka" :style="mksty">
@@ -12,26 +12,22 @@
       <span class="glyphicon glyphicon-console" id="cmd"></span>
       <span class="glyphicon glyphicon-comment" id="chat"></span>
     </div>
-  </div>
+  </div-->
   <div id="beta">
     <div class="mainbar">
-      <div class="row">
-        <home-contest></home-contest>
-      </div>
-      <div class="row">
-        <home-problem></home-problem>
-      </div>
-      <div class="row">
-        <home-discuss></home-discuss>
-      </div>
+      <home-problem></home-problem>
+      <home-contest></home-contest>
+      <home-discuss></home-discuss>
     </div>
     <div class="sidebar">
-      <div class="home-component">
-        <princeton></princeton>
-      </div>
+      <home-component :title="'占位符'">
+        <hr class=".hr">
+      </home-component>
+      <princeton></princeton>
     </div>
     <div style="clear:both;"></div>
   </div>
+  <urgent></urgent>
 </div>
 </template>
 <script>
@@ -41,19 +37,22 @@ import tlex              from '../wallpaper/tlex.vue'
 import homeContest       from './homeContest.vue'
 import homeDiscuss       from './homeDiscuss.vue'
 import homeProblem       from './homeProblems.vue'
+import HomeComponent     from './homeComponent'
+import urgent            from '../urgent/urgent.vue'
 export default {
   name: 'component-home',
-  data: function() {
+  data: function () {
     return {
       mk: {
         x: 0,
         y: 0,
         z: 0
-      }
+      },
+      btns: false
     }
   },
-  mounted: function() {
-    this.$nextTick(function() {
+  mounted: function () {
+    this.$nextTick(function () {
     })
   },
   methods: {
@@ -65,7 +64,7 @@ export default {
       this.mk.y = x * 30
       var y = e.layerY - h
       y = y / h
-      this.mk.x = - y * 30
+      this.mk.x = -y * 30
     }
   },
   computed: {
@@ -76,6 +75,8 @@ export default {
     }
   },
   components: {
+    urgent,
+    HomeComponent,
     princeton,
     alex,
     tlex,
@@ -88,21 +89,17 @@ export default {
 <style lang="less" scoped>
 @import '../../less/global.less';
 
-#home {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  flex-direction: column;
-  overflow-x: hidden;
-}
 
 #alpha {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   background: none;
   text-align: left;
   width: 100vw;
   height: 100vh;
   overflow-x: hidden;
+  z-index: -1;
 
   #moka {
     display: none;
@@ -186,26 +183,33 @@ export default {
 
 #beta {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  padding: 0 1.5%;
 
   .mainbar{
     float: left;
     width: 60%;
 
-    .row>:first-child {
-      width: 100%;
-    }
-
-    .row h3 {
+    h3 {
       margin-top: 0;
       font-family: '微软雅黑';
+    }
+    div:nth-child(n+2){
+      margin-top: 30px; 
     }
   }
   .sidebar{
     float: right;
-    width: 40%;
-    padding-left: 30px;
+    width: 35%;
+    margin-left: 2%;
+    padding-left: 3%;
+    border-left: 1px solid #eee;
+    .wrapper{
+      max-width: 350px;
+      margin: auto;
+    }
+    div:nth-child(n+2){
+      margin-top: 30px; 
+    }
   }
 }
 </style>

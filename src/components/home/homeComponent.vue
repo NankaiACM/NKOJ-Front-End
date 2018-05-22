@@ -4,9 +4,9 @@
       <div class="title-bar">
         {{title}}
       </div>
-      <div class="navbutton">
+      <!--div class="navbutton">
         <span class="glyphicon glyphicon-list"></span>
-      </div>
+      </div-->
     </div>
     <div class="content-bar">
       <slot></slot>
@@ -16,13 +16,12 @@
 
 <script>
 export default {
-  name:"homeComponent",
-  props:{title:String},
-  data(){
-    return{
-
+  name: 'homeComponent',
+  props: {title: String},
+  data () {
+    return {
     }
-  },
+  }
 }
 </script>
 
@@ -56,7 +55,7 @@ export default {
     }
   }
 
-  .navbutton{
+  .navbutton {
     position: absolute;
     font-size: 150%;
     bottom: 10px;
@@ -64,7 +63,6 @@ export default {
     color: white;
     transition: left 0.3s ease;
   }
-  
 }
 .hc-wrapper .content-bar{
   flex: 1;

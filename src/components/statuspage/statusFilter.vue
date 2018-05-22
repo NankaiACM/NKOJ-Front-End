@@ -44,7 +44,7 @@
   </div>
 </template>
 <script>
-var status_map = [...require('../../../static/status_map.json')]
+var {statusMap, langMap} = require('./map.json')
 export default {
   data: function () {
     return {
@@ -58,40 +58,25 @@ export default {
         page_length: 20
       },
       dropdata: {
-        status: status_map,
-        lang: [{
-          "value": "1",
-          "lang": "C99"
-        }, {
-          "value": "2",
-          "lang": "C++ 98"
-        }, {
-          "value": "3",
-          "lang": "Free Pascal"
-        }, {
-          "value": "4",
-          "lang": "Java (JDK6)"
-        }, {
-          "value": "5",
-          "lang": "C++14"
-        }]
+        status: statusMap,
+        lang: langMap
       }
     }
   },
   mounted: function () {
-    this.$nextTick(function(){
+    this.$nextTick(function () {
       this.filter = this.$store.state.statusFilter
       console.log(this.filter)
     })
   },
   methods: {
-    setSF: function (key,value) {
-      console.log(key+value)
+    setSF: function (key, value) {
+      console.log(key + value)
       this.$store.commit({
         type: 'setSFilter',
         key: key,
         value: value
-        })
+      })
     }
   },
   watch: {
@@ -109,23 +94,23 @@ export default {
 @import '../../less/global.less';
 
 .question-filter-base {
-    height: @filterheight;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background: #fff;
+  height: @filterheight;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .status-filter .nav {
-    width: 100%;
+  width: 100%;
 }
 
 .status-filter input {
-    width: 8em;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-    outline: none;
+  width: 8em;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+  background: none;
 }
 
 .status-filter .form-control:focus {

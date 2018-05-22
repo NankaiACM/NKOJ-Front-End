@@ -1,12 +1,11 @@
 <template>
 <div id="userPageAvatar">
-  <h4 align="left">修改头像</h4><hr>
-  <div class="row"><img :src="src" ref="img"></div>
-  <label><input type='file' @change="fileChange" ref="input"></label>
-  <button class="btn btn-info" @click="updateUserAvatar">上传</button>
+  <h4 align="left">修改头像</h4>
+  <img :src="avatarUrl" ref="img">
+  <div id="upf">选择图片<input type="file" id="upbtn" @change="fileChange" ref="input"></div>
+  <div id="ups" @click="updateUserAvatar">上传</div>
 </div>
 </template>
-
 <script>
 export default {
   name: 'user-page-avatar',
@@ -19,55 +18,82 @@ export default {
       const refs = this.$refs
       const elInput = refs.input
       const elImg = refs.img
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onload = (e) => {
-        const src = e.target.result;
-        elImg.src = src;
-      };
+        const src = e.target.result
+        elImg.src = src
+      }
       if (elInput.files && elInput.files[0]) {
-        reader.readAsDataURL(elInput.files[0]);
+        reader.readAsDataURL(elInput.files[0])
       }
     },
     updateUserAvatar: function (e) {
-      let data = new FormData();
-      data.append('avatar', this.$refs.input.files[0]);
+      let data = new FormData()
+      data.append('avatar', this.$refs.input.files[0])
       console.log(data)
-      this.$http.post(`${window.noPointHost}/api/u/update`, data,  {crossDomain : true, credentials : true}).then( (res) => {
-        console.log(res)
-      })
+      this.$http.post(`${window.noPointHost}/api/u/update`,
+        data,
+        {crossDomain: true, credentials: true})
+        .then((res) => {
+          alert('ok')
+          window.location.reload()
+        }, e => {
+          console.log('upload fail')
+        })
       e.preventDefault()
+    }
+  },
+  computed: {
+    avatarUrl: function () {
+      return window.noPointHost + '/api/avatar/' + this.$store.state.userData['user_id']
     }
   }
 }
 </script>
-
-<style scoped>
-#userPageAvatar{
-  position:absolute;
+<style lang="less" scoped>
+#userPageAvatar {
+  position: fixed;
   background: white;
-  width: 50%;
-  padding: 20px;
-  margin: 10% 30%;
   z-index: 4;
-  border-radius: 10px;
-}
-#userPageAvatar img{
-  margin-top: 20px;
-  margin-bottom: 20px;
-  height: 300px;
-  width: 300px;
-  border: 2px darkgray solid;
-}
-#userPageAvatar h4{
-  padding: 10px 0;
-  margin: 0;
-  font-weight: bold;
-  color: #16aad8;
-}
-#userPageAvatar hr{
-  width: 60px;
-  padding: 0;
-  margin: 0;
-  border: 2px solid #eff1f3;
+  display: flex;
+  padding: 2em 3em;
+  border-radius: 4px;
+  flex-direction: column;
+  align-items: center;
+  h4 {
+    color: #16aad8;
+  }
+  img {
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    border: 2px darkgray solid;
+    margin: 2em 0;
+    object-fit: cover;
+  }
+  #upf, #ups {
+    position: relative;
+    cursor: pointer;
+    width: 5em;
+    height: 2em;
+    line-height: 2em;
+    text-align: center;
+    border: 1px solid #16aad8;
+    color: #16aad8;
+  }
+  #upf {
+    border-radius: 4px 4px 0 0;
+  }
+  #ups {
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+  }
+  #upbtn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    opacity: 0;
+  }
 }
 </style>

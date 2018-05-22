@@ -1,32 +1,42 @@
 <template>
-  <div id="princeton">
-    <div id="huiban"><div id="html-container" class="ptin" v-html="danmakusHTML"></div></div>
-    <div id="pt-ctl">
-      <div class="pt-in-ctl">
+  <div id="princeton" class="home-component">
+    <home-component :title="'聊天室'">
+      <hr class="hr">
+      <div class="danmaku-wrapper">
+        <div>
+          <div id="huiban" class="ptin html-container" v-html="danmakusHTML"></div>
+        </div>
+        <div id="pt-ctl">
+          <div class="pt-in-ctl">
         <textarea class="ptin" v-model="danmaku" @keyup.enter="ptsend" placeholder="DA ZE">
         </textarea>
-        <span class="limit-hit">{{danmaku.length}}/{{limit_hit}}</span>
+            <span class="limit-hit">{{danmaku.length}}/{{limit_hit}}</span>
+          </div>
+          <div class="pt-btns">
+            <div class="hook-btn" :class="{'onhook': this.bot.isOnHook}" @click="bot.isOnHook = !bot.isOnHook">hook
+            </div>
+            <div class="hit-btn" :class="{'notban': this.danmaku !== ''}" @click="ptsend">发射电波</div>
+          </div>
+        </div>
       </div>
-      <div class="pt-btns">
-        <div class="hook-btn" :class="{'onhook': this.bot.isOnHook}" @click="bot.isOnHook = !bot.isOnHook">hook</div>
-        <div class="hit-btn" :class="{'notban': this.danmaku !== ''}" @click="ptsend">发射电波</div>
-      </div>
-    </div>
-    <div class="clearfix"></div>
+      <div class="clearfix"></div>
+    </home-component>
   </div>
 </template>
 <script>
+import homeComponent from '../home/homeComponent.vue'
 export default {
   name: 'princeton',
+  components: {homeComponent},
   data: function () {
     return {
       danmaku: '',
       danmakus: [],
       limit_hit: 140,
       princeton: 0,
-      url: 'ws://localhost:8001',
-      hisurl: 'http://111.231.98.20/api/danmaku',
-      bot:{
+      url: 'ws://acm.nankai.edu.cn:80',
+      hisurl: 'http://acm.nankai.edu.cn:80/api/danmaku',
+      bot: {
         url: 'http://www.tuling123.com/openapi/api',
         key: '797f060721db48dca531d74bbc847af9',
         id: '',
@@ -48,11 +58,12 @@ export default {
     },
     ptopen: function (evt) {
       console.log('pt open')
-      console.info(evt)
+      // console.info(evt)
       this.$http.get(this.hisurl)
         .then(function (res) {
-          console.log(res)
+          // console.log(res)
           this.danmakus = [...this.dealhis(res.body.data), ...this.danmakus]
+          this.danmakus = this.danmakus.reverse()
         }, function (e) {
           console.log(e)
         })
@@ -70,11 +81,11 @@ export default {
         slf.princeton.close()
         console.log('尝试重启')
         slf.ptinit()
-      },30000)
+      }, 30000)
     },
     ptmsg: function (evt) {
       console.log('pt msg')
-      console.log('type:'+(typeof evt.data))
+      console.log('type:' + (typeof evt.data))
       if (typeof evt.data === 'string') {
         console.log('rec:' + evt.data)
         var dtmp = this.dealable(evt.data)
@@ -113,7 +124,7 @@ export default {
     },
     botalk: function (str) {
       var vm = this
-      vm.$http.get(vm.bot.url + '?key=' +vm.bot.key + '&info=' + str + '&userid=' + this.bot.id)
+      vm.$http.get(vm.bot.url + '?key=' + vm.bot.key + '&info=' + str + '&userid=' + this.bot.id)
         .then(function (res) {
           var jsn = res.data
           var ret = jsn.text
@@ -129,7 +140,7 @@ export default {
         var str = ''
         str += his[i].nickname
         str += ': '
-        str +=his[i].message
+        str += his[i].message
         ret.push(str)
       }
       return ret
@@ -150,7 +161,8 @@ export default {
       var decoder = new TextDecoder('utf-8')
       var user = decoder.decode(blob.slice(4, 4 + ulen))
       var message = this.dealable(decoder.decode(blob.slice(5 + ulen, 5 + ulen + mlen)))
-      this.danmakus.push(`<span class="user-${color}">${admin ? '[管]' : ''}${user}</span>: ${message}`)
+      let n = `<span class="user-${color}">${admin ? '[管]' : ''}${user}</span>: ${message}`
+      this.danmakus = [n, ...this.danmakus]
       // Color Schema: https://github.com/hukl/Smyck-Color-Scheme/blob/master/colors
     }
   },
@@ -166,13 +178,13 @@ export default {
       }
     }
   },
-  mounted: function (){
+  mounted: function () {
     this.$nextTick(function () {
       this.ptinit()
-      this.bot.id = (~~(Math.random()*(1<<24))).toString(16)
+      this.bot.id = (~~(Math.random() * (1 << 24))).toString(16)
     })
   },
-  beforeDestroy: function() {
+  beforeDestroy: function () {
     this.princeton.close()
     for (var i in this.princeton.rmt) {
       clearTimeout(this.princeton.rmt[i])
@@ -181,10 +193,12 @@ export default {
 }
 </script>
 <style>
-#princeton {
-  background: #f8f8f8;
+.danmaku-wrapper {
+  opacity: 0.9;
   border-radius: .41em;
   padding: 2em;
+  max-width: 380px;
+  margin: auto;
 }
 
 #pt-ctl {
@@ -200,8 +214,7 @@ export default {
   width: 100%;
   height: 56px;
   border: 1px solid #eaeaea;
-  background: #fff;
-  border-radius: 4px;
+  background: none;
   padding: .41em;
   overflow: hidden;
   font-size: 12px;
@@ -249,7 +262,7 @@ export default {
   background: #bbb;
 }
 
-#huiban #html-container {
+#huiban.html-container {
   padding: 1em;
   font-size: 14px;
   word-break: break-all;
@@ -259,11 +272,11 @@ export default {
   height: 300px;
 }
 
-#huiban #html-container div.dpic {
+#huiban.html-container div.dpic {
   transition: all .41s;
 }
 
-#huiban #html-container div.dpic:hover {
+#huiban.html-container div.dpic:hover {
   cursor: pointer;
   background: #eee;
   border-radius: .41em;
@@ -284,9 +297,11 @@ export default {
   text-align: center;
   font-size: 12px;
   clear: both;
-  background: #ccc;
-  color: #fff;
-  border-radius: .41em;
+  background: none;
+  font-weight: 500;
+  color: rgb(44, 62, 80);
+  border: 1px #6cf solid;
+  border-radius: 0.41em;
   transition: all .41s;
   cursor: not-allowed;
 }
@@ -304,11 +319,13 @@ export default {
 }
 
 .hit-btn.notban,.hook-btn.onhook {
-  background: #5cf;
+  background: #8df;
+  color: white;
 }
 
 .hit-btn.notban:hover,.hook-btn.onhook:hover {
-  background: #6cf;
+  background: #6df;
+  color: white;
 }
 
 .hook-btn {

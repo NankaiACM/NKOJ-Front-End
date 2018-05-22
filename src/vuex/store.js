@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { truncate } from 'fs';
+// import { truncate } from 'fs'
 
 Vue.use(Vuex)
 
@@ -17,7 +17,7 @@ export default new Vuex.Store({
       userID: '',
       status: '',
       lang: '',
-      submit: 0,//监听submit按钮按下
+      submit: 0, // 监听submit按钮按下
       index: 1,
       page_length: 20
     },
@@ -28,11 +28,12 @@ export default new Vuex.Store({
     },
     userData: {
       isLogin: false,
-      id: '',
+      'user_id': '',
       nickname: '',
       lastLogin: '',
       check: false,
-      perm: 'abc'
+      perm: {},
+      o: {}
     }
   },
   getters: {
@@ -47,8 +48,7 @@ export default new Vuex.Store({
     },
     proAddGet: function (state) {
       if (!state.userData.perm) return false
-      if (! state.userData.perm.ADD_PROBLEM) return false
-      console.log(state.userData.perm.ADD_PROBLEM)
+      if (!state.userData.perm.ADD_PROBLEM) return false
       return state.userData.perm.ADD_PROBLEM === '1'
     },
     usrLogGet: function (state) {
@@ -56,13 +56,13 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    setXFilter (state, payload) {//problems filter
+    setXFilter (state, payload) { // problems filter
       if (payload.value === state.filter[payload.key]) {
         payload.value = ''
       }
       state.filter[payload.key] = payload.value
     },
-    setSFilter (state, payload) {//status filter
+    setSFilter (state, payload) { // status filter
       var key = payload.key
       var value = payload.value
       if (value === state.statusFilter[key]) {
@@ -73,29 +73,30 @@ export default new Vuex.Store({
     setRFilter (state, payload) {
       state.rankFilter[payload.key] = payload.value
     },
-    pushRFOption (state, payload) {//push option into rank filter time menu
+    pushRFOption (state, payload) { // push option into rank filter time menu
       if (payload.key !== 'ops') return
       state.rankFilter.timeOps = payload.value
     },
-    setuserDate(state, payload){
-      if(payload.check===true){
-        state.userData.check=true
-      }
-      else{
+    setuserDate (state, payload) {
+      if (payload.check === true) {
+        state.userData.check = true
+      } else {
         if (payload.isLogin === false) {
           state.userData.isLogin = false
-          state.userDate.id = ''
-          state.userDate.nickname = ''
+          state.userData['user_id'] = ''
+          state.userData.nickname = ''
           state.userData.lastLogin = ''
-          state.userData.perm = []
-        }
-        else {
+          state.userData.perm = {}
+          state.userData.o = {}
+          console.log('清空用户数据')
+          console.log(JSON.stringify(state.userData))
+        } else {
           state.userData.isLogin = true
-          state.userData.id = payload.id
+          state.userData['user_id'] = payload['user_id']
           state.userData.nickname = payload.nickname
           state.userData.lastLogin = payload.lastLogin
           state.userData.perm = payload.perm
-          console.log(state)
+          state.userData.o = payload.o
         }
       }
     },
