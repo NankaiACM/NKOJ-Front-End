@@ -167,7 +167,7 @@
     methods: {
       dataSubmit: function (e) {
         e.preventDefault()
-        if(this.$refs.fileData.files.length > 0) {
+        if(this.$ref.fileData.files.length > 0) {
           let sendPackage = new FormData()
           sendPackage.append('data', this.$ref.fileData.files[0])
         }
