@@ -112,9 +112,13 @@
             <div class="t">Tags:</div>
             <div
               class="t"
-              v-for="(item, index) in this.o.tags" :key="index">
+              v-for="(item, index) in this.o.tags" :key="index"
+              v-bind:class="{ty : !(typeof item.attitude === 'undefined') && item.attitude, tn: !(typeof item.attitude === 'undefined') && !item.attitude}"
+              @click="tagCancel(item, $event)">
               {{item.name}}
-              <div class="c">
+              <span style="color: red">{{item.p}}</span>
+              <span style="color: dodgerblue">{{item.n}}</span>
+              <div class="c" v-if="typeof item.attitude === 'undefined'">
                 <div class="y" @click="yes(item, $event)">vote</div>
                 <div class="n" @click="no(item, $event)">no</div>
               </div>
@@ -128,149 +132,192 @@
 </template>
 
 <script>
-export default {
-  name: 'problems-page',
-  data: function () {
-    return {
-      contentObj: {},
-      keyArr: [],
-      o: { // 现在的视图，会被initView完全覆盖
-        case: 0,
-        content: 0,
-        problem_id: 0,
-        restriction_id: 0,
-        submit_ac: 0,
-        submit_all: 0,
-        title: 0
-      },
-      submitLan: 'C++',
-      submitCode: '#include <iostream>',
-      isSee: false,
-      isStart: false,
-      middleInfo: false,
-      leftInfo: false,
-      rightInfo: false,
-      submitInfo: 'hhhhhhhhhhhhh',
-      isInfo: false,
-      titleclass: 'normal'
-    }
-  },
-  computed: {
-    problemMarkDown: function () {
-      var markdown = ''
-      for (var i in this.keyArr) {
-        markdown += '### ' + i.replace(/\b\w/g, l => l.toUpperCase()) + '\n' + this.contentObj[i] + '\n'
-      }
-      return marked(markdown, {sanitize: false})
-    }
-  },
-  mounted: function () {
-    this.$nextTick(() => {
-      this.initView()
-    })
-  },
-  components: {
-    editor: require('vue2-ace-editor')
-  },
-  methods: {
-    hideDiv: function (node) {
-      node.style.display = 'none'
-    },
-    no: function (it, e) {
-      this.hideDiv(e.target.parentElement)
-      console.log(e.target.parentElement.style.display)
-    },
-    yes: function (it, e) {
-      this.hideDiv(e.target.parentElement)
-    },
-    initView: function () {
-      window.addEventListener('scroll', this.hScroll)
-      this.$http.get(`${window.noPointHost}/api/problem/` + this.$route.params.problemId).then(
-        (res) => {
-          console.log(res.body)
-          this.keyArr = res.body.data.content
-          this.contentObj = res.body.data.content
-          this.o = res.body.data
-          this.isStart = true
-          console.log(JSON.stringify(this.o))
+  export default {
+    name: 'problems-page',
+    data: function () {
+      return {
+        contentObj: {},
+        keyArr: [],
+        o: { // 现在的视图，会被initView完全覆盖
+          case: 0,
+          content: 0,
+          problem_id: 0,
+          restriction_id: 0,
+          submit_ac: 0,
+          submit_all: 0,
+          title: 0
         },
-        (e) => {
-          console.log(e)
-        })
+        submitLan: 'C++',
+        submitCode: '#include <iostream>',
+        isSee: false,
+        isStart: false,
+        middleInfo: false,
+        leftInfo: false,
+        rightInfo: false,
+        submitInfo: 'hhhhhhhhhhhhh',
+        isInfo: false,
+        titleclass: 'normal'
+      }
     },
-    hScroll: function () {
-      var sTop = window.pageYOffset
-      var tTop = document.querySelector('#pro-title').offsetTop
-      if (this.titleclass === 'active white') this.titleclass = 'active'
-      if (sTop > tTop) {
-        this.titleclass = 'active'
+    computed: {
+      problemMarkDown: function () {
+        var markdown = ''
+        for (var i in this.keyArr) {
+          markdown += '### ' + i.replace(/\b\w/g, l => l.toUpperCase()) + '\n' + this.contentObj[i] + '\n'
+        }
+        return marked(markdown, {sanitize: false})
       }
-      if (sTop > tTop && this.titleclass === 'active') {
-        console.log('add white')
-        this.titleclass += ' white'
-      }
-      console.log(this.titleclass)
     },
-    submit: function () {
-      const sendPackage = {
-        pid: this.$route.params.problemId,
-        lang: 1,
-        code: this.submitCode
-      }
-      let _this = this
-      this.$http.post(`${window.noPointHost}/api/judge`, sendPackage,
-        {crossDomain: true, credentials: true}).then(res => {
-        console.log(res)
-        _this.isInfo = true
-        if (res.body.code === 0) {
-          _this.submitInfo = '成功提交！'
-        } else {
-          _this.submitInfo = '未知错误！'
-        }
-      }, err => {
-        _this.isInfo = true
-        if (err.body.code === 401) {
-          _this.submitInfo = '请您登陆！'
-        } else {
-          _this.submitInfo = '未知错误！'
-        }
+    mounted: function () {
+      this.$nextTick(() => {
+        this.initView()
       })
     },
-    setLan: function (Lan) {
-      this.submitLan = Lan
+    components: {
+      editor: require('vue2-ace-editor')
     },
-    editorInit: function () {
-      require('brace/mode/html')
-      require('brace/mode/javascript')
-      require('brace/mode/c_cpp')
-      require('brace/mode/less')
-      require('brace/theme/terminal')
-    },
-    test: function () {
-      console.log('wtf')
-    },
-    iCanSee: function (e) {
-      this.isSee = !this.isSee
-      this.isStart = !this.isStart
-      this.isInfo = false
-      e.preventDefault()
-    },
-    iCanSee2: function () {
-      if (this.isSee) {
+    methods: {
+      hideDiv: function (node) {
+        node.style.display = 'none'
+      },
+      tagCancel: function (it, e) {
+        this.o.tags.forEach( (val, index) => {
+          if(val.name === it.name && !(typeof val.attitude === 'undefined')){
+            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/remove/${val.id}`).then(res => {
+              if(res.body.code === 0){
+                if(it.attitude) val.p -= 1
+                else val.n -= 1
+              }
+              val.attitude = undefined
+              this.$set(this.o.tags, index, val)
+              console.log(this.o.tags)
+            })
+          }
+        })
+      },
+      no: function (it, e) {
+        this.o.tags.forEach( (val, index) => {
+          console.log(val, it.name)
+          if(val.name === it.name){
+            console.log(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/downvote/${val.id}`)
+            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/downvote/${val.id}`).then(res => {
+              if(res.body.code === 0){
+                val.n = val.n+1
+              }
+              val.attitude = false
+              this.$set(this.o.tags, index, val)
+            })
+          }
+        })
+      },
+      yes: function (it, e) {
+        this.o.tags.forEach( (val, index) => {
+          console.log(val, it.name)
+          if(val.name === it.name){
+            console.log(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/upvote/${val.id}`)
+            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/upvote/${val.id}`).then(res => {
+              if(res.body.code === 0){
+                val.p = val.p+1
+              }
+              val.attitude = true
+              this.$set(this.o.tags, index, val)
+            })
+          }
+        })
+      },
+      initView: function () {
+        window.addEventListener('scroll', this.hScroll)
+        this.$http.get(`${window.noPointHost}/api/problem/` + this.$route.params.problemId).then(
+          (res) => {
+            console.log(res.body)
+            this.keyArr = res.body.data.content
+            this.contentObj = res.body.data.content
+            this.o = res.body.data
+            this.isStart = true
+            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/tag`).then( res => {
+              res.body.data.forEach((val1, index) => {
+                this.o.tags.forEach((val2, index) => {
+                  if(val2.id === val1.tag_id){
+                    val2.attitude = val1.attitude
+                    this.$set(this.o.tags, index, val2)
+                  }
+                })
+              })
+            })
+          },
+          (e) => {
+            console.log(e)
+          })
+
+      },
+      hScroll: function () {
+        var sTop = window.pageYOffset
+        var tTop = document.querySelector('#pro-title').offsetTop
+        if (sTop > tTop) { // 不给予恢复
+          this.titleclass = 'active'
+          window.removeEventListener('scroll', this.hScroll)
+        }
+      },
+      submit: function () {
+        const sendPackage = {
+          pid: this.$route.params.problemId,
+          lang: 1,
+          code: this.submitCode
+        }
+        let _this = this
+        this.$http.post(`${window.noPointHost}/api/judge`, sendPackage,
+          {crossDomain: true, credentials: true}).then(res => {
+          console.log(res)
+          _this.isInfo = true
+          if (res.body.code === 0) {
+            _this.submitInfo = '成功提交！'
+          } else {
+            _this.submitInfo = '未知错误！'
+          }
+        }, err => {
+          _this.isInfo = true
+          if (err.body.code === 401) {
+            _this.submitInfo = '请您登陆！'
+          } else {
+            _this.submitInfo = '未知错误！'
+          }
+        })
+      },
+      setLan: function (Lan) {
+        this.submitLan = Lan
+      },
+      editorInit: function () {
+        require('brace/mode/html')
+        require('brace/mode/javascript')
+        require('brace/mode/c_cpp')
+        require('brace/mode/less')
+        require('brace/theme/terminal')
+      },
+      test: function () {
+        console.log('wtf')
+      },
+      iCanSee: function (e) {
         this.isSee = !this.isSee
         this.isStart = !this.isStart
         this.isInfo = false
+        e.preventDefault()
+      },
+      iCanSee2: function () {
+        if (this.isSee) {
+          this.isSee = !this.isSee
+          this.isStart = !this.isStart
+          this.isInfo = false
+        }
+      }
+    },
+    beforeDestroy: function () {
+      try {
+        window.removeEventListener('scroll', this.hScroll)
+      } catch (e) {
+        console.log(e)
       }
     }
-  },
-  beforeDestroy: function () {
-    try {
-      window.removeEventListener('scroll', this.hScroll)
-    } catch (e) {
-      console.log(e)
-    }
   }
-}
 </script>
 
 <style scoped lang="less">
@@ -440,7 +487,6 @@ export default {
       left: 75px;
       top: 200px;
       border-radius: 10px;
-      text-align: center;
       z-index: 10;
     }
 
@@ -454,7 +500,7 @@ export default {
     }
 
     .submitInfo hr {
-      // padding: 5px; // ?
+      padding: 5px;
       margin: 0;
     }
 
@@ -464,7 +510,7 @@ export default {
   .pro-container {
     position: absolute;
     margin-top: 150px;
-    top: 0;
+    top: -10px;
     left: 10%;
     right: 10%;
     margin-bottom: 60px;
@@ -474,6 +520,8 @@ export default {
     transition: all 0.5s;
     // border-radius: 10px;
     .problemPageTitle {
+      background: #fff;
+      z-index: 1000;
       margin: 2em 0;
       font-family: "微软雅黑";
       font-weight: 400;
@@ -495,9 +543,6 @@ export default {
       text-align: center;
       position: fixed;
       font-weight: 100;
-    }
-    .problemPageTitle.white {
-      background: #fff;
     }
     .details {
       display: flex;
@@ -571,6 +616,9 @@ export default {
     .tags {
       display: flex;
       flex-direction: row;
+      .t:hover{
+        cursor: pointer;
+      }
       .t {
         color: #1678c2;
         border: 1px solid #1678c2;
@@ -614,6 +662,14 @@ export default {
             background: #fff;
           }
         }
+      }
+      .tn{
+        border: 2px solid #1678c2;
+        color: #1678c2
+      }
+      .ty {
+        border: 2px solid red;
+        color: red
       }
     }
   }
