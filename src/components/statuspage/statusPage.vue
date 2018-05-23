@@ -9,9 +9,9 @@
           <th>problem id</th>
           <th>result</th>
           <th>language</th>
-          <th>memory</th>
-          <th>time</th>
           <th>code length</th>
+          <th>time</th>
+          <th>memory</th>
           <th>submit time</th>
         </tr>
       </thead>
@@ -20,7 +20,7 @@
           <td class="hidden-xs">{{status.solution_id}}</td>
           <td>
             <router-link :to="{path:'user/'+status.nickname}">
-              <span class="label label-info">{{status.nickname}}</span>
+              {{status.user_id}}
             </router-link>
           </td>
           <td>
@@ -39,15 +39,15 @@
           </td>
           <td>{{status.language}}</td>
           <td>
-            {{status.code_size}}&nbsp;&nbsp;
+            {{status.code_size}}&nbsp;byte&nbsp;
             <router-link v-if="status.code_id" :to="{path:'code/'+status.code_id}">
               <span class="label label-default">
               <i class="glyphicon glyphicon-eye-open"></i>
             </span>
             </router-link>
           </td>
-          <td>{{status.time}}</td>
-          <td>{{status.memory}}</td>
+          <td>{{status.time}} ms</td>
+          <td>{{status.memory}} kB</td>
           <td>{{new Date(status.when).toLocaleString()}}</td>
         </tr>
       </tbody>
@@ -207,7 +207,7 @@ a:focus {
 
 #status-page {
   text-align: left;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.7);
   padding: 0;
   min-height: 100%;
   margin-top: @filterheight;
@@ -216,7 +216,6 @@ a:focus {
 .table-container {
   font-size: 0.5em;
   min-width: 600px;
-  border: 2px solid #e8f1f2;
 }
 
 .table-container table.table td {
@@ -236,6 +235,9 @@ a:focus {
   transition: all 0.41s;
 }
 
+.table-container .table-hover tbody tr:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
 #statusTable td a:hover {
   text-decoration: none;
 }
