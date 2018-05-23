@@ -185,10 +185,15 @@ export default {
     hScroll: function () {
       var sTop = window.pageYOffset
       var tTop = document.querySelector('#pro-title').offsetTop
-      if (sTop > tTop) { // 不给予恢复
+      if (this.titleclass === 'active white') this.titleclass = 'active'
+      if (sTop > tTop) {
         this.titleclass = 'active'
-        window.removeEventListener('scroll', this.hScroll)
       }
+      if (sTop > tTop && this.titleclass === 'active') {
+        console.log('add white')
+        this.titleclass += ' white'
+      }
+      console.log(this.titleclass)
     },
     submit: function () {
       console.log('wtf')
@@ -454,7 +459,7 @@ html {
   transition: all 0.5s;
   // border-radius: 10px;
   .problemPageTitle {
-    background: #fff;
+    background: none;
     margin: 2em 0;
     font-family: "微软雅黑";
     font-weight: 400;
@@ -476,6 +481,9 @@ html {
     text-align: center;
     position: fixed;
     font-weight: 100;
+  }
+  .problemPageTitle.white {
+    background: #fff;
   }
   .details {
     display: flex;
