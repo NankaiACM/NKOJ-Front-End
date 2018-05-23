@@ -167,15 +167,19 @@
     methods: {
       dataSubmit: function (e) {
         e.preventDefault()
-        if(this.$ref.fileData.files.length > 0) {
-          let sendPackage = new FormData()
-          sendPackage.append('data', this.$ref.fileData.files[0])
+        console.log(this)
+        console.log(this.$refs)
+        let sendPackage = new FormData()
+        if(this.$refs.fileData.files.length > 0) {
+          sendPackage.append('file', this.$refs.fileData.files[0])
         }
-        if(this.$ref.fileSpj.files.length > 0) {
-          let sendPackage = new FormData()
-          sendPackage.append('data', this.$ref.fileData.files[0])
+        if(this.$refs.fileSpj.files.length > 0) {
+          sendPackage.append('file', this.$refs.fileData.files[0])
           sendPackage.append('lang', this.isCpp ? 0 : this.isJava ? 1 : 2)
         }
+        this.$http.post(`${window.noPointHost}/api/admin/problem/data/${this.pId}`, sendPackage, res => {
+          console.log(res)
+        })
       },
       dataUpload: function (e) {
         e.preventDefault()
