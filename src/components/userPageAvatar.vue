@@ -1,19 +1,30 @@
 <template>
 <div id="userPageAvatar">
   <h4 align="left">修改头像</h4>
-  <img :src="avatarUrl" ref="img">
+  <img id="croimg" :src="avatarUrl" ref="img">
   <div id="upf">选择图片<input type="file" id="upbtn" @change="fileChange" ref="input"></div>
   <div id="ups" @click="updateUserAvatar">上传</div>
 </div>
 </template>
 <script>
+import Cropper from 'cropperjs'
 export default {
   name: 'user-page-avatar',
   data: function () {
     return {
+      cropprt: {}
     }
   },
   methods: {
+    cropperIint: function () {
+      const image = document.querySelector('#croimg')
+      const cropper = new Cropper(image, {
+        aspectRatio: 1 / 1,
+        crop: function (event) {
+          console.log(event.detail.x)
+        }
+      })
+    },
     fileChange: function (e) {
       const refs = this.$refs
       const elInput = refs.input
@@ -43,6 +54,11 @@ export default {
       e.preventDefault()
     }
   },
+  mounted: function () {
+    this.$nextTick(function () {
+      // this.cropperIint()
+    })
+  },
   computed: {
     avatarUrl: function () {
       return window.noPointHost + '/api/avatar/' + this.$store.state.userData['user_id']
@@ -60,6 +76,7 @@ export default {
   border-radius: 4px;
   flex-direction: column;
   align-items: center;
+  overflow: scroll;
   h4 {
     color: #16aad8;
   }

@@ -92,16 +92,14 @@ export default {
         .post(`${window.noPointHost}/api/u/login`, loginPackege, {
           timeout: '8000'
         })
-        .then(res => {
-          console.log(JSON.stringify(res))
+        .then(function (res) {
           if (res.body.code === 0) {
             this.loginStatus = 2
             console.log('获取用户数据')
-            console.log(JSON.stringify(res))
             this.$store.commit({
               type: 'setuserDate',
               isLogin: true,
-              id: res.body.data.user_id,
+              'user_id': res.body.data.user_id,
               nickname: res.body.data.nickname,
               lastLogin: res.body.data.last_login,
               perm: res.body.data.perm,
