@@ -56,7 +56,7 @@ export default {
   },
   mounted: function () {
     this.$nextTick(function () {
-      this.cropperIint()
+      // this.cropperIint()
     })
   },
   computed: {
