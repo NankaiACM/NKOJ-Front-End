@@ -112,9 +112,13 @@
             <div class="t">Tags:</div>
             <div
               class="t"
-              v-for="(item, index) in this.o.tags" :key="index">
+              v-for="(item, index) in this.o.tags" :key="index"
+              v-bind:class="{ty : !(typeof item.attitude === 'undefined') && item.attitude, tn: !(typeof item.attitude === 'undefined') && !item.attitude}"
+              @click="tagCancel(item, $event)">
               {{item.name}}
-              <div class="c">
+              <span style="color: red">{{item.p}}</span>
+              <span style="color: dodgerblue">{{item.n}}</span>
+              <div class="c" v-if="typeof item.attitude === 'undefined'">
                 <div class="y" @click="yes(item, $event)">vote</div>
                 <div class="n" @click="no(item, $event)">no</div>
               </div>
@@ -176,12 +180,50 @@
       hideDiv: function (node) {
         node.style.display = 'none'
       },
+      tagCancel: function (it, e) {
+        this.o.tags.forEach( (val, index) => {
+          if(val.name === it.name && !(typeof val.attitude === 'undefined')){
+            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/remove/${val.id}`).then(res => {
+              if(res.body.code === 0){
+                if(it.attitude) val.p -= 1
+                else val.n -= 1
+              }
+              val.attitude = undefined
+              this.$set(this.o.tags, index, val)
+              console.log(this.o.tags)
+            })
+          }
+        })
+      },
       no: function (it, e) {
-        this.hideDiv(e.target.parentElement)
-        console.log(e.target.parentElement.style.display)
+        this.o.tags.forEach( (val, index) => {
+          console.log(val, it.name)
+          if(val.name === it.name){
+            console.log(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/downvote/${val.id}`)
+            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/downvote/${val.id}`).then(res => {
+              if(res.body.code === 0){
+                val.n = val.n+1
+              }
+              val.attitude = false
+              this.$set(this.o.tags, index, val)
+            })
+          }
+        })
       },
       yes: function (it, e) {
-        this.hideDiv(e.target.parentElement)
+        this.o.tags.forEach( (val, index) => {
+          console.log(val, it.name)
+          if(val.name === it.name){
+            console.log(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/upvote/${val.id}`)
+            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/upvote/${val.id}`).then(res => {
+              if(res.body.code === 0){
+                val.p = val.p+1
+              }
+              val.attitude = true
+              this.$set(this.o.tags, index, val)
+            })
+          }
+        })
       },
       initView: function () {
         window.addEventListener('scroll', this.hScroll)
@@ -197,6 +239,16 @@
           (e) => {
             console.log(e)
           })
+        this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/tag`).then( res => {
+          res.body.data.forEach((val1, index) => {
+            this.o.tags.forEach((val2, index) => {
+              if(val2.id === val1.tag_id){
+                val2.attitude = val1.attitude
+                this.$set(this.o.tags, index, val2)
+              }
+            })
+          })
+        })
       },
       hScroll: function () {
         var sTop = window.pageYOffset
@@ -458,7 +510,7 @@
   .pro-container {
     position: absolute;
     margin-top: 150px;
-    top: 0;
+    top: -10px;
     left: 10%;
     right: 10%;
     margin-bottom: 60px;
@@ -469,6 +521,7 @@
     // border-radius: 10px;
     .problemPageTitle {
       background: #fff;
+      z-index: 1000;
       margin: 2em 0;
       font-family: "微软雅黑";
       font-weight: 400;
@@ -563,6 +616,9 @@
     .tags {
       display: flex;
       flex-direction: row;
+      .t:hover{
+        cursor: pointer;
+      }
       .t {
         color: #1678c2;
         border: 1px solid #1678c2;
@@ -606,6 +662,14 @@
             background: #fff;
           }
         }
+      }
+      .tn{
+        border: 2px solid #1678c2;
+        color: #1678c2
+      }
+      .ty {
+        border: 2px solid red;
+        color: red
       }
     }
   }
