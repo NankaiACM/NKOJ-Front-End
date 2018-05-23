@@ -440,6 +440,7 @@ export default {
       left: 75px;
       top: 200px;
       border-radius: 10px;
+      text-align: center;
       z-index: 10;
     }
 
@@ -453,7 +454,7 @@ export default {
     }
 
     .submitInfo hr {
-      padding: 5px;
+      // padding: 5px; // ?
       margin: 0;
     }
 
@@ -473,7 +474,6 @@ export default {
     transition: all 0.5s;
     // border-radius: 10px;
     .problemPageTitle {
-      background: #fff;
       margin: 2em 0;
       font-family: "微软雅黑";
       font-weight: 400;
