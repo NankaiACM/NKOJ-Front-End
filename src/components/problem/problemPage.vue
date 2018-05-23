@@ -234,21 +234,21 @@
             this.contentObj = res.body.data.content
             this.o = res.body.data
             this.isStart = true
-            console.log(JSON.stringify(this.o))
+            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/tag`).then( res => {
+              res.body.data.forEach((val1, index) => {
+                this.o.tags.forEach((val2, index) => {
+                  if(val2.id === val1.tag_id){
+                    val2.attitude = val1.attitude
+                    this.$set(this.o.tags, index, val2)
+                  }
+                })
+              })
+            })
           },
           (e) => {
             console.log(e)
           })
-        this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/tag`).then( res => {
-          res.body.data.forEach((val1, index) => {
-            this.o.tags.forEach((val2, index) => {
-              if(val2.id === val1.tag_id){
-                val2.attitude = val1.attitude
-                this.$set(this.o.tags, index, val2)
-              }
-            })
-          })
-        })
+
       },
       hScroll: function () {
         var sTop = window.pageYOffset
