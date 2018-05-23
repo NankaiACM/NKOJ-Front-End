@@ -5,7 +5,7 @@
       <thead class="thread-height">
         <tr>
           <th class="hidden-xs">run id</th>
-          <th>user id</th>
+          <th>nickname</th>
           <th>problem id</th>
           <th>result</th>
           <th>language</th>
@@ -19,8 +19,8 @@
         <tr v-for="(status, index) in statusList" :key="index">
           <td class="hidden-xs">{{status.solution_id}}</td>
           <td>
-            <router-link :to="{path:'user/'+status.nickname}">
-              {{status.user_id}}
+            <router-link :to="{path:'user/'+status.user_id}">
+              <span class="label label-info">{{status.nickname}}</span>
             </router-link>
           </td>
           <td>
@@ -37,7 +37,7 @@
               {{getStatusText(status.status_id)}}
             </button>
           </td>
-          <td>{{status.language}}</td>
+          <td>{{lang_hash[status.language]}}</td>
           <td>
             {{status.code_size}}&nbsp;byte&nbsp;
             <router-link v-if="status.code_id" :to="{path:'code/'+status.code_id}">
@@ -68,7 +68,7 @@
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
 import StatusDetails from './details.vue'
-var statusMap = [...require('../../../static/status_map.json')]
+var {statusMap, langMap, langHash} = require('./map.json')
 export default {
   name: 'statusPage',
   props: ['isFilter', 'isInfinite', 'isBtn', 'apiUrl'],
@@ -77,6 +77,7 @@ export default {
       pool: [],
       statusList: [],
       status_map: statusMap,
+      lang_hash: langHash,
       details: {
         datas: []
       },
