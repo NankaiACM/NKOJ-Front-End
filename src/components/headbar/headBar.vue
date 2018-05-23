@@ -129,6 +129,15 @@ export default {
     },
     usrLog: function () {
       return this.$store.getters.usrLogGet
+    },
+    isChage: function () {
+      return this.$store.state.userData['user_id']
+    }
+  },
+  watch: {
+    isChage: function () {
+      console.log('Data change[from headbar]')
+      this.freshUserData()
     }
   }
 }

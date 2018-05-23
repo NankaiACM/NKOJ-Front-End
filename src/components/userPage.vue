@@ -159,8 +159,6 @@ export default {
           udata[i] = ndata[i]
         }
       }
-      console.log(odata)
-      console.log(udata)
       if (JSON.stringify(udata) === '{}') {
         console.log('没有更新')
         this.isEdit = false
@@ -174,13 +172,11 @@ export default {
         .then(function (res) {
           if (res.body.code === 0) {
             console.log('大概更新成功')
-            console.log(res)
             this.isEdit = false
             this.reinit()
           } else {
             console.log('大失败')
             // 使错误信息通过dislist反馈到视图上
-            console.log(res.body.error)
             const error = res.body.error
             const vm = this
             for (let i in error) {
@@ -200,13 +196,11 @@ export default {
       this.$router.checkUser(vm.$store, function () {
         // 成功获取用户数据
         console.log('似乎完成了用户数据请求')
-        console.log(vm.$store.state.userData)
         vm.init()
         console.log('更新数据成功')
       }, function (e) {
         // 用户未登录
         console.log('用户未登录')
-        console.log(JSON.stringify(e))
       }, function (e) {
         // api请求失败
         console.log('api 请求失败')
@@ -215,7 +209,6 @@ export default {
     },
     init: function () {
       console.log('in user')
-      console.log(JSON.stringify(this.$store.state.userData))
       this.o = this.$store.state.userData.o // 由后端返回的全部用户数据
       this.rank = this.o.rank ? this.o.rank : '锟斤拷' // 尚未包含此数据
       this.timeSignUp = '锟斤拷' // 尚未包含此数据
@@ -226,8 +219,6 @@ export default {
         ndata[i] = this.o[i]
       }
       this.n = ndata
-      console.log(JSON.stringify(this.o))
-      console.log(JSON.stringify(this.n))
     }
   },
   mounted: function () {
@@ -236,8 +227,17 @@ export default {
     })
   },
   computed: {
+    isChange: function () {
+      return this.$store.state.userData['user_id']
+    },
     avatarUrl: function () {
       return `${window.noPointHost}/api/avatar/` + this.o['user_id']
+    }
+  },
+  watch: {
+    isChange: function () {
+      console.log('Data change[from userPage]')
+      this.init()
     }
   }
 }
