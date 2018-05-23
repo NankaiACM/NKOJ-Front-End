@@ -295,7 +295,7 @@
 
 <style scoped>
 .adminPage{
-  background: #f5f5f5;
+  background: rgba(255,255,255,.7);
   padding: 20px 0;
 }
 .adminForm{
