@@ -6,32 +6,37 @@
       </div>
       <ul class="nav navbar-nav">
         <li class="separate"><span></span></li>
-        <li :class="{focusing:nowPage=='home'}" v-on:click="$emit('toHome')"><span
+        <li :class="{focusing:nowPage==='home'}" v-on:click="$emit('toHome')"><span
           class="glyphicon glyphicon-home"></span>主页
         </li>
-        <li :class="{focusing:nowPage=='problems'}" v-on:click="$emit('toProblem')"><span
+        <li :class="{focusing:nowPage==='problems'}" v-on:click="$emit('toProblem')"><span
           class="glyphicon glyphicon-list"></span>题目
         </li>
-        <li :class="{focusing:nowPage=='status'}" v-on:click="$emit('toStatus')"><span
+        <li :class="{focusing:nowPage==='status'}" v-on:click="$emit('toStatus')"><span
           class="glyphicon glyphicon-stats"></span>评测
         </li>
-        <li :class="{focusing:nowPage=='contest'}" v-on:click="$emit('toContest')"><span
+        <li :class="{focusing:nowPage==='contest'}" v-on:click="$emit('toContest')"><span
           class="glyphicon glyphicon-tower"></span>比赛
         </li>
-        <li :class="{focusing:nowPage=='rank'}" v-on:click="$emit('toRank')"><span
+        <li :class="{focusing:nowPage==='rank'}" v-on:click="$emit('toRank')"><span
           class="glyphicon glyphicon-signal"></span>排名
         </li>
-        <li :class="{focusing:nowPage=='discuss'}" v-on:click="$emit('toDiscuss')"><span
+        <li :class="{focusing:nowPage==='discuss'}" v-on:click="$emit('toDiscuss')"><span
           class="glyphicon glyphicon-comment"></span>讨论
         </li>
       </ul>
       <div class="usersBar" :class="{'login-usersBar':userData.isLogin}">
+        <div class="field" @click="toggleAnnouncement">
+          <a class="slider">公告<img src="../../assets/ic_mail.png"/></a>
+        </div>
         <div class="separate"></div>
-        <div class="field" :class="{'field-focus':nowPage=='signUp' && userPage!=='login'}" v-on:click="$emit('signUp')"
-            v-if="userData.isLogin===false">
+        <div class="field" :class="{'field-focus':nowPage==='signUp' && userPage!=='login'}"
+             v-on:click="$emit('signUp')"
+             v-if="userData.isLogin===false">
           <a> 注册<span class="glyphicon glyphicon-user"></span></a>
         </div>
-        <div class="field" :class="{'field-focus':userPage=='login'}" v-on:click="$emit('logIn')"  v-if="userData.isLogin===false">
+        <div class="field" :class="{'field-focus':userPage==='login'}" v-on:click="$emit('logIn')"
+             v-if="userData.isLogin===false">
           <a> 登录<span class="glyphicon glyphicon-log-in"></span></a>
         </div>
         <div class="userdetail" v-if="userData.isLogin">
@@ -50,7 +55,6 @@
           </dropmenu>
         </div>
       </div>
-      <div class="navbar-nav usersBar slider" @click="toggleAnnouncement"></div>
     </div>
     <!--<div class="slider" @click="toggleAnnouncement"></div>-->
     <div class="head-container" id="loki">
@@ -58,9 +62,9 @@
     </div>
   </div>
   <vue-slide-up-down :active="showAnnouncement">
-    <div class="announcement">
-      2017.12.8 我们为它加入了新的语言 Python~ 欢迎尝试<br>
-      如果您对 OJ 的进一步开发，包括前端/后台/数据库设计，有兴趣，请联系 sunrisefox@qq.com ~
+    <div class="announcement" :class="{'hasScroll':isScrolled}">
+      这是一个占位公告喵(>^ω^<)<br>
+      未来会从后端请求的，大概
     </div>
     <div class="clearfix"></div>
   </vue-slide-up-down>
@@ -69,6 +73,7 @@
 
 <script>
 import dropmenu from './dropmenu.vue'
+import isScrolled from '../../scroll'
 export default {
   name: 'headBar',
   components: {dropmenu},
@@ -78,7 +83,7 @@ export default {
   },
   data () {
     return {
-      isScrolled: false,
+      isScrolled,
       showAnnouncement: false,
       userData: {isLogin: false}
     }
@@ -306,14 +311,13 @@ export default {
   width: 70%;
   margin: auto;
   margin-bottom: 1em;
-  background-color: #fff;
-  box-shadow: 0 0 10px 1px rgba(0,0,0,0.35);
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.15);
 }
 .slider:active {
   transform: scale(1.5);
 }
 .slider {
-  width: 64px;
-  background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNjRweCIgaGVpZ2h0PSI2NHB4Ij4KPGc+Cgk8Zz4KCQk8cGF0aCBkPSJNNDk3LDI0MWgtNDVjLTguMjg0LDAtMTUsNi43MTYtMTUsMTVzNi43MTYsMTUsMTUsMTVoNDVjOC4yODQsMCwxNS02LjcxNiwxNS0xNVM1MDUuMjg0LDI0MSw0OTcsMjQxeiIgZmlsbD0iIzkzM0VDNSIvPgoJPC9nPgo8L2c+CjxnPgoJPGc+CgkJPHBhdGggZD0iTTQ3Ny42MDcsMzM1LjM5NGwtMzAtMzBjLTUuODU3LTUuODU3LTE1LjM1NS01Ljg1Ny0yMS4yMTMsMGMtNS44NTksNS44NTctNS44NTksMTUuMzU1LDAsMjEuMjEzbDMwLDMwICAgIGM1Ljg1Nyw1Ljg1OCwxNS4zNTYsNS44NTgsMjEuMjEzLDBDNDgzLjQ2NSwzNTAuNzQ5LDQ4My40NjUsMzQxLjI1Miw0NzcuNjA3LDMzNS4zOTR6IiBmaWxsPSIjOTMzRUM1Ii8+Cgk8L2c+CjwvZz4KPGc+Cgk8Zz4KCQk8cGF0aCBkPSJNNDc3LjYwNiwxNTUuMzk0Yy01Ljg1Ny01Ljg1Ny0xNS4zNTUtNS44NTctMjEuMjEzLDBsLTMwLDMwYy01Ljg1OCw1Ljg1OC01Ljg1OCwxNS4zNTUsMCwyMS4yMTMgICAgYzUuODU4LDUuODU4LDE1LjM1Niw1Ljg1NywyMS4yMTMsMGwzMC0zMEM0ODMuNDY0LDE3MC43NDksNDgzLjQ2NCwxNjEuMjUyLDQ3Ny42MDYsMTU1LjM5NHoiIGZpbGw9IiM5MzNFQzUiLz4KCTwvZz4KPC9nPgo8Zz4KCTxnPgoJCTxwYXRoIGQ9Ik0zNDcsNjFjLTIyLjUzMSwwLTQxLjI0NSwxNi42NDUtNDQuNDk3LDM4LjI4NGwtMTMuNjgzLDEzLjY4M0MyNjUuMDA1LDEzNi43ODIsMjI5LjkzMywxNTEsMTk1LDE1MWgtOTAgICAgYy0xOS41NTUsMC0zNi4yMjgsMTIuNTQxLTQyLjQyLDMwSDYwYy0zMy4wODQsMC02MCwyNi45MTYtNjAsNjBzMjYuOTE2LDYwLDYwLDYwaDIuNThjNC41MjcsMTIuNzY0LDE0LjY1NiwyMi44OTMsMjcuNDIsMjcuNDIgICAgVjQwNmMwLDI0LjgxMywyMC4xODgsNDUsNDUuMDAxLDQ1QzE1OS44MTMsNDUxLDE4MCw0MzAuODEzLDE4MCw0MDZ2LTc1aDE1YzM0LjkzMiwwLDcwLjAwNCwxNC4yMTgsOTMuODIsMzguMDMzbDEzLjY4MywxMy42ODMgICAgQzMwNS43NTUsNDA0LjM1NCwzMjQuNDcsNDIxLDM0Ny4wMDEsNDIxQzM3MS44MTMsNDIxLDM5Miw0MDAuODEzLDM5MiwzNzZWMTA2QzM5Miw4MS4xODcsMzcxLjgxMyw2MSwzNDcsNjF6IE02MCwyNzEgICAgYy0xNi41NDIsMC0zMC0xMy40NTgtMzAtMzBzMTMuNDU4LTMwLDMwLTMwVjI3MXogTTE1MCw0MDZjMCw4LjI3MS02LjcyOSwxNS0xNSwxNXMtMTUtNi43MjktMTUtMTV2LTc1aDMwVjQwNnogTTE4MCwzMDFoLTc1ICAgIGMtOC4yNzEsMC0xNS02LjcyOS0xNS0xNXYtOTBjMC04LjI3MSw2LjcyOS0xNSwxNS0xNWg3NVYzMDF6IE0zMDIsMzQwLjM0NmMtMjUuMzQxLTIxLjkzMi01Ny45MjItMzUuNTU5LTkyLjEtMzguNjY2ICAgIGwwLjAwMS0xMjEuMzYxYzM0LjE3Ny0zLjEwNiw2Ni43NTgtMTYuNzMzLDkyLjA5OS0zOC42NjZWMzQwLjM0NnogTTM2MiwzNzZjMCw4LjI3MS02LjcyOSwxNS0xNC45OTksMTVIMzQ3ICAgIGMtOC4yNzEsMC0xNS02LjcyOS0xNS0xNVYxMDZjMC04LjI3MSw2LjcyOS0xNSwxNS4wMDEtMTVjOC4yNywwLDE0Ljk5OSw2LjcyOSwxNC45OTksMTVWMzc2eiIgZmlsbD0iIzkzM0VDNSIvPgoJPC9nPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=);
-  }
+  width: 32px;
+  height: 32px;
+}
 </style>

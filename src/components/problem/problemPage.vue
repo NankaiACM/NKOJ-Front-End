@@ -52,8 +52,8 @@
     </transition>
     <div>
       <div class="pro-container">
-        <h2 id="pro-title" align="left" class="problemPageTitle" :class="titleclass">
-          {{o.title ? o.title : '美好的bug正在发生'}}
+        <h2 id="pro-title" align="left" class="problemPageTitle" :class="{[titleclass]: true, bga: isScrolled}">
+          {{o.title ? o.title : '暂未获得到信息...'}}
         </h2>
         <div class="problemDescription" @click="iCanSee2">
           <div>
@@ -132,6 +132,7 @@
 </template>
 
 <script>
+  import isScrolled from '../../scroll'
   export default {
     name: 'problems-page',
     data: function () {
@@ -149,6 +150,7 @@
         },
         submitLan: 'C++',
         submitCode: '#include <iostream>',
+        isScrolled,
         isSee: false,
         isStart: false,
         middleInfo: false,
@@ -520,14 +522,16 @@
     transition: all 0.5s;
     // border-radius: 10px;
     .problemPageTitle {
-      background: #fff;
       z-index: 1000;
       margin: 2em 0;
-      font-family: "微软雅黑";
+      font-family: "微软雅黑", sans-serif;
       font-weight: 400;
       color: #233;
       border-bottom: 1px solid #eee;
       transition: all 1.41s;
+    }
+    .problemPageTitle.bga {
+      background: #fff;
     }
     .problemPageTitle.normal {
       border-left: 10px solid #93a7a7;

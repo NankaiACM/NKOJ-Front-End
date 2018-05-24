@@ -1,5 +1,5 @@
 <template>
-  <div id="ver" class="ver alert alert-info">
+  <div id="ver" class="ver alert bga">
     <a style="font-weight: bold" href="https://github.com/NankaiACM">来 Github ！ Star 和 Fork 我们喵<span
       style="color:red">❤</span>~ </a>
     <br>
@@ -63,6 +63,9 @@ $(function () {
     text-align: left;
   }
 
+  .bga {
+    background: rgba(217, 237, 247, 0.7);
+  }
   .badge {
     color: #1b98e0;
   }

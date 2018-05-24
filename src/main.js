@@ -5,7 +5,7 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 import router from './router'
 import store from './vuex/store'
-
+import isScrolled from './scroll'
 import SlideUpDown from 'vue-slide-up-down'
 
 Vue.config.productionTip = false
@@ -16,5 +16,10 @@ new Vue({
   el: '#NKOJ',
   router,
   store,
-  template: '<router-view></router-view>'
+  template: '<router-view></router-view>',
+  data () {
+    return {
+      isScrolled
+    }
+  }
 })
