@@ -29,10 +29,10 @@ export default {
   },
   methods: {
     formJson: function (str) {
-      const date_message = str.split('Date:   ')[1].split('\n')
-      const [date, ...message] = date_message
+      const dateMessage = str.split('Date:   ')[1].split('\n')
+      const [date, ...message] = dateMessage
       return {
-        date: date,
+        date: new Date(date),
         author: str.split('Author: ')[1].split('<')[0],
         message: message.join('\n')
       }
