@@ -55,7 +55,7 @@
     </table>
     <infinite-loading @infinite="infiniteHandler" v-if="isInfinite===true">
           <span slot="no-more">
-            There is no more status :( at bottom
+            There is no more status :) | 都已经全被你知道了啦QAQ
           </span>
     </infinite-loading>
     <div id="load-btn-box" v-if="isBtn">
@@ -92,7 +92,8 @@ export default {
         last: -1
       },
       showdt: false,
-      maxId: -1
+      maxId: -1,
+      minId: -1
     }
   },
   methods: {
@@ -148,8 +149,12 @@ export default {
           var tmp = vm.statusList
           if (!res.body.data) {
             console.log('infinite feedback erro')
+            if ($state.loaded) $state.loaded() // must call this
             return -1
           }
+          const min = res.body.data[res.body.data.length - 1]['solution_id']
+          if (min === vm.minId) if ($state.complete) $state.complete()
+          vm.minId = min
           vm.removeLower(res.body.data)
           tmp = tmp.concat(res.body.data)
           vm.statusList = tmp
