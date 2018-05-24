@@ -30,12 +30,12 @@
               </span></button>
             <ul class="dropdown-menu">
               <li><a v-on:click="setLan('C++')">C++</a></li>
-              <li><a v-on:click="setLan('Java')">Java</a></li>
-              <li><a v-on:click="setLan('Python')">Python</a></li>
-              <li><a v-on:click="setLan('JavaScript')">JavaScrpit</a></li>
-              <li><a v-on:click="setLan('Pascal')">Pascall</a></li>
-              <li><a v-on:click="setLan('Html')">Html</a></li>
-              <li><a v-on:click="setLan('Css')">Css</a></li>
+              <!--<li><a v-on:click="setLan('Java')">Java</a></li>-->
+              <!--<li><a v-on:click="setLan('Python')">Python</a></li>-->
+              <!--<li><a v-on:click="setLan('JavaScript')">JavaScrpit</a></li>-->
+              <!--<li><a v-on:click="setLan('Pascal')">Pascall</a></li>-->
+              <!--<li><a v-on:click="setLan('Html')">Html</a></li>-->
+              <!--<li><a v-on:click="setLan('Css')">Css</a></li>-->
             </ul>
           </div>
           <button class="mobileRight btn btn-default" @click="iCanSee"
@@ -50,88 +50,84 @@
         <transition name="fade"><label class="bottomInfo bottomInfoRight" v-if="rightInfo">Back</label></transition>
       </div>
     </transition>
-    <div>
+    <div style="position: relative;">
       <div class="pro-container">
-        <h2 id="pro-title" align="left" class="problemPageTitle" :class="titleclass">
-          {{o.title ? o.title : '美好的bug正在发生'}}
+        <h2 id="pro-title" align="left" class="problemPageTitle" :class="{[titleclass]: false}">
+          {{o.title ? o.title : '暂未获得到信息...'}}
         </h2>
+        <hr>
         <div class="problemDescription" @click="iCanSee2">
-          <div>
-            <div class="details">
-              <div class="i ac">
-                <div class="l">Ac</div>
-                <div class="r">{{o.ac}}</div>
-              </div>
-              <div class="i all">
-                <div class="l">All submit</div>
-                <div class="r">{{o.all}}</div>
-              </div>
-            </div>
-            <div class="details">
-              <div class="i level">
-                <div class="l">Level</div>
-                <div class="r">{{o.level}}</div>
-              </div>
-              <div class="i tl">
-                <div class="l">Time Limit</div>
-                <div class="r">{{o.time_limit}} ms</div>
-              </div>
-              <div class="i ml">
-                <div class="l">Memory Limit</div>
-                <div class="r">{{o.memory_limit}} kB</div>
-              </div>
-            </div>
-            <div class="details">
-              <div class="i sj">
-                <div class="l">
-                  special judge
-                </div>
-                <div class="r">
-                  {{o.special_judge}}
-                </div>
-              </div>
-              <div class="i dj">
-                <div class="l">
-                  detail judge
-                </div>
-                <div class="r">
-                  {{o.detail_judge}}
-                </div>
-              </div>
-              <div class="i cases">
-                <div class="l">
-                  cases
-                </div>
-                <div class="r">
-                  {{o.cases}}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="tags">
-            <div class="t">Tags:</div>
-            <div
-              class="t"
-              v-for="(item, index) in this.o.tags" :key="index"
-              v-bind:class="{ty : !(typeof item.attitude === 'undefined') && item.attitude, tn: !(typeof item.attitude === 'undefined') && !item.attitude}"
-              @click="tagCancel(item, $event)">
-              {{item.name}}
-              <span style="color: red">{{item.p}}</span>
-              <span style="color: dodgerblue">{{item.n}}</span>
-              <div class="c" v-if="typeof item.attitude === 'undefined'">
-                <div class="y" @click="yes(item, $event)">vote</div>
-                <div class="n" @click="no(item, $event)">no</div>
-              </div>
-            </div>
-          </div>
           <div align="left" v-html="problemMarkDown"></div>
+        </div>
+        <div class="tags">
+          <div class="i no"><span class="l">Tags:</span></div>
+          <div class="i ml" v-for="(item, index) in this.o.tags" :key="index"
+               v-bind:class="{ty : item.attitude, tn: item.attitude}">
+            <span class="l">{{item.name}}</span>
+            <span class="r">{{item.p - item.n}}</span>
+            <div class="r" v-if="isEditingTag">
+              <div v-if="!item.attitude">
+                <div style="display: inline" class="y" @click="yes(item, $event)">+</div>
+                /
+                <div style="display: inline" class="n" @click="no(item, $event)">-</div>
+              </div>
+              <div style="display: inline" @click="tagCancel(item, $event)" v-if="item.attitude">*</div>
+            </div>
+          </div>
+          <div class="i level" @click="toggleEditTag()"><span class="l">{{isEditingTag ? '确认' : '编辑'}}</span><span
+            class="r glyphicon" :class="isEditingTag ? 'glyphicon-check':'glyphicon-pencil'"> </span></div>
+        </div>
+      </div>
+      <div class="pro-container-left">
+        <div>
+          <div class="details">
+            <div class="i ac">
+              <div class="l">AC / All</div>
+              <div class="r">{{o.ac}} / {{o.all}}</div>
+            </div>
+          </div>
+          <div class="details">
+            <div class="i cases">
+              <div class="l">Cases</div>
+              <div class="r">{{o.cases}}</div>
+            </div>
+          </div>
+          <div class="details">
+            <div class="i level">
+              <div class="l">Level</div>
+              <div class="r">{{o.level}}</div>
+            </div>
+          </div>
+          <div class="details">
+            <div class="i tl">
+              <div class="l">Time</div>
+              <div class="r">{{o.time_limit}} ms</div>
+            </div>
+          </div>
+          <div class="details">
+            <div class="i ml">
+              <div class="l">Memory</div>
+              <div class="r">{{o.memory_limit}} kB</div>
+            </div>
+          </div>
+          <div class="details" v-if="o.special_judge">
+            <div class="i sj">
+              <div class="l">Special Judge</div>
+            </div>
+          </div>
+        </div>
+        <div class="details" v-if="o.detail_judge">
+          <div class="i dj">
+            <div class="l">Detail Judge</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
+  import isScrolled from '../../scroll'
+
   export default {
     name: 'problems-page',
     data: function () {
@@ -149,8 +145,10 @@
         },
         submitLan: 'C++',
         submitCode: '#include <iostream>',
+        isScrolled,
         isSee: false,
         isStart: false,
+        isEditingTag: false,
         middleInfo: false,
         leftInfo: false,
         rightInfo: false,
@@ -177,15 +175,16 @@
       editor: require('vue2-ace-editor')
     },
     methods: {
-      hideDiv: function (node) {
-        node.style.display = 'none'
+      toggleEditTag () {
+        console.log('edit')
+        this.isEditingTag = !this.isEditingTag
       },
       tagCancel: function (it, e) {
-        this.o.tags.forEach( (val, index) => {
-          if(val.name === it.name && !(typeof val.attitude === 'undefined')){
+        this.o.tags.forEach((val, index) => {
+          if (val.name === it.name && !(typeof val.attitude === 'undefined')) {
             this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/remove/${val.id}`).then(res => {
-              if(res.body.code === 0){
-                if(it.attitude) val.p -= 1
+              if (res.body.code === 0) {
+                if (it.attitude) val.p -= 1
                 else val.n -= 1
               }
               val.attitude = undefined
@@ -196,13 +195,13 @@
         })
       },
       no: function (it, e) {
-        this.o.tags.forEach( (val, index) => {
+        this.o.tags.forEach((val, index) => {
           console.log(val, it.name)
-          if(val.name === it.name){
+          if (val.name === it.name) {
             console.log(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/downvote/${val.id}`)
             this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/downvote/${val.id}`).then(res => {
-              if(res.body.code === 0){
-                val.n = val.n+1
+              if (res.body.code === 0) {
+                val.n = val.n + 1
               }
               val.attitude = false
               this.$set(this.o.tags, index, val)
@@ -211,13 +210,13 @@
         })
       },
       yes: function (it, e) {
-        this.o.tags.forEach( (val, index) => {
+        this.o.tags.forEach((val, index) => {
           console.log(val, it.name)
-          if(val.name === it.name){
+          if (val.name === it.name) {
             console.log(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/upvote/${val.id}`)
             this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/upvote/${val.id}`).then(res => {
-              if(res.body.code === 0){
-                val.p = val.p+1
+              if (res.body.code === 0) {
+                val.p = val.p + 1
               }
               val.attitude = true
               this.$set(this.o.tags, index, val)
@@ -234,10 +233,10 @@
             this.contentObj = res.body.data.content
             this.o = res.body.data
             this.isStart = true
-            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/tag`).then( res => {
+            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/tag`).then(res => {
               res.body.data.forEach((val1, index) => {
                 this.o.tags.forEach((val2, index) => {
-                  if(val2.id === val1.tag_id){
+                  if (val2.id === val1.tag_id) {
                     val2.attitude = val1.attitude
                     this.$set(this.o.tags, index, val2)
                   }
@@ -506,172 +505,14 @@
 
   }
 
-  // work tmp, after work break out
   .pro-container {
-    position: absolute;
-    margin-top: 150px;
-    top: -10px;
-    left: 10%;
-    right: 10%;
-    margin-bottom: 60px;
-    background: white;
+    margin: 5rem auto 0;
+    background: rgba(255, 255, 255, 0.7);
+    width: 80%;
     padding: 40px 60px;
     overflow: auto;
+    border: solid 1px #eeeeee;
     transition: all 0.5s;
-    // border-radius: 10px;
-    .problemPageTitle {
-      background: #fff;
-      z-index: 1000;
-      margin: 2em 0;
-      font-family: "微软雅黑";
-      font-weight: 400;
-      color: #233;
-      border-bottom: 1px solid #eee;
-      transition: all 1.41s;
-    }
-    .problemPageTitle.normal {
-      border-left: 10px solid #93a7a7;
-    }
-    .problemPageTitle.active {
-      padding: 0;
-      margin: 0;
-      left: 0;
-      right: 0;
-      top: @barheight;
-      height: @filterheight;
-      line-height: @filterheight - 2em;
-      text-align: center;
-      position: fixed;
-      font-weight: 100;
-    }
-    .details {
-      display: flex;
-      flex-direction: row;
-      margin-bottom: 1em;
-      transform: scale(1);
-      .i {
-        border: solid 1px;
-        border-radius: 4px;
-        margin-right: 1em;
-        .l, .r {
-          display: inline-block;
-          padding: .41em 1em;
-        }
-        .l {
-          border-right: 1px solid;
-        }
-      }
-      .ac, .all {
-        .r {
-          position: relative;
-        }
-        .r::before {
-          position: absolute;
-          content: ' ';
-          width: .6em;
-          height: .6em;
-          background: #fff;
-          transform: translateX(-50%) translateY(-50%) rotate(45deg);
-          left: 0;
-          top: 50%;
-        }
-      }
-      .ac {
-        color: #db2828;
-        border-color: #db2828;
-        .l {
-          color: #fff;
-          background: #db2828;
-        }
-      }
-      .all {
-        color: #1e70bf;
-        border-color: #1e70bf;
-        .l {
-          color: #fff;
-          background: #1e70bf;
-        }
-      }
-      .tl {
-        color: #16ab39;
-        border-color: #16ab39;
-      }
-      .ml {
-        color: #1678c2;
-        border-color: #1678c2;
-      }
-      .level {
-        color: #2cbfec;
-        border-color: #2cbfec;
-      }
-      .sj {
-        color: #eaae00;
-        border-color: #eaae00;
-      }
-      .dj {
-        color: #9627ba;
-        border-color: #a333c8;
-      }
-    }
-    .tags {
-      display: flex;
-      flex-direction: row;
-      .t:hover{
-        cursor: pointer;
-      }
-      .t {
-        color: #1678c2;
-        border: 1px solid #1678c2;
-        border-radius: 4px;
-        padding: .41em 1em;
-        margin-right: 1em;
-        position: relative;
-        transition: all .41s;
-        .c {
-          display: inline-block;
-          transition: all .41s;
-          .y, .n {
-            display: inherit;
-            position: relative;
-            padding: .2em .4em;
-            cursor: pointer;
-            transition: all .41s;
-          }
-          .y:hover, .n:hover {
-          }
-          .y {
-            background: #db2828;
-            color: #fff;
-            border-radius: 4px 0 0 4px;
-          }
-          .n {
-            background: #1e70bf;
-            color: #fff;
-            border-radius: 0 4px 4px 0;
-          }
-          .n::before {
-            content: ' ';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            margin-top: -.5em;
-            margin-left: -.7em;
-            width: 1em;
-            height: 1em;
-            border-radius: 50%;
-            background: #fff;
-          }
-        }
-      }
-      .tn{
-        border: 2px solid #1678c2;
-        color: #1678c2
-      }
-      .ty {
-        border: 2px solid red;
-        color: red
-      }
-    }
   }
 
   .pro-container:hover {
@@ -679,5 +520,162 @@
     0 0px 20px rgba(150, 150, 150, 0.1),
     5px 0 5px rgba(150, 150, 150, 0.1),
     -5px 0 5px rgba(150, 150, 150, 0.1);
+  }
+
+  .problemPageTitle {
+    z-index: 2;
+    margin: 1em 0;
+    font-family: "微软雅黑", sans-serif;
+    font-weight: 400;
+    color: #233;
+    transition: all 1.41s;
+  }
+
+  .problemPageTitle.bga {
+    background: rgba(255, 255, 255, 0.7);
+  }
+
+  .problemPageTitle.normal {
+    border-left: 10px solid #93a7a7;
+  }
+
+  .problemPageTitle.active {
+    padding: 0;
+    margin: 0;
+    left: 0;
+    right: 0;
+    top: @barheight;
+    height: @filterheight;
+    line-height: @filterheight - 2em;
+    text-align: center;
+    position: fixed;
+    font-weight: 100;
+  }
+
+  .details {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1em;
+    text-align: center;
+    transform: scale(1);
+    background: rgba(255, 255, 255, 0.6);
+    .i {
+      width: 100px;
+      border: solid 1px;
+      border-radius: 4px;
+      .l, .r {
+        display: block;
+        padding: .41em 1em;
+      }
+      .r {
+        border-left: 1px solid;
+        white-space: pre;
+      }
+    }
+  }
+
+  .tags {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1em;
+    transform: scale(1);
+    .i {
+      border: solid 1px;
+      margin-right: 1em;
+      .l, .r {
+        display: inline-block;
+        padding: .21em .41em;
+      }
+      .r {
+        border-left: 1px solid;
+      }
+    }
+  }
+
+  .ac, .all {
+    .r {
+      position: relative;
+    }
+  }
+
+  .ac {
+    color: #db2828;
+    border-color: #db2828;
+    .l {
+      color: #fff;
+      background: #db2828;
+    }
+  }
+
+  .all {
+    color: #1e70bf;
+    border-color: #1e70bf;
+    .l {
+      color: #fff;
+      background: #1e70bf;
+    }
+  }
+
+  .tl {
+    color: #16ab39;
+    border-color: #16ab39;
+    .l {
+      color: white;
+      background: #16ab39;
+    }
+  }
+
+  .ml {
+    color: #1678c2;
+    border-color: #1678c2;
+    .l {
+      color: white;
+      background: #1678c2;
+    }
+  }
+
+  .level {
+    color: #2cbfec;
+    border-color: #2cbfec;
+    .l {
+      color: white;
+      background: #2cbfec;
+    }
+  }
+
+  .sj {
+    color: #eaae00;
+    border-color: #eaae00;
+    .l {
+      color: white;
+      background: #eaae00;
+    }
+  }
+
+  .dj {
+    color: #9627ba;
+    border-color: #a333c8;
+    .l {
+      color: white;
+      background: #a333c8;
+    }
+  }
+
+  .no {
+    border: none !important;
+  }
+
+  .cases {
+    .l {
+      color: white;
+      background: #333333;
+    }
+  }
+
+  .pro-container-left {
+    position: absolute;
+    margin-top: 5rem;
+    background: none;
+    top: 0;
   }
 </style>

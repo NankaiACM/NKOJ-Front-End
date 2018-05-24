@@ -20,7 +20,7 @@
           <td class="hidden-xs">{{status.solution_id}}</td>
           <td>
             <router-link :to="{path:'user/'+status.user_id}">
-              <span class="label label-info">{{status.nickname}}</span>
+              <span>{{status.nickname}}</span>
             </router-link>
           </td>
           <td>
@@ -30,11 +30,12 @@
           </td>
           <td>
             <button
-              :class="['btn btn-sm',getStatusClass(status.status_id)]"
+              :class="['btn btn-sm status',getStatusClass(status.status_id)]"
+              :style="'background-color: '+status.color"
               type="button" class="btn btn-primary"
               @click="setDetails(status)"
             >
-              {{getStatusText(status.status_id)}}
+              {{getStatusText(status.status_id) || status.msg_en}}
             </button>
           </td>
           <td>{{lang_hash[status.language]}}</td>
@@ -48,11 +49,11 @@
           </td>
           <td>{{status.time}} ms</td>
           <td>{{status.memory}} kB</td>
-          <td>{{new Date(status.when).toLocaleString()}}</td>
+          <td :title="new Date(status.when).toLocaleString()">{{moment(status.when).fromNow()}}</td>
         </tr>
       </tbody>
     </table>
-    <infinite-loading @infinite="infiniteHandler" v-if="isInfinite==true">
+    <infinite-loading @infinite="infiniteHandler" v-if="isInfinite===true">
           <span slot="no-more">
             There is no more status :( at bottom
           </span>
@@ -68,6 +69,7 @@
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
 import StatusDetails from './details.vue'
+import moment from 'moment'
 var {statusMap, langMap, langHash} = require('./map.json')
 export default {
   name: 'statusPage',
@@ -99,23 +101,15 @@ export default {
     },
     getStatusClass: function (statusId) {
       statusId = statusId.toString()
-      var res = 'label-default'
-      this.status_map.map(item => {
-        if (item.value === statusId) {
-          res = item.label_class
-        }
-      })
-      return res
+      let status = 'label-default'
+      this.status_map.some(item => item.value === statusId && (status = item.label_class))
+      return status
     },
     getStatusText: function (statusId) {
-      var res = 'unknow'
       statusId = statusId.toString()
-      this.status_map.map(item => {
-        if (item.value === statusId) {
-          res = item.status
-        }
-      })
-      return res
+      let status = undefined
+      this.status_map.some(item => item.value === statusId && (status = item.status))
+      return status
     },
     infiniteHandler: function ($state) {
       // if ($state.complete) $state.complete()
@@ -170,7 +164,8 @@ export default {
         }, function (e) {
           console.log(JSON.stringify(e))
         })
-    }
+    },
+    moment: moment
   },
   mounted: function () {
     let vm = this
@@ -299,6 +294,10 @@ a:focus {
 
 .load-btn span:hover {
   transform: rotate(180deg);
+}
+
+.status {
+  border: none;
 }
 
 @media (min-width: 768px) {}
