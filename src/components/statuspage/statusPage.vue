@@ -91,7 +91,8 @@ export default {
         limit: 150, // 单次请求最大量
         last: -1
       },
-      showdt: false
+      showdt: false,
+      maxId: -1
     }
   },
   methods: {
@@ -107,9 +108,17 @@ export default {
     },
     getStatusText: function (statusId) {
       statusId = statusId.toString()
-      let status = undefined
+      let status = 'Unknow'
       this.status_map.some(item => item.value === statusId && (status = item.status))
       return status
+    },
+    removeLower: function (list) {
+      var index = -1
+      for (let i = list.length - 1; i >= 0; i--) {
+        if (list[i]['solution_id'] > this.maxId) break
+        index = i
+      }
+      if (index !== -1) list.splice(index, list.length - index) // js 引用
     },
     infiniteHandler: function ($state) {
       // if ($state.complete) $state.complete()
@@ -124,6 +133,7 @@ export default {
               return -1
             }
             vm.statusList = res.body.data
+            vm.maxId = vm.statusList[0]['solution_id']
             if ($state.loaded) $state.loaded()
           }, function (e) {
             console.log('init get erro')
@@ -140,8 +150,10 @@ export default {
             console.log('infinite feedback erro')
             return -1
           }
+          vm.removeLower(res.body.data)
           tmp = tmp.concat(res.body.data)
           vm.statusList = tmp
+          vm.maxId = vm.statusList[0]['solution_id']
           if ($state.loaded) $state.loaded()
         }, function (e) {
           console.log('infinite erro')
@@ -154,12 +166,18 @@ export default {
       vm.$http.get(vm.apiUrl + '/' + till)
         .then(function (res) {
           if (!res.body.data) {
+            console.log('无返回')
+            return 0
+          }
+          vm.removeLower(res.body.data)
+          if (res.body.data.length === 0) {
             console.log('没有新的更新')
             return 0
           }
           var tmp = res.body.data
           tmp = tmp.concat(vm.statusList)
           vm.statusList = tmp
+          vm.maxId = vm.statusList[0]['solution_id']
           console.log('魔法状态更新')
         }, function (e) {
           console.log(JSON.stringify(e))
@@ -190,6 +208,9 @@ export default {
       this.filter = this.$store.state.statusFilter
     },
     'filter.submit': function () {
+    },
+    maxId: function (n, o) {
+      console.log('new maxId: ' + n)
     }
   }
 }
