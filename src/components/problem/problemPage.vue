@@ -30,12 +30,12 @@
               </span></button>
             <ul class="dropdown-menu">
               <li><a v-on:click="setLan('C++')">C++</a></li>
-              <li><a v-on:click="setLan('Java')">Java</a></li>
-              <li><a v-on:click="setLan('Python')">Python</a></li>
-              <li><a v-on:click="setLan('JavaScript')">JavaScrpit</a></li>
-              <li><a v-on:click="setLan('Pascal')">Pascall</a></li>
-              <li><a v-on:click="setLan('Html')">Html</a></li>
-              <li><a v-on:click="setLan('Css')">Css</a></li>
+              <!--<li><a v-on:click="setLan('Java')">Java</a></li>-->
+              <!--<li><a v-on:click="setLan('Python')">Python</a></li>-->
+              <!--<li><a v-on:click="setLan('JavaScript')">JavaScrpit</a></li>-->
+              <!--<li><a v-on:click="setLan('Pascal')">Pascall</a></li>-->
+              <!--<li><a v-on:click="setLan('Html')">Html</a></li>-->
+              <!--<li><a v-on:click="setLan('Css')">Css</a></li>-->
             </ul>
           </div>
           <button class="mobileRight btn btn-default" @click="iCanSee"
@@ -522,7 +522,7 @@
     transition: all 0.5s;
     // border-radius: 10px;
     .problemPageTitle {
-      z-index: 1000;
+      z-index: 2;
       margin: 2em 0;
       font-family: "微软雅黑", sans-serif;
       font-weight: 400;
