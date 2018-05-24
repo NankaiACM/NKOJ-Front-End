@@ -1,47 +1,56 @@
 <template>
-<div id="details" class="container">
-  <div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 details-container">
+<div id="details">
+  <div class="details-container container-fluid">
     <div>
       <h3>
-        <span class="glyphicon glyphicon-screenshot"></span>提交编号：
-        <router-link :to="{path: 'details/' + solution_id}">{{solution_id}}</router-link>
+        <span class="glyphicon glyphicon-screenshot"></span> 提交编号
+        <router-link :to="{path: '/details/' + o.solution_id}">{{solution_id}}</router-link>
       </h3>
       <div class="alert alert-info">
-        提交时间：{{when_str}} / 用时：{{time}}ms / 内存：{{memory}}byte
+        提交时间: {{o.when}} / 用时: {{o.time}} ms / 内存: {{o.memory}} byte / 代码长度: {{o.code_size}}
       </div>
     </div>
     <div>
-      <h3><span class="glyphicon glyphicon-edit"></span>题号：
-        <router-link :to="{path: 'problem/' + problem_id}">{{problem_id}}</router-link>
+      <h3><span class="glyphicon glyphicon-edit"></span> 题号
+        <router-link :to="{path: '/problem/' + o.problem_id}">{{o.problem_id}}</router-link>
       </h3>
     </div>
     <div>
-      <h3><span class="glyphicon glyphicon-search"></span>评测结果</h3>
-      <div class="alert alert-info">{{status_str}}</div>
+      <h3><span class="glyphicon glyphicon-search"></span> 评测结果</h3>
+      <div class="alert alert-info">
+        {{o.msg_en}} <br>
+        {{o.msg_cn}} <br>
+      </div>
     </div>
     <div>
-      <h3><span class="glyphicon glyphicon-console"></span>编译信息和编译器输出</h3>
-      <div class="alert alert-info">{{compile_str}}</div>
+      <h3><span class="glyphicon glyphicon-console"></span> 编译信息</h3>
+      <div class="alert alert-info">{{o.compile_info}}</div>
     </div>
-    <div>
-      <h3><span class="glyphicon glyphicon-th"></span>测试点信息</h3>
+    <div v-if="evaluateNodes.length !== 1">
+      <h3><span class="glyphicon glyphicon-th"></span> 测试点信息</h3>
       <div class="clearfix">
-      <div v-for="(item, index) in evaluate_nodes" class="eva-node alert alert-info" :key="index">
+      <div v-for="(item, index) in evaluateNodes"
+           v-if="item.stdin !== '0x3df67d'"
+           :key="index"
+           class="eva-node alert alert-info">
         <div>
-          {{index}}
-          <div>{{item.status_str}}</div>
-          <div>{{item.memory_str}}byte</div>
-          <div>{{item.time_str}}ms</div>
+          NO.{{index}}<br>
+          <span>输入</span>
+          <pre>{{item.stdin}}</pre>
+          <span>正确输出</span>
+          <pre>{{item.stdout}}</pre>
+          <span>程序输出</span>
+          <pre>{{item.execout}}</pre>
         </div>
       </div>
       </div>
       <div></div>
     </div>
     <div>
-      <h3><span class="glyphicon glyphicon-pencil"></span>代码内容&nbsp;<button type="button" class="btn btn-info"><span class="glyphicon glyphicon-play" title="在线运行"></span></button></h3>
+      <h3><span class="glyphicon glyphicon-pencil"></span> 代码内容&nbsp;<button type="button" class="btn btn-info"><span class="glyphicon glyphicon-play" title="在线运行"></span></button></h3>
       <div>
         <pre>
-        {{code_str}}
+        {{o.code}}
         </pre>
       </div>
     </div>
@@ -51,56 +60,70 @@
 <script>
 export default {
   name: 'details-page',
-  data: function() {
+  data: function () {
     return {
-      /**_id从服务器请求，*_str在客户端渲染*/
       solution_id: -1,
-      problem_id: 1001,
-      status_id: -1,
-      lang_id: -1,
-      time: -1, //总运行时间
-      memory: -1, //总内存消耗
-      timestamp: 1514736000000, //毫秒级
-      when_str: '20180101',
-      status_str: 'compile eeeerro', //评测结果字符串
-      compile_str: 'eeeeerro', //编译输出字符串，从服务器请求
-      code_str: '(function(){})()',
-      evaluate_nodes: [{
-        status_id: -1,
-        memory: -1,
-        time: -1,
-        status_str: 'eeeerro',
-        memory_str: '1048',
-        time_str: '1048',
-        in_str: 'hello world', //输入字符串
-        in_down: '', //输入文件下载地址
-        out_str: 'hello world', //输出字符串
-      },{
-        status_id: -1,
-        memory: -1,
-        time: -1,
-        status_str: 'eeeerro',
-        memory_str: '1048',
-        time_str: '1048',
-        in_str: 'hello world', //输入字符串
-        in_down: '', //输入文件下载地址
-        out_str: 'hello world', //输出字符串
+      casesNum: 0,
+      o: {
+        'solution_id': -1,
+        'user_id': -1,
+        'problem_id': 0,
+        'status_id': 0,
+        'language': 0,
+        'code_size': 0,
+        'time': 0,
+        'memory': 0,
+        'when': '',
+        'msg_short': '',
+        'msg_en': '',
+        'msg_cn': '',
+        'nickname': 'NULL',
+        'canViewOutput': false,
+        'compile_info': 'segmentFault',
+        'code': 'function(){}();'
+      },
+      evaluateNodes: [{
+        stdin: '0x3df67d',
+        stdout: '',
+        execout: ''
       }]
     }
   },
   methods: {
-    initView: function() {
-      var solution_id = this.$route.params.solution_id
-      if (!solution_id) {
+    initView: function () {
+      const vm = this
+      const solutionId = vm.$route.params.solutionId
+      if (!solutionId) {
         alert('参数错误')
-        return console.erro(this.$route.params)
+        return console.erro(vm.$route.params)
       }
-      console.log(solution_id)
-      this.solution_id = solution_id
+      console.log(solutionId)
+      vm.solution_id = solutionId
+      vm.getO()
+    },
+    getO: function () {
+      const vm = this
+      vm.$http.get(window.noPointHost + '/api/status/detail/' + vm.solution_id)
+        .then(function (res) {
+          const data = res.body.data
+          if (!data) return console.info('error')
+          vm.o = data
+          vm.casesNum = data.cases || 1
+          if (data.canViewOutput) vm.getOutput(1)
+        })
+    },
+    getOutput: function (caseId) {
+      const vm = this
+      vm.$http.get(window.noPointHost + '/api/status/detail/' + vm.solution_id + '/case/' + caseId)
+        .then(function (res) {
+          if (res.body.code !== 0) return 0
+          vm.evaluateNodes.push(res.body.data)
+          if (caseId < vm.casesNum) vm.getOutput(caseId + 1)
+        })
     }
   },
-  mounted: function() {
-    this.$nextTick(function() {
+  mounted: function () {
+    this.$nextTick(function () {
       this.initView()
     })
   }
@@ -108,22 +131,10 @@ export default {
 </script>
 <style lang="less">
 .details-container {
-  text-align: left;
-  margin-top: 4em;
-  margin-bottom: 4em;
-}
-ul {
-  padding-left: 2em;
+  padding: 2em 3em;
+  background: rgba(255, 255, 255, 0.7);
 }
 .eva-node {
-  width: 10em;
-  height: 10em;
   padding: 1em;
-  margin: 1em;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  float: left;
-  flex-direction: column;
 }
 </style>
