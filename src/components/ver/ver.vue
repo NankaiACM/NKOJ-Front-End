@@ -1,6 +1,7 @@
 <template>
   <div id="ver" class="ver alert alert-info">
-    <a style="text-decoration: underline" href="https://github.com/NankaiACM">来 Github ！ Star 和 Fork 我们喵~ </a>
+    <a style="font-weight: bold" href="https://github.com/NankaiACM">来 Github ！ Star 和 Fork 我们喵<span
+      style="color:red">❤</span>~ </a>
     <br>
     <a href="https://github.com/NankaiACM/NKOJ-Front-End">Front End: </a><span class="badge badge-green">{{moment(frontend.date).fromNow()}}</span>
     By <span class="badge badge-orange" data-toggle="popover" data-placement="top" title="详情"
@@ -75,7 +76,7 @@ $(function () {
   }
 
   .badge-orange {
-    background-color: darksalmon;
+    background-color: #FAAA9E;
   }
 
   .badge-pink {
