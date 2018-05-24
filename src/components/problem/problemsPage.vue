@@ -70,8 +70,8 @@ export default {
       total: 1
     }
   },
-  mounted: function() {
-    this.$nextTick(function() {
+  mounted: function () {
+    this.$nextTick(function () {
       this.filter = this.$store.state.filter
       this.initView()
     })
