@@ -56,77 +56,90 @@
           {{o.title ? o.title : '暂未获得到信息...'}}
         </h2>
         <div class="problemDescription" @click="iCanSee2">
-          <div>
-            <div class="details">
-              <div class="i ac">
-                <div class="l">Ac</div>
-                <div class="r">{{o.ac}}</div>
-              </div>
-              <div class="i all">
-                <div class="l">All submit</div>
-                <div class="r">{{o.all}}</div>
-              </div>
-            </div>
-            <div class="details">
-              <div class="i level">
-                <div class="l">Level</div>
-                <div class="r">{{o.level}}</div>
-              </div>
-              <div class="i tl">
-                <div class="l">Time Limit</div>
-                <div class="r">{{o.time_limit}} ms</div>
-              </div>
-              <div class="i ml">
-                <div class="l">Memory Limit</div>
-                <div class="r">{{o.memory_limit}} kB</div>
-              </div>
-            </div>
-            <div class="details">
-              <div class="i sj">
-                <div class="l">
-                  special judge
-                </div>
-                <div class="r">
-                  {{o.special_judge}}
-                </div>
-              </div>
-              <div class="i dj">
-                <div class="l">
-                  detail judge
-                </div>
-                <div class="r">
-                  {{o.detail_judge}}
-                </div>
-              </div>
-              <div class="i cases">
-                <div class="l">
-                  cases
-                </div>
-                <div class="r">
-                  {{o.cases}}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="tags">
-            <div class="t">Tags:</div>
-            <div
-              class="t"
-              v-for="(item, index) in this.o.tags" :key="index"
-              v-bind:class="{ty : !(typeof item.attitude === 'undefined') && item.attitude, tn: !(typeof item.attitude === 'undefined') && !item.attitude}"
-              @click="tagCancel(item, $event)">
-              {{item.name}}
-              <span style="color: red">{{item.p}}</span>
-              <span style="color: dodgerblue">{{item.n}}</span>
-              <div class="c" v-if="typeof item.attitude === 'undefined'">
-                <div class="y" @click="yes(item, $event)">vote</div>
-                <div class="n" @click="no(item, $event)">no</div>
-              </div>
-            </div>
-          </div>
           <div align="left" v-html="problemMarkDown"></div>
         </div>
+        <div class="tags" style="margin-top: 100px">
+          <div class="t" >Tags:</div>
+          <div
+            class="t"
+            v-for="(item, index) in this.o.tags" :key="index"
+            v-bind:class="{ty : !(typeof item.attitude === 'undefined') && item.attitude, tn: !(typeof item.attitude === 'undefined') && !item.attitude}"
+            @click="tagCancel(item, $event)">
+            {{item.name}}
+            <span style="color: red">{{item.p}}</span>
+            <span style="color: dodgerblue">{{item.n}}</span>
+            <div class="c" v-if="typeof item.attitude === 'undefined'">
+              <div class="y" @click="yes(item, $event)">vote</div>
+              <div class="n" @click="no(item, $event)">no</div>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+    <div class="pro-container pro-container-left">
+      <div>
+        <div class="details">
+          <div class="i ac">
+            <div class="l">Ac</div>
+            <div class="r">{{o.ac}}</div>
+          </div>
+        </div>
+        <div class="details">
+          <div class="i all">
+            <div class="l">All</div>
+            <div class="r">{{o.all}}</div>
+          </div>
+        </div>
+        <div class="details">
+          <div class="i level">
+            <div class="l">Level</div>
+            <div class="r">{{o.level}}</div>
+          </div>
+        </div>
+        <div class="details">
+          <div class="i tl">
+            <div class="l">Time</div>
+            <div class="r">{{o.time_limit}} ms</div>
+          </div>
+        </div>
+        <div class="details">
+          <div class="i ml">
+            <div class="l">Memory</div>
+            <div class="r">{{o.memory_limit}} kB</div>
+          </div>
+        </div>
+        <div class="details">
+          <div class="i sj">
+            <div class="l">
+              special judge
+            </div>
+            <div class="r">
+              {{o.special_judge}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="details">
+        <div class="i dj">
+          <div class="l">
+            detail judge
+          </div>
+          <div class="r">
+            {{o.detail_judge}}
+          </div>
+        </div>
+      </div>
+      <div class="details">
+        <div class="i cases">
+          <div class="l">
+            cases
+          </div>
+          <div class="r">
+            {{o.cases}}
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -509,6 +522,7 @@
   }
 
   // work tmp, after work break out
+
   .pro-container {
     position: absolute;
     margin-top: 150px;
@@ -519,6 +533,7 @@
     background: white;
     padding: 40px 60px;
     overflow: auto;
+    border: solid 1px #eeeeee;
     transition: all 0.5s;
     // border-radius: 10px;
     .problemPageTitle {
@@ -552,13 +567,14 @@
       display: flex;
       flex-direction: row;
       margin-bottom: 1em;
+      text-align: center;
       transform: scale(1);
       .i {
+        width: 100px;
         border: solid 1px;
         border-radius: 4px;
-        margin-right: 1em;
         .l, .r {
-          display: inline-block;
+          display: block;
           padding: .41em 1em;
         }
         .l {
@@ -569,16 +585,16 @@
         .r {
           position: relative;
         }
-        .r::before {
-          position: absolute;
-          content: ' ';
-          width: .6em;
-          height: .6em;
-          background: #fff;
-          transform: translateX(-50%) translateY(-50%) rotate(45deg);
-          left: 0;
-          top: 50%;
-        }
+        /*.r::before {*/
+          /*position: absolute;*/
+          /*content: ' ';*/
+          /*width: .6em;*/
+          /*height: .6em;*/
+          /*background: #fff;*/
+          /*transform: translateX(-50%) translateY(-50%) rotate(45deg);*/
+          /*left: 0;*/
+          /*top: 50%;*/
+        /*}*/
       }
       .ac {
         color: #db2828;
@@ -599,22 +615,48 @@
       .tl {
         color: #16ab39;
         border-color: #16ab39;
+        .l {
+          color: white;
+          background: #16ab39;
+        }
       }
       .ml {
         color: #1678c2;
         border-color: #1678c2;
+        .l {
+          color: white;
+          background: #1678c2;
+        }
       }
       .level {
         color: #2cbfec;
         border-color: #2cbfec;
+        .l {
+          color: white;
+          background: #2cbfec;
+        }
       }
       .sj {
         color: #eaae00;
         border-color: #eaae00;
+        .l {
+          color: white;
+          background: #eaae00;
+        }
       }
       .dj {
         color: #9627ba;
         border-color: #a333c8;
+        .l {
+          color: white;
+          background:  #a333c8;
+        }
+      }
+      .cases {
+        .l {
+          color: white;
+          background: #333333;
+        }
       }
     }
     .tags {
@@ -677,7 +719,11 @@
       }
     }
   }
-
+  .pro-container-left{
+    left: 0;
+    width: 100px;
+    padding: 0 0;
+  }
   .pro-container:hover {
     box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1),
     0 0px 20px rgba(150, 150, 150, 0.1),
