@@ -1,64 +1,84 @@
 <template>
-  <div id="ver">
-    The Project is under development
+  <div id="ver" class="ver alert alert-info">
+    <a style="text-decoration: underline" href="https://github.com/NankaiACM">来 Github ！ Star 和 Fork 我们喵~ </a>
     <br>
-    frontend version: beta.{{frontend}}
+    <a href="https://github.com/NankaiACM/NKOJ-Front-End">Front End: </a><span class="badge badge-green">{{moment(frontend.date).fromNow()}}</span>
+    By <span class="badge badge-orange" data-toggle="popover" data-placement="top" title="详情"
+             :data-content="frontend.message">{{frontend.author}}</span>
     <br>
-    backend version: beta.{{backend}}
+    <a href="https://github.com/NankaiACM/NKOJ-Back-End">Back End: </a><span class="badge badge-yellow">{{moment(backend.date).fromNow()}}</span>
+    By <span class="badge badge-pink" data-toggle="popover" data-placement="top" title="详情"
+             :data-content="backend.message">{{backend.author}}</span>
   </div>
 </template>
 <style lang="less" scoped>
 </style>
 <script>
+
 import moment from 'moment'
 
 export default {
   name: 'ver',
   data: function () {
     return {
-      frontend: '',
-      backend: '',
+      frontend: {},
+      backend: {},
       apiUrl: '/api/version'
     }
   },
   methods: {
-    getCommit: function (str) {
-      str = str.split('commit ')[1]
-      str = str.split('\nAuthor')[0]
-      return str
+    formJson: function (str) {
+      const date_message = str.split('Date:   ')[1].split('\n')
+      const [date, ...message] = date_message
+      return {
+        date: date,
+        author: str.split('Author: ')[1].split('<')[0],
+        message: message.join('\n')
+      }
     },
-    getDate: function (str) {
-      str = str.split('Date:   ')[1]
-      str = str.split('\n\n    ')[0]
-      return moment(new Date(str)).format()
-    }
+    moment: moment
   },
   mounted: function () {
     let slf = this
     slf.$nextTick(function () {
       slf.$http.get(window.noPointHost + slf.apiUrl)
         .then(function (res) {
-          console.log('向魔法机请求魔法阶级情报')
-          const akari = res.body.data
-          console.log(akari)
-          for (let i in akari) {
-            slf[i] = slf.getCommit(akari[i]).substr(0, 8) + ' '
-            slf[i] += slf.getDate(akari[i])
-          }
-        }, function (e) {
-          console.log('请求魔法机魔法阶级失败')
+          const data = res.body.data
+          this.frontend = this.formJson(data.frontend)
+          this.backend = this.formJson(data.backend)
         })
     })
   }
 }
+$(function () {
+  $('[data-toggle="popover"]').popover({trigger: 'hover'})
+})
 </script>
 <style lang="less" scoped>
-#ver {
+  .ver {
   position: fixed;
   right: 0;
   bottom: 0;
-  color: #000;
-  pointer-events: none;
-  text-align: right;
-}
+    text-align: left;
+  }
+
+  .badge {
+    color: #1b98e0;
+  }
+
+  .badge-green {
+    background-color: palegreen;
+  }
+
+  .badge-yellow {
+    background-color: lightyellow;
+  }
+
+  .badge-orange {
+    background-color: darksalmon;
+  }
+
+  .badge-pink {
+    background-color: lightpink;
+  }
 </style>

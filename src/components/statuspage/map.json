@@ -62,26 +62,14 @@
     }
   ],
   "langMap": [{
-    "value": "1",
+    "value": "0",
     "lang": "C99"
   }, {
-    "value": "2",
-    "lang": "C++ 98"
-  }, {
-    "value": "3",
-    "lang": "Free Pascal"
-  }, {
-    "value": "4",
-    "lang": "Java (JDK6)"
-  }, {
-    "value": "5",
+    "value": "1",
     "lang": "C++14"
   }],
   "langHash": {
-    "1": "C99",
-    "2": "C++98",
-    "3": "Free Pascal",
-    "4": "Java (JDK6)",
-    "5": "C++14"
+    "0": "C99",
+    "1": "C++14"
   }
 }

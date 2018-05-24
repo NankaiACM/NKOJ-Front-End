@@ -40,7 +40,7 @@
           </router-link>
         </td>
         <td class="problemTableCol3">
-          {{problem.submit_ac}} / {{problem.submit_all}}
+          {{problem.ac}} / {{problem.all}}
         </td>
       </tr>
     </tbody>
@@ -145,17 +145,11 @@ export default {
 @import '../../less/global.less';
 
 #Problems {
-  background: none;
+  background: rgba(255, 255, 255, 0.7);
   color: #233;
   padding:0;
   transition: all 1s;
   margin-top: @filterheight;
-}
-
-.fat-container {
-  background: #fff;
-  border-radius: 2px;
-  border: 2px solid #e8f1f2;
 }
 
 #Problems td a {
@@ -164,7 +158,6 @@ export default {
 }
 
 #ProblemTable {
-  background: #fff;
   padding: 2em;
   border-bottom: 1px solid #e5e9ef;
   margin-bottom: 1em;
