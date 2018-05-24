@@ -50,476 +50,453 @@
         <transition name="fade"><label class="bottomInfo bottomInfoRight" v-if="rightInfo">Back</label></transition>
       </div>
     </transition>
-    <div style="position: relative;">
-      <div class="pro-container">
-        <h2 id="pro-title" align="left" class="problemPageTitle" :class="{[titleclass]: false}">
-          {{o.title ? o.title : '暂未获得到信息...'}}
-        </h2>
-        <hr>
-        <div class="problemDescription" @click="iCanSee2">
-          <div align="left" v-html="problemMarkDown"></div>
-        </div>
-        <div class="tags">
-          <div class="i no"><span class="l">Tags:</span></div>
-          <div class="i ml" v-for="(item, index) in this.o.tags" :key="index"
-               v-bind:class="{ty : item.attitude, tn: item.attitude}">
-            <span class="l">{{item.name}}</span>
-            <span class="r">{{item.p - item.n}}</span>
-            <div class="r" v-if="isEditingTag">
-              <div v-if="!item.attitude">
-                <div style="display: inline" class="y" @click="yes(item, $event)">+</div>
-                /
-                <div style="display: inline" class="n" @click="no(item, $event)">-</div>
-              </div>
-              <div style="display: inline" @click="tagCancel(item, $event)" v-if="item.attitude">*</div>
+    <div class="pro-container">
+      <h2 id="pro-title" align="left" class="problemPageTitle" :class="{[titleclass]: false}">
+        {{o.title ? o.title : '暂未获得到信息...'}}
+      </h2>
+      <hr>
+      <div class="problemDescription" @click="iCanSee2">
+        <div align="left" v-html="problemMarkDown"></div>
+      </div>
+      <div class="tags">
+        <div class="i h">Tags:</div>
+        <div class="i t" v-for="(item, index) in this.o.tags" :key="index"
+             v-bind:class="{ty : item.attitude, tn: item.attitude}">
+          <div class="l">{{item.name}}</div>
+          <div class="r">{{item.p - item.n}}</div>
+          <div class="e" v-if="isEditingTag">
+            <div class="c" v-if="!item.attitude">
+              <div class="y" @click="yes(item, $event)">+</div>
+              /
+              <div class="n" @click="no(item, $event)">-</div>
             </div>
+            <div  class="b" @click="tagCancel(item, $event)" v-if="item.attitude">*</div>
           </div>
-          <div class="i level" @click="toggleEditTag()"><span class="l">{{isEditingTag ? '确认' : '编辑'}}</span><span
-            class="r glyphicon" :class="isEditingTag ? 'glyphicon-check':'glyphicon-pencil'"> </span></div>
+        </div>
+        <div class="i g" @click="toggleEditTag()">
+          <div class="l">{{isEditingTag ? '确认' : '编辑'}}</div>
+          <div class="r s"><span class="glyphicon" :class="isEditingTag ? 'glyphicon-check':'glyphicon-pencil'"></span></div>
         </div>
       </div>
-      <div class="pro-container-left">
-        <div>
-          <div class="details">
-            <div class="i ac">
-              <div class="l">AC / All</div>
-              <div class="r">{{o.ac}} / {{o.all}}</div>
-            </div>
-          </div>
-          <div class="details">
-            <div class="i cases">
-              <div class="l">Cases</div>
-              <div class="r">{{o.cases}}</div>
-            </div>
-          </div>
-          <div class="details">
-            <div class="i level">
-              <div class="l">Level</div>
-              <div class="r">{{o.level}}</div>
-            </div>
-          </div>
-          <div class="details">
-            <div class="i tl">
-              <div class="l">Time</div>
-              <div class="r">{{o.time_limit}} ms</div>
-            </div>
-          </div>
-          <div class="details">
-            <div class="i ml">
-              <div class="l">Memory</div>
-              <div class="r">{{o.memory_limit}} kB</div>
-            </div>
-          </div>
-          <div class="details" v-if="o.special_judge">
-            <div class="i sj">
-              <div class="l">Special Judge</div>
-            </div>
-          </div>
+      <div class="details">
+        <div class="i ac">
+          <div class="t">AC / All</div>
+          <div class="b">{{o.ac}} / {{o.all}}</div>
         </div>
-        <div class="details" v-if="o.detail_judge">
-          <div class="i dj">
-            <div class="l">Detail Judge</div>
-          </div>
+        <div class="i cs">
+          <div class="t">Cases</div>
+          <div class="b">{{o.cases}}</div>
+        </div>
+        <div class="i level">
+          <div class="t">Level</div>
+          <div class="b">{{o.level}}</div>
+        </div>
+        <div class="i tl">
+          <div class="t">Time</div>
+          <div class="b">{{o.time_limit}} ms</div>
+        </div>
+        <div class="i ml">
+          <div class="t">Memory</div>
+          <div class="b">{{o.memory_limit}} kB</div>
+        </div>
+        <div class="i sj" v-if="o.special_judge">
+          <div class="t">Special Judge</div>
+        </div>
+        <div class="i dj" v-if="o.detail_judge">
+          <div class="t">Detail Judge</div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-  import isScrolled from '../../scroll'
+import isScrolled from '../../scroll'
 
-  export default {
-    name: 'problems-page',
-    data: function () {
-      return {
-        contentObj: {},
-        keyArr: [],
-        o: { // 现在的视图，会被initView完全覆盖
-          case: 0,
-          content: 0,
-          problem_id: 0,
-          restriction_id: 0,
-          submit_ac: 0,
-          submit_all: 0,
-          title: 0
-        },
-        submitLan: 'C++',
-        submitCode: '#include <iostream>',
-        isScrolled,
-        isSee: false,
-        isStart: false,
-        isEditingTag: false,
-        middleInfo: false,
-        leftInfo: false,
-        rightInfo: false,
-        submitInfo: 'hhhhhhhhhhhhh',
-        isInfo: false,
-        titleclass: 'normal'
+export default {
+  name: 'problems-page',
+  data: function () {
+    return {
+      contentObj: {},
+      keyArr: [],
+      o: { // 现在的视图，会被initView完全覆盖
+        case: 0,
+        content: 0,
+        problem_id: 0,
+        restriction_id: 0,
+        submit_ac: 0,
+        submit_all: 0,
+        title: 0
+      },
+      submitLan: 'C++',
+      submitCode: '#include <iostream>',
+      isScrolled,
+      isSee: false,
+      isStart: false,
+      isEditingTag: false,
+      middleInfo: false,
+      leftInfo: false,
+      rightInfo: false,
+      submitInfo: 'hhhhhhhhhhhhh',
+      isInfo: false,
+      titleclass: 'normal'
+    }
+  },
+  computed: {
+    problemMarkDown: function () {
+      var markdown = ''
+      for (var i in this.keyArr) {
+        markdown += '### ' + i.replace(/\b\w/g, l => l.toUpperCase()) + '\n' + this.contentObj[i] + '\n'
       }
+      return marked(markdown, {sanitize: false})
+    }
+  },
+  mounted: function () {
+    this.$nextTick(() => {
+      this.initView()
+    })
+  },
+  components: {
+    editor: require('vue2-ace-editor')
+  },
+  methods: {
+    toggleEditTag () {
+      console.log('edit')
+      this.isEditingTag = !this.isEditingTag
     },
-    computed: {
-      problemMarkDown: function () {
-        var markdown = ''
-        for (var i in this.keyArr) {
-          markdown += '### ' + i.replace(/\b\w/g, l => l.toUpperCase()) + '\n' + this.contentObj[i] + '\n'
+    tagCancel: function (it, e) {
+      this.o.tags.forEach((val, index) => {
+        if (val.name === it.name && !(typeof val.attitude === 'undefined')) {
+          this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/remove/${val.id}`).then(res => {
+            if (res.body.code === 0) {
+              if (it.attitude) val.p -= 1
+              else val.n -= 1
+            }
+            val.attitude = undefined
+            this.$set(this.o.tags, index, val)
+            console.log(this.o.tags)
+          })
         }
-        return marked(markdown, {sanitize: false})
-      }
-    },
-    mounted: function () {
-      this.$nextTick(() => {
-        this.initView()
       })
     },
-    components: {
-      editor: require('vue2-ace-editor')
+    no: function (it, e) {
+      this.o.tags.forEach((val, index) => {
+        console.log(val, it.name)
+        if (val.name === it.name) {
+          console.log(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/downvote/${val.id}`)
+          this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/downvote/${val.id}`).then(res => {
+            if (res.body.code === 0) {
+              val.n = val.n + 1
+            }
+            val.attitude = false
+            this.$set(this.o.tags, index, val)
+          })
+        }
+      })
     },
-    methods: {
-      toggleEditTag () {
-        console.log('edit')
-        this.isEditingTag = !this.isEditingTag
-      },
-      tagCancel: function (it, e) {
-        this.o.tags.forEach((val, index) => {
-          if (val.name === it.name && !(typeof val.attitude === 'undefined')) {
-            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/remove/${val.id}`).then(res => {
-              if (res.body.code === 0) {
-                if (it.attitude) val.p -= 1
-                else val.n -= 1
-              }
-              val.attitude = undefined
-              this.$set(this.o.tags, index, val)
-              console.log(this.o.tags)
-            })
-          }
-        })
-      },
-      no: function (it, e) {
-        this.o.tags.forEach((val, index) => {
-          console.log(val, it.name)
-          if (val.name === it.name) {
-            console.log(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/downvote/${val.id}`)
-            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/downvote/${val.id}`).then(res => {
-              if (res.body.code === 0) {
-                val.n = val.n + 1
-              }
-              val.attitude = false
-              this.$set(this.o.tags, index, val)
-            })
-          }
-        })
-      },
-      yes: function (it, e) {
-        this.o.tags.forEach((val, index) => {
-          console.log(val, it.name)
-          if (val.name === it.name) {
-            console.log(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/upvote/${val.id}`)
-            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/upvote/${val.id}`).then(res => {
-              if (res.body.code === 0) {
-                val.p = val.p + 1
-              }
-              val.attitude = true
-              this.$set(this.o.tags, index, val)
-            })
-          }
-        })
-      },
-      initView: function () {
-        window.addEventListener('scroll', this.hScroll)
-        this.$http.get(`${window.noPointHost}/api/problem/` + this.$route.params.problemId).then(
-          (res) => {
-            console.log(res.body)
-            this.keyArr = res.body.data.content
-            this.contentObj = res.body.data.content
-            this.o = res.body.data
-            this.isStart = true
-            this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/tag`).then(res => {
-              res.body.data.forEach((val1, index) => {
-                this.o.tags.forEach((val2, index) => {
-                  if (val2.id === val1.tag_id) {
-                    val2.attitude = val1.attitude
-                    this.$set(this.o.tags, index, val2)
-                  }
-                })
+    yes: function (it, e) {
+      this.o.tags.forEach((val, index) => {
+        console.log(val, it.name)
+        if (val.name === it.name) {
+          console.log(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/upvote/${val.id}`)
+          this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/upvote/${val.id}`).then(res => {
+            if (res.body.code === 0) {
+              val.p = val.p + 1
+            }
+            val.attitude = true
+            this.$set(this.o.tags, index, val)
+          })
+        }
+      })
+    },
+    initView: function () {
+      window.addEventListener('scroll', this.hScroll)
+      this.$http.get(`${window.noPointHost}/api/problem/` + this.$route.params.problemId).then(
+        (res) => {
+          console.log(res.body)
+          this.keyArr = res.body.data.content
+          this.contentObj = res.body.data.content
+          this.o = res.body.data
+          this.isStart = true
+          this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/tag`).then(res => {
+            res.body.data.forEach((val1, index) => {
+              this.o.tags.forEach((val2, index) => {
+                if (val2.id === val1.tag_id) {
+                  val2.attitude = val1.attitude
+                  this.$set(this.o.tags, index, val2)
+                }
               })
             })
-          },
-          (e) => {
-            console.log(e)
           })
-
-      },
-      hScroll: function () {
-        var sTop = window.pageYOffset
-        var tTop = document.querySelector('#pro-title').offsetTop
-        if (sTop > tTop) { // 不给予恢复
-          this.titleclass = 'active'
-          window.removeEventListener('scroll', this.hScroll)
-        }
-      },
-      submit: function () {
-        const sendPackage = {
-          pid: this.$route.params.problemId,
-          lang: 1,
-          code: this.submitCode
-        }
-        let _this = this
-        this.$http.post(`${window.noPointHost}/api/judge`, sendPackage,
-          {crossDomain: true, credentials: true}).then(res => {
-          console.log(res)
-          _this.isInfo = true
-          if (res.body.code === 0) {
-            _this.submitInfo = '成功提交！'
-          } else {
-            _this.submitInfo = '未知错误！'
-          }
-        }, err => {
-          _this.isInfo = true
-          if (err.body.code === 401) {
-            _this.submitInfo = '请您登陆！'
-          } else {
-            _this.submitInfo = '未知错误！'
-          }
+        },
+        (e) => {
+          console.log(e)
         })
-      },
-      setLan: function (Lan) {
-        this.submitLan = Lan
-      },
-      editorInit: function () {
-        require('brace/mode/html')
-        require('brace/mode/javascript')
-        require('brace/mode/c_cpp')
-        require('brace/mode/less')
-        require('brace/theme/terminal')
-      },
-      test: function () {
-        console.log('wtf')
-      },
-      iCanSee: function (e) {
+    },
+    hScroll: function () {
+      var sTop = window.pageYOffset
+      var tTop = document.querySelector('#pro-title').offsetTop
+      if (sTop > tTop) { // 不给予恢复
+        this.titleclass = 'active'
+        window.removeEventListener('scroll', this.hScroll)
+      }
+    },
+    submit: function () {
+      const sendPackage = {
+        pid: this.$route.params.problemId,
+        lang: 1,
+        code: this.submitCode
+      }
+      let _this = this
+      this.$http.post(`${window.noPointHost}/api/judge`, sendPackage,
+        {crossDomain: true, credentials: true}).then(res => {
+        console.log(res)
+        _this.isInfo = true
+        if (res.body.code === 0) {
+          _this.submitInfo = '成功提交！'
+        } else {
+          _this.submitInfo = '未知错误！'
+        }
+      }, err => {
+        _this.isInfo = true
+        if (err.body.code === 401) {
+          _this.submitInfo = '请您登陆！'
+        } else {
+          _this.submitInfo = '未知错误！'
+        }
+      })
+    },
+    setLan: function (Lan) {
+      this.submitLan = Lan
+    },
+    editorInit: function () {
+      require('brace/mode/html')
+      require('brace/mode/javascript')
+      require('brace/mode/c_cpp')
+      require('brace/mode/less')
+      require('brace/theme/terminal')
+    },
+    test: function () {
+      console.log('wtf')
+    },
+    iCanSee: function (e) {
+      this.isSee = !this.isSee
+      this.isStart = !this.isStart
+      this.isInfo = false
+      e.preventDefault()
+    },
+    iCanSee2: function () {
+      if (this.isSee) {
         this.isSee = !this.isSee
         this.isStart = !this.isStart
         this.isInfo = false
-        e.preventDefault()
-      },
-      iCanSee2: function () {
-        if (this.isSee) {
-          this.isSee = !this.isSee
-          this.isStart = !this.isStart
-          this.isInfo = false
-        }
-      }
-    },
-    beforeDestroy: function () {
-      try {
-        window.removeEventListener('scroll', this.hScroll)
-      } catch (e) {
-        console.log(e)
       }
     }
+  },
+  beforeDestroy: function () {
+    try {
+      window.removeEventListener('scroll', this.hScroll)
+    } catch (e) {
+      console.log(e)
+    }
   }
+}
 </script>
 
 <style scoped lang="less">
-  @import '../../less/global.less';
+@import '../../less/global.less';
 
-  html {
-    #problemPage pre {
-      text-align: left;
-      background: white;
-      margin-bottom: 30px;
-      border: none;
-      color: #13293D;
-    }
-
-    #problemPage {
-      padding-bottom: 30px;
-    }
-
-    #problemSubmit {
-      background: white;
-      position: fixed;
-      z-index: 2;
-      right: 60px;
-      top: 100px;
-      padding: 5px;
-      margin-top: 40px;
-      width: 300px;
-      height: 550px;
-      border: solid 5px #16aad8;
-      border-radius: 10px;
-      box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1), 0 -5px 5px rgba(150, 150, 150, 0.1), 5px 0 5px rgba(150, 150, 150, 0.1), -5px 0 5px rgba(150, 150, 150, 0.1);
-    }
-
-    #problemSubmit:hover {
-      box-shadow: 0 5px 5px rgba(150, 150, 150, 0.4), 0 -5px 5px rgba(150, 150, 150, 0.4), 5px 0 5px rgba(150, 150, 150, 0.4), -5px 0 5px rgba(150, 150, 150, 0.4);
-    }
-
-    #problemSubmit nav {
-      padding-right: 20px;
-      margin: 0;
-      background: #16aad8;
-      text-align: left;
-      border: none;
-      border-radius: 0;
-    }
-
-    #problemSubmit h4 {
-      font-weight: 600;
-      color: #16aad8;
-      overflow: hidden;
-    }
-
-    #codeArea {
-      border: 1px solid rgba(151, 159, 175, 0.8);
-      border-radius: 2px;
-    }
-
-    #problemPage h1, h2, h3 {
-      font-weight: 600;
-    }
-
-    .fade-enter-active, .fade-leave-active {
-      transition: all .5s;
-    }
-
-    .fade-enter, .fade-leave-to {
-      opacity: 0;
-      transform: scale(1.2, 1.2);
-    }
-
-    .up-enter-active, .up-leave-active {
-      transition: all 1s ease;
-    }
-
-    .up-enter {
-      opacity: 0;
-      transform: translateY(100px);
-    }
-
-    .up-leave-to {
-      opacity: 0;
-      transform: translateY(100px);
-    }
-
-    #problemPage button, .mobileLeft {
-      margin-top: 10px;
-      position: absolute;
-      left: 130px;
-      width: 40px;
-      height: 40px;
-      background: white;
-      border: lightgray solid 1px;
-      border-radius: 100px;
-      transition: all 0.5s;
-    }
-
-    #problemPage button:focus, button:hover {
-      outline: none;
-    }
-
-    #problemPage .mobileLeft button {
-      left: 0;
-      margin-top: 0;
-      border: none;
-    }
-
-    #problemPage .mobileLeft {
-      left: 50px;
-      border: none;
-    }
-
-    #problemPage .mobileRight {
-      left: 210px;
-      border: none;
-    }
-
-    #problemPage .navbar-default .navbar-nav > .open > a,
-    .navbar-default .navbar-nav > .open > a:focus,
-    .navbar-default .navbar-nav > .open > a:hover {
-      background: #2cbfec;
-      border-radius: 10px;
-    }
-
-    #problemPage .submitGirl {
-      position: fixed;
-      bottom: -25px;
-      left: 75%;
-      z-index: 2;
-      opacity: 0.65;
-    }
-
-    #problemPage .submitGirl:hover {
-      bottom: 0;
-      opacity: 1;
-      transition: all 0.5s;
-      cursor: pointer;
-    }
-
-    #problemPage .navbar-header {
-      font-weight: bold;
-    }
-
-    #problemPage .navbar-text {
-      color: white;
-    }
-
-    .bottomInfo {
-      font-family: inherit;
-      font-size: 0.8em;
-      bottom: 0;
-      left: 130px;
-      position: absolute;
-    }
-
-    .bottomInfoLeft {
-      left: 45px
-    }
-
-    .bottomInfoRight {
-      left: 215px;
-    }
-
-    .submitInfo {
-      position: absolute;
-      background: white;
-      width: 150px;
-      left: 75px;
-      top: 200px;
-      border-radius: 10px;
-      z-index: 10;
-    }
-
-    .submitInfo h4 {
-      padding: 5px;
-      margin: 0;
-    }
-
-    .submitInfo .submitInfoText {
-      padding: 15px;
-    }
-
-    .submitInfo hr {
-      padding: 5px;
-      margin: 0;
-    }
-
+html {
+  #problemPage pre {
+    text-align: left;
+    background: white;
+    margin-bottom: 30px;
+    border: none;
+    color: #13293D;
   }
 
+  #problemPage {
+    padding-bottom: 30px;
+  }
+
+  #problemSubmit {
+    background: white;
+    position: fixed;
+    z-index: 2;
+    right: 60px;
+    top: 100px;
+    padding: 5px;
+    margin-top: 40px;
+    width: 300px;
+    height: 550px;
+    border: solid 5px #16aad8;
+    border-radius: 10px;
+    box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1), 0 -5px 5px rgba(150, 150, 150, 0.1), 5px 0 5px rgba(150, 150, 150, 0.1), -5px 0 5px rgba(150, 150, 150, 0.1);
+  }
+
+  #problemSubmit:hover {
+    box-shadow: 0 5px 5px rgba(150, 150, 150, 0.4), 0 -5px 5px rgba(150, 150, 150, 0.4), 5px 0 5px rgba(150, 150, 150, 0.4), -5px 0 5px rgba(150, 150, 150, 0.4);
+  }
+
+  #problemSubmit nav {
+    padding-right: 20px;
+    margin: 0;
+    background: #16aad8;
+    text-align: left;
+    border: none;
+    border-radius: 0;
+  }
+
+  #problemSubmit h4 {
+    font-weight: 600;
+    color: #16aad8;
+    overflow: hidden;
+  }
+
+  #codeArea {
+    border: 1px solid rgba(151, 159, 175, 0.8);
+    border-radius: 2px;
+  }
+
+  #problemPage h1, h2, h3 {
+    font-weight: 600;
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: all .5s;
+  }
+
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+    transform: scale(1.2, 1.2);
+  }
+
+  .up-enter-active, .up-leave-active {
+    transition: all 1s ease;
+  }
+
+  .up-enter {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+
+  .up-leave-to {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+
+  #problemPage button, .mobileLeft {
+    margin-top: 10px;
+    position: absolute;
+    left: 130px;
+    width: 40px;
+    height: 40px;
+    background: white;
+    border: lightgray solid 1px;
+    border-radius: 100px;
+    transition: all 0.5s;
+  }
+
+  #problemPage button:focus, button:hover {
+    outline: none;
+  }
+
+  #problemPage .mobileLeft button {
+    left: 0;
+    margin-top: 0;
+    border: none;
+  }
+
+  #problemPage .mobileLeft {
+    left: 50px;
+    border: none;
+  }
+
+  #problemPage .mobileRight {
+    left: 210px;
+    border: none;
+  }
+
+  #problemPage .navbar-default .navbar-nav > .open > a,
+  .navbar-default .navbar-nav > .open > a:focus,
+  .navbar-default .navbar-nav > .open > a:hover {
+    background: #2cbfec;
+    border-radius: 10px;
+  }
+
+  #problemPage .submitGirl {
+    position: fixed;
+    bottom: -25px;
+    left: 75%;
+    z-index: 2;
+    opacity: 0.65;
+  }
+
+  #problemPage .submitGirl:hover {
+    bottom: 0;
+    opacity: 1;
+    transition: all 0.5s;
+    cursor: pointer;
+  }
+
+  #problemPage .navbar-header {
+    font-weight: bold;
+  }
+
+  #problemPage .navbar-text {
+    color: white;
+  }
+
+  .bottomInfo {
+    font-family: inherit;
+    font-size: 0.8em;
+    bottom: 0;
+    left: 130px;
+    position: absolute;
+  }
+
+  .bottomInfoLeft {
+    left: 45px
+  }
+
+  .bottomInfoRight {
+    left: 215px;
+  }
+
+  .submitInfo {
+    position: absolute;
+    background: white;
+    width: 150px;
+    left: 75px;
+    top: 200px;
+    border-radius: 10px;
+    z-index: 10;
+  }
+
+  .submitInfo h4 {
+    padding: 5px;
+    margin: 0;
+  }
+
+  .submitInfo .submitInfoText {
+    padding: 15px;
+  }
+
+  .submitInfo hr {
+    padding: 5px;
+    margin: 0;
+  }
   .pro-container {
-    margin: 5rem auto 0;
-    background: rgba(255, 255, 255, 0.7);
+    position: relative;
     width: 80%;
+    margin: 5rem auto 0;
     padding: 40px 60px;
-    overflow: auto;
+    background: rgba(255, 255, 255, 0.7);
     border: solid 1px #eeeeee;
     transition: all 0.5s;
   }
 
   .pro-container:hover {
-    box-shadow: 0 5px 5px rgba(150, 150, 150, 0.1),
-    0 0px 20px rgba(150, 150, 150, 0.1),
-    5px 0 5px rgba(150, 150, 150, 0.1),
-    -5px 0 5px rgba(150, 150, 150, 0.1);
+    box-shadow: 0 0 5px 5px rgba(150, 150, 150, 0.1);
   }
 
   .problemPageTitle {
@@ -551,131 +528,139 @@
     position: fixed;
     font-weight: 100;
   }
-
   .details {
+    position: absolute;
     display: flex;
-    flex-direction: row;
-    margin-bottom: 1em;
+    top: 0;
+    left: -130px;
+    flex-direction: column;
     text-align: center;
-    transform: scale(1);
-    background: rgba(255, 255, 255, 0.6);
+    margin-top: 5rem;
     .i {
       width: 100px;
       border: solid 1px;
       border-radius: 4px;
-      .l, .r {
-        display: block;
+      cursor: pointer;
+      margin-bottom: 1em;
+      .t {
+        color: #fff;
+      }
+      .t, .b {
         padding: .41em 1em;
       }
-      .r {
-        border-left: 1px solid;
+      .b {
+        background: rgba(255, 255, 255, 0.6);
         white-space: pre;
       }
     }
+    .ac {
+      color: #db2828;
+      border-color: #db2828;
+      .t {
+        background: #db2828;
+      }
+    }
+    .tl {
+      color: #16ab39;
+      border-color: #16ab39;
+      .t {
+        background: #16ab39;
+      }
+    }
+    .ml {
+      color: #1678c2;
+      border-color: #1678c2;
+      .t {
+        background: #1678c2;
+      }
+    }
+    .level {
+      color: #2cbfec;
+      border-color: #2cbfec;
+      .t {
+        background: #2cbfec;
+      }
+    }
+    .sj {
+      color: #eaae00;
+      border-color: #eaae00;
+      .t {
+        background: #eaae00;
+      }
+    }
+    .dj {
+      color: #9627ba;
+      border-color: #a333c8;
+      .t {
+        background: #a333c8;
+      }
+    }
+    .cs {
+      .t {
+        background: #333333;
+      }
+    }
   }
-
-  .tags {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 1em;
-    transform: scale(1);
-    .i {
-      border: solid 1px;
-      margin-right: 1em;
-      .l, .r {
-        display: inline-block;
-        padding: .21em .41em;
+}
+.tags {
+  display: flex;
+  flex-direction: row;
+  .i {
+    border: solid 1px;
+    margin-right: 1em;
+    &.h {
+      border: none;
+      padding: .21em .41em;
+    }
+    &.t {
+      border-color: #1e88e5;
+      .l {
+        background: #1e88e5;
+        color: #fff;
+      }
+      .r, .e {
+        border-color: #1e88e5;
+        color: #1e88e5;
+      }
+    }
+    &.g {
+      border-color: #2cbfec;
+      .l {
+        background: #2cbfec;
+        color: #fff;
       }
       .r {
-        border-left: 1px solid;
+        border-color: #2cbfec;
+      }
+      .s {
+        color: #2cbfec;
       }
     }
-  }
-
-  .ac, .all {
+    & > div {
+      display: inline-block;
+      padding: .21em .41em;
+      float: left;
+    }
     .r {
-      position: relative;
+      border-left: 1px solid;
+    }
+    .e {
+      & > div {
+        display: inline-block;
+      }
+      .c {
+        & > div {
+          display: inline-block;
+          cursor: pointer;
+        }
+      }
+      .b {
+        cursor: not-allowed;
+      }
+    }
+    .s {
+      cursor: pointer;
     }
   }
-
-  .ac {
-    color: #db2828;
-    border-color: #db2828;
-    .l {
-      color: #fff;
-      background: #db2828;
-    }
-  }
-
-  .all {
-    color: #1e70bf;
-    border-color: #1e70bf;
-    .l {
-      color: #fff;
-      background: #1e70bf;
-    }
-  }
-
-  .tl {
-    color: #16ab39;
-    border-color: #16ab39;
-    .l {
-      color: white;
-      background: #16ab39;
-    }
-  }
-
-  .ml {
-    color: #1678c2;
-    border-color: #1678c2;
-    .l {
-      color: white;
-      background: #1678c2;
-    }
-  }
-
-  .level {
-    color: #2cbfec;
-    border-color: #2cbfec;
-    .l {
-      color: white;
-      background: #2cbfec;
-    }
-  }
-
-  .sj {
-    color: #eaae00;
-    border-color: #eaae00;
-    .l {
-      color: white;
-      background: #eaae00;
-    }
-  }
-
-  .dj {
-    color: #9627ba;
-    border-color: #a333c8;
-    .l {
-      color: white;
-      background: #a333c8;
-    }
-  }
-
-  .no {
-    border: none !important;
-  }
-
-  .cases {
-    .l {
-      color: white;
-      background: #333333;
-    }
-  }
-
-  .pro-container-left {
-    position: absolute;
-    margin-top: 5rem;
-    background: none;
-    top: 0;
-  }
+}
 </style>
