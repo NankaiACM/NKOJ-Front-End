@@ -25,9 +25,9 @@
 <script>
 import homeComponent from './homeComponent.vue'
 export default {
-  name: "component-home-contest",
-  components:{homeComponent},
-  data() {
+  name: 'component-home-contest',
+  components: {homeComponent},
+  data () {
     return {
       newContests: []
     }
@@ -47,7 +47,7 @@ export default {
   }
 }
 </script>
-<style scope lang="less">
+<style scoped lang="less">
 @import '../../less/global.less';
 #new-contest-container {
   margin: 0 -15px;

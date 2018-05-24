@@ -7,16 +7,9 @@
     </transition>
     <transition name="fade">
       <div id="problemSubmit" v-if="isSee">
-        <transition name="fade">
-          <div class="submitInfo" v-if="isInfo">
-            <h4>提示信息</h4>
-            <hr>
-            <div class="submitInfoText">{{submitInfo}}</div>
-          </div>
-        </transition>
         <h4>Code: {{submitLan}}</h4>
         <div id="codeArea">
-          <editor v-model="submitCode" @init="editorInit" lang="c_cpp" theme="terminal" height="430px"></editor>
+          <editor v-model="submitCode" @init="editorInit" lang="c_cpp" theme="github" height="430px"></editor>
         </div>
         <div>
           <button class="mobileHome btn btn-default" @mouseleave="middleInfo = false"
@@ -48,6 +41,20 @@
         <transition name="fade"><label class="bottomInfo bottomInfoLeft" v-if="leftInfo">Language</label></transition>
         <transition name="fade"><label class="bottomInfo" v-if="middleInfo">Submit</label></transition>
         <transition name="fade"><label class="bottomInfo bottomInfoRight" v-if="rightInfo">Back</label></transition>
+        <div class="bgshadow"
+           @click="isInfo=false"
+           v-if="isInfo">
+        </div>
+        <transition name="fade">
+          <div class="submitInfo" v-if="isInfo">
+            <h4>提示信息</h4>
+            <hr>
+            <div class="text">
+              {{submitInfo}}<br>
+              <router-link :to="{path: '/details/' + solutionId}">点击获取详情</router-link>
+            </div>
+          </div>
+        </transition>
       </div>
     </transition>
     <div class="pro-container">
@@ -251,8 +258,10 @@ export default {
         {crossDomain: true, credentials: true}).then(res => {
         console.log(res)
         _this.isInfo = true
+        _this.solutionId = -1
         if (res.body.code === 0) {
           _this.submitInfo = '成功提交！'
+          _this.solutionId = res.body.data['solution_id']
         } else {
           _this.submitInfo = '未知错误！'
         }
@@ -273,7 +282,7 @@ export default {
       require('brace/mode/javascript')
       require('brace/mode/c_cpp')
       require('brace/mode/less')
-      require('brace/theme/terminal')
+      require('brace/theme/github')
     },
     test: function () {
       console.log('wtf')
@@ -462,28 +471,31 @@ html {
     left: 215px;
   }
 
+  .bgshadow {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #000;
+    opacity: .41;
+    z-index: 9;
+    transition: all .41s;
+  }
+
   .submitInfo {
     position: absolute;
-    background: white;
+    background: #fff;
     width: 150px;
     left: 75px;
     top: 200px;
     border-radius: 10px;
+    border: 1px solid #ccc;
     z-index: 10;
-  }
-
-  .submitInfo h4 {
-    padding: 5px;
-    margin: 0;
-  }
-
-  .submitInfo .submitInfoText {
-    padding: 15px;
-  }
-
-  .submitInfo hr {
-    padding: 5px;
-    margin: 0;
+    text-align: center;
+    .text {
+      padding: 1em;
+    }
   }
   .pro-container {
     position: relative;

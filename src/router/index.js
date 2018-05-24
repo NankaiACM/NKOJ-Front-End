@@ -58,7 +58,7 @@ const router = new Router({
       { path: '/discuss/:id', component: postPage },
       { path: '/ranklist', component: rankPage },
       { path: '/user/:id', component: userPage },
-      { path: '/details/:solution_id', component: detailsPage },
+      { path: '/details/:solutionId', component: detailsPage },
       {
         path: '/contest',
         component: componentContest,
