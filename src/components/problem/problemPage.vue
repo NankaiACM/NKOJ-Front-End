@@ -135,7 +135,7 @@ export default {
         title: 0
       },
       submitLan: 'C++',
-      submitCode: '#include <iostream>',
+      submitCode: '#include <iostream>\n',
       isScrolled,
       isSee: false,
       isStart: false,

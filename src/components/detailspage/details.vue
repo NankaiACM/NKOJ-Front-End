@@ -49,9 +49,7 @@
     <div>
       <h3><span class="glyphicon glyphicon-pencil"></span> 代码内容&nbsp;<button type="button" class="btn btn-info"><span class="glyphicon glyphicon-play" title="在线运行"></span></button></h3>
       <div>
-        <pre>
-        {{o.code}}
-        </pre>
+        <pre>{{o.code}}</pre>
       </div>
     </div>
   </div>
