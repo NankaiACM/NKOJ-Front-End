@@ -18,12 +18,12 @@
     {
       "value": "101",
       "status": "Compilation Error",
-      "label_class": "btn-danger"
+      "label_class": "btn-light"
     },
     {
       "value": "103",
       "status": "Runtime Error",
-      "label_class": "btn-danger"
+      "label_class": "btn-warning"
     },
     {
       "value": "105",

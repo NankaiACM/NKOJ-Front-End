@@ -18,7 +18,7 @@
       </div>
       <div>
         <h3><span class="glyphicon glyphicon-console"></span> 编译信息</h3>
-        <div class="alert alert-info">{{o.compile_info || '无输出'}}</div>
+        <div class="alert alert-info"><samp style="white-space: pre">{{o.compile_info || '无输出'}}</samp></div>
       </div>
       <div>
         <h3><span class="glyphicon glyphicon-pencil"></span> 代码
