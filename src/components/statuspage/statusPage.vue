@@ -121,6 +121,14 @@ export default {
       }
       if (index !== -1) list.splice(index, list.length - index) // js 引用
     },
+    removeHeigher: function (list) {
+      var index = -1
+      for (let i = 0; i < list.length; i++) {
+        if (list[i]['solution_id'] < this.minId) break
+        index = i
+      }
+      if (index !== -1) list.splice(0, index)
+    },
     infiniteHandler: function ($state) {
       // if ($state.complete) $state.complete()
       // if ($state.loaded) $state.loaded()
@@ -135,6 +143,7 @@ export default {
             }
             vm.statusList = res.body.data
             vm.maxId = vm.statusList[0]['solution_id']
+            vm.minId = vm.statusList[vm.statusList.length - 1]['solution_id']
             if ($state.loaded) $state.loaded()
           }, function (e) {
             console.log('init get erro')
@@ -149,16 +158,19 @@ export default {
           var tmp = vm.statusList
           if (!res.body.data) {
             console.log('infinite feedback erro')
-            if ($state.loaded) $state.loaded() // must call this
+            if ($state.complete) $state.complete()
             return -1
           }
           const min = res.body.data[res.body.data.length - 1]['solution_id']
-          if (min === vm.minId) if ($state.complete) $state.complete()
+          if (min === vm.minId) {
+            console.log('stop')
+            if ($state.complete) $state.complete()
+            return 0
+          }
+          vm.removeHeigher(res.body.data)
           vm.minId = min
-          vm.removeLower(res.body.data)
           tmp = tmp.concat(res.body.data)
           vm.statusList = tmp
-          vm.maxId = vm.statusList[0]['solution_id']
           if ($state.loaded) $state.loaded()
         }, function (e) {
           console.log('infinite erro')
