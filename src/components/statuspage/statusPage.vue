@@ -15,44 +15,44 @@
           <th>submit time</th>
         </tr>
         </thead>
-        <tbody>
-        <tr v-for="(status, index) in statusList" :key="index">
-          <td class="hidden-xs">{{status.solution_id}}</td>
-          <td>
-            <router-link :to="{path:'user/'+status.user_id}">
-              <span>{{status.nickname}}</span>
-            </router-link>
-          </td>
-          <td>
-            <router-link :to="{path:'problem/'+status.problem_id}">
-              <span class="label label-info">{{status.problem_id}}</span>
-            </router-link>
-          </td>
-          <td>
-            <router-link
-              :class="['btn btn-sm status',getStatusClass(status.status_id)]"
-              :style="'background-color: '+status.color"
-              type="button"
-              :to="{path:'details/'+status.solution_id}"
-              tag="button"
-            >
-              {{getStatusText(status.status_id) || status.msg_en}}
-            </router-link>
-          </td>
-          <td>{{lang_hash[status.language]}}</td>
-          <td>
-            {{status.code_size}} byte
-            <router-link v-if="status.code_id" :to="{path:'code/'+status.code_id}">
-              <span class="label label-default">
-              <i class="glyphicon glyphicon-eye-open"></i>
-            </span>
-            </router-link>
-          </td>
-          <td>{{status.time}} ms</td>
-          <td>{{status.memory}} kB</td>
-          <td :title="new Date(status.when).toLocaleString()">{{moment(status.when).fromNow()}}</td>
-        </tr>
-        </tbody>
+        <transition-group tag="tbody" name="list">
+          <tr v-for="(status, index) in statusList" :key="index">
+            <td class="hidden-xs">{{status.solution_id}}</td>
+            <td>
+              <router-link :to="{path:'user/'+status.user_id}">
+                <span>{{status.nickname}}</span>
+              </router-link>
+            </td>
+            <td>
+              <router-link :to="{path:'problem/'+status.problem_id}">
+                <span class="label label-info">{{status.problem_id}}</span>
+              </router-link>
+            </td>
+            <td>
+              <router-link
+                :class="['btn btn-sm status',getStatusClass(status.status_id)]"
+                :style="'background-color: '+status.color"
+                type="button"
+                :to="{path:'details/'+status.solution_id}"
+                tag="button"
+              >
+                {{getStatusText(status.status_id) || status.msg_en}}
+              </router-link>
+            </td>
+            <td>{{lang_hash[status.language]}}</td>
+            <td>
+              {{status.code_size}} byte
+              <router-link v-if="status.code_id" :to="{path:'code/'+status.code_id}">
+                <span class="label label-default">
+                <i class="glyphicon glyphicon-eye-open"></i>
+              </span>
+              </router-link>
+            </td>
+            <td>{{status.time}} ms</td>
+            <td>{{status.memory}} kB</td>
+            <td :title="new Date(status.when).toLocaleString()">{{moment(status.when).fromNow()}}</td>
+          </tr>
+        </transition-group>
       </table>
       <infinite-loading @infinite="infiniteHandler" v-if="isInfinite===true" class="no-more">
           <span slot="no-more">
@@ -261,6 +261,15 @@ export default {
     border-bottom: 0;
     height: 3em;
     text-align: center;
+  }
+
+  .list-enter-active, .list-leave-active {
+    transition: all .41s;
+  }
+
+  .list-enter, .list-leave-to {
+    opacity: 0;
+    transform: translateY(30px);
   }
 
   .table-container table.table tr {
