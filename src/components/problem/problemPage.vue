@@ -49,7 +49,7 @@
           <div class="submitInfo" v-if="isInfo">
             <h4>提示信息</h4>
             <hr>
-            <div class="text">
+            <div class="text" v-if="solutionId">
               {{submitInfo}}<br>
               <router-link :to="{path: '/details/' + solutionId}">点击获取详情</router-link>
             </div>
@@ -258,19 +258,18 @@ export default {
         {crossDomain: true, credentials: true}).then(res => {
         console.log(res)
         _this.isInfo = true
-        _this.solutionId = -1
         if (res.body.code === 0) {
           _this.submitInfo = '成功提交！'
           _this.solutionId = res.body.data['solution_id']
         } else {
-          _this.submitInfo = '未知错误！'
+          _this.submitInfo = `${res.body.message}(${res.body.code})`
         }
       }, err => {
         _this.isInfo = true
         if (err.body.code === 401) {
           _this.submitInfo = '请您登陆！'
         } else {
-          _this.submitInfo = '未知错误！'
+          _this.submitInfo = `未知错误！(${err.body})`
         }
       })
     },
