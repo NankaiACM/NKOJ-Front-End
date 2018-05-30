@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="head-wrapper" :class="{'hasScroll':isScrolled}">
+  <div class="head-wrapper" :class="{'hasScroll':isScrolled || ($route.path.indexOf('account') !== -1)}">
     <div class="head-container">
       <div class="mainIcon"><img height="50px" src="../../assets/logo_new_whitemode.png" v-on:click="$emit('toHome')">
       </div>
@@ -42,13 +42,12 @@
         <div class="userdetail" v-if="userData.isLogin">
           <img class="img-circle" :src="avatarUrl">
           <dropmenu v-if="userData.isLogin" :userData="userData">
-            <li class="nickname">Hi! <span>{{userData.nickname}}</span></li>
+            <li class="nickname">Hi! <span v-if="proAdd"> [管理员] </span><span>{{userData.nickname}}</span></li>
             <li class="hr"><hr></li>
             <li class="link forbiden"><a href="#">我收藏的比赛</a></li>
             <li class="hr"><hr></li>
-            <li class="link"><router-link :to="'/user/'+$store.state.userData.id">用户信息与设置</router-link></li>
-            <li class="link" v-if="proAdd"><router-link to="/admin">出题</router-link></li>
-            <li class="link forbiden" v-if="proAdd"><a href="#">我出的题目</a></li>
+            <li class="link" v-if="usrLog"><router-link to="/account/setting">个人中心</router-link></li>
+            <li class="link" v-if="proAdd"><router-link to="/admin">管理中心</router-link></li>
             <li class="link" v-if="usrLog"><a href="#" @click="logout()">注销</a></li>
             <li class="hr"><hr></li>
             <li class="lst-login">上次登陆日期 {{new Date(userData.lastLogin).toLocaleDateString()}}</li>

@@ -33,7 +33,6 @@
 <script>
 import princeton         from '../chat/princeton.vue'
 import alex              from '../wallpaper/alex.vue'
-import tlex              from '../wallpaper/tlex.vue'
 import homeContest       from './homeContest.vue'
 import homeDiscuss       from './homeDiscuss.vue'
 import homeProblem       from './homeProblems.vue'
@@ -79,7 +78,6 @@ export default {
     HomeComponent,
     princeton,
     alex,
-    tlex,
     homeContest,
     homeDiscuss,
     homeProblem
@@ -194,7 +192,7 @@ export default {
       font-family: '微软雅黑';
     }
     div:nth-child(n+2){
-      margin-top: 30px; 
+      margin-top: 30px;
     }
   }
   .sidebar{
@@ -208,7 +206,7 @@ export default {
       margin: auto;
     }
     div:nth-child(n+2){
-      margin-top: 30px; 
+      margin-top: 30px;
     }
   }
 }

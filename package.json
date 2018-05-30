@@ -77,7 +77,6 @@
     "selenium-server": "^3.11.0",
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
-    "three.js": "^0.77.1",
     "uglifyjs-webpack-plugin": "^1.2.5",
     "url-loader": "^0.5.8",
     "vue-jest": "^1.0.2",

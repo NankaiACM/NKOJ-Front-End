@@ -9,20 +9,17 @@ import problemsPage from '../components/problem/problemPage'
 import statusPage from '../components/statuspage/statusPage'
 import discussPage from '../components/discuss/discussPage'
 import postPage from '../components/discuss/post'
-import userPage from '../components/userPage'
 import componentContest from '../components/contestpage/componentContest'
 import allContest from '../components/contestpage/allContest'
 import contest from '../components/contestpage/contest'
-// import codePage from '../components/codePage'
 import detailsPage from '../components/detailspage/details'
 import rankPage from '../components/ranklist/rankPage'
 import signupPage from '../components/signupPage'
 import adminPage from '../components/admin/admin'
 import adminProblemPage from '../components/admin/adminProblem'
 import adminContest from '../components/admin/adminContest'
-
-import test from '../components/userPageAvatar'
-import test1 from '../components/userPage'
+import account from '../components/account/route.js'
+import space from '../components/space/route'
 
 Vue.use(Router)
 console.log(window.noPointHost)
@@ -40,6 +37,8 @@ const router = new Router({
           { path: '/admin/contest', component: adminContest }
         ]
       },
+      account,
+      ...space,
       { path: '/home', component: componentHome },
       { path: '/problems', component: componentProblems },
       { path: '/notFound', component: componentB },
@@ -57,7 +56,6 @@ const router = new Router({
       { path: '/discuss', component: discussPage },
       { path: '/discuss/:id', component: postPage },
       { path: '/ranklist', component: rankPage },
-      { path: '/user/:id', component: userPage },
       { path: '/details/:solutionId', component: detailsPage },
       {
         path: '/contest',
@@ -74,14 +72,7 @@ const router = new Router({
         ]
       },
       {
-        path: '/sign_up', component: signupPage},
-      {
-        path: '/test',
-        component: test
-      },
-      {
-        path: '/test1',
-        component: test1
+        path: '/sign_up', component: signupPage
       }
     ]
   }, {

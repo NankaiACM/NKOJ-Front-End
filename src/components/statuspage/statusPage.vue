@@ -19,7 +19,7 @@
           <tr v-for="(status, index) in statusList" :key="index">
             <td class="hidden-xs">{{status.solution_id}}</td>
             <td>
-              <router-link :to="{path:'user/'+status.user_id}">
+              <router-link :to="{path:'/space/uid/'+status.user_id}">
                 <span>{{status.nickname}}</span>
               </router-link>
             </td>
