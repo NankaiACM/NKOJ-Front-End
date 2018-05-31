@@ -44,7 +44,7 @@
   </div>
 </template>
 <script>
-var {statusMap, langMap} = require('./map.json')
+  const {statusMap, langMap} = require('./map.json')
 export default {
   data: function () {
     return {
