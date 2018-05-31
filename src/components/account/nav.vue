@@ -2,7 +2,7 @@
 <div id="nav">
   <div class="w">
     <router-link to="/account/setting" class="a">我的信息</router-link>
-    <router-link to="/account/ac" class="a">我的AC</router-link>
+    <router-link to="/account/qus" class="a">我的题目</router-link>
     <router-link to="/account/avatar" class="a">我的头像</router-link>
   </div>
 </div>

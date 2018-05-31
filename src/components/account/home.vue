@@ -4,7 +4,7 @@
     <fish></fish>
   </div>
   <div id="body-wrp">
-    <router-view name="link">
+    <router-view name="link" class="b-wrp">
     </router-view>
     <router-view name="body" class="b-wrp">
     </router-view>

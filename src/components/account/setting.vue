@@ -189,6 +189,8 @@ export default {
         ndata[i] = this.o[i]
       }
       this.n = ndata
+      this.ac = this.o.ac.length
+      this.all = this.o.all.length
     }
   },
   mounted: function () {
@@ -222,6 +224,7 @@ export default {
     transition: all .41s;
     float: right;
     margin-left: 2em;
+    outline: none;
   }
   .trans:hover {
     color: #85B7D9;
