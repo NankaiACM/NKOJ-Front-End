@@ -189,8 +189,10 @@ export default {
         ndata[i] = this.o[i]
       }
       this.n = ndata
-      this.ac = this.o.ac.length
-      this.all = this.o.all.length
+      if (this.o.ac) {
+        this.ac = this.o.ac.length
+        this.all = this.o.all.length
+      }
     }
   },
   mounted: function () {

@@ -1,83 +1,110 @@
 <template>
-<div v-if="isAdmin">
-  <nav class="navbar navbar-default sidebar">
-    <ul class="nav navbar-nav">
-      <li role="presentation"><a href="/admin/problem">Problems</a></li>
-      <li role="presentation"><a href="/admin/contest">Contests</a></li>
-      <li role="presentation"><a href="/admin/user">Users</a></li>
-      <li role="presentation"><a href="/admin/status">Status</a></li>
-    </ul>
-  </nav>
-  <router-view></router-view>
+<div id="admin">
+  <div class="view-wrp" v-if="isAdmin">
+    <div class="b-wrp">
+      <div class="body-wrp">
+        <router-view></router-view>
+      </div>
+    </div>
+    <div class="nav-wrp">
+      <a href="/admin/problem">Problems</a>
+      <a href="/admin/contest">Contests</a>
+      <a href="/admin/rejudge">Rejudge</a>
+    </div>
+  </div>
 </div>
 </template>
 
 <script>
-  import adminProblem from './adminProblem'
-  export default {
-    components: {adminProblem},
-    name: 'admin',
-    data: function () {
-      return {
-        isAdmin: false
-      }
-    },
-    mounted: function () {
-      this.$nextTick(() => {
-        this.initView()
+import adminProblem from './adminProblem'
+export default {
+  components: {adminProblem},
+  name: 'admin',
+  data: function () {
+    return {
+      isAdmin: false
+    }
+  },
+  mounted: function () {
+    this.$nextTick(() => {
+      this.initView()
+    })
+  },
+  methods: {
+    initView: function () {
+      this.$http.get(`${window.noPointHost}/api/admin/role`,
+        {
+          crossDomain: true,
+          timeout: '8000',
+          cache: true,
+          credentials: true
+        }).then((res) => {
+        if (res.body.code === 0) {
+          this.isAdmin = true
+        }
+      }, (err) => {
+        if (err.body.code === 401) {
+          alert('访问不可达')
+          this.$router.push('/')
+        }
       })
-    },
-    methods: {
-      initView: function () {
-        this.$http.get(`${window.noPointHost}/api/admin/role`,
-          {
-            crossDomain: true,
-            timeout: '8000',
-            cache: true,
-            credentials: true
-          }).then((res) => {
-            if (res.body.code === 0) {
-              this.isAdmin = true
-            }
-          }, (err) => {
-            if (err.body.code === 401) {
-              alert('访问不可达')
-              this.$router.push('/')
-            }
-          })
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+#admin {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  padding-top: 60px;
+  background: #fff;
+  overflow-y: auto;
+  font-family: PingFangSC-Regular,Microsoft YaHei,Arial,Helvetica,sans-serif;
+  .view-wrp {
+    height: 100%;
+  }
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #ccd0d7;
+    border-radius: 3px;
+  }
+  .nav-wrp {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 90px;
+    width: 240px;
+    height: 100vh;
+    border-right: solid 1px #ccc;
+    a {
+      display: block;
+      width: 100%;
+      height: 30px;
+      line-height: 30px;
+      text-decoration: none;
+      text-align: center;
+      margin: 2em 0;
+      color: #233;
+      transition: all .41s;
+      &:hover {
+        color: #1e88e5;
       }
     }
   }
-</script>
-
-<style scoped>
-.sidebar {
-  background: hotpink;
-  margin-bottom: 0;
-}
-.sidebar ul {
-  width: 100%;
-}
-.sidebar li{
-  width: 25%;
-}
-.sidebar li:hover, li a:focus{
-  background: none;
-  color: white;
-}
-.sidebar li a:hover{
-  background: none;
-  color: white;
-  font-size: 25px;
-}
-.sidebar li a:focus{
-  color: white;
-}
-.sidebar li a {
-  font-size: 20px;
-  font-family: "Yu Gothic UI";
-  color: white;
-  width:  100%;
-  transition: all 0.2s;
+  .b-wrp {
+    position: relative;
+    padding-left: 240px;
+    height: 100%;
+    .body-wrp {
+      height: 100%;
+      padding: 30px 41px;
+    }
+  }
 }
 </style>

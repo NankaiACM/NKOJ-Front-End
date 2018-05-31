@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="head-wrapper" :class="{'hasScroll':isScrolled || ($route.path.indexOf('account') !== -1)}">
+  <div class="head-wrapper" :class="{'hasScroll': visScrl}">
     <div class="head-container">
       <div class="mainIcon"><img height="50px" src="../../assets/logo_new_whitemode.png" v-on:click="$emit('toHome')">
       </div>
@@ -136,6 +136,9 @@ export default {
     },
     isChage: function () {
       return this.$store.state.userData['user_id']
+    },
+    visScrl: function () {
+      return this.isScrolled || (this.$route.path.indexOf('account') !== -1) || (this.$route.path.indexOf('admin') !== -1)
     }
   },
   watch: {

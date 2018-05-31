@@ -155,7 +155,7 @@ export default {
   components: {notify}
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
   .a, .r {
     margin: 0 .5em;
     cursor: pointer;

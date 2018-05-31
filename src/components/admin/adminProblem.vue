@@ -95,36 +95,38 @@
         </div>
       </div>
       <hr>
-      <div>
-        <label>题目描述</label>
-        <div ref="pDescription" class="adminEditor"></div>
+      <div id="editbox-wrp">
+        <div>
+          <label>题目描述</label>
+          <div ref="pDescription" class="adminEditor"></div>
+        </div>
+        <hr>
+        <div>
+          <label>输入描述</label>
+          <div ref="pInput" class="adminEditor"></div>
+        </div>
+        <hr>
+        <div>
+          <label>输出描述</label>
+          <div ref="pOutput" class="adminEditor"></div>
+        </div>
+        <hr>
+        <div>
+          <label>样例输入</label>
+          <div ref="pSInput" class="adminEditor"></div>
+        </div>
+        <hr>
+        <div>
+          <label>样例输出</label>
+          <div ref="pSOutput" class="adminEditor"></div>
+        </div>
+        <hr>
+        <div>
+          <label>Hint</label>
+          <div ref="pHint" class="adminEditor"></div>
+        </div>
+        <hr>
       </div>
-      <hr>
-      <div>
-        <label>输入描述</label>
-        <div ref="pInput" class="adminEditor"></div>
-      </div>
-      <hr>
-      <div>
-        <label>输出描述</label>
-        <div ref="pOutput" class="adminEditor"></div>
-      </div>
-      <hr>
-      <div>
-        <label>样例输入</label>
-        <div ref="pSInput" class="adminEditor"></div>
-      </div>
-      <hr>
-      <div>
-        <label>样例输出</label>
-        <div ref="pSOutput" class="adminEditor"></div>
-      </div>
-      <hr>
-      <div>
-        <label>Hint</label>
-        <div ref="pHint" class="adminEditor"></div>
-      </div>
-      <hr>
       <button type="submit" class="btn btn-default" @click="problemSubmit">{{buttonInfo}}</button>
       <div style="margin-top: 20px"><label v-if="isInfo">{{submitInfo}}</label></div>
       <div></div>
@@ -134,192 +136,183 @@
 </template>
 
 <script>
-  import Editor from '../../../bin/wangEditor'
-  export default {
-    name: 'admin-problem',
-    data: function () {
-      return {
-        pDescription: '',
-        pInput: '',
-        pOutput: '',
-        pSInput: '',
-        pSOutput: '',
-        pId: '',
-        pTitle: '',
-        pMemory: '',
-        pTime: '',
-        pCase: '',
-        pSpj: false,
-        pDM: false,
-        pTag: '',
-        pLevel: '',
-        pHint: '',
-        isInfo: false,
-        submitInfo: '',
-        isData: false,
-        isModify: false,
-        buttonInfo: '创建新题',
-        isCpp: false,
-        isJava: false,
-        isPython: false
-      }
-    },
-    methods: {
-      dataSubmit: function (e) {
-        e.preventDefault()
-        console.log(this)
-        console.log(this.$refs)
-        let sendPackage = new FormData()
-        if(this.$refs.fileData.files.length > 0) {
-          sendPackage.append('file', this.$refs.fileData.files[0])
-        }
-        if(this.$refs.fileSpj.files.length > 0) {
-          sendPackage.append('file', this.$refs.fileData.files[0])
-          sendPackage.append('lang', this.isCpp ? 0 : this.isJava ? 1 : 2)
-        }
-        this.$http.post(`${window.noPointHost}/api/admin/problem/data/${this.pId}`, sendPackage, res => {
-          console.log(res)
-        })
-      },
-      dataUpload: function (e) {
-        e.preventDefault()
-        this.isData = true
-        this.dataGet()
-      },
-      dataGet: function () {
-        this.isModify = false
-        this.$http.get(`${window.noPointHost}/api/problem/${this.pId}`,
-          {crossDomain : true, credentials : true}).then(res => {
-          if(res.body.code !== 0){
-            alert(`Error: ${res.body.code}`)
-          } else {
-            console.log(res)
-            this.pDescription = res.body.data.content.description
-            this.pInput = res.body.data.content.input
-            this.pOutput = res.body.data.content.output
-            this.pSInput = res.body.data.content.sample_input
-            this.pSOutput = res.body.data.content.sample_output
-            this.pHint = res.body.data.content.hint
-            this.pTitle = res.body.data.title
-            this.pMemory = res.body.data.memory_limit
-            this.pTime = res.body.data.time_limit
-            this.pCase = res.body.data.cases
-            this.pSpj = res.body.data.special_judge
-            this.pDM = res.body.data.detail_judge
-            this.pLevel = res.body.data.level
-            let str = ''
-            res.body.data.tags.forEach( (item, i) => {
-              if(i !== 0) str += '='
-              str += item.name
-            })
-            this.pTag = str
-            this.initView()
-            this.buttonInfo = "修改题目"
-            this.isModify = true
-          }
-        }, err => {
-          console.log(err)
-          alert("Error: " + err.body.code)
-        })
-      },
-      dataModify: function (e) {
-        e.preventDefault()
-        this.isData = false
-        this.dataGet()
-      },
-      problemSubmit : function (e) {
-        e.preventDefault()
-        let sendPackge = {}
-        sendPackge.title = this.pTitle
-        sendPackge.cases = this.pCase
-        sendPackge.time_limit = this.pTime
-        sendPackge.memory_limit = this.pMemory
-        sendPackge.type = "0"
-        sendPackge.special_judge = this.pSpj
-        sendPackge.detail_judge = this.pDM
-        sendPackge.tags = this.pTag.split('=')
-        sendPackge.description = this.pDescription
-        sendPackge.input = this.pInput
-        sendPackge.output = this.pOutput
-        sendPackge.sample_input = this.pSInput
-        sendPackge.sample_output = this.pSOutput
-        sendPackge.hint = this.pHint
-        sendPackge.level = this.pLevel
-        console.log(JSON.stringify(sendPackge))
-        let _this = this
-        this.$http.post(this.isModify ? `${window.noPointHost}/api/admin/problem/update/${this.pId}`
-            : `${window.noPointHost}/api/admin/problem/add`, sendPackge,
-          {crossDomain : true, credentials : true}).then(res => {
-          console.log(res)
-          _this.isInfo = true;
-          if(res.body.code === 0) {
-            _this.submitInfo = '成功提交！'
-          } else {
-            _this.submitInfo = '未知错误！'
-          }
-        }, err => {
-          _this.isInfo = true;
-          if(err.body.code === 401){
-            _this.submitInfo = '请您登陆！'
-          } else {
-            _this.submitInfo = '未知错误！'
-          }
-        })
-      },
-      createEditor: function (x, y) {
-        let editor = new Editor(x)
-        editor.customConfig.onchange = (html) => {
-          this[y] = html
-        }
-        editor.customConfig.uploadImgServer = `${window.noPointHost}/api/admin/upload`
-        editor.customConfig.uploadFileName = 'file'
-        editor.customConfig.uploadImgHooks = {
-          customInsert: function (insertImg, result, editor) {
-            let url = result.data[0]
-            insertImg(`${window.noPointHost}${url}`)
-          }
-        }
-        editor.create()
-        editor.txt.html(this[y])
-      },
-      initView: function () {
-        this.createEditor(this.$refs.pDescription, "pDescription")
-        this.createEditor(this.$refs.pInput, "pInput")
-        this.createEditor(this.$refs.pOutput, "pOutput")
-        this.createEditor(this.$refs.pSInput, "pSInput")
-        this.createEditor(this.$refs.pSOutput, "pSOutput")
-        this.createEditor(this.$refs.pHint, "pHint")
-      }
-    },
-    mounted() {
-      this.initView()
+import Editor from '../../../bin/wangEditor'
+export default {
+  name: 'admin-problem',
+  data: function () {
+    return {
+      pDescription: '',
+      pInput: '',
+      pOutput: '',
+      pSInput: '',
+      pSOutput: '',
+      pId: '',
+      pTitle: '',
+      pMemory: '',
+      pTime: '',
+      pCase: '',
+      pSpj: false,
+      pDM: false,
+      pTag: '',
+      pLevel: '',
+      pHint: '',
+      isInfo: false,
+      submitInfo: '',
+      isData: false,
+      isModify: false,
+      buttonInfo: '创建新题',
+      isCpp: false,
+      isJava: false,
+      isPython: false
     }
+  },
+  methods: {
+    dataSubmit: function (e) {
+      e.preventDefault()
+      console.log(this)
+      console.log(this.$refs)
+      let sendPackage = new FormData()
+      if (this.$refs.fileData.files.length > 0) {
+        sendPackage.append('file', this.$refs.fileData.files[0])
+      }
+      if (this.$refs.fileSpj.files.length > 0) {
+        sendPackage.append('file', this.$refs.fileData.files[0])
+        sendPackage.append('lang', this.isCpp ? 0 : this.isJava ? 1 : 2)
+      }
+      this.$http.post(`${window.noPointHost}/api/admin/problem/data/${this.pId}`, sendPackage, res => {
+        console.log(res)
+      })
+    },
+    dataUpload: function (e) {
+      e.preventDefault()
+      this.isData = true
+      this.dataGet()
+    },
+    dataGet: function () {
+      this.isModify = false
+      this.$http.get(`${window.noPointHost}/api/problem/${this.pId}`,
+        {crossDomain: true, credentials: true}).then(res => {
+        if (res.body.code !== 0) {
+          alert(`Error: ${res.body.code}`)
+        } else {
+          console.log(res)
+          this.pDescription = res.body.data.content.description
+          this.pInput = res.body.data.content.input
+          this.pOutput = res.body.data.content.output
+          this.pSInput = res.body.data.content.sample_input
+          this.pSOutput = res.body.data.content.sample_output
+          this.pHint = res.body.data.content.hint
+          this.pTitle = res.body.data.title
+          this.pMemory = res.body.data.memory_limit
+          this.pTime = res.body.data.time_limit
+          this.pCase = res.body.data.cases
+          this.pSpj = res.body.data.special_judge
+          this.pDM = res.body.data.detail_judge
+          this.pLevel = res.body.data.level
+          let str = ''
+          res.body.data.tags.forEach((item, i) => {
+            if (i !== 0) str += '='
+            str += item.name
+          })
+          this.pTag = str
+          this.initView()
+          this.buttonInfo = '修改题目'
+          this.isModify = true
+        }
+      }, err => {
+        console.log(err)
+        alert('Error: ' + err.body.code)
+      })
+    },
+    dataModify: function (e) {
+      e.preventDefault()
+      this.isData = false
+      this.dataGet()
+    },
+    problemSubmit: function (e) {
+      e.preventDefault()
+      let sendPackge = {}
+      sendPackge.title = this.pTitle
+      sendPackge.cases = this.pCase
+      sendPackge.time_limit = this.pTime
+      sendPackge.memory_limit = this.pMemory
+      sendPackge.type = '0'
+      sendPackge.special_judge = this.pSpj
+      sendPackge.detail_judge = this.pDM
+      sendPackge.tags = this.pTag.split('=')
+      sendPackge.description = this.pDescription
+      sendPackge.input = this.pInput
+      sendPackge.output = this.pOutput
+      sendPackge.sample_input = this.pSInput
+      sendPackge.sample_output = this.pSOutput
+      sendPackge.hint = this.pHint
+      sendPackge.level = this.pLevel
+      console.log(JSON.stringify(sendPackge))
+      let _this = this
+      this.$http.post(this.isModify ? `${window.noPointHost}/api/admin/problem/update/${this.pId}`
+        : `${window.noPointHost}/api/admin/problem/add`, sendPackge,
+      {crossDomain: true, credentials: true}).then(res => {
+        console.log(res)
+        _this.isInfo = true
+        if (res.body.code === 0) {
+          _this.submitInfo = '成功提交！'
+        } else {
+          _this.submitInfo = '未知错误！'
+        }
+      }, err => {
+        _this.isInfo = true
+        if (err.body.code === 401) {
+          _this.submitInfo = '请您登陆！'
+        } else {
+          _this.submitInfo = '未知错误！'
+        }
+      })
+    },
+    createEditor: function (x, y) {
+      let editor = new Editor(x)
+      editor.customConfig.onchange = (html) => {
+        this[y] = html
+      }
+      editor.customConfig.uploadImgServer = `${window.noPointHost}/api/admin/upload`
+      editor.customConfig.uploadFileName = 'file'
+      editor.customConfig.uploadImgHooks = {
+        customInsert: function (insertImg, result, editor) {
+          let url = result.data[0]
+          insertImg(`${window.noPointHost}${url}`)
+        }
+      }
+      editor.create()
+      editor.txt.html(this[y])
+    },
+    initView: function () {
+      this.createEditor(this.$refs.pDescription, 'pDescription')
+      this.createEditor(this.$refs.pInput, 'pInput')
+      this.createEditor(this.$refs.pOutput, 'pOutput')
+      this.createEditor(this.$refs.pSInput, 'pSInput')
+      this.createEditor(this.$refs.pSOutput, 'pSOutput')
+      this.createEditor(this.$refs.pHint, 'pHint')
+    }
+  },
+  mounted () {
+    this.initView()
   }
+}
 </script>
 
 <style scoped>
-.adminPage{
-  background: rgba(255,255,255,.7);
-  padding: 20px 0;
-}
 .adminForm{
   background: white;
-  padding: 20px 0;
-  border-radius: 5px;
-  width: 80%;
-  margin-left: 10%;
   transition: all 0.2s;
 }
-.adminForm:hover{
-  box-shadow: 0 0 15px 1px #e1e1e1;
-}
 .adminFormGroup {
-  margin-top: 45px;
+  margin: 1em 2em;
 }
 .adminEditor {
   text-align: left;
   width: 80%;
-  margin-left: 10%;
-  margin-top: 20px;
+  margin: 2em 10%;
+}
+#editbox-wrp label {
+  margin: 2em 10% 0 10%;
 }
 </style>
