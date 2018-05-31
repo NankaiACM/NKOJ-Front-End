@@ -5,9 +5,14 @@
         <h3>
           <span class="glyphicon glyphicon-screenshot"></span> 提交 {{solution_id}} 至
           <router-link :to="{path: '/problem/' + o.problem_id}">{{o.problem_id}}</router-link>
+          <span>[shared:
+            <span v-if="!o.shared">no<span class="a" @click="$router.addShare(vm, solution_id, o)">&lt;add&gt;</span></span>
+            <span v-if="o.shared">yes<span class="r" @click="$router.removeShare(vm, solution_id, o)">&lt;remove&gt;</span></span>
+            ]
+          </span>
         </h3>
         <div class="alert alert-info">
-          时间: {{new Date(o.when).toLocaleString()}} / 用时: {{o.time}} ms / 内存: {{o.memory}} byte / 代码长度: {{o.code_size}}
+          时间: {{new Date(o.when).toLocaleString()}} / 用时: {{o.time}} ms / 内存: {{o.memory}} kB / 代码长度: {{o.code_size}} byte
         </div>
       </div>
       <div>
@@ -60,83 +65,102 @@
         </div>
       </div>
     </div>
+    <notify :title="notify.title" :message="notify.message" :count="notify.count"></notify>
   </div>
 </template>
 <script>
-  export default {
-    name: 'details-page',
-    data: function () {
-      return {
+import notify from '../shell/notify'
+export default {
+  name: 'details-page',
+  data: function () {
+    return {
+      notify: {
+        title: '',
+        message: '',
+        count: 0
+      },
+      solution_id: -1,
+      casesNum: 0,
+      share: false,
+      o: {
         solution_id: -1,
-        casesNum: 0,
-        o: {
-          solution_id: -1,
-          user_id: -1,
-          problem_id: 0,
-          status_id: 0,
-          language: 0,
-          code_size: 0,
-          time: 0,
-          memory: 0,
-          when: '',
-          msg_short: '',
-          msg_en: '',
-          msg_cn: '',
-          nickname: 'NULL',
-          canViewOutput: false,
-          compile_info: 'segmentFault',
-          code: 'function(){}();'
-        },
-        evaluateNodes: [{
-          stdin: '0x3df67d',
-          stdout: '',
-          execout: ''
-        }]
-      }
-    },
-    methods: {
-      initView: function () {
-        const vm = this
-        const solutionId = vm.$route.params.solutionId
-        if (!solutionId) {
-          alert('参数错误')
-          return console.erro(vm.$route.params)
-        }
-        console.log(solutionId)
-        vm.solution_id = solutionId
-        vm.getO()
+        user_id: -1,
+        problem_id: 0,
+        status_id: 0,
+        language: 0,
+        code_size: 0,
+        time: 0,
+        memory: 0,
+        when: '',
+        msg_short: '',
+        msg_en: '',
+        msg_cn: '',
+        nickname: 'NULL',
+        canViewOutput: false,
+        compile_info: 'segmentFault',
+        code: 'function(){}();'
       },
-      getO: function () {
-        const vm = this
-        vm.$http.get(window.noPointHost + '/api/status/detail/' + vm.solution_id)
-          .then(function (res) {
-            const data = res.body.data
-            if (!data) return console.info('error')
-            vm.o = data
-            vm.casesNum = data.cases || 1
-            if (data.canViewOutput) vm.getOutput(1)
-          })
-      },
-      getOutput: function (caseId) {
-        const vm = this
-        console.log('this is ', this)
-        vm.$http.get(window.noPointHost + '/api/status/detail/' + vm.solution_id + '/case/' + caseId)
-          .then(function (res) {
-            if (res.body.code !== 0) return 0
-            console.log('that is ', this)
-            vm.evaluateNodes.push(res.body.data)
-            if (caseId < vm.casesNum) vm.getOutput(caseId + 1)
-          })
-      }
-    },
-    mounted: function () {
-      this.$nextTick(function () {
-        this.initView()
-      })
+      evaluateNodes: [{
+        stdin: '0x3df67d',
+        stdout: '',
+        execout: ''
+      }]
     }
-  }
+  },
+  computed: {
+    vm: function () {
+      return this
+    }
+  },
+  methods: {
+    initView: function () {
+      const vm = this
+      const solutionId = vm.$route.params.solutionId
+      if (!solutionId) {
+        alert('参数错误')
+        return console.erro(vm.$route.params)
+      }
+      console.log(solutionId)
+      vm.solution_id = solutionId
+      vm.getO()
+    },
+    getO: function () {
+      const vm = this
+      vm.$http.get(window.noPointHost + '/api/status/detail/' + vm.solution_id)
+        .then(function (res) {
+          const data = res.body.data
+          if (!data) return console.info('error')
+          vm.o = data
+          vm.casesNum = data.cases || 1
+          if (data.canViewOutput) vm.getOutput(1)
+        })
+    },
+    getOutput: function (caseId) {
+      const vm = this
+      console.log('this is ', this)
+      vm.$http.get(window.noPointHost + '/api/status/detail/' + vm.solution_id + '/case/' + caseId)
+        .then(function (res) {
+          if (res.body.code !== 0) return 0
+          console.log('that is ', this)
+          vm.evaluateNodes.push(res.body.data)
+          if (caseId < vm.casesNum) vm.getOutput(caseId + 1)
+        })
+    }
+  },
+  mounted: function () {
+    this.$nextTick(function () {
+      this.initView()
+    })
+  },
+  components: {notify}
+}
 </script>
 <style lang="less">
+  .a, .r {
+    margin: 0 .5em;
+    cursor: pointer;
+  }
+
   .details-container {
     padding: 2em 3em;
     background: rgba(255, 255, 255, 0.7);
@@ -148,6 +172,10 @@
 
   .eva-node > .alert {
     padding-top: 0em;
+  }
+
+  .alert-info {
+    background: rgba(217, 237, 247, 0.23);
   }
 
   @media (min-width: 576px) {

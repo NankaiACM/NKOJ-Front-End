@@ -134,5 +134,36 @@ router.checkUser = function (store, logined, notLogging, catchError) {
     catchError(e) // 失败时的回调
   })
 }
+router.addShare = function (vm, solutionId, status) {
+  console.log(vm)
+  vm.$http.get(window.noPointHost + '/api/status/share/add/' + solutionId)
+    .then(function (r) {
+      if (r.body.code === 0) {
+        vm.notify.title = 'add status'
+        vm.notify.message = 'add succeed'
+        vm.notify.count++
+        if (status) status.shared = true
+        return 0
+      }
+      vm.notify.title = 'add status'
+      vm.notify.message = 'add failed'
+      vm.notify.count++
+    })
+}
+router.removeShare = function (vm, solutionId, status) {
+  vm.$http.get(window.noPointHost + '/api/status/share/remove/' + solutionId)
+    .then(function (r) {
+      if (r.body.code === 0) {
+        vm.notify.title = 'remove status'
+        vm.notify.message = 'remove succeed'
+        vm.notify.count++
+        if (status) status.shared = false
+        return 0
+      }
+      vm.notify.title = 'remove status'
+      vm.notify.message = 'remove failed'
+      vm.notify.count++
+    })
+}
 
 export default router

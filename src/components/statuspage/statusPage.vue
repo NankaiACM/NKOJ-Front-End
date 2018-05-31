@@ -13,6 +13,7 @@
           <th>time</th>
           <th>memory</th>
           <th>submit time</th>
+          <th>shared</th>
         </tr>
         </thead>
         <transition-group tag="tbody" name="list">
@@ -51,6 +52,12 @@
             <td>{{status.time}} ms</td>
             <td>{{status.memory}} kB</td>
             <td :title="new Date(status.when).toLocaleString()">{{moment(status.when).fromNow()}}</td>
+            <td>
+              <span class="share" v-if="status.user_id === myId">
+                <span v-if="status.shared">yes <span class="r glyphicon glyphicon-remove" @click="$router.removeShare(vm, status.solution_id, status)"></span></span>
+                <span v-if="!status.shared">no <span class="a" @click="$router.addShare(vm, status.solution_id, status)">+</span></span>
+              </span>
+            </td>
           </tr>
         </transition-group>
       </table>
@@ -64,11 +71,13 @@
         </div>
       </div>
     </div>
+    <notify :title="notify.title" :message="notify.message" :count="notify.count"></notify>
   </div>
 </template>
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
 import moment from 'moment'
+import notify from '../shell/notify'
 
 const {statusMap, langMap, langHash} = require('./map.json')
 export default {
@@ -76,6 +85,11 @@ export default {
   props: ['isFilter', 'isInfinite', 'isBtn', 'apiUrl'],
   data: function () {
     return {
+      notify: {
+        title: '',
+        message: '',
+        count: ''
+      },
       pool: [],
       statusList: [],
       status_map: statusMap,
@@ -119,7 +133,7 @@ export default {
     removeHiger: function (list) {
       let index = -1
       for (let i = 0; i < list.length; i++) {
-        if (list[i]['solution_id'] < this.minId) break;
+        if (list[i]['solution_id'] < this.minId) break
         index = i
       }
       if (index !== -1) list.splice(0, index)
@@ -206,7 +220,8 @@ export default {
     }
   },
   components: {
-    InfiniteLoading
+    InfiniteLoading,
+    notify
   },
   watch: {
     '$store.state.statusFilter.submit': function (n, o) {
@@ -216,6 +231,14 @@ export default {
     },
     maxId: function (n, o) {
       console.log('new maxId: ' + n)
+    }
+  },
+  computed: {
+    myId: function () {
+      return this.$store.state.userData['user_id']
+    },
+    vm: function () {
+      return this
     }
   }
 }
@@ -339,6 +362,22 @@ export default {
 
   .no-more {
     margin: 2em auto;
+  }
+
+  .share {
+    .a, .r {
+      display: inline-block;
+      cursor: pointer;
+      transition: all .41s;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      &:hover {
+        background: #d0e5f2;
+        border-radius: 50%;
+      }
+    }
   }
 
   @media (min-width: 768px) {
