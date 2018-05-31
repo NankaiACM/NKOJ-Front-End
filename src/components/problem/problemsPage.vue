@@ -64,8 +64,8 @@ export default {
       aclist: [],
       onlist: [],
       pageSize: 20,
-      queryleft: 1,
-      queryright: 150,
+      queryleft: 0,
+      queryright: 50,
       viewing: 1, // >=1
       total: 1
     }
@@ -79,7 +79,7 @@ export default {
   methods: {
     initView: function () {
       console.log(this.queryright)
-      this.$http.get(`${window.noPointHost}/api/problems/list?l=${this.queryleft}&r=${this.queryright}`)
+      this.$http.get(`${window.noPointHost}/api/problems/list/${this.queryleft}/${this.queryright}`)
         .then(function (res) {
           this.rawList = res.body.data.list
           this.total = res.body.data.served
@@ -87,8 +87,9 @@ export default {
         })
     },
     stateAstarRender: function (tmp) {
-      for (var x in tmp) {
-        var item = tmp[x]
+      for (let x in tmp) {
+        if (!tmp.hasOwnProperty(x)) continue
+        let item = tmp[x]
         tmp[x].isStar = false
         tmp[x].state = 'none'
         if (this.starlist.indexOf(item.problem_id) !== -1) {
@@ -97,20 +98,20 @@ export default {
         if (this.aclist.indexOf(item.problem_id) !== -1) {
           item[x].state = 'ac'
         }
-        if (this.onlist.indexOf(item.problem_id) !== -1) {
+        else if (this.onlist.indexOf(item.problem_id) !== -1) {
           item[x].state = 'on'
         }
       }
       return tmp
     },
     raw2listrender: function () {
-      var left = (this.viewing - 1) * this.pageSize + 1
-      if (left > this.total) left = this.tatal
-      if (left < 1) left = 1
-      var right = (this.viewing + 0) * this.pageSize
-      if (right > this.tatal) right = this.tatal
-      if (right < 1) right = 1
-      var tmp = this.rawList.slice(left - 1, right)
+      let left = (this.viewing - 1) * this.pageSize
+      if (left > this.total) left = this.total
+      else if (left < 0) left = 0
+      let right = this.viewing * this.pageSize
+      if (right > this.total) right = this.total
+      else if (right < 0) right = 0
+      const tmp = this.rawList.slice(left, right)
       this.problemList = this.stateAstarRender(tmp)
       console.log(tmp)
     },

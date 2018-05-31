@@ -64,15 +64,13 @@
         </div>
       </div>
     </div>
-    <status-details :datas="details.datas" v-if="showdt" @rmdt="showdt = false"></status-details>
   </div>
 </template>
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
-import StatusDetails from './details.vue'
 import moment from 'moment'
 
-var {statusMap, langMap, langHash} = require('./map.json')
+const {statusMap, langMap, langHash} = require('./map.json')
 export default {
   name: 'statusPage',
   props: ['isFilter', 'isInfinite', 'isBtn', 'apiUrl'],
@@ -93,16 +91,11 @@ export default {
         limit: 150, // 单次请求最大量
         last: -1
       },
-      showdt: false,
       maxId: -1,
       minId: -1
     }
   },
   methods: {
-    setDetails: function (solution) {
-      this.details.datas = solution
-      this.showdt = true
-    },
     getStatusClass: function (statusId) {
       statusId = statusId.toString()
       let status = 'label-default'
@@ -116,7 +109,7 @@ export default {
       return status
     },
     removeLower: function (list) {
-      var index = -1
+      let index = -1
       for (let i = list.length - 1; i >= 0; i--) {
         if (list[i]['solution_id'] > this.maxId) break
         index = i
@@ -124,7 +117,7 @@ export default {
       if (index !== -1) list.splice(index, list.length - index) // js 引用
     },
     removeHiger: function (list) {
-      var index = -1
+      let index = -1
       for (let i = 0; i < list.length; i++) {
         if (list[i]['solution_id'] < this.minId) break;
         index = i
@@ -157,7 +150,7 @@ export default {
       console.log('向魔法机请求更久远的数据')
       vm.$http.get(vm.apiUrl + '/' + from + '/' + limit)
         .then(function (res) {
-          var tmp = vm.statusList
+          let tmp = vm.statusList
           if (!res.body.data) {
             console.log('infinite feedback erro')
             if ($state.complete) $state.complete()
@@ -189,9 +182,7 @@ export default {
             console.log('没有新的更新')
             return 0
           }
-          var tmp = res.body.data
-          tmp = tmp.concat(vm.statusList)
-          vm.statusList = tmp
+          vm.statusList = res.body.data.concat(vm.statusList)
           vm.maxId = vm.statusList[0]['solution_id']
           console.log('魔法状态更新')
         }, function (e) {
@@ -215,8 +206,7 @@ export default {
     }
   },
   components: {
-    InfiniteLoading,
-    StatusDetails
+    InfiniteLoading
   },
   watch: {
     '$store.state.statusFilter.submit': function (n, o) {
