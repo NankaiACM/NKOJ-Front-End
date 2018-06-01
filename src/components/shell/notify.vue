@@ -43,6 +43,15 @@ export default {
   .t, .m {
     padding: .3em 1em;
     word-break: break-word;
+    max-height: 60vh;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #ccd0d7;
+      border-radius: 3px;
+    }
   }
   .x {
     position: absolute;
