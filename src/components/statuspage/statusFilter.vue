@@ -44,7 +44,7 @@
   </div>
 </template>
 <script>
-  const {statusMap, langMap} = require('./map.json')
+const {statusMap, langMap} = require('./map.json')
 export default {
   data: function () {
     return {
@@ -118,5 +118,3 @@ export default {
   outline: none;
 }
 </style>
-
-

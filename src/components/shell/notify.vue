@@ -29,6 +29,7 @@ export default {
 <style lang="less" scoped>
 #notify {
   background: #fff;
+  max-width: 40vw;
   box-shadow: 0 0 10px 1px #ccc;
   position: fixed;
   padding: 1em 30px 1em 1em;
@@ -41,6 +42,7 @@ export default {
   }
   .t, .m {
     padding: .3em 1em;
+    word-break: break-word;
   }
   .x {
     position: absolute;

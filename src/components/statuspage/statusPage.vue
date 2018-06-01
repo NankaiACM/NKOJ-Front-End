@@ -18,7 +18,19 @@
         </thead>
         <transition-group tag="tbody" name="list">
           <tr v-for="(status, index) in statusList" :key="index">
-            <td class="hidden-xs">{{status.solution_id}}</td>
+            <td class="hidden-xs idbox">
+              {{status.solution_id}}
+              <span v-if="isAdmin" class="rejudge glyphicon glyphicon-repeat" @click="notify.mptdex = index" title="rejudge this"></span>
+              <transition name="mptfade">
+                <span v-if="notify.mptdex === index" class="mptboard">
+                  <span>rejudge:{{status.solution_id}}</span>
+                  <span>
+                    <span class="reok glyphicon glyphicon-ok" @click="rejudge(status.solution_id)"></span>
+                    <span class="rerm glyphicon glyphicon-remove" @click="notify.mptdex = -1"></span>
+                  </span>
+                </span>
+              </transition>
+            </td>
             <td>
               <router-link :to="{path:'/space/uid/'+status.user_id}">
                 <span>{{status.nickname}}</span>
@@ -53,9 +65,9 @@
             <td>{{status.memory}} kB</td>
             <td :title="new Date(status.when).toLocaleString()">{{moment(status.when).fromNow()}}</td>
             <td>
-              <span class="share" v-if="status.user_id === myId">
-                <span v-if="status.shared">yes <span class="r glyphicon glyphicon-remove" @click="$router.removeShare(vm, status.solution_id, status)"></span></span>
-                <span v-if="!status.shared">no <span class="a" @click="$router.addShare(vm, status.solution_id, status)">+</span></span>
+              <span class="share">
+                <span v-if="status.shared">yes <span v-if="status.user_id === myId" class="rm" @click="$router.removeShare(vm, status.solution_id, status)">x</span></span>
+                <span v-if="!status.shared">no <span v-if="status.user_id === myId" class="add" @click="$router.addShare(vm, status.solution_id, status)">+</span></span>
               </span>
             </td>
           </tr>
@@ -88,7 +100,8 @@ export default {
       notify: {
         title: '',
         message: '',
-        count: ''
+        count: '',
+        mptdex: -1
       },
       pool: [],
       statusList: [],
@@ -110,6 +123,21 @@ export default {
     }
   },
   methods: {
+    rejudge: function (solutionId) {
+      const vm = this
+      vm.$http.get(window.noPointHost + '/api/judge/rejudge/' + solutionId)
+        .then(function (res) {
+          vm.notify.title = 'rejudge status'
+          vm.notify.message = JSON.stringify(res.body)
+          vm.notify.count++
+          vm.notify.mptdex = -1
+        }, function (e) {
+          vm.notify.title = 'rejudge status: error'
+          vm.notify.message = JSON.stringify(e.body)
+          vm.notify.count++
+          vm.notify.mptdex = -1
+        })
+    },
     getStatusClass: function (statusId) {
       statusId = statusId.toString()
       let status = 'label-default'
@@ -239,6 +267,11 @@ export default {
     },
     vm: function () {
       return this
+    },
+    isAdmin: function () {
+      if (!this.$store.state.userData.o) return false
+      if (!this.$store.state.userData.o.perm) return false
+      return this.$store.state.userData.o.perm.ADD_PROBLEM === '1'
     }
   }
 }
@@ -364,20 +397,51 @@ export default {
     margin: 2em auto;
   }
 
-  .share {
-    .a, .r {
-      display: inline-block;
-      cursor: pointer;
-      transition: all .41s;
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-      text-align: center;
-      &:hover {
-        background: #d0e5f2;
-        border-radius: 50%;
-      }
+  .idbox {
+    position: relative;
+  }
+
+  .mptboard {
+    position: absolute;
+    left: 0;
+    background: #fff;
+    box-shadow: 0 0 3px 3px #ccc;
+    padding: .5em 1em;
+    z-index: 141;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mptfade-enter-active, .mptfade-leave-active {
+    transition: all .41s;
+    opacity: 1;
+  }
+
+  .mptfade-enter, .mptfade-leave-to {
+    opacity: 0;
+  }
+
+  .add, .rm, .rejudge,
+  .reok, .rerm{
+    display: inline-block;
+    cursor: pointer;
+    transition: all .41s;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    transition: all 1.41s;
+    &:hover {
+      transform: rotate(360deg);
+      background: #d0e5f2;
+      border-radius: 50%;
     }
+  }
+
+  .reok:hover {
+    color: #c24f4a;
+    transform: rotate(0);
   }
 
   @media (min-width: 768px) {
