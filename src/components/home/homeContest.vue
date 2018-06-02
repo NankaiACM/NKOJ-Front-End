@@ -32,17 +32,17 @@ export default {
       newContests: []
     }
   },
-  mounted: function() {
-    this.$nextTick(function() {
-      this.initView();
-    });
+  mounted: function () {
+    this.$nextTick(function () {
+      this.initView()
+    })
   },
   methods: {
-    initView: function() {
-      var _this = this;
-      this.$http.get('/static/newContests.json').then(function(res) {
-        _this.newContests = res.body.data;
-      });
+    initView: function () {
+      var _this = this
+      this.$http.get('/static/rm/newContests.json').then(function (res) {
+        _this.newContests = res.body.data
+      })
     }
   }
 }

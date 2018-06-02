@@ -32,47 +32,47 @@
 <script>
 import homeComponent from './homeComponent.vue'
 export default {
-  name: "component-home-discuss",
-  components:{homeComponent},
-  data() {
+  name: 'component-home-discuss',
+  components: {homeComponent},
+  data () {
     return {
       newDiscuss: []
     }
   },
-  mounted: function() {
-    this.$nextTick(function() {
-      this.initView();
-    });
+  mounted: function () {
+    this.$nextTick(function () {
+      this.initView()
+    })
   },
   methods: {
-    initView: function() {
-      this.$http.get('/static/newDiscuss.json')
-        .then(function(res) {
-        this.newDiscuss = res.body.data;
-      });
+    initView: function () {
+      this.$http.get('/static/rm/newDiscuss.json')
+        .then(function (res) {
+          this.newDiscuss = res.body.data
+        })
     },
-    stamp2str: function(timestamp) {
-      timestamp = Number(timestamp);
-      if (isNaN(timestamp)) return "时间之外";
-      var nowstamp = new Date().getTime();
-      var d = nowstamp - timestamp;
-      d /= 1000;
-      if (d < 60) return ~~d + '秒前';
-      d /= 60;
-      if (d < 60) return ~~d + '分钟前';
-      d /= 60;
-      if (d < 24) return ~~d + '小时前';
-      d /= 24;
-      if (d < 366) return ~~d + '天前';
-      d /= 365;
-      return ~~d + '年前';
+    stamp2str: function (timestamp) {
+      timestamp = Number(timestamp)
+      if (isNaN(timestamp)) return '时间之外'
+      var nowstamp = new Date().getTime()
+      var d = nowstamp - timestamp
+      d /= 1000
+      if (d < 60) return ~~d + '秒前'
+      d /= 60
+      if (d < 60) return ~~d + '分钟前'
+      d /= 60
+      if (d < 24) return ~~d + '小时前'
+      d /= 24
+      if (d < 366) return ~~d + '天前'
+      d /= 365
+      return ~~d + '年前'
     }
   }
 }
 </script>
 <style>
 .home-discuss {
-  text-align: left;  
+  text-align: left;
 }
 
 .leftimg {

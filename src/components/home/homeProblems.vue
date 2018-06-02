@@ -38,7 +38,7 @@ export default {
   methods: {
     initView: function () {
       var _this = this
-      this.$http.get('../../static/newProblems.json').then(function (res) {
+      this.$http.get('../../static/rm/newProblems.json').then(function (res) {
         console.log('加载homeProblems数据')
         _this.newProblems = res.body.data
       })
