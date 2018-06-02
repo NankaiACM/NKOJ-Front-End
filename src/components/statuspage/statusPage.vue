@@ -19,7 +19,7 @@
         <transition-group tag="tbody" name="list">
           <tr v-for="(status, index) in statusList" :key="index">
             <td class="hidden-xs idbox">
-              {{status.solution_id}}
+              <span :class="{'has-contest' : status.contest_id}">{{status.solution_id}}<span v-if="status.contest_id">({{status.contest_id}})</span></span>
               <span v-if="isAdmin" class="rejudge glyphicon glyphicon-repeat" @click="notify.mptdex = index" title="rejudge this"></span>
               <transition name="mptfade">
                 <span v-if="notify.mptdex === index" class="mptboard">
@@ -426,17 +426,20 @@ export default {
   .reok, .rerm{
     display: inline-block;
     cursor: pointer;
-    transition: all .41s;
     width: 20px;
     height: 20px;
     line-height: 20px;
     text-align: center;
-    transition: all 1.41s;
+    transition: all .41s;
     &:hover {
       transform: rotate(360deg);
       background: #d0e5f2;
       border-radius: 50%;
     }
+  }
+
+  .has-contest {
+    color: green;
   }
 
   .reok:hover {

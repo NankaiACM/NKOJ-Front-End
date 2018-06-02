@@ -2,7 +2,7 @@
   <div id="problemPage">
     <transition name="up">
       <div class="submitGirl" v-if="isStart" @click="iCanSee">
-        <img src="../../assets/Akkarin.png" width="150px" height="150px">
+        <img src="../../assets/Akkarin.png" style="width: 150px; height: 150px">
       </div>
     </transition>
     <transition name="fade">
@@ -49,8 +49,8 @@
           <div class="submitInfo" v-if="isInfo">
             <h4>提示信息</h4>
             <hr>
+            {{submitInfo}}
             <div class="text" v-if="solutionId">
-              {{submitInfo}}<br>
               <router-link :to="{path: '/details/' + solutionId}">点击获取详情</router-link>
             </div>
           </div>
@@ -86,6 +86,10 @@
         </div>
       </div>
       <div class="details">
+        <div class="i ct" v-if="o.contest_id">
+          <div class="t">Contest</div>
+          <div class="b">{{o.contest_id}}</div>
+        </div>
         <div class="i ac">
           <div class="t">AC / All</div>
           <div class="b">{{o.ac}} / {{o.all}}</div>
@@ -128,6 +132,7 @@ export default {
       o: { // 现在的视图，会被initView完全覆盖
         case: 0,
         content: 0,
+        contest_id: undefined,
         problem_id: 0,
         restriction_id: 0,
         submit_ac: 0,
@@ -144,14 +149,15 @@ export default {
       leftInfo: false,
       rightInfo: false,
       submitInfo: 'hhhhhhhhhhhhh',
+      solutionId: undefined,
       isInfo: false,
       titleclass: 'normal'
     }
   },
   computed: {
     problemMarkDown: function () {
-      var markdown = ''
-      for (var i in this.keyArr) {
+      let markdown = ''
+      for (let i in this.keyArr) {
         markdown += '### ' + i.replace(/\b\w/g, l => l.toUpperCase()) + '\n' + this.contentObj[i] + '\n'
       }
       return marked(markdown, {sanitize: false})
@@ -240,8 +246,8 @@ export default {
         })
     },
     hScroll: function () {
-      var sTop = window.pageYOffset
-      var tTop = document.querySelector('#pro-title').offsetTop
+      const sTop = window.pageYOffset
+      const tTop = document.querySelector('#pro-title').offsetTop
       if (sTop > tTop) { // 不给予恢复
         this.titleclass = 'active'
         window.removeEventListener('scroll', this.hScroll)
@@ -254,8 +260,7 @@ export default {
         code: this.submitCode
       }
       let _this = this
-      this.$http.post(`${window.noPointHost}/api/judge`, sendPackage,
-        {crossDomain: true, credentials: true}).then(res => {
+      this.$http.post(`${window.noPointHost}/api/judge`, sendPackage).then(res => {
         console.log(res)
         _this.isInfo = true
         if (res.body.code === 0) {
@@ -282,9 +287,6 @@ export default {
       require('brace/mode/c_cpp')
       require('brace/mode/less')
       require('brace/theme/github')
-    },
-    test: function () {
-      console.log('wtf')
     },
     iCanSee: function (e) {
       this.isSee = !this.isSee
@@ -562,6 +564,13 @@ html {
       .b {
         background: rgba(255, 255, 255, 0.6);
         white-space: pre;
+      }
+    }
+    .ct {
+      color: yellowgreen;
+      border-color: yellowgreen;
+      .t {
+        background: springgreen;
       }
     }
     .ac {
