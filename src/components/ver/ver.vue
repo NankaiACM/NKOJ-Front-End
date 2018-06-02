@@ -48,12 +48,12 @@ export default {
           this.frontend = this.formJson(data.frontend)
           this.backend = this.formJson(data.backend)
         })
+      window.$(function () {
+        window.$('[data-toggle="popover"]').popover({trigger: 'hover'})
+      })
     })
   }
 }
-$(function () {
-  $('[data-toggle="popover"]').popover({trigger: 'hover'})
-})
 </script>
 <style lang="less" scoped>
   .ver {

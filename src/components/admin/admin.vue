@@ -7,9 +7,9 @@
       </div>
     </div>
     <div class="nav-wrp">
-      <a href="/admin/problem">Problems</a>
-      <a href="/admin/contest">Contests</a>
-      <a href="/admin/rejudge">Rejudge</a>
+      <router-link to="/admin/problem">Add problem</router-link>
+      <router-link to="/admin/contest">Contest</router-link>
+      <router-link to="/admin/rejudge">Rejudge</router-link>
     </div>
   </div>
 </div>
