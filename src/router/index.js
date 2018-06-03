@@ -15,10 +15,7 @@ import contest from '../components/contestpage/contest'
 import detailsPage from '../components/detailspage/details'
 import rankPage from '../components/ranklist/rankPage'
 import signupPage from '../components/signupPage'
-import adminPage from '../components/admin/admin'
-import adminProblemPage from '../components/admin/adminProblem'
-import adminContest from '../components/admin/adminContest'
-import rejudge from '../components/admin/rejudge'
+import admin from '../components/admin/route'
 import account from '../components/account/route'
 import space from '../components/space/route'
 
@@ -30,15 +27,7 @@ const router = new Router({
     path: '/',
     component: HOME,
     children: [
-      { path: '/admin',
-        component: adminPage,
-        children: [
-          { path: '/admin', component: adminProblemPage },
-          { path: '/admin/problem', component: adminProblemPage },
-          { path: '/admin/contest', component: adminContest },
-          { path: '/admin/rejudge', component: rejudge}
-        ]
-      },
+      admin,
       account,
       ...space,
       { path: '/home', component: componentHome },

@@ -8,7 +8,8 @@
     </div>
     <div class="nav-wrp">
       <router-link to="/admin/problem">Add problem</router-link>
-      <router-link to="/admin/contest">Contest</router-link>
+      <router-link to="/admin/newpc">New Contest</router-link>
+      <router-link to="/admin/getpc">Contest Data</router-link>
       <router-link to="/admin/rejudge">Rejudge</router-link>
     </div>
   </div>
