@@ -11,6 +11,7 @@
       <router-link to="/admin/newpc">New Contest</router-link>
       <router-link to="/admin/getpc">Contest Data</router-link>
       <router-link to="/admin/rejudge">Rejudge</router-link>
+      <router-link to="/admin/edituser">Edit User</router-link>
     </div>
   </div>
 </div>

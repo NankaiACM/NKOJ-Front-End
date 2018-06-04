@@ -1,11 +1,14 @@
 <template>
-<div id="rejudge" :class="{gray: solutionId === ''}">
-  <div class="b">
-    <input placeholder="solution id" class="i" v-model="solutionId">
-    <div class="r" @click="rejudge">rejudge</div>
+  <div id="rejudge">
+    <h3>Rejudge</h3>
+    <div id="b" :class="{gray: solutionId === ''}">
+      <div class="b">
+        <input placeholder="solution id" class="i" v-model="solutionId">
+        <div class="r" @click="rejudge">rejudge</div>
+      </div>
+      <div class="c" v-if="isRes">{{resMsg}}</div>
+    </div>
   </div>
-  <div class="c" v-if="isRes">{{resMsg}}</div>
-</div>
 </template>
 <script>
 export default {
@@ -32,11 +35,19 @@ export default {
 </script>
 <style lang="less" scoped>
 #rejudge {
+  min-height: 100%;
+  position: relative;
+}
+#b {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   .b {
     display: flex;
     flex-direction: row;

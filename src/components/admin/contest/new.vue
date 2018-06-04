@@ -3,16 +3,16 @@
   <h3>添加新竞赛 <span class="up" @click="submit">上传</span></h3>
   <form id="newpc" enctype="multipart/form-data">
     <span>比赛标题</span><input placeholder="title" type="text" name="title" value="">
-    <span>比赛描述</span><textarea placeholder="description" type="text" name="description" value=""></textarea>
     <span>神秘数字</span><input placeholder="perm" type="text" name="perm" value="(1,0,0,0,0)">
-    <span>权限设置</span><input placeholder="private" type="checkbox" name="private" value="false">
     <span>开始时间</span><input placeholder="start" type="datetime-local" name="start">
     <span>结束时间</span><input placeholder="end" type="datetime-local" name="end">
+    <span>权限设置</span><input placeholder="private" type="checkbox" name="private" value="false">
     <span>上传markdown文件</span>
     <div>
       <label for="upfile" class="upf">{{filename}}</label>
       <input id="upfile" @change="handFile" placeholder="markdown文件" name="file" type="file">
     </div>
+    <span>比赛描述</span><textarea placeholder="description" type="text" name="description" value=""></textarea>
   </form>
 </div>
 </template>
@@ -65,7 +65,7 @@ export default {
   margin-top: 3em;
   display: grid;
   grid-template-columns: 15em auto;
-  grid-template-rows: 3em auto repeat(8,3em);
+  grid-template-rows: repeat(6,5em) auto;
   justify-content: center;
   align-items: center;
   input {
@@ -87,8 +87,8 @@ export default {
     border-radius: 4px;
   }
   textarea {
-    min-width: 30em;
-    min-height: 5em;
+    min-width: 35em;
+    min-height: 10em;
     padding: .4em 1em;
     margin: .5em 0;
     outline: none;

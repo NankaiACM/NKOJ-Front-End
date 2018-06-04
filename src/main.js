@@ -7,10 +7,12 @@ import router from './router'
 import store from './vuex/store'
 import isScrolled from './scroll'
 import SlideUpDown from 'vue-slide-up-down'
+import notify from './components/shell/notify'
 
 Vue.config.productionTip = false
 Vue.use(VueResource)
 Vue.component('vue-slide-up-down', SlideUpDown)
+Vue.component('notify', notify)
 /* eslint-disable no-new */
 new Vue({
   el: '#NKOJ',
