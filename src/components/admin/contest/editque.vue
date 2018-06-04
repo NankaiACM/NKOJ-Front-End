@@ -17,6 +17,5 @@ export default {
 #editque{
   position: relative;
   min-height: 100%;
-  z-index: 141;
 }
 </style>

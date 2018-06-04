@@ -7,12 +7,12 @@
       <span class="edit" @click="edtPC">Edit</span>
     </span>
   </h3>
-  <div class="blog" v-if="!isEdit">
+  <div class="blg" v-if="!isEdit">
     <div class="section" v-for="(item, key, index) in o" :key="index">
       <span class="l">{{key}}</span><span class="r">{{item}}</span>
     </div>
   </div>
-  <div class="blog" v-if="isEdit">
+  <div class="blg" v-if="isEdit">
     <div class="section">
       <span class="l"></span><span class="r"></span>
     </div>
@@ -78,46 +78,6 @@ export default {
       border-radius: 0 4px 4px 0;
     }
   }
-  .blog {
-    border: 1px solid #e5e5e5;
-    border-radius: 4px;
-    margin: 3em 0;
-    padding: 2em 0;
-  }
-  .section {
-    margin: 0 3em;
-    padding: 2em 0;
-    border-bottom: 1px solid #e5e9ef;
-    position: relative;
-    height: auto;
-    display: grid;
-    grid-template-columns: 30% 70%;
-    &:first-child {
-      border-top: 1px solid #c24f4a;
-    }
-    &:last-child {
-      border-bottom: 1px solid #1e88e5;
-    }
-    .l, .r {
-      padding: 0 1em;
-      color: #233;
-    }
-    &::after {
-      content: ' ';
-      display: block;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      height: 1px;
-      width: 1px;
-      transition: all 1.41s;
-    }
-    &:hover {
-      &::after {
-        background: #2cbfec;
-        width: 100%;
-      }
-    }
-  }
+  @import './blg.less';
 }
 </style>
