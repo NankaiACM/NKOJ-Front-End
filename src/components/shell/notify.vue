@@ -37,6 +37,7 @@ export default {
   bottom: 1em;
   right: -110%;
   transition: all 1.41s;
+  transform: translateZ(1141px) perspective(1141px);
   .t {
     font-weight: 700;
   }

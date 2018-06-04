@@ -1,9 +1,20 @@
 <template>
 <div id="datas">
-  <h3>比赛信息<span class="search"><input placeholder="竞赛 ID" type="text" v-model="id" id="info"><span id="get" @click="getPC">Get</span></span></h3>
-  <div class="blog">
+  <h3>比赛信息
+    <span class="search">
+      <input placeholder="竞赛 ID" type="text" v-model="id" id="info">
+      <span class="get" @click="getPC">Get</span>
+      <span class="edit" @click="edtPC">Edit</span>
+    </span>
+  </h3>
+  <div class="blog" v-if="!isEdit">
     <div class="section" v-for="(item, key, index) in o" :key="index">
       <span class="l">{{key}}</span><span class="r">{{item}}</span>
+    </div>
+  </div>
+  <div class="blog" v-if="isEdit">
+    <div class="section">
+      <span class="l"></span><span class="r"></span>
     </div>
   </div>
 </div>
@@ -14,11 +25,13 @@ export default {
   data: function () {
     return {
       id: '1001',
-      o: {}
+      o: {},
+      isEdit: false
     }
   },
   methods: {
     getPC: function () {
+      this.isEdit = false
       this.$http.get(window.noPointHost + '/api/admin/contest/' + this.id)
         .then(function (r) {
           console.log(JSON.stringify(r))
@@ -26,6 +39,10 @@ export default {
         }, function (e) {
           console.log(JSON.stringify(e))
         })
+    },
+    edtPC: function () {
+      console.log('edit')
+      this.isEdit = true
     }
   }
 }
@@ -36,11 +53,12 @@ export default {
     float: right;
     font-size: 16px;
     &:hover {
-      #info, #get {
+      #info, .get, .edit {
         border-color: #2cbfec;
       }
     }
-    #info, #get {
+    #info, .get, .edit {
+      float: left;
       display: inline-block;
       background: none;
       outline: none;
@@ -48,13 +66,16 @@ export default {
       padding: .4em 1em;
       border-radius: 4px 0 0 4px;
     }
-    #get {
+    .get, .edit {
       cursor: pointer;
-      border-radius: 0 4px 4px 0;
+      border-radius: 0;
       border-left: none;
       &:hover {
         color: #2cbfec;
       }
+    }
+    .edit {
+      border-radius: 0 4px 4px 0;
     }
   }
   .blog {
@@ -68,17 +89,17 @@ export default {
     padding: 2em 0;
     border-bottom: 1px solid #e5e9ef;
     position: relative;
+    height: auto;
+    display: grid;
+    grid-template-columns: 30% 70%;
     &:first-child {
       border-top: 1px solid #c24f4a;
     }
     &:last-child {
       border-bottom: 1px solid #1e88e5;
     }
-    .l {
-      display: inline-block;
-      width: 30%;
-    }
-    .r {
+    .l, .r {
+      padding: 0 1em;
       color: #233;
     }
     &::after {

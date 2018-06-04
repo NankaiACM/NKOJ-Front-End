@@ -57,15 +57,16 @@ export default {
 </script>
 <style lang="less" scoped>
   .ver {
-  position: fixed;
-  right: 0;
-  bottom: 0;
+    position: fixed;
+    right: 0;
+    bottom: 0;
     text-align: left;
   }
 
   .bga {
     background: rgba(217, 237, 247, 0.7);
   }
+
   .badge {
     color: #1b98e0;
   }

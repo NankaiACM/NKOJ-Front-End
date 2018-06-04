@@ -14,6 +14,7 @@
     </div>
     <span>比赛描述</span><textarea placeholder="description" type="text" name="description" value=""></textarea>
   </form>
+  <notify :title="notify.title" :message="notify.message" :count="notify.count"></notify>
 </div>
 </template>
 
@@ -22,7 +23,12 @@ export default {
   name: 'new',
   data: function () {
     return {
-      filename: '点击选择markdown文件'
+      filename: '点击选择markdown文件',
+      notify: {
+        title: 'new contest status',
+        message: '',
+        count: 0
+      }
     }
   },
   methods: {
@@ -32,8 +38,12 @@ export default {
       this.$http.post(window.noPointHost + '/api/admin/contest/', fromData)
         .then(function (r) {
           console.log(JSON.stringify(r))
+          this.notify.message = JSON.stringify(r.body)
+          this.notify.count++
         }, function (e) {
           console.log(JSON.stringify(e))
+          this.notify.message = JSON.stringify(e.body)
+          this.notify.count++
         })
     },
     handFile: function (e) {

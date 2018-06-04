@@ -12,6 +12,7 @@
       <router-link to="/admin/getpc">Contest Data</router-link>
       <router-link to="/admin/rejudge">Rejudge</router-link>
       <router-link to="/admin/edituser">Edit User</router-link>
+      <router-link to="/admin/editque">Edit Ques</router-link>
     </div>
   </div>
 </div>
