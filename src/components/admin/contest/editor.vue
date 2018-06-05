@@ -1,6 +1,6 @@
 <template>
   <div id="editor">
-    <form class="blg" enctype="multipart/form-data">
+    <form class="blg" enctype="multipart/form-data" id="pcform">
       <div class="section">
         <span class="l">比赛标题</span>
         <div class="r"><input placeholder="title" type="text" name="title" value=""></div>
@@ -36,10 +36,11 @@
     <notify :title="notify.title" :message="notify.message" :count="notify.count"></notify>
   </div>
 </template>
-
 <script>
+import moment from 'moment'
 export default {
   name: 'editor',
+  props: ['url'],
   data: function () {
     return {
       filename: '点击选择markdown文件',
@@ -47,13 +48,76 @@ export default {
         title: 'new contest status',
         message: '',
         count: 0
-      }
+      },
+      id: ''
     }
+  },
+  methods: {
+    handFile: function (e) {
+      const file = e.target.files[0] || e.dataTransfer.files[0]
+      this.filename = file.name
+    },
+    submit: function () {
+      const form = document.querySelector('#pcform')
+      const formData = new FormData(form)
+      formData.set('private', document.querySelector('input[name=private]').checked)
+      this.$http.post(window.noPointHost + '/api/admin/contest/' + this.id, formData)
+        .then(function (r) {
+          console.log(JSON.stringify(r))
+          this.notify.title = 'save status:'
+          this.notify.message = JSON.stringify(r.body)
+          this.notify.count++
+        }, function (e) {
+          console.log(JSON.stringify(e))
+          this.notify.title = 'save status:[erro]'
+          this.notify.message = JSON.stringify(e.body)
+          this.notify.count++
+        })
+    }
+  },
+  mounted: function () {
+    this.$nextTick(function () {
+      if (this.url === 'new') return 0
+      this.id = this.url
+      this.$http.get(window.noPointHost + '/api/admin/contest/' + this.url)
+        .then(function (r) {
+          console.log(r)
+          r = r.body.data
+          document.querySelector('input[name=title]').value = r.title
+          document.querySelector('textarea[name=description]').value = r.description
+          document.querySelector('input[name=perm]').value = r.perm
+          document.querySelector('input[name=private]').checked = r.private
+          var s = JSON.stringify(r.during.toString())
+          s = s.replace(/\"/g, '')
+          s = s.replace(/\\/g, '')
+          s = s.replace('[', '')
+          s = s.replace(']', '')
+          s = s.replace('(', '')
+          s = s.replace(')', '')
+          if (s.indexOf(',') !== -1) {
+            s = s.split(',')
+            console.log(s)
+            if (s[0].length !== 0) {
+              document.querySelector('input[name=start]').value = moment(s[0]).toISOString().substr(0, 23)
+            }
+            if (s[1].length !== 0) {
+              document.querySelector('input[name=end]').value = moment(s[1]).toISOString().substr(0, 23)
+            }
+          }
+          this.notify.title = 'fetch contest state:'
+          this.notify.message = JSON.stringify(r)
+          this.notify.count++
+        }, function (e) {
+          this.notify.title = 'fetch contest state:[erro]'
+          this.notify.message = JSON.stringify(e)
+          this.notify.count++
+        })
+    })
   }
 }
 </script>
 <style lang="less" scoped>
-@import './blg.less';
+@import './blg';
 #editor {
   input {
     outline: none;

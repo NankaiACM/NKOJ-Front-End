@@ -1,13 +1,14 @@
 <template xmlns:padding-top="http://www.w3.org/1999/xhtml">
 <div class="adminPage">
+  <h3>添加题目</h3>
   <form class="form-horizontal adminForm">
     <div class="form-group adminFormGroup">
       <label class="col-sm-3 control-label">修改的题号</label>
       <div class="col-sm-3">
         <input class="form-control" placeholder="problem_id 不填表示创建新的题目" v-model="pId">
       </div>
-      <button class="col-sm-1 btn btn-default" @click="dataUpload">上传数据</button>
-      <button class="col-sm-1 btn btn-default" style="margin-left: 20px" @click="dataModify">修改题目</button>
+      <button class="btn btn-default" @click="dataUpload">上传数据</button>
+      <button class="btn btn-default" style="margin-left: 20px" @click="dataModify">修改题目</button>
     </div>
     <div class="form-group adminFormGroup">
       <label class="col-sm-3 control-label">题目名称</label>
@@ -303,6 +304,7 @@ export default {
 .adminForm{
   background: white;
   transition: all 0.2s;
+  padding: 3em 0;
 }
 .adminFormGroup {
   margin: 1em 2em;

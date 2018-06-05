@@ -4,17 +4,12 @@
     <span class="search">
       <input placeholder="竞赛 ID" type="text" v-model="id" id="info">
       <span class="get" @click="getPC">Get</span>
-      <span class="edit" @click="edtPC">Edit</span>
+      <router-link :to="'/admin/editpc/' + this.id" class="edit">Edit</router-link>
     </span>
   </h3>
-  <div class="blg" v-if="!isEdit">
+  <div class="blg">
     <div class="section" v-for="(item, key, index) in o" :key="index">
       <span class="l">{{key}}</span><span class="r">{{item}}</span>
-    </div>
-  </div>
-  <div class="blg" v-if="isEdit">
-    <div class="section">
-      <span class="l"></span><span class="r"></span>
     </div>
   </div>
 </div>
@@ -25,13 +20,11 @@ export default {
   data: function () {
     return {
       id: '1001',
-      o: {},
-      isEdit: false
+      o: {}
     }
   },
   methods: {
     getPC: function () {
-      this.isEdit = false
       this.$http.get(window.noPointHost + '/api/admin/contest/' + this.id)
         .then(function (r) {
           console.log(JSON.stringify(r))
@@ -39,10 +32,6 @@ export default {
         }, function (e) {
           console.log(JSON.stringify(e))
         })
-    },
-    edtPC: function () {
-      console.log('edit')
-      this.isEdit = true
     }
   }
 }
@@ -70,6 +59,8 @@ export default {
       cursor: pointer;
       border-radius: 0;
       border-left: none;
+      text-decoration: none;
+      color: #233;
       &:hover {
         color: #2cbfec;
       }

@@ -1,16 +1,24 @@
 <template>
 <div id="edit">
-  <h3>修改比赛信息</h3>
+  <h3>修改比赛信息<span class="up" @click="save">保存</span></h3>
+  <editor :url="$route.params.id" ref="editor"></editor>
 </div>
 </template>
-
 <script>
 import editor from './editor'
 export default {
-  name: 'edit'
+  name: 'edit',
+  components: {editor},
+  methods: {
+    save: function () {
+      console.log(this.$route.params.id)
+      this.$refs.editor.submit()
+    }
+  }
 }
 </script>
-
-<style scoped>
-
+<style lang="less" scoped>
+#edit {
+  @import './btn';
+}
 </style>
