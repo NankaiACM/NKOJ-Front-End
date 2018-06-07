@@ -1,7 +1,9 @@
 <template>
-  <div id="post" class="container-fluid ">
-    <div>
-      <post-cell :item=tmp></post-cell>
+  <div id="post">
+    <div class="wrp">
+      <div v-for="(item, index) in os" :key="index">
+        <post-cell :item="item" :pos="index" @reload="reload"></post-cell>
+      </div>
     </div>
   </div>
 </template>
@@ -11,24 +13,41 @@ export default {
   name: 'post',
   data: function () {
     return {
-      tmp: {
-        id: '123',//讨论的id
-        title: '这是标题',
-        article: 'no words<br>w<br>w<br>w<br>w',
-        nodes: ['a','b'],
-        sponsor: 'cc',//发起
-        terminator: 'dd',//最后回复,
-        s_ttamp: '1523177873441',//发起时间戳
-        t_ttamp: '1523177873441',//最后回复时间戳
-        v_c: '100',//查看量
-        r_c: '100',//回复量
-      }
+      os: []
     }
   },
   components: {
     postCell
+  },
+  methods: {
+    reload: function () {
+      this.$http.get(window.noPointHost + '/api/post/' + this.$route.params['id'])
+        .then(function (r) {
+          console.log(r.body)
+          if (r.body.code !== 0) return console.log('code', r.body.code)
+          if (r.body.data.length < 1) return console.log('none')
+          this.os = r.body.data
+        })
+    }
+  },
+  mounted: function () {
+    this.$nextTick(function () {
+      this.reload()
+    })
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
+#post {
+  padding: 4em 2em;
+  background: rgba(255,255,255,.9);
+  display: flex;
+  flex-direction: column;
+  .wrp {
+    max-width: 960px;
+    min-width: 760px;
+    justify-self: center;
+    align-self: center;
+  }
+}
 </style>

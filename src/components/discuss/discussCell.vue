@@ -1,99 +1,154 @@
 <template>
-    <div class="media onepiece">
-        <div class="titile-line media">
-          <div class="avatar-box media-left media-middle" :title="item.sponsor">
-            <a href="">
-              <img class="avatar" src="https://scontent-atl3-1.cdninstagram.com/vp/a20896b90863479914f873af2708210e/5B60AB24/t51.2885-19/s150x150/15803553_930150850418977_1876360934042107904_a.jpg" :alt="item.sponsor">
-            </a>
-          </div>
-          <router-link :to="{path: 'discuss/'+item.id}" class="title-a media-body media-middle">
-            <div class="media-heading" :title="item.title">{{item.title}}</div>
-          </router-link>
-        </div>
-        <div class="main-article">
-          <markdown-box :mdstr="item.article"></markdown-box>
-          <slot name="more-art" class="media-left"></slot>
-        </div>
-        <div class="icons-line media">
-          <div class="media-left">
-            <span class="glyphicon glyphicon-heart-empty"></span>
-          </div>
-          <div class="media-left">
-            <span class="glyphicon glyphicon-comment"></span>
-          </div>
-          <div class="v-c media-left media-bottom">
-            <span class="glyphicon glyphicon-eye-open">{{item.v_c}}</span>
-          </div>
-          <div class="r-c media-left media-bottom">
-            <span class="glyphicon glyphicon-pencil">{{item.r_c}}</span>
-          </div>
-          <div class="media-body">
-          </div>
-          <div class="media-right">
-            <span class="glyphicon glyphicon-bookmark"></span>
-          </div>
-        </div>
-        <div class="small-line info-line media">
-          <div class="nodes media-left i media-middle">
-            <div class="node" v-for="(node, nindex) in item.nodes" :key="nindex">
-              {{node}}
-            </div>
-          </div>
-          <div class="sponsor i">
-            {{item.sponsor}}
-            {{cc}}
-            <span class=""></span><!--时长视觉-->
-          </div>
-          <div class="terminator i">
-            {{item.terminator}}
-            {{dd}}
-            <span class=""></span><!--时长视觉-->
-          </div>
-        </div>
-        <div class="rep-line media">
-          <div class="media-left usr-left">
-            username
-          </div>
-          <div class="media-body rep-right">
-            replyssssssssssssssssssssss<br>sdfsdf
-          </div>
-        </div>
-        <slot name="more-rep" class="media"></slot>
-        <div class="input-line media">
-          <div class="input-wrapper meida-body">
-            <div class="input-hack">{{input}}</div>
-            <textarea class="input-box" placeholder="添加评论..." v-model="input" @keyup.enter="hit">
-            </textarea>
-          </div>
-          <div class="media-right dot-box">
-            <span class="glyphicon glyphicon-share-alt" :class="{active: input !== ''}"></span>
-          </div>
-        </div>
+  <div class="onepiece" :class="{top: pos === 0}">
+    <div class="titile-line">
+      <div class="avatar-box" :title="item['user_id']">
+        <a href="">
+          <img class="avatar" :src="avatarSubUrl + item['user_id']" :alt="item['user_id']">
+        </a>
+      </div>
+      <router-link :to="{path: '/discuss/'+item['post_id']}" class="title-a">
+        <div v-if="pos === 0" :title="item.title">{{item.title}}</div>
+        <div v-if="pos !== 0" :title="'回复'">回复 #0 @ {{item['parent_id']}}</div>
+      </router-link>
+      <div v-if="(!item['parent_id']) && (pos === 0)" class="addAns" @click="reply(item['post_id'], item['user_id'])">添加答案</div>
     </div>
+    <div class="main-article">
+      <markdown-box :mdstr="item.content"></markdown-box>
+      <slot name="more-art"></slot>
+    </div>
+    <div class="icons-line">
+      <div class="v-c">
+        <span class="glyphicon glyphicon-chevron-up pbtn" @click="u(item['post_id'])"></span>
+        <span>{{item.positive}}</span>
+      </div>
+      <div class="r-c">
+        <span class="glyphicon glyphicon-chevron-down pbtn" @click="d(item['post_id'])"></span>
+        <span>{{item.negative}}</span>
+      </div>
+      <div class="sponsor i">
+        <span>{{item['user_id']}}</span>
+        {{cc(item.since)}}
+      </div>
+      <div class="terminator i">
+        <span>{{item['last_active_user']}}</span>
+        {{cc(item['last_active_date'])}}
+      </div>
+      <span class="pbtn" @click="at(item['post_id'], item['user_id'])">评论</span>
+    </div>
+    <div class="rep-lines" v-if="item.comments && item.comments.length > 0">
+      <div class="rep-line" v-for="(it, index) in item.comments" :key="index">
+        <div></div>
+        <div class="avatar-box" :title="it['user_id']">
+          <a href="">
+            <img class="avatar" :src="avatarSubUrl + it['user_id']" :alt="it['user_id']">
+          </a>
+        </div>
+        <div class="rep-right">
+          <span class="rep-user">{{it['user_id']}}</span>
+          <span>评论 @{{it['reply_to']}}</span>
+          <markdown-box class="rep-content" :mdstr="it.content"></markdown-box>
+          <div class="info">
+            <span class="time">{{dd(it.since)}}</span>
+            <span class="pbtn" @click="at(it['reply_id'], it['user_id'])">评论</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <slot name="more-rep"></slot>
+    <div class="input-line" v-if="focusState">
+      <div class="input-wrapper">
+        <div class="input-hack">{{input}}</div>
+        <textarea v-focus="focusState" class="input-box" :placeholder="placeholder" v-model="input">
+        </textarea>
+      </div>
+      <div class="dot-box" @click="hit">
+        <span class="glyphicon glyphicon-share-alt" :class="{active: input !== ''}"></span>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import moment from 'moment'
 import markdownBox from './markdownBox.vue'
 export default {
   name: 'discussCell',
-  props: ['item'],
+  props: ['item', 'pos'],
   data: function () {
     return {
-      input: ''
+      input: '',
+      placeholder: '',
+      focusState: false,
+      rid: '',
+      rOc: '/reply/'
     }
   },
   methods: {
     hit: function () {
       console.log(this.input)
+      this.$http.post(window.noPointHost + '/api/post' + this.rOc + this.rid, {content: this.input})
+        .then(function (r) {
+          console.log(JSON.stringify(r))
+          if (r.body.code === 0) this.r()
+          this.input = ''
+        }, function (e) {
+          console.log(JSON.stringify(e))
+        })
+    },
+    cc: function (stamp) {
+      return moment(stamp, 'x').fromNow()
+    },
+    dd: function (stamp) {
+      return moment(stamp).format('YYYY-MM-DD hh:mm:ss')
+    },
+    at: function (prid, uid) {
+      this.placeholder = '评论 @' + uid
+      this.rid = prid
+      this.rOc = '/comment/'
       this.input = ''
+      this.focusState = !this.focusState
+    },
+    reply: function (rid, uid) {
+      this.placeholder = '回复 #' + rid + '@' + uid
+      this.rid = rid
+      this.rOc = '/reply'
+      this.input = ''
+      this.focusState = !this.focusState
+    },
+    u: function (rid) {
+      this.$http.get(window.noPointHost + '/api/post/upvote/' + rid)
+        .then(function (r) {
+          if (r.body.code === 0) {
+            if (r.body.data.affected === 0) return this.rm('u', rid)
+            this.r()
+          }
+        })
+    },
+    d: function (rid) {
+      this.$http.get(window.noPointHost + '/api/post/downvote/' + rid)
+        .then(function (r) {
+          if (r.body.code === 0) {
+            if (r.body.data.affected === 0) return this.rm('d', rid)
+            this.r()
+          }
+        })
+    },
+    rm: function (fash, rid) {
+      this.$http.get(window.noPointHost + '/api/post/rmvote/' + rid)
+        .then(function (r) {
+          console.log(r)
+          if (r.body.code === 0) {
+            this[fash](rid)
+            this.r()
+          }
+        })
+    },
+    r: function () {
+      this.$emit('reload')
     }
   },
   computed: {
-    cc: function () {
-      return moment(this.item.s_ttamp, 'x').fromNow()
-    },
-    dd: function () {
-      return moment(this.item.t_ttamp, 'x').fromNow()
+    avatarSubUrl: function () {
+      return window.noPointHost + '/api/avatar/'
     }
   },
   components: {
@@ -101,189 +156,172 @@ export default {
   },
   mounted: function () {
     this.$nextTick(function () {
-
+      this.placeholder = '回复@' + this.item['user_id']
+      this.rid = this.item['user_id']
     })
   },
   beforeDestroy: function () {
+  },
+  directives: {
+    focus: {
+      update: function (el, {v}) {
+        if (v) {
+          el.focus()
+        }
+      }
+    }
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .onepiece {
-  margin: 2em;
-  border: 1px solid #e6e6e6;
-  border-radius: 4px;
+  margin: 0 2em -1em 2em;
   color: #262626;
+  border: 1px solid #efefef;
   background: #fff;
+  padding-bottom: 2.5em;
+  &.top {
+    border: 1px solid #ccc;
+    margin: 2em 1em;
+    border-radius: 4px;
+    padding-bottom: 1em;
+  }
+  p {
+    margin: 0;
+  }
+  .pbtn {
+    cursor: pointer;
+  }
+  .avatar-box {
+    height: 3em;
+    width: 3em;
+    border-radius: 50%;
+    .avatar {
+      height: 100%;
+      width: 100%;
+      border-radius: 50%;
+      border: none;
+      outline: none;
+      object-fit: cover;
+    }
+  }
+  .titile-line {
+    height: 5em;
+    display: grid;
+    grid-template-columns: 4em auto 7em;
+    align-items: center;
+    padding: 1em 2em;
+    border-bottom: 1px solid #efefef;
+    .title-a {
+      color: #233;
+    }
+    .addAns {
+      border: 1px #efefef solid;
+      padding: .4em 1em;
+      text-align: center;
+      cursor: pointer;
+      color: #ccc;
+      &:hover {
+        color: #233;
+      }
+    }
+  }
+  .main-article {
+    text-align: left;
+    padding: 1em 0;
+    margin: 0 2em;
+    border-bottom: 1px solid #efefef;
+  }
+  .icons-line {
+    display: flex;
+    flex-direction: row;
+    height: 3em;
+    color: #99a2aa;
+    border-bottom: 1px solid #efefef;
+    .r-c ,.v-c {
+      line-height: 2em;
+      padding-right: .5em;
+    }
+    .i {
+      margin-right: 2em;
+      position: relative;
+      line-height: 2em;
+      &::after {
+        content: '·';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin-left: 100%;
+        font-weight: 800;
+        width: 2em;
+        text-align: center;
+      }
+      &:last-child::after {
+        content: '';
+      }
+    }
+  }
+  .rep-lines {
+    padding: .5em 0;
+    margin: 0 2em;
+    .rep-line {
+      min-height: 2em;
+      padding: .5em 0;
+      height: auto;
+      display: grid;
+      grid-template-columns: 1em 2em auto auto;
+      grid-column-gap: 1em;
+      .avatar-box {
+        width: 2em;
+        height: 2em;
+        justify-self: center;
+        align-self: start;
+      }
+      .rep-right {
+        .rep-user {
+          margin-right: 1em;
+        }
+        .rep-content {
+          display: inline-block;
+        }
+        .info {
+          height: 1em;
+          color: #99a2aa;
+          span {
+            padding-right: 1em;
+          }
+        }
+      }
+    }
+  }
+  .input-line {
+    .input-hack {
+      position: relative;
+      display: block;
+      width: 100%;
+      z-index: -1;
+      opacity: 0;
+      word-break: break-all;
+      white-space: pre; /* important */
+    }
+  }
 }
-
-.onepiece .media-right {
-  text-align: right;
-}
-
-.onepiece .titile-line {
-  height: 5em;
-  padding: 1em 2em;
-  border-bottom: 1px solid #efefef;
-}
-
-.onepiece .avatar-box {
-  height: 3em;
-  width: 3em;
-  border-radius: 50%;
-}
-
-.onepiece .avatar {
-  height: 3em;
-  width: 3em;
-  border-radius: 50%;
-  border: none;
-  outline: none;
-  background: #fff;
-}
-
 .onepiece .icons-line,
-.onepiece .info-line,
-.onepiece .rep-line,
 .onepiece .input-line {
-  height: 2em;
   padding: .5em 0;
-  padding-bottom: 0;
   margin: 0 2em;
   line-height: 2em;
   transition: all .41s;
 }
 
-.onepiece .rep-line {
-  min-height: 2em;
-  height: auto;
-}
-
 .onepiece .input-line {
+  position: relative;
   min-height: 4em;
   height: auto;
   padding-bottom: 1em;
   margin-top: .5em;
-}
-
-.onepiece .main-article {
-  text-align: left;
-  padding: 1em 0;
-  margin: 0 2em;
-  border-bottom: 1px solid #efefef;
-}
-
-.onepiece .icons-line {
-  height: 2.5em;
-}
-
-.onepiece .icons-line span {
-  font-size: 1.6em;
-  cursor: pointer;
-  opacity: .8;
-}
-
-.onepiece .icons-line span:hover {
-  opacity: .9;
-}
-
-.onepiece .icons-line .r-c span,
-.onepiece .icons-line .v-c span {
-  font-size: 1.1em;
-  padding-right: .5em;
-}
-
-.onepiece .small-line {
-  display: flex;
-  color: #ccc;
-}
-
-.onepiece .small-line .nodes {
-  display: flex;
-}
-
-.onepiece .media-left {
-  margin-right: 2em;
-}
-
-.title-a .media-heading {
-  text-align: left;
-  color: #233;
-}
-
-.small-line .nodes .node {
-  text-align: center;
-  position: relative;
-  display: inline-block;
-  color: #999;
-  cursor: pointer;
-  margin: 0 1.5em;
-  font-weight: 600;
-  transition: all .41s;
-}
-
-.small-line .nodes .node:first-child {
-  margin-left: 0.8em;
-}
-
-.info-line .nodes .node::before,
-.info-line .nodes .node::after {
-  content: '#';
-  display: block;
-  position: absolute;
-  top: 0;
-}
-
-.info-line .nodes .node::before {
-  left: -.8em;
-}
-
-.info-line .nodes .node::after {
-  right: -.8em;
-}
-
-.small-line .nodes .node:last-child {
-  margin-right: 0;
-}
-
-.small-line .nodes .node:hover {
-  color: #262626;
-}
-
-.info-line .i {
-  margin-right: 2em;
-  position: relative;
-  line-height: 2em;
-}
-
-.info .i::after {
-  content: '·';
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  margin-left: 100%;
-  font-weight: 800;
-  width: 2em;
-  text-align: center;
-}
-
-.info-line .i:last-child::after {
-  content: '';
-}
-
-.rep-line .usr-left {
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.rep-line .rep-right {
-  text-align: left;
-}
-
-.input-line {
   border-top: 1px solid #efefef;
-  position: relative;
 }
 
 .input-wrapper {
@@ -311,14 +349,6 @@ export default {
 
 .input-line .dot-box span.active:hover {
   opacity: .9;
-}
-
-.input-line .input-hack {
-  position: relative;
-  display: block;
-  z-index: -1;
-  opacity: 0;
-  word-break: break-all;
 }
 
 .input-line .input-box {
