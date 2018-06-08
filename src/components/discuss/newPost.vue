@@ -1,11 +1,11 @@
 <template>
-  <div id="new-post" class="media">
+  <div id="new-post" class="">
     <div class="id-line">
-      <router-link class="media-left media-middle id-img" to=""><img class="id-img" alt="usr" :src="tmp"></router-link>
-      <router-link class="media-body media-middle id-id" to="">me</router-link>
+      <img class="id-img" alt="usr" :src="imgUrl">
+      <div class="id-id" to=""> me</div>
     </div>
     <div class="button-line">
-      <div class="post-btn"><div class="glyphicon glyphicon-plus btn-icon media-middle"></div>new post</div>
+      <div class="post-btn"><span class="glyphicon glyphicon-plus"></span> new post</div>
     </div>
   </div>
 </template>
@@ -14,7 +14,12 @@ export default {
   name: 'newPost',
   data: function () {
     return {
-      tmp: 'https://scontent-atl3-1.cdninstagram.com/vp/a20896b90863479914f873af2708210e/5B60AB24/t51.2885-19/s150x150/15803553_930150850418977_1876360934042107904_a.jpg'
+      tmp: ''
+    }
+  },
+  computed: {
+    imgUrl: function () {
+      return window.noPointHost + '/api/avatar/' + this.$store.state.userData['user_id']
     }
   }
 }
@@ -25,11 +30,15 @@ export default {
   margin-top: 0;
   border: 1px solid #e6e6e6;
   border-radius: 4px;
-  background: #fff;
+  height: auto;
   .id-line {
     padding: 1em 2em;
     border-bottom: 1px solid #efefef;
     height: 5em;
+    display: grid;
+    grid-template-columns: 3em auto;
+    align-items: center;
+    grid-column-gap: 1em;
     .id-img {
       height: 3em;
       width: 3em;
@@ -41,7 +50,6 @@ export default {
     }
   }
   .button-line {
-    height: 5em;
     padding: 1em 2em;
     .post-btn {
       height: 3em;
@@ -50,13 +58,10 @@ export default {
       border: 1px solid #efefef;
       cursor: pointer;
       transition: all .41s;
-      .btn-icon {
-        margin: .5em;
-        margin-top: -.1em;
-      }
+      text-align: center;
     }
     .post-btn:hover {
-      box-shadow: 0 0 5px 1px #eeeeee;
+      box-shadow: 0 0 4px 1px #eee;
     }
   }
 }

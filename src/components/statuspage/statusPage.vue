@@ -3,18 +3,18 @@
     <div class="container-fluid table-container">
       <table id="statusTable" class="table table-hover">
         <thead class="thread-height">
-        <tr>
-          <th class="hidden-xs">run id</th>
-          <th>nickname</th>
-          <th>problem id</th>
-          <th>result</th>
-          <th>language</th>
-          <th>code length</th>
-          <th>time</th>
-          <th>memory</th>
-          <th>submit time</th>
-          <th>shared</th>
-        </tr>
+          <tr>
+            <th class="hidden-xs">run id</th>
+            <th>nickname</th>
+            <th>problem id</th>
+            <th>result</th>
+            <th>language</th>
+            <th>code length</th>
+            <th>time</th>
+            <th>memory</th>
+            <th>submit time</th>
+            <th>shared</th>
+          </tr>
         </thead>
         <transition-group tag="tbody" name="list">
           <tr v-for="(status, index) in statusList" :key="index">
@@ -304,6 +304,8 @@ export default {
 
   #statusTable th {
     font-size: 1.2em;
+    font-weight: 500;
+    color: #2cbfec;
     border-bottom: 0;
     height: 3em;
     text-align: center;

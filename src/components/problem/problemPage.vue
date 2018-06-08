@@ -122,7 +122,7 @@
 </template>
 <script>
 import isScrolled from '../../scroll'
-
+import marked from 'marked'
 export default {
   name: 'problems-page',
   data: function () {

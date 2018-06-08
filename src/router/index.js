@@ -7,7 +7,7 @@ import componentHome from '../components/home/home'
 import componentB from '../components/componentB'
 import problemsPage from '../components/problem/problemPage'
 import statusPage from '../components/statuspage/statusPage'
-import discussPage from '../components/discuss/discussPage'
+import discuss from '../components/discuss/page'
 import postPage from '../components/discuss/post'
 import componentContest from '../components/contestpage/componentContest'
 import allContest from '../components/contestpage/allContest'
@@ -44,7 +44,7 @@ const router = new Router({
           apiUrl: window.noPointHost + '/api/status'
         }
       },
-      { path: '/discuss', component: discussPage },
+      { path: '/discuss', component: discuss},
       { path: '/discuss/:id', component: postPage },
       { path: '/ranklist', component: rankPage },
       { path: '/details/:solutionId', component: detailsPage },

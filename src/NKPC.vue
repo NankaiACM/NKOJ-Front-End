@@ -173,312 +173,310 @@
 </template>
 
 <script>
-import problemList from "./components/contestpage/contestOpenCompenents/problemList.vue";
-import status from "./components/statuspage/statusPage.vue";
-import ranks from "./components/contestpage/contestRank.vue";
-import loginPage from './components/dialog/loginDialog';
-import dialogWrap from "./components/dialog/dialogWrap.vue";
-import saurusFooter from './components/footer';
-import vueLoading from "vue-loading-template";
+import problemList from './components/contestpage/contestOpenCompenents/problemList.vue'
+import status from './components/statuspage/statusPage.vue'
+import ranks from './components/contestpage/contestRank.vue'
+import loginPage from './components/dialog/loginDialog'
+import dialogWrap from './components/dialog/dialogWrap.vue'
+import saurusFooter from './components/footer'
+import vueLoading from 'vue-loading-template'
+import marked from 'marked'
 
 export default {
   name: 'NKPC',
-  components:{
+  components: {
     problemList,
     status,
     ranks,
     loginPage,
     saurusFooter,
     dialogWrap,
-    vueLoading,
+    vueLoading
   },
-  data(){
-    return{
+  data () {
+    return {
       statusApi: `${window.noPointHost}/api/status/list`,
       headShowing: false,
-      hoverNav:3,
+      hoverNav: 3,
       nowTime: new Date(),
-      startTime: "",
-      endTime: "",
+      startTime: '',
+      endTime: '',
       contestid: 23,
-      contestTitle: "",
+      contestTitle: '',
       isPadZero: true,
-      problems:[
+      problems: [
         {
-          problemName:'Fantastic Girlfriend And White Album',
-          status:0,
+          problemName: 'Fantastic Girlfriend And White Album',
+          status: 0
         },
         {
-          problemName:'Touhou Project',
-          status:1,
+          problemName: 'Touhou Project',
+          status: 1
         },
         {
-          problemName:'Osu! ver 2.0',
-          status:2,
+          problemName: 'Osu! ver 2.0',
+          status: 2
         },
         {
-          problemName:'A Game With Numbers',
-          status:0,
+          problemName: 'A Game With Numbers',
+          status: 0
         },
         {
-          problemName:'Congruence Equation',
-          status:0,
+          problemName: 'Congruence Equation',
+          status: 0
         },
         {
-          problemName:'Seat Arrangements',
-          status:0,
+          problemName: 'Seat Arrangements',
+          status: 0
         },
         {
-          problemName:'Perfect Number',
-          status:2,
-        },
+          problemName: 'Perfect Number',
+          status: 2
+        }
       ],
       MDtext: [],
       navbarItems: [],
 
-      userPage:"None",
+      userPage: 'None',
       userData: undefined,
-      dialogMessage: "",
+      dialogMessage: ''
     }
   },
-  methods:{
-    handleScroll(){
-      let scrolled = document.documentElement.scrollTop || document.body.scrollTop;
-      if(scrolled > 30){
-        this.headShowing=true;
+  methods: {
+    handleScroll () {
+      let scrolled = document.documentElement.scrollTop || document.body.scrollTop
+      if (scrolled > 30) {
+        this.headShowing = true
+      } else {
+        this.headShowing = false
       }
-      else{
-        this.headShowing=false;
-      }
-      let band = document.querySelectorAll("div.band-with-80padding");
-      this.hoverNav=this.navbarItems.length+1;
-      for(var i=this.navbarItems.length-1;i>=0;i--){
-        if(scrolled > band[i].offsetTop-70) {
-          this.hoverNav=i;
-          break;
+      let band = document.querySelectorAll('div.band-with-80padding')
+      this.hoverNav = this.navbarItems.length + 1
+      for (var i = this.navbarItems.length - 1; i >= 0; i--) {
+        if (scrolled > band[i].offsetTop - 70) {
+          this.hoverNav = i
+          break
         }
       }
     },
-    changeProblemListHeight(){
-      let problemList = document.querySelectorAll(".problem-list");
-      var maxnum=0;
-      for(var i=0;i<problemList.length;i++){
-        maxnum = Math.max(maxnum,problemList[i].offsetHeight);
+    changeProblemListHeight () {
+      let problemList = document.querySelectorAll('.problem-list')
+      var maxnum = 0
+      for (var i = 0; i < problemList.length; i++) {
+        maxnum = Math.max(maxnum, problemList[i].offsetHeight)
       }
-      for(var i=0;i<problemList.length;i++){
-        problemList[i].style.cssText = "height:"+maxnum+'px';
+      for (var i = 0; i < problemList.length; i++) {
+        problemList[i].style.cssText = 'height:' + maxnum + 'px'
       }
     },
-    scrollBand(index){
-      let band = document.querySelectorAll("div.band-with-80padding");
-      Velocity(band[index],"scroll",{ duration:500 ,offset: "-60px", easing: "easeOutQuart"});
+    scrollBand (index) {
+      let band = document.querySelectorAll('div.band-with-80padding')
+      Velocity(band[index], 'scroll', { duration: 500, offset: '-60px', easing: 'easeOutQuart'})
     },
-    upToTop(){
-      Velocity(document.querySelector("body"),"scroll", { duration: 500, easing: "easeOutQuart" })
+    upToTop () {
+      Velocity(document.querySelector('body'), 'scroll', { duration: 500, easing: 'easeOutQuart' })
     },
     exitShow: function () {
-      this.userPage="None"
+      this.userPage = 'None'
     },
-    changeLogin:function(value){
-      this.userPage=value;
+    changeLogin: function (value) {
+      this.userPage = value
     },
-    initDatas:function(){
-      var vue=this;
+    initDatas: function () {
+      var vue = this
       vue.$http
-          .get(
-            `${noPointHost}/api/contest/` +
+        .get(
+          `${noPointHost}/api/contest/` +
               vue.contestid,
-            {
-              crossDomain: true,
-              xhrFields: { withCredentials: true },
-              timeout: "8000",
-              cache: true,
-              credentials: true
+          {
+            crossDomain: true,
+            xhrFields: { withCredentials: true },
+            timeout: '8000',
+            cache: true,
+            credentials: true
+          }
+        )
+        .then(
+          res => {
+            let datas = res.body.data
+            vue.startTime = datas.start
+            vue.endTime = datas.end
+            vue.contestTitle = datas.title
+            vue.navbarItems = datas.info
+            vue.MDtext = new Array(vue.navbarItems.length)
+            for (let i = 0; i < vue.navbarItems.length; i++) {
+              vue.MDtext[i] = ''
+              vue.$http.get(`${noPointHost}/api/contest/` + this.contestid + '/' + vue.navbarItems[i]).then(res => {
+                vue.MDtext.splice(i, 1, res.body)
+              })
             }
-          )
-          .then(
-            res => {
-              let datas=res.body.data;
-              vue.startTime=datas.start;
-              vue.endTime=datas.end;
-              vue.contestTitle=datas.title;
-              vue.navbarItems=datas.info;
-              vue.MDtext=new Array(vue.navbarItems.length);
-              for(let i=0;i<vue.navbarItems.length;i++){
-                vue.MDtext[i]="";
-                vue.$http.get(`${noPointHost}/api/contest/` + this.contestid + '/' + vue.navbarItems[i]).then(res => {
-                  vue.MDtext.splice(i, 1, res.body)
-                })
-              }
-            },
-            res => {
-              //wait to code
-              var vue = this;
-            }
-          )
-          .catch(function(response) {
-            //wait to code
-            var vue = this;
-          });
+          },
+          res => {
+            // wait to code
+            var vue = this
+          }
+        )
+        .catch(function (response) {
+          // wait to code
+          var vue = this
+        })
       setInterval(() => {
-        vue.nowTime=new Date();
-      }, 100);
+        vue.nowTime = new Date()
+      }, 100)
     },
-    initUser:function(){
-      var vue=this;
+    initUser: function () {
+      var vue = this
       vue.$http
-          .get(
-            `${noPointHost}/api/user/login/check`,
-            {
-              crossDomain: true,
-              xhrFields: { withCredentials: true },
-              timeout: "8000",
-              cache: true,
-              credentials: true
+        .get(
+          `${noPointHost}/api/user/login/check`,
+          {
+            crossDomain: true,
+            xhrFields: { withCredentials: true },
+            timeout: '8000',
+            cache: true,
+            credentials: true
+          }
+        )
+        .then(
+          res => {
+            if (res.body.code === 0) {
+              vue.userData = res.body.data
+            } else {
+              vue.userData = undefined
             }
-          )
-          .then(
-            res => {
-              if(res.body.code===0){
-                vue.userData = res.body.data;
-              }
-              else{
-                vue.userData = undefined;
-              }
-            },
-            res => {
-              //wait to code
-              var vue = this;
-            }
-          )
-          .catch(function(response) {
-            //wait to code
-            var vue = this;
-          });
+          },
+          res => {
+            // wait to code
+            var vue = this
+          }
+        )
+        .catch(function (response) {
+          // wait to code
+          var vue = this
+        })
     },
     getMD: function (text) {
-      return marked(text, {sanitize : true})
+      return marked(text, {sanitize: true})
     },
-    changeUserInfo:function (info){
-      this.initUser();
+    changeUserInfo: function (info) {
+      this.initUser()
     },
     registerAttempt: function () {
-        var vue=this;
-      if(vue.userData===undefined){
-        vue.userPage='signUp';
-      }
-      else{
-        vue.dialogMessage='';
-        vue.userPage="dialog";
-      vue.$http
+      var vue = this
+      if (vue.userData === undefined) {
+        vue.userPage = 'signUp'
+      } else {
+        vue.dialogMessage = ''
+        vue.userPage = 'dialog'
+        vue.$http
           .get(
             `${noPointHost}/api/user/contest/register/` + vue.contestid,
             {
               crossDomain: true,
               xhrFields: { withCredentials: true },
-              timeout: "8000",
+              timeout: '8000',
               cache: true,
               credentials: true
             }
           )
           .then(
             res => {
-              if(res.body.code===0){
-                vue.dialogMessage="报名成功！"
-              } else if(res.body.code===3){
-                vue.dialogMessage="您已经报名过了"
-              } else{
-                vue.dialogMessage="操作非法！"
+              if (res.body.code === 0) {
+                vue.dialogMessage = '报名成功！'
+              } else if (res.body.code === 3) {
+                vue.dialogMessage = '您已经报名过了'
+              } else {
+                vue.dialogMessage = '操作非法！'
               }
             },
             res => {
-              //wait to code
-              var vue = this;
+              // wait to code
+              var vue = this
             }
           )
-          .catch(function(response) {
-            //wait to code
-            var vue = this;
-          });
+          .catch(function (response) {
+            // wait to code
+            var vue = this
+          })
       }
     },
     logout: function (event) {
       event.preventDefault()
-        this.dialogMessage='';
+      this.dialogMessage = ''
       this.userPage = 'dialog'
       this.$http.get(`${noPointHost}/api/user/logout`,
-      {
-        crossDomain: true,
-        xhrFields: {withCredentials: true},
-        timeout: "8000",
-        cache: true,
-        credentials: true
-      }).then( res => {
-          if(res.body.code === 0){
-            this.dialogMessage = "注销成功"
-            this.userData = undefined
-          } else {
-            this.dialogMessage = "注销失败"
-          }
+        {
+          crossDomain: true,
+          xhrFields: {withCredentials: true},
+          timeout: '8000',
+          cache: true,
+          credentials: true
+        }).then(res => {
+        if (res.body.code === 0) {
+          this.dialogMessage = '注销成功'
+          this.userData = undefined
+        } else {
+          this.dialogMessage = '注销失败'
+        }
       }, err => {
-        this.dialogMessage = "注销失败"
+        this.dialogMessage = '注销失败'
       })
     }
   },
   mounted: function () {
     this.$nextTick(function () {
-      window.addEventListener('scroll', this.handleScroll);
-      this.initDatas();
-      this.initUser();
-      this.changeProblemListHeight();
+      window.addEventListener('scroll', this.handleScroll)
+      this.initDatas()
+      this.initUser()
+      this.changeProblemListHeight()
     })
   },
   beforeDestroy: function () {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll)
   },
-  computed:{
-    countDown:function(){
-      var targetTime = this.contestStatus==1? this.endTime : this.startTime;
-      var msecond = new Date(targetTime).getTime() - new Date(this.nowTime).getTime();   //时间差的毫秒数
-      //------------------------------
-      //计算出相差天数
-      var days=Math.floor(msecond/(24*3600*1000))
-      //计算出小时数
-      var leave1=msecond%(24*3600*1000)    //计算天数后剩余的毫秒数
-      var hours=Math.floor(leave1/(3600*1000))
-      //计算相差分钟数
-      var leave2=leave1%(3600*1000)        //计算小时数后剩余的毫秒数
-      var minutes=Math.floor(leave2/(60*1000))
-      //计算相差秒数
-      var leave3=leave2%(60*1000)      //计算分钟数后剩余的毫秒数
-      var seconds=Math.floor(leave3/1000)
-      if(this.isPadZero){
-        days = ('0'+days).substr(-2)
-        hours = ('0'+hours).substr(-2)
-        minutes = ('0'+minutes).substr(-2)
-        seconds = ('0'+seconds).substr(-2)
+  computed: {
+    countDown: function () {
+      var targetTime = this.contestStatus == 1 ? this.endTime : this.startTime
+      var msecond = new Date(targetTime).getTime() - new Date(this.nowTime).getTime() // 时间差的毫秒数
+      // ------------------------------
+      // 计算出相差天数
+      var days = Math.floor(msecond / (24 * 3600 * 1000))
+      // 计算出小时数
+      var leave1 = msecond % (24 * 3600 * 1000) // 计算天数后剩余的毫秒数
+      var hours = Math.floor(leave1 / (3600 * 1000))
+      // 计算相差分钟数
+      var leave2 = leave1 % (3600 * 1000) // 计算小时数后剩余的毫秒数
+      var minutes = Math.floor(leave2 / (60 * 1000))
+      // 计算相差秒数
+      var leave3 = leave2 % (60 * 1000) // 计算分钟数后剩余的毫秒数
+      var seconds = Math.floor(leave3 / 1000)
+      if (this.isPadZero) {
+        days = ('0' + days).substr(-2)
+        hours = ('0' + hours).substr(-2)
+        minutes = ('0' + minutes).substr(-2)
+        seconds = ('0' + seconds).substr(-2)
       }
-      return{
-        ds:days,
-        hrs:hours,
-        mins:minutes,
-        secs:seconds
-      }
-    },
-    contestStatus:function(){
-      if(this.nowTime<this.endTime){
-        //end
-        return 2;
-      } else if(this.nowTime<this.startTime){
-        //starting
-        return 1;
-      } else{
-        //waiting for start
-        return 0;
+      return {
+        ds: days,
+        hrs: hours,
+        mins: minutes,
+        secs: seconds
       }
     },
-    avatarUrl:function(){
-      return `${noPointHost}/api/avatar/`+ this.userData.user_id
+    contestStatus: function () {
+      if (this.nowTime < this.endTime) {
+        // end
+        return 2
+      } else if (this.nowTime < this.startTime) {
+        // starting
+        return 1
+      } else {
+        // waiting for start
+        return 0
+      }
+    },
+    avatarUrl: function () {
+      return `${noPointHost}/api/avatar/` + this.userData.user_id
     }
   }
 }
@@ -561,9 +559,6 @@ hr.cut-off{
     border-top: 1px solid #d3dcdc;
 }
 
-
-
-
 .title-box{
     margin: 8rem 12% 6rem;
     border: 10px solid #e8f1f2;
@@ -605,10 +600,6 @@ hr.cut-off{
     display: block;
 }
 
-
-
-
-
 .time-bar .timers{
     display: flex;
     justify-content: center;
@@ -645,11 +636,6 @@ hr.cut-off{
     position: relative;
     top: 5px;
 }
-
-
-
-
-
 
 .navbar{
     position: fixed;
@@ -813,9 +799,6 @@ hr.cut-off{
     background: rgba(19, 41, 61, 0.5);
 }
 
-
-
-
 .band-with-80padding h3{
     text-align: center;
     color: #87b7cb;
@@ -917,7 +900,6 @@ hr.cut-off{
     padding: 40px 0;
     text-align: center;
 }
-
 
 .footer{
     background: #006494;

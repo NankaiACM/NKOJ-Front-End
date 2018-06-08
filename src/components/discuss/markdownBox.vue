@@ -3,6 +3,7 @@
   </div>
 </template>
 <script>
+import marked from 'marked'
 export default {
   name: 'markdown-box',
   props: ['mdstr'],

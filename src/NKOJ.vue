@@ -10,6 +10,7 @@
     -->
     <head-bar @toHome="localTo('home')" @logIn='changeToLogin' @signUp='changeToSignup'
               @toProblem="localTo('problems')" @toStatus="localTo('status')" @toContest="localTo('contest')"
+              @toDiscuss="localTo('discuss')"
               :nowPage=nowPageF :userPage=userPage>
     <question-filter v-if="this.$route.path === '/problems'" class="abb"></question-filter>
     <status-filter v-if="this.$route.path === '/status'" class="abb"></status-filter>

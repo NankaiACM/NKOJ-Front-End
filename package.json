@@ -20,6 +20,7 @@
     "echarts-gl": "^1.1.1",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
+    "marked": "^0.4.0",
     "moment": "^2.22.1",
     "particles.js": "^2.0.0",
     "vue": "^2.5.16",

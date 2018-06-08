@@ -1,52 +1,46 @@
 <template>
-<div id="Problems" class="container-fulid">
-  <div class="fat-container container-fluid">
-  <table id="ProblemTable" class="table table-hover">
-    <thead class="thread-height">
-      <tr>
-        <th class="problem-status"></th>
-        <th class="problemTableHeaderCol1">编号</th>
-        <th class="problemTableHeaderCol2">题目名称</th>
-        <th class="problemTableHeaderCol3">通过率</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr id="problemRow" v-for="problem in problemList" v-bind:key="problem.id">
-        <td class="problem-status">
-          <i
-            :class="{
-              'glyphicon':true,
-              'glyphicon-star-empty':true,
-              'pro-status-star':problem.isStar
-            }">
-          </i>
-          <i
-            :class="{
-              'glyphicon':true,
-              'glyphicon-minus-sign':problem.state==='none',
-              'glyphicon-refresh':problem.state==='on',
-              'glyphicon-ok':problem.state==='ac'
-            }">
-          </i>
-        </td>
-        <td class="problemTableCol1">
-          <router-link :to="{path:'problem/'+problem.problem_id}">
-            {{problem.problem_id}}
-          </router-link>
-        </td>
-        <td class="problemTableCol2">
-          <router-link :to="{path:'problem/'+problem.problem_id}">
-            {{problem.title}}
-          </router-link>
-        </td>
-        <td class="problemTableCol3">
-          {{problem.ac}} / {{problem.all}}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div id="problem">
+  <div class="wrp">
+    <div class="head">
+      <div></div>
+      <div>编号</div>
+      <div>题目名称</div>
+      <div>通过率</div>
+    </div>
+    <div class="line" v-for="problem in problemList" v-bind:key="problem.id">
+      <div class="status">
+        <span
+          :class="{
+            'glyphicon':true,
+            'glyphicon-star-empty':true,
+            'pro-status-star':problem.isStar
+          }">
+        </span>
+        <span
+          :class="{
+            'glyphicon':true,
+            'glyphicon-minus-sign':problem.state==='none',
+            'glyphicon-refresh':problem.state==='on',
+            'glyphicon-ok':problem.state==='ac'
+          }">
+        </span>
+      </div>
+      <div>
+        <router-link :to="{path:'problem/'+problem.problem_id}">
+          {{problem.problem_id}}
+        </router-link>
+      </div>
+      <div>
+        <router-link :to="{path:'problem/'+problem.problem_id}">
+          {{problem.title}}
+        </router-link>
+      </div>
+      <div>
+        {{problem.ac}} / {{problem.all}}
+      </div>
+    </div>
+  </div>
   <problems-pagination @viewingleap="handleViewing" :pagesize="this.pageSize" :last="this.total"></problems-pagination>
-</div>
 </div>
 </template>
 <script>
@@ -142,88 +136,50 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 @import '../../less/global.less';
-
-#Problems {
-  background: rgba(255, 255, 255, 0.7);
-  color: #233;
-  padding:0;
-  transition: all 1s;
-  margin-top: @filterheight;
-}
-
-#Problems td a {
-  color: #2c3e50;
-  text-decoration: none;
-}
-
-#ProblemTable {
-  padding: 2em;
-  border-bottom: 1px solid #e5e9ef;
-  margin-bottom: 1em;
-}
-
-#ProblemTable thead tr th {
-  font-size: 1.4em;
-  text-align: left;
-}
-
-#ProblemTable tbody tr td:first-child {
-  padding-left: 3em;
-}
-
-#ProblemTable tbody tr td:last-child {
-  padding-right: 3em;
-}
-
-#ProblemTable td {
-  vertical-align: middle;
-  border: 0;
-}
-
-#ProblemTable tr {
-  transition: all 1s;
-}
-
-tbody .problem-status {
-  width: 2rem;
-  height: 4rem;
-}
-
-.problem-status i {
-  width: 2rem;
-  height: 2rem;
-  font-size: 2rem;
-  color: #b1b1b1;
-  margin: 0;
-  padding: 0;
-  transition: color .5s;
-  cursor: pointer;
-}
-
-.problem-status i:hover {
-  color: #8b8b8b;
-}
-
-.problem-status i.pro-status-star {
-  color: orange;
-}
-
-.problem-status i.glyphicon-refresh {
-  color: #6cf;
-}
-
-.problem-status i.glyphicon-ok {
-  color: #63c163;
-}
-
-@media (min-width: 992px) {
-  .problem-page-title {
-  }
-}
-@media (min-width: 768px) {
-  .nagi {
+#problem {
+  margin-top: 60px;
+  padding: 1em 2em 3em 2em;
+  background: rgba(255,255,255,.8);
+  .wrp {
+    width: 100%;
+    .head, .line {
+      display: grid;
+      grid-template-columns: 50px 80px auto 50px;
+      grid-column-gap: 2rem;
+    }
+    .head {
+      padding: 1em 30px;
+      font-size: 16px;
+      color: #2cbfec;
+      border-bottom: 1px solid rgba(241,241,241,.8);
+    }
+    .line {
+      padding: 1em 30px;
+      color: #233;
+      align-items: center;
+      &:hover {
+        background: #f1f1f1;
+      }
+      a {
+        color: #233;
+      }
+      .status {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        span {
+          font-size: 18px;
+          padding: 4px 0;
+          color: #ccc;
+          cursor: pointer;
+          &:hover {
+            color: #2cbfec;
+          }
+        }
+      }
+    }
   }
 }
 </style>

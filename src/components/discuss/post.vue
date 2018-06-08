@@ -2,13 +2,13 @@
   <div id="post">
     <div class="wrp">
       <div v-for="(item, index) in os" :key="index">
-        <post-cell :item="item" :pos="index" @reload="reload"></post-cell>
+        <cell :item="item" :pos="index" @reload="reload"></cell>
       </div>
     </div>
   </div>
 </template>
 <script>
-import postCell from './discussCell.vue'
+import cell from './cell.vue'
 export default {
   name: 'post',
   data: function () {
@@ -17,7 +17,7 @@ export default {
     }
   },
   components: {
-    postCell
+    cell
   },
   methods: {
     reload: function () {
@@ -39,7 +39,7 @@ export default {
 </script>
 <style lang="less" scoped>
 #post {
-  padding: 4em 2em;
+  padding: 4em 2em 6em 2em;
   background: rgba(255,255,255,.9);
   display: flex;
   flex-direction: column;

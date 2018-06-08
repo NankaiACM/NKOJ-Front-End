@@ -1,6 +1,6 @@
 <template>
   <div class="onepiece" :class="{top: pos === 0}">
-    <div class="titile-line">
+    <div class="title-line">
       <div class="avatar-box" :title="item['user_id']">
         <a href="">
           <img class="avatar" :src="avatarSubUrl + item['user_id']" :alt="item['user_id']">
@@ -50,6 +50,7 @@
           <div class="info">
             <span class="time">{{dd(it.since)}}</span>
             <span class="pbtn" @click="at(it['reply_id'], it['user_id'])">评论</span>
+            <span class="pbtn glyphicon glyphicon-heart" @click="like(it['reply_id'])"> {{it.score}}</span>
           </div>
         </div>
       </div>
@@ -113,6 +114,13 @@ export default {
       this.rOc = '/reply'
       this.input = ''
       this.focusState = !this.focusState
+    },
+    like: function (rid) {
+      this.$http.get(window.noPointHost + '/api/post/like/' + rid)
+        .then(function (r) {
+          if (r.body.code !== 0) return
+          if (r.body.data.affected !== 0) this.r()
+        })
     },
     u: function (rid) {
       this.$http.get(window.noPointHost + '/api/post/upvote/' + rid)
@@ -178,13 +186,20 @@ export default {
   margin: 0 2em -1em 2em;
   color: #262626;
   border: 1px solid #efefef;
-  background: #fff;
   padding-bottom: 2.5em;
   &.top {
-    border: 1px solid #ccc;
+    border: none;
     margin: 2em 1em;
     border-radius: 4px;
     padding-bottom: 1em;
+    border-top: 2px solid #ccc;
+    border-bottom: 2px solid #ccc;
+    .title-line {
+      .title-a {
+        font-weight: 500;
+        font-size: 18px;
+      }
+    }
   }
   p {
     margin: 0;
@@ -205,7 +220,7 @@ export default {
       object-fit: cover;
     }
   }
-  .titile-line {
+  .title-line {
     height: 5em;
     display: grid;
     grid-template-columns: 4em auto 7em;
@@ -216,11 +231,11 @@ export default {
       color: #233;
     }
     .addAns {
-      border: 1px #efefef solid;
+      border: 1px #ccc solid;
       padding: .4em 1em;
       text-align: center;
       cursor: pointer;
-      color: #ccc;
+      color: #99a2aa;
       &:hover {
         color: #233;
       }
