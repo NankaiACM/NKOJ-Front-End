@@ -13,6 +13,19 @@
       </div>
     </div>
   </div>
+  <div>
+    <div v-if="$store.getters.usrLogGet && $store.getters.proAddGet" class="opa">
+      <div class="opaBtn">
+        <span
+          @click="dosth('remove', it['post_id'])"
+          class="glyphicon glyphicon-trash del">delete</span>
+        <br>
+        <span
+          @click="dosth('recover', it['post_id'])"
+          class="glyphicon glyphicon-repeat rev">recover</span>
+      </div>
+    </div>
+  </div>
 </div>
 </template>
 <script>
@@ -23,6 +36,20 @@ export default {
   methods: {
     interval: function (timestamp) {
       return moment(timestamp, 'x').fromNow()
+    },
+    dosth: function (opa, id) {
+      /*
+       * opa:
+       * recover,remove
+       */
+      if (opa !== 'recover' && opa !== 'remove') return -1
+      const vm = this
+      vm.$http.get(window.noPointHost + '/api/admin/post/' + opa + '/' + id)
+        .then(function (res) {
+          console.log(res)
+        }, function (e) {
+          console.log(e)
+        })
     }
   }
 }
@@ -32,7 +59,7 @@ export default {
 .item {
   max-width: 960px;
   display: grid;
-  grid-template-columns: 50px 50px auto;
+  grid-template-columns: 50px 50px auto 50px;
   grid-column-gap: 1em;
   border-bottom: 1px solid #eee;
   padding: 1em 0;
@@ -44,19 +71,21 @@ export default {
     justify-items: center;
     align-items: center;
   }
+  @pc: #aaa;
+  @nc: #aaa;
   .positive {
-    border: 1px solid #4cae4c;
-    color: #4cae4c;
+    border: 1px solid @pc;
+    color: @pc;
     &.fill {
-      background: #4cae4c;
+      background: @pc;
       color: #fff;
     }
   }
   .negative {
-    border: 1px solid #c24f4a;
-    color: #c24f4a;
+    border: 1px solid @nc;
+    color: @nc;
     &.fill {
-      background: #c24f4a;
+      background: @nc;
       color: #fff;
     }
   }
@@ -74,6 +103,23 @@ export default {
     a {
       color: #9d9d9d;
       margin: 0 1em;
+    }
+  }
+  .opa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    .opaBtn {
+      text-align: center;
+      cursor: pointer;
+      .del:hover {
+        color: #c24f4a;
+      }
+      .rev:hover {
+        color: #2cbfec;
+      }
     }
   }
 }

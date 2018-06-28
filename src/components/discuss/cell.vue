@@ -58,9 +58,11 @@
     <slot name="more-rep"></slot>
     <div class="input-line" v-if="focusState">
       <div class="input-wrapper">
-        <div class="input-hack">{{input}}</div>
+        <div id="input-hack" contenteditable="true"><!--{{input}}--></div>
+        <!--
         <textarea v-focus="focusState" class="input-box" :placeholder="placeholder" v-model="input">
         </textarea>
+        -->
       </div>
       <div class="dot-box" @click="hit">
         <span class="glyphicon glyphicon-share-alt" :class="{active: input !== ''}"></span>
@@ -85,12 +87,14 @@ export default {
   },
   methods: {
     hit: function () {
+      this.input = document.querySelector('#input-hack').innerText
       console.log(this.input)
       this.$http.post(window.noPointHost + '/api/post' + this.rOc + this.rid, {content: this.input})
         .then(function (r) {
           console.log(JSON.stringify(r))
           if (r.body.code === 0) this.r()
           this.input = ''
+          this.focusState = false
         }, function (e) {
           console.log(JSON.stringify(e))
         })
@@ -111,7 +115,7 @@ export default {
     reply: function (rid, uid) {
       this.placeholder = '回复 #' + rid + '@' + uid
       this.rid = rid
-      this.rOc = '/reply'
+      this.rOc = '/reply/'
       this.input = ''
       this.focusState = !this.focusState
     },
@@ -183,17 +187,13 @@ export default {
 </script>
 <style lang="less" scoped>
 .onepiece {
-  margin: 0 2em -1em 2em;
+  margin: 0 2em 0 2em;
   color: #262626;
-  border: 1px solid #efefef;
-  padding-bottom: 2.5em;
+  border-bottom: 1px solid #cdcdcd;
+  padding: 1em 0;
   &.top {
     border: none;
-    margin: 2em 1em;
-    border-radius: 4px;
-    padding-bottom: 1em;
-    border-top: 2px solid #ccc;
-    border-bottom: 2px solid #ccc;
+    border-bottom: 2px solid #cdcdcd;
     .title-line {
       .title-a {
         font-weight: 500;
@@ -226,7 +226,7 @@ export default {
     grid-template-columns: 4em auto 7em;
     align-items: center;
     padding: 1em 2em;
-    border-bottom: 1px solid #efefef;
+    // border-bottom: 1px solid #efefef;
     .title-a {
       color: #233;
     }
@@ -245,14 +245,14 @@ export default {
     text-align: left;
     padding: 1em 0;
     margin: 0 2em;
-    border-bottom: 1px solid #efefef;
+    // border-bottom: 1px solid #efefef;
   }
   .icons-line {
     display: flex;
     flex-direction: row;
     height: 3em;
     color: #99a2aa;
-    border-bottom: 1px solid #efefef;
+    // border-bottom: 1px solid #efefef;
     .r-c ,.v-c {
       line-height: 2em;
       padding-right: .5em;
@@ -311,15 +311,35 @@ export default {
     }
   }
   .input-line {
-    .input-hack {
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    #input-hack {
       position: relative;
       display: block;
       width: 100%;
-      z-index: -1;
-      opacity: 0;
+      height: auto;
+      // z-index: -1;
+      // opacity: 0;
+      outline: none;
       word-break: break-all;
       white-space: pre; /* important */
     }
+    /*
+    .input-box {
+      position: absolute;
+      background: none;
+      display: block;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      resize: none;
+      overflow: visible;
+      outline: none;
+      color: #262626;
+      &::-webkit-input-placeholder {
+      }
+    }
+    */
   }
 }
 .onepiece .icons-line,
@@ -334,9 +354,9 @@ export default {
   position: relative;
   min-height: 4em;
   height: auto;
-  padding-bottom: 1em;
+  padding: .5em 1em;
   margin-top: .5em;
-  border-top: 1px solid #efefef;
+  // border-top: 1px solid #efefef;
 }
 
 .input-wrapper {
@@ -348,6 +368,8 @@ export default {
 .input-line .dot-box {
   position: absolute;
   right: 0;
+  width: 3em;
+  text-align: center;
   bottom: 1em;
 }
 
@@ -364,24 +386,5 @@ export default {
 
 .input-line .dot-box span.active:hover {
   opacity: .9;
-}
-
-.input-line .input-box {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  resize: none;
-  overflow: hidden;
-  outline: none;
-  color: #262626;
-}
-
-.input-line .input-box::-webkit-input-placeholder {
-}
-
-.onepiece .media-right {
-  min-width: 5em;
 }
 </style>

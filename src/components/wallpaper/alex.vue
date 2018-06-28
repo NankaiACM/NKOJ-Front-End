@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     wllRender: function () {
-      this.boolt = ! this.boolt
+      this.boolt = !this.boolt
       var trngls = this.trangles
       this.trangles = []
       for (var i = 0; i < this.nums; i++) {
@@ -50,7 +50,7 @@ export default {
     },
     r: function () {
       var t = _r()
-      if (t > .5) t = 1
+      if (t > 0.5) t = 1
       if (t !== 1) t = 0
       return this.color[t]
     }

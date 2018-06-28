@@ -99,6 +99,6 @@ export default new Vuex.Store({
           state.userData.o = payload.o
         }
       }
-    },
+    }
   }
 })

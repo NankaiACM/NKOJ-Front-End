@@ -36,7 +36,7 @@
           <a> 注册<span class="glyphicon glyphicon-user"></span></a>
         </div>
         <div class="field" :class="{'field-focus':userPage==='login'}" v-on:click="$emit('logIn')"
-             v-if="userData.isLogin===false">
+             v-if="userData.isLogin===false" id="loginBtn">
           <a> 登录<span class="glyphicon glyphicon-log-in"></span></a>
         </div>
         <div class="userdetail" v-if="userData.isLogin">

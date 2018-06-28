@@ -43,7 +43,7 @@ import foot from './components/footer.vue'
 import ver from './components/ver/ver.vue'
 
 export default {
-  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell, wallPaper,alex,foot, ver},
+  components: {loginDialog, headBar, questionFilter, statusFilter, rankFilter, componentShell, wallPaper, alex, foot, ver},
   name: 'NKOJ',
   data: function () {
     return {

@@ -5,13 +5,15 @@
         <div class="head"><div class="title">Top Discuss</div><div class="tag active">0</div></div>
         <stream :items="list"></stream>
       </div>
-      <div><new-post></new-post></div>
+      <div>
+        <new-post></new-post>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import stream from './stream'
-import newPost from './newPost'
+import newPost from './newPostTag'
 export default {
   name: 'discuss',
   components: {stream, newPost},
@@ -38,7 +40,8 @@ export default {
     padding: 3em 2em;
     .wrp {
       display: grid;
-      grid-template-columns: auto 300px;
+      grid-template-columns: auto 200px;
+      grid-column-gap: 2em;
       .head {
         display: grid;
         grid-template-columns: auto 5em;
@@ -56,9 +59,12 @@ export default {
           &.active {
             border-left: 1px solid #ccc;
             border-right: 1px solid #ccc;
-            border-top: 3px solid #2cbfec;
+            border-top: 2px solid #ccc;
           }
         }
+      }
+      .signInBtn {
+
       }
     }
   }

@@ -8,11 +8,18 @@ import store from './vuex/store'
 import isScrolled from './scroll'
 import SlideUpDown from 'vue-slide-up-down'
 import notify from './components/shell/notify'
+import mavonEditor from 'mavon-editor'
 
 Vue.config.productionTip = false
 Vue.use(VueResource)
+Vue.use(mavonEditor)
 Vue.component('vue-slide-up-down', SlideUpDown)
 Vue.component('notify', notify)
+/*
+ * data of notify should be post
+ * title, message, count
+ */
+
 /* eslint-disable no-new */
 new Vue({
   el: '#NKOJ',

@@ -7,7 +7,7 @@
 <script>
 import it from './item'
 export default {
-  name: 'stream.vue',
+  name: 'stream',
   components: {it},
   props: ['items']
 }
