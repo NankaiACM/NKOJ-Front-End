@@ -1,6 +1,6 @@
 <template>
 <div id="app">
-  <!--<alex></alex>-->
+  <alex></alex>
   <login-dialog v-if="userPage=='login'" @exit="exitShow" :status="userPage" @changeStatus="changeLogin"></login-dialog>
   <header>
     <!--
