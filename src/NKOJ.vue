@@ -26,6 +26,7 @@
   </div>
   <component-shell></component-shell>
   <ver></ver>
+  <notify :title="$store.state.notify.title" :message="$store.state.notify.message" :count="$store.state.notify.count"></notify>
 </div>
 </template>
 

@@ -34,6 +34,11 @@ export default new Vuex.Store({
       check: false,
       perm: {},
       o: {}
+    },
+    notify: {
+      title: '',
+      message: '',
+      count: 0
     }
   },
   getters: {
@@ -99,6 +104,11 @@ export default new Vuex.Store({
           state.userData.o = payload.o
         }
       }
+    },
+    setNotify: function (state, payload) {
+      state.notify.title = payload.title
+      state.notify.message = payload.message
+      state.notify.count++
     }
   }
 })
