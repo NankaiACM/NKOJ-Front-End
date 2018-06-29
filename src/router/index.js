@@ -167,5 +167,64 @@ router.removeShare = function (vm, solutionId, status) {
       vm.notify.count++
     })
 }
-
+router.mngCP = function (vm, cp, mng, id) {
+  /*
+   * manage comment and post
+   * 删除评论
+   * cp:
+   * comment, post
+   * mng:
+   * recover, remove
+   */
+  if (mng !== 'recover' && mng !== 'remove') return -1
+  var apiUrl = ''
+  if (cp === 'comment') apiUrl = window.noPointHost + '/api/admin/post/' + mng + '/comment/' + id
+  else if (cp === 'post') apiUrl = window.noPointHost + '/api/admin/post/' + mng + '/' + id
+  else return -1
+  vm.$http.get(apiUrl)
+    .then(function (res) {
+      if (res.body.code === 0) {
+        vm.$store.commit('setNotify', {
+          title: mng + ': ok',
+          message: res.body.message
+        })
+      } else {
+        vm.$store.commit('setNotify', {
+          title: res.body.message,
+          message: JSON.stringify(res.error)
+        })
+      }
+    }, function (e) {
+      vm.$store.commit('setNotify', {
+        title: 'net error',
+        message: JSON.stringify(e)
+      })
+    })
+}
+router.uploadPost = function (vm, id) {
+  vm.$http.post(window.noPointHost + '/api/post/' + id, {
+    title: vm.title,
+    content: vm.content
+  }).then(function (res) {
+    console.log(res.body)
+    if (res.body.code === 0) {
+      vm.$store.commit('setNotify', {
+        title: 'submit ok',
+        message: res.body.message
+      })
+    } else {
+      vm.$store.commit('setNotify', {
+        title: 'error' + res.body.message,
+        message: JSON.stringify(res.body.error)
+      })
+    }
+  }, function (e) {
+    console.log('error')
+    vm.$store.commit('setNotify', {
+      title: 'upload error',
+      message: JSON.stringify(e)
+    })
+    console.log(e)
+  })
+}
 export default router

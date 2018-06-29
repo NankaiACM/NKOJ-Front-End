@@ -1,7 +1,7 @@
 <template>
-  <div id="rejudge">
-    <h3>Rejudge</h3>
-    <div id="b" :class="{gray: solutionId === ''}">
+  <div id="rejudge" class="bginputbg">
+    <h3>重新评测</h3>
+    <div id="bginput" :class="{gray: solutionId === ''}">
       <div class="b">
         <input placeholder="solution id" class="i" v-model="solutionId">
         <div class="r" @click="rejudge">rejudge</div>
@@ -34,64 +34,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-#rejudge {
-  min-height: 100%;
-  position: relative;
-}
-#b {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  .b {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 4em;
-    .i {
-      height: 40px;
-      border: 1px solid #1e88e5;
-      outline: none;
-      border-radius: 4px 0 0 4px;
-      border-right: none;
-      padding: .4em 1em;
-    }
-    .r {
-      width: 100px;
-      height: 40px;
-      line-height: 40px;
-      background: #1e88e5;
-      color: #d0e5f2;
-      border-radius: 0 4px 4px 0;
-      text-align: center;
-      cursor: pointer;
-      transition: all .41s;
-      &:hover {
-        background: #2cbfec;
-      }
-    }
-  }
-  &.gray {
-    .i {
-      border-color: #999;
-    }
-    .r {
-      color: #fff;
-      background: #999;
-      &:hover {
-        background: #999;
-      }
-    }
-  }
-  .c {
-    max-width: 80%;
-    border: 1px solid #999;
-    border-radius: 4px;
-    padding: 40px;
-  }
-}
+@import './bginput.less';
 </style>
