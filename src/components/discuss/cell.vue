@@ -26,14 +26,17 @@
         <span>{{item.negative}}</span>
       </div>
       <div class="sponsor i">
-        <span>{{item['user_id']}}</span>
+        <span>user [{{item['user_id']}}] post </span>
         {{cc(item.since)}}
       </div>
       <div class="terminator i">
         <span>{{item['last_active_user']}}</span>
         {{cc(item['last_active_date'])}}
       </div>
-      <span class="pbtn" @click="at(item['post_id'], item['user_id'])">评论</span>
+        <span class="pbtn i" @click="at(item['post_id'], item['user_id'])">评论</span>
+        <span v-if="isAdmin" class="pbtn i" @click="$router.mngCP(vm, 'post', 'remove', item['post_id'])">删除</span>
+        <span v-if="isAdmin" class="pbtn i" @click="$router.mngCP(vm, 'post', 'recover', item['post_id'])">恢复</span>
+        <router-link v-if="isAdmin" tag="span" :to="'/admin/editpost/' + item['post_id']" class="pbtn i">编辑</router-link>
     </div>
     <div class="rep-lines" v-if="item.comments && item.comments.length > 0">
       <div class="rep-line" v-for="(it, index) in item.comments" :key="index">
@@ -51,6 +54,8 @@
             <span class="time">{{dd(it.since)}}</span>
             <span class="pbtn" @click="at(it['reply_id'], it['user_id'])">评论</span>
             <span class="pbtn glyphicon glyphicon-heart" @click="like(it['reply_id'])"> {{it.score}}</span>
+            <span v-if="isAdmin" class="pbtn" @click="$router.mngCP(vm, 'comment', 'remove', it['reply_id'])">删除</span>
+            <span v-if="isAdmin" class="pbtn" @click="$router.mngCP(vm, 'comment', 'recover', it['reply_id'])">恢复</span>
           </div>
         </div>
       </div>
@@ -100,7 +105,7 @@ export default {
         })
     },
     cc: function (stamp) {
-      return moment(stamp, 'x').fromNow()
+      return moment(new Date(stamp), 'x').fromNow()
     },
     dd: function (stamp) {
       return moment(stamp).format('YYYY-MM-DD hh:mm:ss')
@@ -161,6 +166,12 @@ export default {
   computed: {
     avatarSubUrl: function () {
       return window.noPointHost + '/api/avatar/'
+    },
+    vm: function () {
+      return this
+    },
+    isAdmin: function () {
+      return this.$store.getters.usrLogGet && this.$store.getters.proAddGet
     }
   },
   components: {

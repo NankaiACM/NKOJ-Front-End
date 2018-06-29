@@ -35,21 +35,12 @@ export default {
   props: ['it'],
   methods: {
     interval: function (timestamp) {
-      return moment(timestamp, 'x').fromNow()
+      console.log(new Date(timestamp))
+      return moment(new Date(timestamp), 'x').fromNow()
     },
     dosth: function (opa, id) {
-      /*
-       * opa:
-       * recover,remove
-       */
-      if (opa !== 'recover' && opa !== 'remove') return -1
       const vm = this
-      vm.$http.get(window.noPointHost + '/api/admin/post/' + opa + '/' + id)
-        .then(function (res) {
-          console.log(res)
-        }, function (e) {
-          console.log(e)
-        })
+      vm.$router.mngCP(vm, 'post', opa, id)
     }
   }
 }
