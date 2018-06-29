@@ -10,7 +10,6 @@
       @save="upload"
       v-model="content">
     </mavon-editor>
-    <notify :title="notify.title" :message="notify.message" :count="notify.count"></notify>
   </div>
 </template>
 <script>
@@ -20,40 +19,14 @@ export default {
   data: function () {
     return {
       title: '',
-      content: '',
-      notify: {
-        title: '',
-        message: '',
-        count: ''
-      }
+      content: ''
     }
   },
   methods: {
     upload: function () {
       console.log(this.title)
       console.log(this.content)
-      const vm = this
-      vm.$http.post(window.noPointHost + '/api/post/0', {
-        title: vm.title,
-        content: vm.content
-      }).then(function (res) {
-        console.log(res.body)
-        if (res.body.code === 0) {
-          vm.notify.title = 'submit ok'
-          vm.notify.message = res.body.message
-          vm.notify.count++
-        } else {
-          vm.notify.title = 'error' + res.body.message
-          vm.notify.message = JSON.stringify(res.body.error)
-          vm.notify.count++
-        }
-      }, function (e) {
-        console.log('error')
-        vm.notify.title = 'submit error'
-        vm.notify.message = JSON.stringify(e)
-        vm.notify.count++
-        console.log(e)
-      })
+      this.$router.uploadPost(this, this.id)
       return 0
     }
   }
