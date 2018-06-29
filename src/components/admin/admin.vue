@@ -13,6 +13,11 @@
       <router-link to="/admin/rejudge">Rejudge</router-link>
       <router-link to="/admin/edituser">Edit User</router-link>
       <router-link to="/admin/editque">Edit Ques</router-link>
+      <router-link to="/admin/editpost">Edit Post</router-link>
+      <router-link to="/admin/rmpost">Remove Post</router-link>
+      <router-link to="/admin/rcpost">Recover Post</router-link>
+      <router-link to="/admin/rmcomment">Remove Comment</router-link>
+      <router-link to="/admin/rccomment">Recover Comment</router-link>
     </div>
   </div>
 </div>
