@@ -33,6 +33,7 @@
   </div>
   <div class="section">
     <h3>联系TA</h3>
+    <router-link target="_blank" class="a" :to="{path: '/message/whisper/' + o['user_id']}">发送私信</router-link>
   </div>
 </div>
 </template>
