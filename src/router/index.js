@@ -19,6 +19,7 @@ import signupPage from '../components/signupPage'
 import admin from '../components/admin/route'
 import account from '../components/account/route'
 import space from '../components/space/route'
+import message from '../components/message/route'
 
 Vue.use(Router)
 console.log(window.noPointHost)
@@ -31,6 +32,7 @@ const router = new Router({
       admin,
       account,
       ...space,
+      message,
       { path: '/home', component: componentHome },
       { path: '/problems', component: componentProblems },
       { path: '/notFound', component: componentB },
