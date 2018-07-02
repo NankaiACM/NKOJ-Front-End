@@ -90,6 +90,11 @@ router.beforeEach((to, from, next) => {
   let userinfo = store.state.userData
   if (userinfo.check === false) { // 仅在第一次加载页面checkUser(), 但不包含主动checkUser()
     router.checkUser(store)
+    /* WARNING *
+     * checkUser 包含异步， 页面加载nextTick中依赖于userDate状态的过程将会在刷新或者第一次进入出错，
+     * 但是由非_blank方式跳转而来时，页面将会表现正常。
+     * 建议将nextTick中的依赖过程加入watch列表
+     */
     store.commit({
       type: 'setuserDate',
       check: true
@@ -236,21 +241,28 @@ router.rmMsg = function (vm, oa, value) {
   }
   const api = ops[oa]
   if (!api) return -1
-  vm.$http.get(window.noPointHost + api + value)
+  return vm.$http.get(window.noPointHost + api + value)
     .then(function (res) {
       if (res.body.code === 0) {
         console.log('delete ok')
+        vm.$store.commit('setNotify', {
+          title: '删除成功',
+          message: res.body.message
+        })
+        return 0
       }
       vm.$store.commit('setNotify', {
         title: '删除消息',
         message: res.body.message
       })
+      return -1
     }, function (e) {
       vm.$store.commit('setNotify', {
         title: '发生错误',
         message: JSON.stringify(e)
       })
       console.log(e)
+      return -2
     })
 }
 router.banUser = function (vm, id) {
@@ -263,6 +275,28 @@ router.banUser = function (vm, id) {
     }, function (e) {
       vm.$store.commit('setNotify', {
         title: '发生错误',
+        message: JSON.stringify(e)
+      })
+    })
+}
+router.unifyQuery = function (vm, demand) {
+  // for no other callback
+  vm.$http.get(window.noPointHost + demand.api + demand.id)
+    .then(function (res) {
+      if (res.body.code === 0) {
+        vm.$store.commit('setNotify', {
+          title: demand.title,
+          message: res.body.message
+        })
+        return 0
+      }
+      vm.$store.commit('setNotify', {
+        title: demand.title + ': error',
+        message: JSON.stringify(res.body)
+      })
+    }, function (e) {
+      vm.$store.commit('setNotify', {
+        title: demand.title + ': fatal',
         message: JSON.stringify(e)
       })
     })
