@@ -229,4 +229,42 @@ router.uploadPost = function (vm, id) {
     console.log(e)
   })
 }
+router.rmMsg = function (vm, oa, value) {
+  const ops = {
+    one: '/api/message/delete/',
+    all: '/api/message/deleteall/'
+  }
+  const api = ops[oa]
+  if (!api) return -1
+  vm.$http.get(window.noPointHost + api + value)
+    .then(function (res) {
+      if (res.body.code === 0) {
+        console.log('delete ok')
+      }
+      vm.$store.commit('setNotify', {
+        title: '删除消息',
+        message: res.body.message
+      })
+    }, function (e) {
+      vm.$store.commit('setNotify', {
+        title: '发生错误',
+        message: JSON.stringify(e)
+      })
+      console.log(e)
+    })
+}
+router.banUser = function (vm, id) {
+  vm.$http.get(window.noPointHost + '/api/message/block/' + id)
+    .then(function (res) {
+      vm.$store.commit('setNotify', {
+        title: '屏蔽用户',
+        message: res.body.message
+      })
+    }, function (e) {
+      vm.$store.commit('setNotify', {
+        title: '发生错误',
+        message: JSON.stringify(e)
+      })
+    })
+}
 export default router

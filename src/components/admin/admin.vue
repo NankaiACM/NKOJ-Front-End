@@ -7,17 +7,20 @@
       </div>
     </div>
     <div class="nav-wrp">
-      <router-link to="/admin/problem">Add problem</router-link>
-      <router-link to="/admin/newpc">New Contest</router-link>
-      <router-link to="/admin/getpc">Contest Data</router-link>
-      <router-link to="/admin/rejudge">Rejudge</router-link>
-      <router-link to="/admin/edituser">Edit User</router-link>
-      <router-link to="/admin/editque">Edit Ques</router-link>
-      <router-link to="/admin/editpost">Edit Post</router-link>
-      <router-link to="/admin/rmpost">Remove Post</router-link>
-      <router-link to="/admin/rcpost">Recover Post</router-link>
-      <router-link to="/admin/rmcomment">Remove Comment</router-link>
-      <router-link to="/admin/rccomment">Recover Comment</router-link>
+      <router-link to="/admin/problem">添加题目</router-link>
+      <router-link to="/admin/newpc">添加竞赛</router-link>
+      <router-link to="/admin/getpc">竞赛数据</router-link>
+      <router-link to="/admin/rejudge">重新评测</router-link>
+      <router-link to="/admin/edituser">编辑用户</router-link>
+      <router-link to="/admin/editque">编辑问题</router-link>
+      <router-link to="/admin/editpost">编辑讨论</router-link>
+      <router-link to="/admin/rmpost">删除讨论</router-link>
+      <router-link to="/admin/rcpost">恢复讨论</router-link>
+      <router-link to="/admin/rmcomment">删除评论</router-link>
+      <router-link to="/admin/rccomment">恢复评论</router-link>
+      <router-link to="/admin/report">用户举报</router-link>
+      <router-link to="/admin/batch">群发私信</router-link>
+      <router-link to="/admin/sendto">独立私信</router-link>
     </div>
   </div>
 </div>

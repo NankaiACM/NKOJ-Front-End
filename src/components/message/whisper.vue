@@ -15,10 +15,22 @@
       </div>
     </div>
     <div class="dialog">
-      <div class="title">{{active}}</div>
+      <div class="title">
+        <span class="l">{{active}}</span>
+        <span class="r">
+          <span class="b" v-if="!menu" @click="menu = true">···</span>
+          <span class="c" v-if="menu">
+            <span @click="menu = false">-></span>
+            <span @click="cls">清空会话</span>
+            <span @click="ban">屏蔽</span>
+          </span>
+        </span>
+      </div>
       <div class="content">
         <div class="word" v-for="(it, index) in rwords" :key="index" :class="{l: true}">
           {{it.content}}
+          <span @click="clo(it['message_id'])" class="glyphicon glyphicon-remove i"></span>
+          <span @click="report(it['message_id'])" class="i r">举报</span>
         </div>
       </div>
       <div class="input">
@@ -39,7 +51,8 @@ export default {
       pool: {},
       words: [],
       input: '',
-      add: '0x3924ef'
+      add: '0x3924ef',
+      menu: false
     }
   },
   computed: {
@@ -61,8 +74,50 @@ export default {
     })
   },
   methods: {
+    cls: function () {
+      this.pool[this.active] = []
+      this.words = [] // 其实是重复的
+      this.$router.rmMsg(this, 'all', this.active)
+    },
+    ban: function () {
+      this.$router.banUser(this, this.active)
+    },
+    clo: function (id) {
+      const vm = this
+      vm.$http.get(window.noPointHost + '/api/message/delete/' + id)
+        .then(function (res) {
+          if (res.body.code === 0) {
+            vm.pool[vm.active] = undefined
+            vm.fetchWords(vm.active)
+          }
+          vm.$store.commit('setNotify', {
+            title: '删除消息',
+            message: res.body.message
+          })
+        }, function (e) {
+          vm.$store.commit('setNotify', {
+            title: '删除失败',
+            message: JSON.stringify(e)
+          })
+        })
+    },
     img: function (id) {
       return window.noPointHost + '/api/avatar/' + id
+    },
+    report: function (id) {
+      const vm = this
+      vm.$http.get(window.noPointHost + '/api/message/report/' + id)
+        .then(function (res) {
+          vm.$store.commit('setNotify', {
+            title: '举报私信',
+            message: res.body.message
+          })
+        }, function (e) {
+          vm.$store.commit('setNotify', {
+            title: '错误',
+            message: JSON.stringify(e)
+          })
+        })
     },
     fetchWords: function (id) {
       const vm = this
@@ -90,6 +145,7 @@ export default {
     },
     send: function () {
       const vm = this
+      console.log(vm.words)
       vm.$http.post(window.noPointHost + '/api/message/' + vm.active, {
         message: vm.input
       }).then(function (res) {
@@ -97,8 +153,9 @@ export default {
         if (res.body.code === 0) {
           console.log('send ok')
           const newword = { content: vm.input }
+          console.log(vm.words)
           vm.pool[vm.active].push(newword)
-          vm.words.push(newword)
+          // vm.words.push(newword)  // js 引用
           vm.input = ''
         } else {
           vm.$store.commit('setNotify', {
@@ -151,6 +208,9 @@ export default {
       font-weight: 600;
       border-bottom: 1px solid #efefef;
     }
+    .title {
+      font-size: 16px;
+    }
     .add {
       padding: 1em 2em;
       display: flex;
@@ -171,11 +231,32 @@ export default {
   }
   .dialog {
     .title {
-      padding: .5em;
       text-align: center;
+      font-size: 16px;
       color: #2cbfec;
       font-weight: 600;
       border-bottom: 1px solid #ccc;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      .l {
+        margin: .5em;
+      }
+      .r {
+        display: flex;
+        cursor: pointer;
+        .c {
+          display: flex;
+        }
+        .b, .c span {
+          padding: .5em 1em;
+          cursor: pointer;
+          font-weight: 600;
+          &:hover {
+            background: #efefef;
+          }
+        }
+      }
     }
     .content {
       padding: 2em 0;
@@ -199,6 +280,31 @@ export default {
         background: #fff;
         &.l {
           align-self: flex-start;
+        }
+        .i {
+          display: none;
+          height: 0;
+          width: 0;
+        }
+        &:hover .i {
+          color: #333;
+          display: inline-block;
+          font-weight: 200;
+          width: 2em;
+          height: 2em;
+          line-height: 2em;
+          text-align: center;
+          background: #ccc;
+          border-radius: 50%;
+          cursor: pointer;
+          &:hover {
+            color: red;
+          }
+        }
+        &:hover .r {
+          width: auto;
+          padding: 0 1em;
+          border-radius: 4px;
         }
       }
     }
@@ -233,6 +339,7 @@ export default {
         border: 1px solid #ccc;
         cursor: pointer;
         &:hover {
+          color: #2cbfec;
           border-color: #2cbfec;
         }
       }

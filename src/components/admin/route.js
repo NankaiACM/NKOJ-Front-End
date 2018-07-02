@@ -8,6 +8,8 @@ import editpc from './contest/edit'
 import pcdata from './contest/pcdata'
 import edituser from './contest/edituser'
 import editque from './contest/editque'
+import report from './message/report'
+import batch from './message/batch'
 
 export default {
   path: '/admin',
@@ -23,6 +25,8 @@ export default {
     { path: '/admin/editque', component: editque},
     { path: '/admin/editpost', component: editpost},
     { path: '/admin/editpost/:id', component: editpost},
+    { path: '/admin/report', component: report},
+    { path: '/admin/batch', component: batch},
     { path: '/admin/rmcomment',
       component: mngCP,
       props: {
