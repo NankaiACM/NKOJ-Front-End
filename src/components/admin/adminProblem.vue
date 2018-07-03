@@ -1,4 +1,4 @@
-<template xmlns:padding-top="http://www.w3.org/1999/xhtml">
+<template>
 <div class="adminPage">
   <h3>添加题目</h3>
   <form class="form-horizontal adminForm">

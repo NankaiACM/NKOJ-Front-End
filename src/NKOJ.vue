@@ -175,6 +175,8 @@ header {
   padding-top: 2vw;
   padding-bottom: 60px;
   flex: 1;
+  display: flex;
+  flex-direction: column;
   border-radius: 2px;
   &::before{
     background-color: white;

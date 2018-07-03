@@ -90,7 +90,7 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 @import '../../less/global.less';
 
 .question-filter-base {
