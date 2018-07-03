@@ -35,7 +35,15 @@ export default {
   methods: {
     upload: function () {
       const vm = this
-      vm.$router.uploadPost(vm, vm.id)
+      vm.$router.unifyQuery(vm, {
+        api: '/api/admin/post/edit/',
+        id: vm.id,
+        title: '编辑讨论#' + vm.id,
+        package: {
+          title: vm.title,
+          content: vm.content
+        }
+      })
     }
   },
   mounted: function () {

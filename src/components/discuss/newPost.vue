@@ -1,5 +1,6 @@
 <template>
   <div id="newPost">
+    <h3>发布新问题</h3>
     <div class="topHeader" :class="{active: title !== ''}">
       <input class="tlIn" v-model="title" type="text" placeholder="title: a sentence of clear question.">
       <button class="tlBtn" @click="upload">发布问题</button>
@@ -24,9 +25,15 @@ export default {
   },
   methods: {
     upload: function () {
-      console.log(this.title)
-      console.log(this.content)
-      this.$router.uploadPost(this, this.id)
+      this.$router.unifyQuery(this, {
+        api: '/api/post/',
+        id: 0,
+        title: '发布新讨论',
+        package: {
+          title: this.title,
+          content: this.content
+        }
+      })
       return 0
     }
   }
@@ -35,9 +42,12 @@ export default {
 <style lang="less" scoped>
 #newPost {
   background: rgba(255, 255, 255, 1);
-  padding: 2em;
+  padding: 2em 3em;
   box-shadow: 0 0px 3px 1px shade(#efefef, 5%);
   min-height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   .topHeader {
     font-size: 18px;
     margin: 0 0 2em 0;
@@ -71,6 +81,7 @@ export default {
   }
   #marktor {
     z-index: 2;
+    flex: 1;
   }
 }
 </style>

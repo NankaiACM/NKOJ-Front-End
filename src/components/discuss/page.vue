@@ -38,6 +38,7 @@ export default {
   #discuss {
     background: rgba(255, 255, 255, .8);
     padding: 3em 2em;
+    flex: 1;
     .wrp {
       display: grid;
       grid-template-columns: auto 200px;

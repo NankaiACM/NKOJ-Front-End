@@ -208,32 +208,6 @@ router.mngCP = function (vm, cp, mng, id) {
       })
     })
 }
-router.uploadPost = function (vm, id) {
-  vm.$http.post(window.noPointHost + '/api/post/' + id, {
-    title: vm.title,
-    content: vm.content
-  }).then(function (res) {
-    console.log(res.body)
-    if (res.body.code === 0) {
-      vm.$store.commit('setNotify', {
-        title: 'submit ok',
-        message: res.body.message
-      })
-    } else {
-      vm.$store.commit('setNotify', {
-        title: 'error' + res.body.message,
-        message: JSON.stringify(res.body.error)
-      })
-    }
-  }, function (e) {
-    console.log('error')
-    vm.$store.commit('setNotify', {
-      title: 'upload error',
-      message: JSON.stringify(e)
-    })
-    console.log(e)
-  })
-}
 router.rmMsg = function (vm, oa, value) {
   const ops = {
     one: '/api/message/delete/',
@@ -280,25 +254,38 @@ router.banUser = function (vm, id) {
     })
 }
 router.unifyQuery = function (vm, demand) {
-  // for no other callback
-  vm.$http.get(window.noPointHost + demand.api + demand.id)
-    .then(function (res) {
-      if (res.body.code === 0) {
-        vm.$store.commit('setNotify', {
-          title: demand.title,
-          message: res.body.message
-        })
-        return 0
-      }
+  /* demand: {
+   *   title,
+   *   api,
+   *   id,
+   *   package
+   * }
+   */
+  var func = function () {
+    vm.$http.get(window.noPointHost + demand.api + demand.id)
+  }
+  if (demand.package) {
+    func = function () {
+      return vm.$http.post(window.noPointHost + demand.api + demand.id, demand.package)
+    }
+  }
+  return func().then(function (res) {
+    if (res.body.code === 0) {
       vm.$store.commit('setNotify', {
-        title: demand.title + ': error',
-        message: JSON.stringify(res.body)
+        title: demand.title,
+        message: res.body.message
       })
-    }, function (e) {
-      vm.$store.commit('setNotify', {
-        title: demand.title + ': fatal',
-        message: JSON.stringify(e)
-      })
+      return 0
+    }
+    vm.$store.commit('setNotify', {
+      title: demand.title + ': error',
+      message: JSON.stringify(res.body)
     })
+  }, function (e) {
+    vm.$store.commit('setNotify', {
+      title: demand.title + ': fatal',
+      message: JSON.stringify(e)
+    })
+  })
 }
 export default router
