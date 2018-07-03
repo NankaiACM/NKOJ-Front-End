@@ -10,6 +10,8 @@ import edituser from './contest/edituser'
 import editque from './contest/editque'
 import report from './message/report'
 import batch from './message/batch'
+import findusr from './message/find'
+import separate from './message/separate'
 
 export default {
   path: '/admin',
@@ -27,6 +29,8 @@ export default {
     { path: '/admin/editpost/:id', component: editpost},
     { path: '/admin/report', component: report},
     { path: '/admin/batch', component: batch},
+    { path: '/admin/sendto', component: findusr},
+    { path: '/admin/sendto/:id', component: separate},
     { path: '/admin/rmcomment',
       component: mngCP,
       props: {

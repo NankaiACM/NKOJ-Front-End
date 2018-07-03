@@ -138,26 +138,6 @@ export default {
       }
     }
   }
-  .newpost {
-    padding: 1em;
-    .head {
-      margin: 1em 0;
-      display: grid;
-      grid-template-columns: auto 141px;
-      border: 1px solid #ccc;
-      box-shadow: 0 0px 3px rgba(0,0,0,0.157);
-      .title {
-        padding: .5em 1em;
-        outline: none;
-      }
-      .upbtn {
-        padding: .5em 1em;
-        background: #d0d0d0;
-        color: #fff;
-        cursor: pointer;
-        text-align: center;
-      }
-    }
-  }
+  @import "./newpost.less";
 }
 </style>
