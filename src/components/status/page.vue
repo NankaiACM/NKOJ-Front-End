@@ -90,10 +90,10 @@
 import InfiniteLoading from 'vue-infinite-loading'
 import moment from 'moment'
 import notify from '../shell/notify'
+import {statusMap, langHash} from './map.js'
 
-const {statusMap, langMap, langHash} = require('./map.json')
 export default {
-  name: 'statusPage',
+  name: 'status',
   props: ['isFilter', 'isInfinite', 'isBtn', 'apiUrl'],
   data: function () {
     return {

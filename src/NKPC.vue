@@ -174,7 +174,7 @@
 
 <script>
 import problemList from './components/contestpage/contestOpenCompenents/problemList.vue'
-import status from './components/statuspage/statusPage.vue'
+import status from './components/status/page.vue'
 import ranks from './components/contestpage/contestRank.vue'
 import loginPage from './components/dialog/loginDialog'
 import dialogWrap from './components/dialog/dialogWrap.vue'

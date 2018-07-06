@@ -35,7 +35,7 @@ import loginDialog from './components/dialog/loginDialog'
 import headBar from './components/headbar/headBar'
 
 import questionFilter from './components/problem/questionFilter.vue'
-import statusFilter from './components/statuspage/statusFilter.vue'
+import statusFilter from './components/status/filter.vue'
 import rankFilter from './components/ranklist/rankFilter.vue'
 import componentShell from './components/shell/mayoi.vue'
 import wallPaper from './components/wallpaper/wallpaper.vue'

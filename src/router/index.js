@@ -6,7 +6,7 @@ import componentProblems from '../components/problem/problemsPage'
 import componentHome from '../components/home/home'
 import componentB from '../components/componentB'
 import problemsPage from '../components/problem/problemPage'
-import statusPage from '../components/statuspage/statusPage'
+import status from '../components/status/page'
 import discuss from '../components/discuss/page'
 import newpost from '../components/discuss/newPost'
 import postPage from '../components/discuss/post'
@@ -40,7 +40,7 @@ const router = new Router({
       { path: '/problem/:problemId', component: problemsPage },
       {
         path: '/status',
-        component: statusPage,
+        component: status,
         props: {
           isInfinite: true,
           isBtn: false,
