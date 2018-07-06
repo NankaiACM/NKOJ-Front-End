@@ -17,7 +17,7 @@
           </tr>
         </thead>
         <transition-group tag="tbody" name="list">
-          <tr v-for="(status, index) in statusList" :key="index">
+          <tr v-for="(status, index) in afterFilterStatusList" :key="index">
             <td class="hidden-xs idbox">
               <span :class="{'has-contest' : status.contest_id}">{{status.solution_id}}<span v-if="status.contest_id">({{status.contest_id}})</span></span>
               <span v-if="isAdmin" class="rejudge glyphicon glyphicon-repeat" @click="notify.mptdex = index" title="rejudge this"></span>
@@ -252,13 +252,18 @@ export default {
     notify
   },
   watch: {
-    '$store.state.statusFilter.submit': function (n, o) {
-      this.filter = this.$store.state.statusFilter
-    },
-    'filter.submit': function () {
-    },
     maxId: function (n, o) {
       console.log('new maxId: ' + n)
+    },
+    '$store.state.statusFilter': {
+      deep: true,
+      handler: function (n, o) {
+        for (let i in this.filter) {
+          this.filter[i] = n[i]
+        }
+        console.log('deepsee2')
+        console.log(this.filter.status)
+      }
     }
   },
   computed: {
@@ -272,6 +277,26 @@ export default {
       if (!this.$store.state.userData.o) return false
       if (!this.$store.state.userData.o.perm) return false
       return this.$store.state.userData.o.perm.ADD_PROBLEM === '1'
+    },
+    afterFilterStatusList: function () {
+      const filter = this.filter
+      const lmap = ['problemID', 'userID', 'status', 'lang']
+      const rmap = ['problem_id', 'user_id', 'status_id', 'language']
+      console.log(JSON.stringify(filter))
+      console.log(this.statusList)
+      const ans = this.statusList.filter(function (v) {
+        for (let index in lmap) {
+          if (filter[lmap[index]] !== '') {
+            if (filter[lmap[index]].toString() !== v[rmap[index]].toString()) {
+              console.log(filter[lmap[index]], v[rmap[index]])
+              return false
+            }
+          }
+        }
+        return true
+      })
+      console.log(ans)
+      return ans
     }
   }
 }

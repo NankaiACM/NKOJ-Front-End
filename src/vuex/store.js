@@ -17,9 +17,8 @@ export default new Vuex.Store({
       userID: '',
       status: '',
       lang: '',
-      submit: 0, // 监听submit按钮按下
-      index: 1,
-      page_length: 20
+      limit: 150, // 单次请求最大量
+      last: -1
     },
     rankFilter: {
       timeBy: '',
@@ -67,13 +66,11 @@ export default new Vuex.Store({
       }
       state.filter[payload.key] = payload.value
     },
-    setSFilter (state, payload) { // status filter
-      var key = payload.key
-      var value = payload.value
-      if (value === state.statusFilter[key]) {
-        value = ''
+    setStatusFilter (state, payload) { // status filter
+      for (let i in payload) {
+        state.statusFilter[i] = payload[i]
       }
-      state.statusFilter[key] = value
+      console.log(JSON.stringify(state.statusFilter))
     },
     setRFilter (state, payload) {
       state.rankFilter[payload.key] = payload.value
