@@ -63,8 +63,7 @@
   </div>
   <vue-slide-up-down :active="showAnnouncement">
     <div class="announcement" :class="{'hasScroll':isScrolled}">
-      这是一个占位公告喵(>^ω^<)<br>
-      未来会从后端请求的，大概
+      {{annoucement}}
     </div>
     <div class="clearfix"></div>
   </vue-slide-up-down>
@@ -85,7 +84,8 @@ export default {
     return {
       isScrolled,
       showAnnouncement: false,
-      userData: {isLogin: false}
+      userData: {isLogin: false},
+      annoucement: '暂无通知'
     }
   },
   methods: {
@@ -104,6 +104,14 @@ export default {
     freshUserData () {
       this.userData = this.$store.state.userData
     },
+    fetchAnnouncement: function () {
+      this.$http.get(window.noPointHost + '/api/message/announcement')
+        .then(function (res) {
+          if (res.body.code === 0) {
+            this.annoucement = res.body.data[0].content
+          }
+        })
+    },
     logout: function () {
       this.$http.get(this.logoutUrl, {credentials: true})
         .then(function () {
@@ -120,6 +128,7 @@ export default {
     this.$nextTick(function () {
       window.addEventListener('scroll', this.handleScroll)
       this.freshUserData()
+      this.fetchAnnouncement()
     })
   },
   computed: {
