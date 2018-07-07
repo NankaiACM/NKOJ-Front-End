@@ -4,9 +4,6 @@
       <div class="title-bar">
         {{title}}
       </div>
-      <!--div class="navbutton">
-        <span class="glyphicon glyphicon-list"></span>
-      </div-->
     </div>
     <div class="content-bar">
       <slot></slot>

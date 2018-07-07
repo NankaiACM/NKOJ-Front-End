@@ -1,18 +1,5 @@
 <template>
 <div id="home">
-  <!--div id="alpha">
-    <alex></alex>
-    <tlex></tlex>
-    <div id="moka" @mousemove="moka" :style="mksty">
-      <div id="mo">ACM-ICPC</div>
-      <div id="ka">ACM-ICPC</div>
-    </div>
-    <div id="btns">
-      <span class="glyphicon glyphicon-cog" id="set"></span>
-      <span class="glyphicon glyphicon-console" id="cmd"></span>
-      <span class="glyphicon glyphicon-comment" id="chat"></span>
-    </div>
-  </div-->
   <div id="beta">
     <div class="mainbar">
       <home-problem></home-problem>
@@ -44,9 +31,9 @@
 <script>
 import princeton         from '../chat/princeton.vue'
 import alex              from '../wallpaper/alex.vue'
-import homeContest       from './homeContest.vue'
-import homeDiscuss       from './homeDiscuss.vue'
-import homeProblem       from './homeProblems.vue'
+import homeContest       from './contest.vue'
+import homeDiscuss       from './discuss.vue'
+import homeProblem       from './problems.vue'
 import HomeComponent     from './homeComponent'
 import urgent            from '../urgent/urgent.vue'
 export default {
@@ -97,7 +84,6 @@ export default {
 </script>
 <style lang="less" scoped>
 @import '../../less/global.less';
-
 
 #alpha {
   position: fixed;
