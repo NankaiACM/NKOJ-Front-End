@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    filter: {
+    problemFilter: {
       Difficulty: '',
       Status: '',
       Keywords: '',
@@ -41,6 +41,9 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    keyWordsGet: function (state) {
+      return state.problemFilter.Keywords
+    },
     rankTimeGet: function (state) {
       return state.rankFilter.timeBy
     },
@@ -60,11 +63,15 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    setXFilter (state, payload) { // problems filter
-      if (payload.value === state.filter[payload.key]) {
-        payload.value = ''
+    setProblemFilter (state, payload) { // problems filter
+      if (payload.value === state.problemFilter[payload.key]) {
+        if (payload.key !== 'Keywords') {
+          payload.value = ''
+          return 0
+        }
       }
-      state.filter[payload.key] = payload.value
+      state.problemFilter[payload.key] = payload.value
+      console.log(JSON.stringify(state.problemFilter))
     },
     setStatusFilter (state, payload) { // status filter
       for (let i in payload) {

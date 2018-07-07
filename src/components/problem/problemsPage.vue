@@ -44,15 +44,16 @@
 </div>
 </template>
 <script>
-import ProblemsPagination from './pagination.vue'
+import problemsPagination from './pagination.vue'
 import questionFilter from './questionFilter.vue'
+import matchSorter from 'match-sorter'
 export default {
   name: 'component-problems',
   props: ['user_pros_msg'],
   data: function () {
     return {
-      filter: [],
-      rawList: [],
+      rawNetList: [],
+      rawNetTotal: 1,
       problemList: [],
       starlist: [],
       aclist: [],
@@ -60,24 +61,34 @@ export default {
       pageSize: 20,
       queryleft: 0,
       queryright: 50,
-      viewing: 1, // >=1
-      total: 1
+      viewing: 1 // >=1
     }
   },
   mounted: function () {
     this.$nextTick(function () {
-      this.filter = this.$store.state.filter
       this.initView()
     })
+  },
+  computed: {
+    kWords: function () {
+      return this.$store.getters.keyWordsGet
+    },
+    rawList: function () {
+      return matchSorter(this.rawNetList, this.kWords, {
+        keys: ['title', 'problem_id']
+      })
+    },
+    total: function () {
+      return this.rawList.length
+    }
   },
   methods: {
     initView: function () {
       console.log(this.queryright)
       this.$http.get(`${window.noPointHost}/api/problems/list/${this.queryleft}/${this.queryright}`)
         .then(function (res) {
-          this.rawList = res.body.data.list
-          this.total = res.body.data.served
-          this.raw2listrender()
+          this.rawNetList = res.body.data.list
+          this.rawNetTotal = res.body.data.served
         })
     },
     stateAstarRender: function (tmp) {
@@ -121,17 +132,16 @@ export default {
       this.aclist = newv.ac
       this.onlist = newv.on
     },
-    'this.$store.state.filter': {
-      deep: true,
-      handler: function (n, o) {
-        this.filter = n
-        // this.problemList = []
-        // this.initView()
-      }
+    rawList: function (n, o) {
+      console.log('render')
+      this.raw2listrender()
+    },
+    kWords: function () {
+      console.log('happen')
     }
   },
   components: {
-    ProblemsPagination,
+    problemsPagination,
     questionFilter
   }
 }
@@ -160,7 +170,7 @@ export default {
       color: #233;
       align-items: center;
       &:hover {
-        background: #f1f1f1;
+        background: #fff;
       }
       a {
         color: #233;

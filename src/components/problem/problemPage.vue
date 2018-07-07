@@ -567,10 +567,10 @@ html {
       }
     }
     .ct {
-      color: yellowgreen;
-      border-color: yellowgreen;
+      color: #ff9800;
+      border-color: #ff9800;
       .t {
-        background: springgreen;
+        background: #ff9800;
       }
     }
     .ac {

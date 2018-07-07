@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1 id="hahaha">这个页面正在施工中！！！</h1>
+    <h1 id="hahaha">网页不见了</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'component-b'
+  name: '404'
 }
 </script>
 

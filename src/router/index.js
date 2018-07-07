@@ -4,7 +4,7 @@ import HOME from '../NKOJ'
 import NKPC from '../NKPC'
 import componentProblems from '../components/problem/problemsPage'
 import componentHome from '../components/home/home'
-import componentB from '../components/componentB'
+import notFound from '../components/404'
 import problemsPage from '../components/problem/problemPage'
 import status from '../components/status/page'
 import discuss from '../components/discuss/page'
@@ -35,7 +35,7 @@ const router = new Router({
       message,
       { path: '/home', component: componentHome },
       { path: '/problems', component: componentProblems },
-      { path: '/notFound', component: componentB },
+      { path: '/notFound', component: notFound },
       { path: '/', redirect: '/home' },
       { path: '/problem/:problemId', component: problemsPage },
       {
