@@ -122,12 +122,38 @@ const webpackConfig = merge(baseWebpackConfig, {
 
 
     /* WARNING *
-     * baitieyi&&windring add at 20180711
+     * baitieyi&&windring add at 20180711, 20180712
      * be care of this, it seems not good
      */
     new webpack.optimize.CommonsChunkPlugin({
       async: 'used-times',
       minChunks: (module, count) => (count >= 2)
+    }),
+    /* down here like doesn't work */
+
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'marked',
+      minChunks: ({resource} = {}) => (
+        resource && resource.includes('node_modules') && /marked/.test(resource)
+      )
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'wang-editor',
+      minChunks: ({resource} = {}) => (
+        resource && /wangEditor/.test(resource)
+      )
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'cropper',
+      minChunks: ({resource} = {}) => (
+        resource && resource.includes('node_modules') && /cropperjs/.test(resource)
+      )
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'mavon-editor',
+      minChunks: ({resource} = {}) => (
+        resource && resource.includes('node_modules') && /mavon-editor/.test(resource)
+      )
     }),
     /* add end */
 
