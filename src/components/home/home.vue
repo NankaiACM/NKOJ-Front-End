@@ -25,57 +25,19 @@
     </div>
     <div style="clear:both;"></div>
   </div>
-  <urgent></urgent>
 </div>
 </template>
 <script>
 import princeton         from '../chat/princeton.vue'
-import alex              from '../wallpaper/alex.vue'
 import homeContest       from './contest.vue'
 import homeDiscuss       from './discuss.vue'
 import homeProblem       from './problems.vue'
-import HomeComponent     from './homeComponent'
-import urgent            from '../urgent/urgent.vue'
+import homeComponent     from './homeComponent'
 export default {
   name: 'component-home',
-  data: function () {
-    return {
-      mk: {
-        x: 0,
-        y: 0,
-        z: 0
-      },
-      btns: false
-    }
-  },
-  mounted: function () {
-    this.$nextTick(function () {
-    })
-  },
-  methods: {
-    moka: function (e) {
-      const w = 210
-      const h = 35
-      var x = e.layerX - w
-      x = x / w
-      this.mk.y = x * 30
-      var y = e.layerY - h
-      y = y / h
-      this.mk.x = -y * 30
-    }
-  },
-  computed: {
-    mksty: function () {
-      return {
-        'transform': 'rotateX(' + this.mk.x + 'deg) rotateY(' + this.mk.y + 'deg)'
-      }
-    }
-  },
   components: {
-    urgent,
-    HomeComponent,
+    homeComponent,
     princeton,
-    alex,
     homeContest,
     homeDiscuss,
     homeProblem
