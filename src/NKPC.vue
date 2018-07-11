@@ -173,9 +173,9 @@
 </template>
 
 <script>
-import problemList from './components/contestpage/contestOpenCompenents/problemList.vue'
+import problemList from './components/contest/contestOpenCompenents/problemList.vue'
 import status from './components/status/page.vue'
-import ranks from './components/contestpage/contestRank.vue'
+import ranks from './components/contest/contestRank.vue'
 import loginPage from './components/dialog/loginDialog'
 import dialogWrap from './components/dialog/dialogWrap.vue'
 import saurusFooter from './components/footer'

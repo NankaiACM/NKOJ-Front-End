@@ -36,7 +36,7 @@ import headBar from './components/headbar/headBar'
 
 import questionFilter from './components/problem/questionFilter.vue'
 import statusFilter from './components/status/filter.vue'
-import rankFilter from './components/ranklist/rankFilter.vue'
+import rankFilter from './components/rank/rankFilter.vue'
 import componentShell from './components/shell/mayoi.vue'
 import wallPaper from './components/wallpaper/wallpaper.vue'
 import alex from './components/wallpaper/alex.vue'

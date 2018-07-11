@@ -1,25 +1,77 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HOME from '../NKOJ'
-import NKPC from '../NKPC'
-import componentProblems from '../components/problem/problemsPage'
-import componentHome from '../components/home/home'
-import notFound from '../components/404'
-import problemsPage from '../components/problem/problemPage'
-import status from '../components/status/page'
-import discuss from '../components/discuss/page'
-import newpost from '../components/discuss/newPost'
-import postPage from '../components/discuss/post'
-import componentContest from '../components/contestpage/componentContest'
-import allContest from '../components/contestpage/allContest'
-import contest from '../components/contestpage/contest'
-import detailsPage from '../components/detailspage/details'
-import rankPage from '../components/ranklist/rankPage'
-import signupPage from '../components/signupPage'
+// import NKOJ from '../NKOJ'
+// import NKPC from '../NKPC'
+// import problems from '../components/problem/problems'
+// import home from '../components/home/home'
+// import notFound from '../components/404'
+// import problem from '../components/problem/problem'
+// import status from '../components/status/page'
+// import discuss from '../components/discuss/page'
+// import newpost from '../components/discuss/newPost'
+// import post from '../components/discuss/post'
+// import contestWrap from '../components/contest/contestWrap'
+// import allContest from '../components/contest/allContest'
+// import contest from '../components/contest/contest'
+// import details from '../components/details/details'
+// import rank from '../components/rank/rank'
+// import signup from '../components/sign/signup'
+
 import admin from '../components/admin/route'
 import account from '../components/account/route'
 import space from '../components/space/route'
 import message from '../components/message/route'
+
+// new
+
+const NKOJ = () => import(
+  /* webpackChunkName: "nkoj" */
+  '../NkOJ.vue')
+const NKPC = () => import(
+  /* webpackChunkName: "nkpc" */
+  '../NKPC.vue')
+const home = () => import(
+  /* webpackChunkName: "home" */
+  '../components/home/home.vue')
+const signup = () => import(
+  /* webpackChunkName: "sign" */
+  '../components/sign/signup.vue')
+const problems = () => import(
+  /* webpackChunkName: "problem" */
+  '../components/problem/problems.vue')
+const problem = () => import(
+  /* webpackChunkName: "problem" */
+  '../components/problem/problem.vue')
+const status = () => import(
+  /* webpackChunkName: "status" */
+  '../components/status/page.vue')
+const details = () => import(
+  /* webpackChunkName: "status" */
+  '../components/details/details.vue')
+const contestWrap = () => import(
+  /* webpackChunkName: "contest" */
+  '../components/contest/contestWrap.vue')
+const contest = () => import(
+  /* webpackChunkName: "contest" */
+  '../components/contest/contest.vue')
+const allContest = () => import(
+  /* webpackChunkName: "contest" */
+  '../components/contest/allContest.vue')
+const discuss = () => import(
+  /* webpackChunkName: "discuss" */
+  '../components/discuss/page.vue')
+const post = () => import(
+  /* webpackChunkName: "discuss" */
+  '../components/discuss/post.vue')
+const newpost = () => import(
+  /* webpackChunkName: "discuss" */
+  '../components/discuss/newPost.vue')
+const rank = () => import(
+  /* webpackChunkName: "rank" */
+  '../components/rank/rank.vue')
+const notFound = () => import(
+  /* webpackChunkName: "404" */
+  '../components/404.vue')
 
 Vue.use(Router)
 console.log(window.noPointHost)
@@ -27,17 +79,17 @@ const router = new Router({
   mode: 'history',
   routes: [{
     path: '/',
-    component: HOME,
+    component: NKOJ,
     children: [
       admin,
       account,
       ...space,
       message,
-      { path: '/home', component: componentHome },
-      { path: '/problems', component: componentProblems },
+      { path: '/home', component: home },
+      { path: '/problems', component: problems },
       { path: '/notFound', component: notFound },
       { path: '/', redirect: '/home' },
-      { path: '/problem/:problemId', component: problemsPage },
+      { path: '/problem/:problemId', component: problem },
       {
         path: '/status',
         component: status,
@@ -57,13 +109,13 @@ const router = new Router({
       },
       {
         path: '/discuss/:id',
-        component: postPage
+        component: post
       },
-      { path: '/ranklist', component: rankPage },
-      { path: '/details/:solutionId', component: detailsPage },
+      { path: '/ranklist', component: rank },
+      { path: '/details/:solutionId', component: details },
       {
         path: '/contest',
-        component: componentContest,
+        component: contestWrap,
         children: [
           {
             path: '/contest/allContest',
@@ -76,7 +128,7 @@ const router = new Router({
         ]
       },
       {
-        path: '/sign_up', component: signupPage
+        path: '/sign_up', component: signup
       }
     ]
   }, {
@@ -88,7 +140,8 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   let store = router.app.$options.store
   let userinfo = store.state.userData
-  if (userinfo.check === false) { // 仅在第一次加载页面checkUser(), 但不包含主动checkUser()
+  if (userinfo.check === false) {
+    /* 仅在第一次加载页面checkUser(), 但不包含主动checkUser() */
     router.checkUser(store)
     /* WARNING *
      * checkUser 包含异步， 页面加载nextTick中依赖于userDate状态的过程将会在刷新或者第一次进入出错，

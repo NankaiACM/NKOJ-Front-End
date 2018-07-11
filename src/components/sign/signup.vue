@@ -105,8 +105,8 @@
 
 <script>
 import vueLoading from 'vue-loading-template'
-import dialogWrap from './dialog/dialogWrap'
-import encryptMsg from '../encrypt/encryptMsg.js'
+import dialogWrap from '../dialog/dialogWrap'
+import encryptMsg from '../../encrypt/encryptMsg.js'
 
 export default {
   name: 'signupPage',

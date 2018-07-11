@@ -6,15 +6,17 @@ import VueResource from 'vue-resource'
 import router from './router'
 import store from './vuex/store'
 import isScrolled from './scroll'
-import SlideUpDown from 'vue-slide-up-down'
-import notify from './components/shell/notify'
 import mavonEditor from 'mavon-editor'
 
 Vue.config.productionTip = false
 Vue.use(VueResource)
 Vue.use(mavonEditor)
-Vue.component('vue-slide-up-down', SlideUpDown)
-Vue.component('notify', notify)
+Vue.component('vue-slide-up-down',
+  () => import('vue-slide-up-down')
+)
+Vue.component('notify',
+  () => import('./components/shell/notify')
+)
 /*
  * data of notify should be post
  * title, message, count
