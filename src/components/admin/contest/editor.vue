@@ -38,6 +38,7 @@
 </template>
 <script>
 import moment from 'moment'
+// const moment = () => import(webpackChunkName: "moment" */ 'moment')
 export default {
   name: 'editor',
   props: ['url'],

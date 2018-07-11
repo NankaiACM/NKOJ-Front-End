@@ -23,7 +23,10 @@
   </div>
 </template>
 <script>
+import 'mavon-editor/dist/css/index.css'
 import marked from 'marked'
+// const marked = () => import(/* webpackChunkName: "marked" */ 'marked')
+
 export default {
   name: 'batch',
   data: function () {

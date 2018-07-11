@@ -138,6 +138,7 @@
 
 <script>
 import Editor from '../../../bin/wangEditor'
+// const Editor = () => import(/* webpackChunkName: "wang-editor" */ '../../../bin/wangEditor')
 export default {
   name: 'admin-problem',
   data: function () {

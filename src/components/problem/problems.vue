@@ -44,12 +44,20 @@
 </div>
 </template>
 <script>
-import problemsPagination from './pagination.vue'
-import questionFilter from './questionFilter.vue'
+// import problemsPagination from './pagination.vue'
+// import questionFilter from './questionFilter.vue'
 import matchSorter from 'match-sorter'
+// const matchSorter = () => import(
+//   /* webpackChunkName: "match-sorter" */
+//   'match-sorter')
+
 export default {
   name: 'component-problems',
   props: ['user_pros_msg'],
+  components: {
+    problemsPagination: () => import(/* webpackChunkName: "problem" */ './pagination.vue'),
+    questionFilter: () => import(/* webpackChunkName: "problem" */ './questionFilter.vue')
+  },
   data: function () {
     return {
       rawNetList: [],
@@ -89,6 +97,7 @@ export default {
         .then(function (res) {
           this.rawNetList = res.body.data.list
           this.rawNetTotal = res.body.data.served
+          console.log(matchSorter)
         })
     },
     stateAstarRender: function (tmp) {
@@ -139,10 +148,6 @@ export default {
     kWords: function () {
       console.log('happen')
     }
-  },
-  components: {
-    problemsPagination,
-    questionFilter
   }
 }
 </script>

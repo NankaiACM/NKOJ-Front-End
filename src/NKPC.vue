@@ -181,6 +181,7 @@ import dialogWrap from './components/dialog/dialogWrap.vue'
 import saurusFooter from './components/footer'
 import vueLoading from 'vue-loading-template'
 import marked from 'marked'
+// const marked = () => import(/* webpackChunkName: "marked" */ 'marked')
 
 export default {
   name: 'NKPC',

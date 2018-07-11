@@ -49,63 +49,63 @@
   </div>
 </template>
 <script>
-  export default {
-    name: 'problems-pagination',
-    props: ['pagesize', 'last'],
-    data: function () {
-      return {
-        viewing: 1
+export default {
+  name: 'problems-pagination',
+  props: ['pagesize', 'last'],
+  data: function () {
+    return {
+      viewing: 1
+    }
+  },
+  methods: {
+    rang: function (zjcs) {
+      return [zjcs - 2, zjcs - 1, zjcs, zjcs + 1, zjcs + 2]
+    },
+    previous: function () {
+      if (this.viewing > 1) {
+        this.viewing--
       }
     },
-    methods: {
-      rang: function (zjcs) {
-        return [zjcs - 2, zjcs - 1, zjcs, zjcs + 1, zjcs + 2]
-      },
-      previous: function () {
-        if (this.viewing > 1) {
-          this.viewing--
-        }
-      },
-      next: function () {
-        if (this.viewing < this.all_pages) {
-          this.viewing++
-        }
-      },
-      getPage: function () {
-      },
-      jump: function (v) {
-        console.log(this.all_pages)
-        if (v >= 1 && v <= this.all_pages) {
-          this.viewing = v
-        }
+    next: function () {
+      if (this.viewing < this.all_pages) {
+        this.viewing++
       }
     },
-    computed: {
-      jump_input: function () {
-        return ~~(this.last / this.pagesize)
-      },
-      all_pages: function () {
-        console.log(this.last, this.pagesize, 'all pages')
-        return 100
-      },
-      num_list: function () {
-        console.log(this.viewing)
-        if (this.viewing <= 5) {
-          return [1, 2, 3, 4, 5]
-        }
-        if (this.viewing > this.all_pages - 5) {
-          return this.rang(this.all_pages - 2)
-        }
-        console.log('大坟墓守护者')
-        return this.rang(this.viewing)
-      }
+    getPage: function () {
     },
-    watch: {
-      'viewing': function (newv, oldv) {
-        this.$emit('viewingleap', {viewing: newv})
+    jump: function (v) {
+      console.log(this.all_pages)
+      if (v >= 1 && v <= this.all_pages) {
+        this.viewing = v
       }
     }
+  },
+  computed: {
+    jump_input: function () {
+      return ~~(this.last / this.pagesize)
+    },
+    all_pages: function () {
+      console.log(this.last, this.pagesize, 'all pages')
+      return 100
+    },
+    num_list: function () {
+      console.log(this.viewing)
+      if (this.viewing <= 5) {
+        return [1, 2, 3, 4, 5]
+      }
+      if (this.viewing > this.all_pages - 5) {
+        return this.rang(this.all_pages - 2)
+      }
+      console.log('大坟墓守护者')
+      return this.rang(this.viewing)
+    }
+  },
+  watch: {
+    'viewing': function (newv, oldv) {
+      this.$emit('viewingleap', {viewing: newv})
+    }
   }
+}
 </script>
 <style>
   .pagination-container {

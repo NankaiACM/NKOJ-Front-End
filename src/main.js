@@ -7,7 +7,9 @@ import router from './router'
 import store from './vuex/store'
 import isScrolled from './scroll'
 import mavonEditor from 'mavon-editor'
-
+// const mavonEditor = () => import(
+//   /* webpackChunkName: "mavon-editor" */
+//   'mavon-editor')
 Vue.config.productionTip = false
 Vue.use(VueResource)
 Vue.use(mavonEditor)

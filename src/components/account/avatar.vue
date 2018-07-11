@@ -17,6 +17,7 @@
 </template>
 <script>
 import Cropper from 'cropperjs'
+// const Cropper = () => import(/* webpackChunkName: "cropper" */ 'cropperjs')
 export default {
   name: 'user-page-avatar',
   data: function () {

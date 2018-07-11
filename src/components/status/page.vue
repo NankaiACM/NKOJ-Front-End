@@ -88,9 +88,10 @@
 </template>
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
-import moment from 'moment'
 import notify from '../shell/notify'
 import {statusMap, langHash} from './map.js'
+import moment from 'moment'
+// const moment = () => import(webpackChunkName: "moment" */ 'moment')
 
 export default {
   name: 'status',

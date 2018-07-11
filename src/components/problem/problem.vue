@@ -123,8 +123,13 @@
 <script>
 import isScrolled from '../../scroll'
 import marked from 'marked'
+// const marked = () => import(/* webpackChunkName: "marked" */ 'marked')
 export default {
   name: 'problems-page',
+  components: {
+    // editor: require('vue2-ace-editor')
+    editor: () => import(/* webpackChunkName: "ace" */ 'vue2-ace-editor')
+  },
   data: function () {
     return {
       contentObj: {},
@@ -167,9 +172,6 @@ export default {
     this.$nextTick(() => {
       this.initView()
     })
-  },
-  components: {
-    editor: require('vue2-ace-editor')
   },
   methods: {
     toggleEditTag () {
@@ -282,11 +284,17 @@ export default {
       this.submitLan = Lan
     },
     editorInit: function () {
+      /*
       require('brace/mode/html')
       require('brace/mode/javascript')
       require('brace/mode/c_cpp')
       require('brace/mode/less')
       require('brace/theme/github')
+      */
+      import(/* webpackChunkName: "brace" */ 'brace/mode/html')
+      import(/* webpackChunkName: "brace" */ 'brace/mode/javascript')
+      import(/* webpackChunkName: "brace" */ 'brace/mode/c_cpp')
+      import(/* webpackChunkName: "brace" */ 'brace/theme/github')
     },
     iCanSee: function (e) {
       this.isSee = !this.isSee

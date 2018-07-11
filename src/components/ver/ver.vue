@@ -3,11 +3,11 @@
     <a style="font-weight: bold" href="https://github.com/NankaiACM">来 Github ！ Star 和 Fork 我们喵<span
       style="color:red">❤</span>~ </a>
     <br>
-    <a href="https://github.com/NankaiACM/NKOJ-Front-End">Front End: </a><span class="badge badge-green">{{moment(frontend.date).fromNow()}}</span>
+    <a href="https://github.com/NankaiACM/NKOJ-Front-End">Front End: </a><span class="badge badge-green">{{fromNow(frontend.date)}}</span>
     By <span class="badge badge-orange" data-toggle="popover" data-placement="top" title="详情"
              :data-content="frontend.message">{{frontend.author}}</span>
     <br>
-    <a href="https://github.com/NankaiACM/NKOJ-Back-End">Back End: </a><span class="badge badge-yellow">{{moment(backend.date).fromNow()}}</span>
+    <a href="https://github.com/NankaiACM/NKOJ-Back-End">Back End: </a><span class="badge badge-yellow">{{fromNow(backend.date)}}</span>
     By <span class="badge badge-pink" data-toggle="popover" data-placement="top" title="详情"
              :data-content="backend.message">{{backend.author}}</span>
   </div>
@@ -17,7 +17,7 @@
 <script>
 
 import moment from 'moment'
-
+// const moment = () => import(webpackChunkName: "moment" */ 'moment')
 export default {
   name: 'ver',
   data: function () {
@@ -37,7 +37,9 @@ export default {
         message: message.join('\n')
       }
     },
-    moment: moment
+    fromNow: function (timestamp) {
+      return moment(timestamp).fromNow()
+    }
   },
   mounted: function () {
     let slf = this

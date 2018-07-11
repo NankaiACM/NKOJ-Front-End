@@ -77,6 +77,7 @@
 </template>
 <script>
 import moment from 'moment'
+// const moment = () => import(webpackChunkName: "moment" */ 'moment')
 import markdownBox from './markdownBox.vue'
 export default {
   name: 'discussCell',

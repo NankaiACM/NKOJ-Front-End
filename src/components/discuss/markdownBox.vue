@@ -4,6 +4,7 @@
 </template>
 <script>
 import marked from 'marked'
+// const marked = () => import(/* webpackChunkName: "marked" */ 'marked')
 export default {
   name: 'markdown-box',
   props: ['mdstr'],
