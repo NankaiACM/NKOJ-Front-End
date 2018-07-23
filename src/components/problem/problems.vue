@@ -111,8 +111,7 @@ export default {
         }
         if (this.aclist.indexOf(item.problem_id) !== -1) {
           item[x].state = 'ac'
-        }
-        else if (this.onlist.indexOf(item.problem_id) !== -1) {
+        } else if (this.onlist.indexOf(item.problem_id) !== -1) {
           item[x].state = 'on'
         }
       }

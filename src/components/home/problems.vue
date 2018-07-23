@@ -8,13 +8,13 @@
         <div>通过率</div>
       </li>
       <li v-for="problem in newProblems" :key="problem.id">
-        <div>{{problem.problemsID}}</div>
+        <div>{{problem['problem_id']}}</div>
         <div>
-          <router-link :to="{path:'problem/'+problem.problemsID}">
-            {{problem.problemsName}}
+          <router-link :to="{path:'problem/'+problem['problem_id']}">
+            {{problem.title}}
           </router-link>
         </div>
-        <div>{{problem.problemsRatio}}</div>
+        <div>{{problem.ac}} / {{problem.all}}</div>
       </li>
     </ul>
   </home-component>
@@ -38,9 +38,10 @@ export default {
   methods: {
     initView: function () {
       var _this = this
-      this.$http.get('../../static/rm/newProblems.json').then(function (res) {
-        console.log('加载homeProblems数据')
-        _this.newProblems = res.body.data
+      // 暂时使用problems api的数据
+      this.$http.get(`${window.noPointHost}/api/problems/list/0/6`).then(function (res) {
+        console.log('')
+        _this.newProblems = res.body.data.list
       })
     }
   }

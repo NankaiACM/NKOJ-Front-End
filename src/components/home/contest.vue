@@ -8,15 +8,15 @@
         <div>开始时间</div>
         <div>状态</div>
       </li>
-      <li v-for="contest in newContests" :key="contest.id">
-        <div><span>{{contest.contestID}}</span></div>
+      <li v-for="contest in newContests" :key="contest['contest_id']">
+        <div><span>{{contest['contest_id']}}</span></div>
         <div>
-          <router-link :to="{path:'contest/'+contest.contestID}">
-            {{contest.contestTitle}}
+          <router-link :to="{path:'contest/'+contest['contest_id']}">
+            {{contest.title}}
           </router-link>
         </div>
-        <div>{{contest.date}}</div>
-        <div>???</div>
+        <div>{{(contest.during).match(/\d{4}-\d{2}-\d{2}\s\d{2}\:\d{2}\:\d+/)}}</div>
+        <div>{{isDuring(contest.during)}}</div>
       </li>
     </ul>
   </home-component>
@@ -24,6 +24,7 @@
 </template>
 <script>
 import homeComponent from './homeComponent.vue'
+import moment from 'moment'
 export default {
   name: 'component-home-contest',
   components: {homeComponent},
@@ -40,9 +41,18 @@ export default {
   methods: {
     initView: function () {
       var _this = this
-      this.$http.get('/static/rm/newContests.json').then(function (res) {
-        _this.newContests = res.body.data
+      // 暂时使用contest api的数据
+      this.$http.get(`${window.noPointHost}/api/contests/`).then(function (res) {
+        _this.newContests = res.body.data.list.slice(0, 5)
       })
+    },
+    isDuring: function (during) {
+      const [f, s] = during.split(',')
+      const a = f.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)[0]
+      const b = s.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)[0]
+      console.log(a, moment, b)
+      if (!a || !b) return 'unknow'
+      return moment().isBetween(a, b) ? '进行中' : moment().isAfter(b) ? '已结束' : '即将开始'
     }
   }
 }
