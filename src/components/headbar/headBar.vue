@@ -18,9 +18,11 @@
         <li :class="{focusing:nowPage==='contest'}" v-on:click="$emit('toContest')"><span
           class="glyphicon glyphicon-tower"></span>比赛
         </li>
+        <!--
         <li :class="{focusing:nowPage==='rank'}" v-on:click="$emit('toRank')"><span
           class="glyphicon glyphicon-signal"></span>排名
         </li>
+        -->
         <li :class="{focusing:nowPage==='discuss'}" v-on:click="$emit('toDiscuss')"><span
           class="glyphicon glyphicon-comment"></span>讨论
         </li>
@@ -44,8 +46,10 @@
           <dropmenu v-if="userData.isLogin" :userData="userData">
             <li class="nickname">Hi! <span v-if="proAdd"> [管理员] </span><span>{{userData.nickname}}</span></li>
             <li class="hr"><hr></li>
+            <!--
             <li class="link forbiden"><a href="#">我收藏的比赛</a></li>
             <li class="hr"><hr></li>
+            -->
             <li class="link" v-if="usrLog"><router-link to="/account/setting">个人中心</router-link></li>
             <li class="link" v-if="usrLog"><router-link to="/message">消息中心</router-link></li>
             <li class="link" v-if="proAdd"><router-link to="/admin">管理中心</router-link></li>
