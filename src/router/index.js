@@ -26,7 +26,7 @@ import message from '../components/message/route'
 
 const NKOJ = () => import(
   /* webpackChunkName: "nkoj" */
-  '../NkOJ.vue')
+  '../NKOJ.vue')
 const NKPC = () => import(
   /* webpackChunkName: "nkpc" */
   '../NKPC.vue')
