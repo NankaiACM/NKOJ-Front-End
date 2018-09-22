@@ -4,22 +4,12 @@
     <div class="mainbar">
       <home-problem></home-problem>
       <home-contest></home-contest>
-      <home-discuss></home-discuss>
+      <!--<home-discuss></home-discuss>-->
     </div>
     <div class="sidebar">
-      <home-component :title="'占位符'">
+      <home-component :title="'纳新喵~'">
         <hr class=".hr">
-        <pre class="pre">
-7月7日（周六）  Benelux Algorithm Programming Contest 2014 Preliminary
-7月10日（周二） Benelux Algorithm Programming Contest 2014 Final
-7月12日（周四） German Collegiate Programming Contest 2015
-7月17日（周二） The 2018 ACM-ICPC Chinese Collegiate Programming Contest (held by Ningxia Institute of Science and Technology)​
-7月19日（周四） German Collegiate Programming Contest 2018​
-7月24日（周二） The 2018 ACM-ICPC China JiangSu Provincial Programming Contest (held by China University of Mining and Technology)
-7月26日（周四）Nordic Collegiate Programming Contest 2015​
-7月29日（周日）ACM-ICPC 2018 Urumqi
-此外，7月14日，21日，28日为ACM-ICPC亚洲训练联盟内的学校命题的练习赛。
-        </pre>
+        <img style="max-width: 80%; display: block; margin: auto" src="../../assets/qqgroup.jpg"/>
       </home-component>
       <princeton></princeton>
     </div>

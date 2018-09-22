@@ -1,7 +1,7 @@
 <template>
   <div class="footer band-with-40padding">
-    <div class="contact">NKUACM 2017
-      <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=0738b7747f360cbbfcd33c76848b4ec3faa0598a308ad4e0063474175320b89b">[加入QQ群]</a>
+    <div class="contact">NKUACM 2018
+      <a target="_blank" href="https://jq.qq.com/?_wv=1027&k=5i2nGPN">[加入QQ群]</a>
       南开ACM协会
       <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=cd8e44be30b96215206b5a1952dd531ac0b48421e48fb5e07ea2a476feaca460">[加入QQ群]</a>
     </div>
