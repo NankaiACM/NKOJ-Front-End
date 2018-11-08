@@ -173,17 +173,22 @@ export default {
       e.preventDefault()
       console.log(this)
       console.log(this.$refs)
-      let sendPackage = new FormData()
       if (this.$refs.fileData.files.length > 0) {
+        let sendPackage = new FormData()
         sendPackage.append('file', this.$refs.fileData.files[0])
+        this.$http.post(`${window.noPointHost}/api/admin/problem/data/${this.pId}`, sendPackage, res => {
+          console.log(res)
+        })
       }
       if (this.$refs.fileSpj.files.length > 0) {
+        let sendPackage = new FormData()
         sendPackage.append('file', this.$refs.fileSpj.files[0])
         sendPackage.append('lang', this.isCpp ? 0 : this.isJava ? 1 : 2)
+        this.$http.post(`${window.noPointHost}/api/admin/problem/spj/${this.pId}`, sendPackage, res => {
+          console.log(res)
+        })
       }
-      this.$http.post(`${window.noPointHost}/api/admin/problem/data/${this.pId}`, sendPackage, res => {
-        console.log(res)
-      })
+      
     },
     dataUpload: function (e) {
       e.preventDefault()
