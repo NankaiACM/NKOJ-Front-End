@@ -14,8 +14,7 @@
       <div class="collapse-wrap" v-show="isOpen">
         <div class="contest-detail">
           <div class="contest-detail-title">Contest Detail</div>
-          <p>
-              This contest is very interesting! Let's sign up and enjoy ourselves! <br>
+          <p v-html="description">
           </p>
         </div>
       </div>
@@ -35,19 +34,24 @@ export default {
   props: {
     isOpen: Boolean,
     id: Number,
+    contestid: String,
     name: String,
     time: String,
-    isActive: Boolean
+    isActive: Boolean,
+    description: String
   },
   methods: {
     changeStatus () {
       this.$emit('onclickbar', this.id)
     },
     viewThis () {
-
+        this.$router.push('/NKPC/' + this.contestid)
     },
     signUpThis () {
-
+        this.$router.push('/NKPC/' + this.contestid)
+    },
+    viewProblems () {
+        this.$router.push('/NKPC/' + this.contestid)
     }
   }
 }
@@ -93,6 +97,7 @@ export default {
     padding-right: 7.5px;
     box-sizing: border-box;
     display: block;
+    /* white-space: pre; */
     white-space: nowrap;
     flex: 1;
     font-size: 80%;

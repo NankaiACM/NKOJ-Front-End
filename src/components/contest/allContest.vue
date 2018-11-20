@@ -5,10 +5,10 @@
       <h5 class="contest-title">All Contests</h5>
       <div class="contest-list">
         <ul>
-          <li v-for="(allContest,index) in allContests" :key=allContest.id
+          <li v-for="(allContest,index) in allContests" :key="allContest.id"
             is="contests-list-box"  @onclickbar="changeStatusInAll" :id="index"
-            :isOpen="(index==isContestOpen)" :name=allContest.name :time=allContest.time
-            :isActive=false></li>
+            :isOpen="(index==isContestOpen)" :name="allContest.name" :time="allContest.time"
+            :isActive="false"></li>
         </ul>
       </div>
     </div>
@@ -46,6 +46,14 @@ export default {
       if (this.isContestOpen == id) this.isContestOpen = -1
       else this.isContestOpen = id
     },
+  },
+  mounted () {
+    this.$nextTick(function () {
+      this.$http.get(`${noPointHost}/api/contests/`)
+        .then(function (res) {
+          console.log(res)
+        })
+    })
   }
 }
 </script>

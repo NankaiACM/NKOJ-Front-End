@@ -53,6 +53,7 @@
           <hr class="color-white hrsize-2 flex-1">
           <div class="color-white margin-l-r-20 word" v-if="contestStatus==1">距比赛结束还有</div>
           <div class="color-white margin-l-r-20 word" v-else-if="contestStatus==0">距比赛开始还有</div>
+          <div class="color-white margin-l-r-20 word" v-else-if="contestStatus==2">比赛已结束</div>
           <hr class="color-white hrsize-2 flex-1">
         </div>
         <div class="timers">
@@ -106,7 +107,7 @@
           <div class="text">已经看完了？或许你会想要……？</div>
           <div class="btn-div">
             <!--a class="btn btn-ghost" @click="userPage='dialog'">反馈或提问</a-->
-            <a class="btn btn-ghost" @click="registerAttempt">立刻报名</a>
+            <a v-if="!iswarning" class="btn btn-ghost" @click="registerAttempt">立刻报名</a>
             <a v-if="iswarning" class="btn btn-ghost" @click="pushToPC">前往比赛</a>
           </div>
         </div>
@@ -209,36 +210,7 @@ export default {
       contestid: 23,
       contestTitle: '',
       isPadZero: true,
-      problems: [
-        {
-          problemName: 'Fantastic Girlfriend And White Album',
-          status: 0
-        },
-        {
-          problemName: 'Touhou Project',
-          status: 1
-        },
-        {
-          problemName: 'Osu! ver 2.0',
-          status: 2
-        },
-        {
-          problemName: 'A Game With Numbers',
-          status: 0
-        },
-        {
-          problemName: 'Congruence Equation',
-          status: 0
-        },
-        {
-          problemName: 'Seat Arrangements',
-          status: 0
-        },
-        {
-          problemName: 'Perfect Number',
-          status: 2
-        }
-      ],
+      problems: [],
       MDtext: [],
       navbarItems: [],
 
@@ -304,9 +276,9 @@ export default {
           vue.MDtext = new Array(1)
           vue.MDtext[0] = res.description
           vue.problems = res.problems
-          console.log('md', MDtext)
+          console.log('md', vue.MDtext)
         })
-      setInterval(() => vue.nowTime = new Date(), 100)
+      setInterval(() => vue.nowTime = new Date(), 1000)
       /*
       vue.$http
         .get(
@@ -454,10 +426,7 @@ export default {
       return false
     },
     pushToPC: function () {
-      this.$http.get(`${noPointHost}/api/contests/`)
-        .then(function (res) {
-          this.$router.push(`/NKPC/${res.body.data.list[0]['contest_id']}`)
-        }, function (err) {})
+      this.$router.push('/contest')
     }
   },
   mounted: function () {
@@ -474,6 +443,15 @@ export default {
   },
   computed: {
     countDown: function () {
+      // console.log(contestStatus)
+      if (this.contestStatus == 2) {
+        return {
+          ds: NaN,
+          hrs: NaN,
+          mins: NaN,
+          secs: NaN
+        }
+      }
       var targetTime = this.contestStatus == 1 ? this.endTime : this.startTime
       var msecond = new Date(targetTime).getTime() - new Date(this.nowTime).getTime() // 时间差的毫秒数
       // ------------------------------
@@ -502,10 +480,11 @@ export default {
       }
     },
     contestStatus: function () {
-      if (this.nowTime < this.endTime) {
+      console.log()
+      if (new Date(this.nowTime).getTime() > new Date(this.endTime).getTime()) {
         // end
         return 2
-      } else if (this.nowTime < this.startTime) {
+      } else if (new Date(this.nowTime) > new Date(this.startTime).getTime()) {
         // starting
         return 1
       } else {

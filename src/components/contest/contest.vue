@@ -4,21 +4,38 @@
       <h5 class="contest-title">Active Contests</h5>
       <div class="contest-list">
         <ul>
-          <li v-for="(activeContest,index) in activeContests" :key=activeContest.id
+          <li v-for="(activeContest,index) in activeContests" :key="activeContest.id"
             is="contests-list-box"  @onclickbar="changeStatusInActive" :id="index"
-            :isOpen="(index==activeContestOpen)" :name=activeContest.name :time=activeContest.time
-            :isActive=true></li>
+            :contestid="activeContest.contest_id.toString()"
+            :isOpen="(index==activeContestOpen)" :name="activeContest.title" :time="activeContest.during"
+            :isActive="true" :description="activeContest.description"></li>
         </ul>
       </div>
     </div>
+
+    <!-- comming -->
+    <div class="contest-wrapper">
+      <h5 class="contest-title">Upcomming Contests</h5>
+      <div class="contest-list">
+        <ul>
+          <li v-for="(comming, index) in commings" :key="comming.id"
+            is="contests-list-box"  @onclickbar="changeStatusInCommings" :id="index"
+            :contestid="comming.contest_id.toString()"
+            :isOpen="(index==commingContestOpen)" :name="comming.title" :time="comming.during"
+            :isActive="true" :description="comming.description"></li>
+        </ul>
+      </div>
+    </div>
+
     <div class="contest-wrapper">
       <h5 class="contest-title">Ended Contests</h5>
       <div class="contest-list">
         <ul>
-          <li v-for="(archivedContest,index) in archivedContests" :key=archivedContest.id
+          <li v-for="(archivedContest,index) in archivedContests" :key="archivedContest.id"
             is="contests-list-box"  @onclickbar="changeStatusInArchived" :id="index"
-            :isOpen="(index==archivedContestOpen)" :name=archivedContest.name :time=archivedContest.time
-            :isActive=false></li>
+            :contestid="archivedContest.contest_id.toString()"
+            :isOpen="(index==archivedContestOpen)" :name="archivedContest.title" :time="archivedContest.during"
+            :isActive="false" :description="archivedContest.description"></li>
         </ul>
       </div>
     </div>
@@ -30,7 +47,8 @@
 
 <script>
 import ContestsListBox from './contestComponents/contestsListBox.vue'
-
+import moment from 'moment'
+import marked from 'marked'
 export default {
   name: 'contestPage',
   components: {
@@ -40,22 +58,15 @@ export default {
     return {
       activeContestOpen: -1,
       archivedContestOpen: -1,
+      commingContestOpen: -1,
       activeContests: [
-        {name: 'A Contest Name', time: 'Feb 10th, 12:30 pm'},
-        {name: 'A Contest Name', time: 'Feb 11th, 12:30 pm'},
-        {name: 'Another Contest Name', time: 'Feb 12th, 12:30 pm'},
-        {name: 'B Contest Name', time: 'Feb 13th, 12:30 pm'}
+        /* old format:  {name: 'A Contest Name', time: 'Feb 10th, 12:30 pm'}, */
       ],
       archivedContests: [
-        {name: 'A Contest Name', time: 'Nov 10th 2017, 12:30 pm'},
-        {name: 'A Contest Name', time: 'Dec 11th 2017, 12:30 pm'},
-        {name: 'Another Contest Name', time: 'Feb 9th, 12:30 pm'},
-        {name: 'B Contest Name', time: 'Feb 1st, 12:30 pm'},
-        {name: 'A Contest Name', time: 'Nov 10th 2017, 12:30 pm'},
-        {name: 'A Contest Name', time: 'Dec 11th 2017, 12:30 pm'},
-        {name: 'Another Contest Name', time: 'Feb 9th, 12:30 pm'},
-        {name: 'B Contest Name', time: 'Feb 1st, 12:30 pm'}
-      ]
+        /* old format: {name: 'A Contest Name', time: 'Nov 10th 2017, 12:30 pm'}, */
+      ],
+      commings: [],
+      contests: []
     }
   },
   methods: {
@@ -64,6 +75,7 @@ export default {
       else {
         this.activeContestOpen = id
         this.archivedContestOpen = -1
+        this.commingContestOpen = -1
       }
     },
     changeStatusInArchived (id) {
@@ -71,8 +83,53 @@ export default {
       else {
         this.archivedContestOpen = id
         this.activeContestOpen = -1
+        this.commingContestOpen = -1
+      }
+    },
+    changeStatusInCommings (id) {
+      if (this.commingContestOpen == id) this.commingContestOpen = -1
+      else {
+        this.commingContestOpen = id
+        this.activeContestOpen = -1
+        this.archivedContestOpen = -1
       }
     }
+  },
+  mounted () {
+    this.$nextTick(function () {
+      this.$http.get(`${noPointHost}/api/contests/`)
+        .then(function (res) {
+          console.log(res)
+          res = res.body.data
+          this.contests = res.list
+          for (let it of this.contests) {
+            console.log(it)
+            var a, b
+            try {
+              [a, b] = JSON.parse(it.during)
+              console.log(a, b)
+            } catch (e) {
+              a = NaN
+              b = NaN
+            }
+            it.during = moment(a).format('YYYY-MM-DD h:mm') + '\n ~ \n' + moment(b).format('YYYY-MM-DD h:mm')
+            console.log(it.description)
+            it.description = marked(it.description)
+            it.a = a
+            it.b = b
+            if(moment().isBetween(a, b)) {
+              this.activeContests.push(it)
+            } else if (moment().isBefore(a)) {
+              this.commings.push(it)
+            } else {
+              this.archivedContests.push(it)
+            }
+          }
+          this.archivedContests.sort(function (l, r) {
+            return new Date(r.a).getTime() - new Date(l.a).getTime()
+          })
+        })
+    })
   }
 }
 </script>

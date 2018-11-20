@@ -11,7 +11,7 @@
       <li v-for="contest in newContests" :key="contest['contest_id']">
         <div><span>{{contest['contest_id']}}</span></div>
         <div>
-          <router-link :to="{path:'contest/'+contest['contest_id']}">
+          <router-link :to="{path:'/NKPC/'+contest['contest_id']}">
             {{contest.title}}
           </router-link>
         </div>
