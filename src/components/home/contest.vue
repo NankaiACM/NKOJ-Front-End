@@ -15,7 +15,7 @@
             {{contest.title}}
           </router-link>
         </div>
-        <div>{{(contest.during).match(/\d{4}-\d{2}-\d{2}\s\d{2}\:\d{2}\:\d+/)}}</div>
+        <div>{{(contest.during).match(/\d{4}-\d{2}-\d{2}\s\d{2}\:\d{2}\:\d+/)[0]}}</div>
         <div>{{isDuring(contest.during)}}</div>
       </li>
     </ul>
@@ -39,14 +39,14 @@ export default {
     })
   },
   methods: {
-    initView: function () {
+    initView () {
       var _this = this
       // 暂时使用contest api的数据
       this.$http.get(`${window.noPointHost}/api/contests/`).then(function (res) {
         _this.newContests = res.body.data.list.slice(0, 5)
       })
     },
-    isDuring: function (during) {
+    isDuring (during) {
       const [f, s] = during.split(',')
       const a = f.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)[0]
       const b = s.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)[0]

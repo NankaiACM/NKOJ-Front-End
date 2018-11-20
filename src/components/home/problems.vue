@@ -14,7 +14,7 @@
             {{problem.title}}
           </router-link>
         </div>
-        <div>{{problem.ac}} / {{problem.all}}</div>
+        <div>{{problem.ac}} / {{problem.all}} = {{(problem.ac / problem.all * 100).toFixed(2)}}%</div>
       </li>
     </ul>
   </home-component>
@@ -70,7 +70,7 @@ export default {
       width: 80px;
     }
     &:nth-child(3){
-      width: 100px;
+      width: 141px;
     }
   }
   &:nth-child(1){

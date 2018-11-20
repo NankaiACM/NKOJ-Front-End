@@ -133,7 +133,16 @@ const router = new Router({
     ]
   }, {
     path: '/NKPC',
-    component: NKPC
+    component: NKPC,
+    props: {
+      iswarning: true
+    }
+  }, {
+    path: '/NKPC/:contestid',
+    component: NKPC,
+    props: {
+      iswarning: false
+    }
   }
   ]
 })

@@ -107,6 +107,7 @@
           <div class="btn-div">
             <!--a class="btn btn-ghost" @click="userPage='dialog'">反馈或提问</a-->
             <a class="btn btn-ghost" @click="registerAttempt">立刻报名</a>
+            <a v-if="iswarning" class="btn btn-ghost" @click="pushToPC">前往比赛</a>
           </div>
         </div>
       </div>
@@ -114,7 +115,7 @@
 
     <!--比赛中的界面-->
     <!--<div v-else-if="contestStatus==1">-->
-    <div>
+    <div v-if="!iswarning">
       <!--题目板块-->
       <div class="bg-gray band-with-80padding problem-band">
         <!--problem标题-->
@@ -194,6 +195,7 @@ export default {
     dialogWrap,
     vueLoading
   },
+  props: ['iswarning'],
   data () {
     return {
       statusApi: `${window.noPointHost}/api/status/list`,
@@ -284,7 +286,21 @@ export default {
       this.userPage = value
     },
     initDatas: function () {
-      var vue = this
+      const vue = this
+      // vue.contestid = vue.$route.params.contestid
+      console.log(vue.contestid = vue.$route.params.contestid.toString())
+      vue.$http.get(`${noPointHost}/api/contest/${vue.contestid}`)
+        .then(function (res) {
+          res = res.body.data
+          const [f, t] = JSON.parse(res.during)
+          console.log(f, t)
+          vue.startTime = f
+          vue.endTime = t
+          vue.contestTitle = res.title
+          vue.navbarItems = res.description
+        })
+      setInterval(() => vue.nowTime = new Date(), 100)
+      /*
       vue.$http
         .get(
           `${noPointHost}/api/contest/` +
@@ -324,6 +340,7 @@ export default {
       setInterval(() => {
         vue.nowTime = new Date()
       }, 100)
+      */
     },
     initUser: function () {
       var vue = this
@@ -422,10 +439,21 @@ export default {
       }, err => {
         this.dialogMessage = '注销失败'
       })
+    },
+    dealWarning: function () {
+      console.log(this.iswarning)
+      if (this.iswarning !== true) return true
+    },
+    pushToPC: function () {
+      this.$http.get(`${noPointHost}/api/contests/`)
+        .then(function (res) {
+          this.$router.push(`/NKPC/${res.body.data.list[0]['contest_id']}`)
+        }, function (err) {})
     }
   },
   mounted: function () {
     this.$nextTick(function () {
+      this.dealWarning()
       window.addEventListener('scroll', this.handleScroll)
       this.initDatas()
       this.initUser()
