@@ -90,11 +90,11 @@
 
     <!--比赛前的介绍界面-->
     <div v-if="contestStatus==0">
-      <div v-for="(text,index) in navbarItems" :key="text">
+      <div v-for="(text,index) in MDtext" :key="text">
       <div class="band-with-80padding" :class="{'bg-gray':index%2==1,'bg-white':index%2==0}">
         <div class="container">
           <!--标题-->
-          <h3><span class="glyphicon glyphicon-list"></span>{{text.toUpperCase()}}</h3>
+          <h3><span class="glyphicon glyphicon-list"></span>{{contestTitle}}</h3>
           <div v-html="getMD(MDtext[index])"></div>
         </div>
       </div>
@@ -123,9 +123,11 @@
         <!--题目列表-->
         <div class="container padding-t-40">
           <ul>
-            <li v-for="(problem,index) in problems" :key="problem.id">
-              <problem-list :problem-index="index" :problem-name="problem.problemName"
-                            :status="problem.status"/>
+            <li v-for="(problem,index) in problems" :key="problem.problem_id">
+              <problem-list :problem-index="index" :problem-name="problem.title"
+                            :status="0" :ac="problem.ac" :all="problem.all" :id="problem.problem_id.toString()"
+                            :spj="problem.special_judge ? problem.special_judge : false"
+                            :dtj="problem.detail_judge ? problem.detail_judge : false"/>
             </li>
           </ul>
         </div>
@@ -288,16 +290,21 @@ export default {
     initDatas: function () {
       const vue = this
       // vue.contestid = vue.$route.params.contestid
-      console.log(vue.contestid = vue.$route.params.contestid.toString())
+      console.log('in initDatas', vue.contestid = vue.$route.params.contestid.toString())
       vue.$http.get(`${noPointHost}/api/contest/${vue.contestid}`)
         .then(function (res) {
           res = res.body.data
+          console.log(res)
           const [f, t] = JSON.parse(res.during)
           console.log(f, t)
           vue.startTime = f
           vue.endTime = t
           vue.contestTitle = res.title
-          vue.navbarItems = res.description
+          vue.navbarItems = []
+          vue.MDtext = new Array(1)
+          vue.MDtext[0] = res.description
+          vue.problems = res.problems
+          console.log('md', MDtext)
         })
       setInterval(() => vue.nowTime = new Date(), 100)
       /*
@@ -374,6 +381,7 @@ export default {
         })
     },
     getMD: function (text) {
+      console.log('hh', text)
       return marked(text, {sanitize: true})
     },
     changeUserInfo: function (info) {
@@ -443,6 +451,7 @@ export default {
     dealWarning: function () {
       console.log(this.iswarning)
       if (this.iswarning !== true) return true
+      return false
     },
     pushToPC: function () {
       this.$http.get(`${noPointHost}/api/contests/`)
@@ -453,7 +462,7 @@ export default {
   },
   mounted: function () {
     this.$nextTick(function () {
-      this.dealWarning()
+      console.log('warning', this.dealWarning())
       window.addEventListener('scroll', this.handleScroll)
       this.initDatas()
       this.initUser()

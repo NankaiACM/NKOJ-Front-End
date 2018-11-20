@@ -1,12 +1,15 @@
 <template>
-  <div class="problem-list">
+  <div class="problem-list" @click="pushTo">
     <div><div class="number">{{questionNumber}}</div>{{problemName}}</div>
     <hr>
+    <span>{{ac}} / {{all}}</span>
     <div class="status">
       <span v-if="status==0" class="not-submit">Not submit yet</span>
       <span v-if="status==1" class="trying">trying...</span>
       <span v-if="status==2" class="accept">accepted!</span>
     </div>
+    <span v-if="spj" class="not-submit" title="special judge">spj</span>
+    <span v-if="dtj" class="trying" title="detail judge">dtj</span>
   </div>
 </template>
 
@@ -17,10 +20,20 @@ export default {
     status: Number,
     problemName: String,
     problemIndex: Number,
+    id: String,
+    ac: Number,
+    all: Number,
+    spj: Boolean,
+    dtj: Boolean
   },
   data(){
     return{
       
+    }
+  },
+  methods: {
+    pushTo () {
+      this.$router.push('/problem/' + this.id)
     }
   },
   computed:{

@@ -12,7 +12,7 @@
       <router-link to="/admin/getpc">竞赛数据</router-link>
       <router-link to="/admin/rejudge">重新评测</router-link>
       <router-link to="/admin/edituser">编辑用户</router-link>
-      <router-link to="/admin/editque">编辑问题</router-link>
+      <router-link to="/admin/editque">竞赛题目</router-link>
       <router-link to="/admin/editpost">编辑讨论</router-link>
       <router-link to="/admin/rmpost">删除讨论</router-link>
       <router-link to="/admin/rcpost">恢复讨论</router-link>
