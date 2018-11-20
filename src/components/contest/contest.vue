@@ -8,21 +8,21 @@
             is="contests-list-box"  @onclickbar="changeStatusInActive" :id="index"
             :contestid="activeContest.contest_id.toString()"
             :isOpen="(index==activeContestOpen)" :name="activeContest.title" :time="activeContest.during"
-            :isActive="true" :description="activeContest.description"></li>
+            :active="0" :description="activeContest.description"></li>
         </ul>
       </div>
     </div>
 
     <!-- comming -->
     <div class="contest-wrapper">
-      <h5 class="contest-title">Upcomming Contests</h5>
+      <h5 class="contest-title">Upcoming Contests</h5>
       <div class="contest-list">
         <ul>
           <li v-for="(comming, index) in commings" :key="comming.id"
             is="contests-list-box"  @onclickbar="changeStatusInCommings" :id="index"
             :contestid="comming.contest_id.toString()"
             :isOpen="(index==commingContestOpen)" :name="comming.title" :time="comming.during"
-            :isActive="true" :description="comming.description"></li>
+            :active="1" :description="comming.description"></li>
         </ul>
       </div>
     </div>
@@ -35,7 +35,7 @@
             is="contests-list-box"  @onclickbar="changeStatusInArchived" :id="index"
             :contestid="archivedContest.contest_id.toString()"
             :isOpen="(index==archivedContestOpen)" :name="archivedContest.title" :time="archivedContest.during"
-            :isActive="false" :description="archivedContest.description"></li>
+            :active="-1" :description="archivedContest.description"></li>
         </ul>
       </div>
     </div>

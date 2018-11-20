@@ -107,7 +107,7 @@
           <div class="text">已经看完了？或许你会想要……？</div>
           <div class="btn-div">
             <!--a class="btn btn-ghost" @click="userPage='dialog'">反馈或提问</a-->
-            <a v-if="!iswarning" class="btn btn-ghost" @click="registerAttempt">立刻报名</a>
+            <!--<a v-if="!iswarning" class="btn btn-ghost" @click="registerAttempt">立刻报名</a>-->
             <a v-if="iswarning" class="btn btn-ghost" @click="pushToPC">前往比赛</a>
           </div>
         </div>
@@ -154,7 +154,7 @@
         <h3><span class=" glyphicon glyphicon-signal"></span>RANK</h3>
         <!--排名列表-->
         <div class="container padding-t-40">
-          <ranks :userData="userData"/>
+          <ranks/>
           <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
         </div>
       </div>

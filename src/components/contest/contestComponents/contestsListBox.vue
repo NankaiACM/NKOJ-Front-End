@@ -4,10 +4,12 @@
         <div class="contest-name" v-text=name></div>
         <div class="contest-time" v-text=time></div>
         <div class="contest-item-button">
-            <a v-if="isActive" class="psR psL active" v-on:click.stop="viewThis">View Details</a>
+            <a v-if="active == 0" class="psR psL active" v-on:click.stop="viewThis">View Details</a>
+            <a v-else-if="active == 1" class="psR psL disabled">Upcoming</a>
             <a v-else class="psR psL disabled">Ended</a>
-            <button v-if="isActive" class="btn" v-on:click.stop="signUpThis">Sign Up</button>
-            <button v-else class="btn" v-on:click.stop="viewProblems">View Problems</button>
+            <button v-if="active == 1" class="btn" v-on:click.stop="" style="visibility: hidden;">You cannot see this</button>
+            <button v-else-if="active == 0" class="btn" v-on:click.stop="enterThis">Enter</button>
+            <button v-else-if="active == -1" class="btn" v-on:click.stop="viewProblems">View Problems</button>
         </div>
     </div>
     <collapse-transition>
@@ -37,7 +39,7 @@ export default {
     contestid: String,
     name: String,
     time: String,
-    isActive: Boolean,
+    active: Number,
     description: String
   },
   methods: {
@@ -52,6 +54,9 @@ export default {
     },
     viewProblems () {
         this.$router.push('/NKPC/' + this.contestid)
+    },
+    enterThis () {
+        this.viewThis()
     }
   }
 }

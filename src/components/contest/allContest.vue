@@ -7,8 +7,9 @@
         <ul>
           <li v-for="(allContest,index) in allContests" :key="allContest.id"
             is="contests-list-box"  @onclickbar="changeStatusInAll" :id="index"
-            :isOpen="(index==isContestOpen)" :name="allContest.name" :time="allContest.time"
-            :isActive="false"></li>
+            :contestid="allContest.contest_id.toString()"
+            :isOpen="(index==isContestOpen)" :name="allContest.title" :time="allContest.during"
+            :active="allContest.active"></li>
         </ul>
       </div>
     </div>
@@ -19,6 +20,8 @@
 <script>
 import pagination from "./contestComponents/pagination.vue";
 import ContestsListBox from './contestComponents/contestsListBox.vue'
+import moment from 'moment'
+import marked from 'marked'
 
 export default {
   name:'allContest',
@@ -30,14 +33,7 @@ export default {
     return{
       isContestOpen: -1,
       allContests: [
-        {name: 'A Contest Name', time: 'Nov 10th 2017, 12:30 pm'},
-        {name: 'A Contest Name', time: 'Dec 11th 2017, 12:30 pm'},
-        {name: 'Another Contest Name', time: 'Feb 9th, 12:30 pm'},
-        {name: 'B Contest Name', time: 'Feb 1st, 12:30 pm'},
-        {name: 'A Contest Name', time: 'Nov 10th 2017, 12:30 pm'},
-        {name: 'A Contest Name', time: 'Dec 11th 2017, 12:30 pm'},
-        {name: 'Another Contest Name', time: 'Feb 9th, 12:30 pm'},
-        {name: 'B Contest Name', time: 'Feb 1st, 12:30 pm'}
+        /* old format: {name: 'A Contest Name', time: 'Nov 10th 2017, 12:30 pm'}, */
       ],
     }
   },
@@ -51,7 +47,34 @@ export default {
     this.$nextTick(function () {
       this.$http.get(`${noPointHost}/api/contests/`)
         .then(function (res) {
-          console.log(res)
+          res = res.body.data.list
+          for (let it of res) {
+            console.log(it)
+            var a, b
+            try {
+              [a, b] = JSON.parse(it.during)
+              console.log(a, b)
+            } catch (e) {
+              a = NaN
+              b = NaN
+            }
+            it.during = moment(a).format('YYYY-MM-DD h:mm') + '\n ~ \n' + moment(b).format('YYYY-MM-DD h:mm')
+            console.log(it.description)
+            it.description = marked(it.description)
+            it.a = a
+            it.b = b
+            if (moment().isBetween(a, b)) {
+              it.active = 0
+            } else if (moment().isBefore(a)) {
+              it.active = 1
+            } else {
+              it.active = -1
+            }
+            this.allContests.push(it)
+          }
+          this.allContests.sort(function (l, r) {
+            return new Date(r.a).getTime() - new Date(l.a).getTime()
+          })
         })
     })
   }

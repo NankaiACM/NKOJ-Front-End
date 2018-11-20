@@ -6,13 +6,13 @@
         <div class="per-cnt-ctn media-body container">
           <div class="luck">
           <span class="line"><span class="split-mius">#</span><span :style="t()">{{index + 1}}</span></span><br>
-          <span class="line nick" :title="'nikename'"><span class="split-mius l"></span>nick name dfadsfasdfasdfdfdfadsfasdfsdf<span class="split-mius r"></span></span><br>
+          <span class="line nick" :title="'nikename'"><span class="split-mius l"></span>{{person.user_id}}<span class="split-mius r"></span></span><br>
           <span class="line"><span class="split-mius l"></span>solved<span class="split-mius r"></span></span><br>
           <span class="line"><span class="split-mius l"></span>fraction<span class="split-mius r"></span></span>
           </div>
         </div>
         <div class="pro-table  media-body container">
-          <div v-for="(item, index) in person.list" :key="index" class="pro-item" :class="{'ac':person.ac.indexOf(item)!=-1}">
+          <div v-for="(item, index) in new Array(10)" :key="index" class="pro-item" :class="{'ac': Math.random() > .5}">
             {{String.fromCharCode('A'.charCodeAt()+index)}}
           </div>
         </div>
@@ -32,29 +32,16 @@
 import ProblemsPagination from '../problem/pagination'
 export default {
   name: 'contestRank',
-  props: ['userData'],
   data: function () {
     return {
       persons: [
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]},
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]},
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]},
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]},
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,2,2,3,4,9]},
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]},
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,3,3,4,9]},
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]},
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]},
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,4,2,3,4,9]},
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]},
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]},
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]},
-        {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]}
+        /* old format: {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]}, */
       ],
       viewing: 1,
       queryleft: 1,
       queryright: 20,
-      pageSize: 20
+      pageSize: 20,
+      userData: undefined
     }
   },
   methods: {
@@ -73,6 +60,16 @@ export default {
     toMyRank: function() {
       console.log(this.userData)
     }
+  },
+  mounted: function () {
+    this.$nextTick(function () {
+      this.$http.get(`${noPointHost}/api/contest/${this.$route.params.contestid}/user`)
+        .then(function (res) {
+          res = res.body.data
+          this.persons = res
+          console.log(res)
+        })
+    })
   },
   components: {
     ProblemsPagination
@@ -134,7 +131,7 @@ export default {
 }
 
 .split-mius.l::after {
-  content: '/';
+  content: ' ';
 }
 
 .luck:hover .split-mius {
@@ -157,7 +154,7 @@ export default {
   max-width: 20em;
 }
 .luck .line:hover .split-mius.l::after {
-  content: '/';
+  content: '>';
 }
 
 .luck .line:hover .split-mius.r::after {
