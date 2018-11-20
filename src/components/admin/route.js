@@ -8,6 +8,7 @@ import editpc from './contest/edit'
 import pcdata from './contest/pcdata'
 import edituser from './contest/edituser'
 import editque from './contest/editque'
+import allcontest from './contest/allcontest'
 import report from './message/report'
 import batch from './message/batch'
 import findusr from './message/find'
@@ -20,17 +21,21 @@ export default {
     { path: '/admin', component: problem },
     { path: '/admin/problem', component: problem },
     { path: '/admin/newpc', component: newpc },
-    { path: '/admin/editpc/:id', component: editpc},
-    { path: '/admin/rejudge', component: rejudge},
-    { path: '/admin/getpc', component: pcdata},
-    { path: '/admin/edituser', component: edituser},
-    { path: '/admin/editque', component: editque},
-    { path: '/admin/editpost', component: editpost},
-    { path: '/admin/editpost/:id', component: editpost},
-    { path: '/admin/report', component: report},
-    { path: '/admin/batch', component: batch},
-    { path: '/admin/sendto', component: findusr},
-    { path: '/admin/sendto/:id', component: separate},
+    { path: '/admin/allcontest', component: allcontest },
+    { path: '/admin/editpc/:id', component: editpc },
+    { path: '/admin/rejudge', component: rejudge },
+    { path: '/admin/getpc', component: pcdata },
+    { path: '/admin/getpc/:id', component: pcdata },
+    { path: '/admin/edituser', component: edituser },
+    { path: '/admin/edituser/:id', component: edituser },
+    { path: '/admin/editque', component: editque },
+    { path: '/admin/editque/:id', component: editque },
+    { path: '/admin/editpost', component: editpost },
+    { path: '/admin/editpost/:id', component: editpost },
+    { path: '/admin/report', component: report },
+    { path: '/admin/batch', component: batch },
+    { path: '/admin/sendto', component: findusr },
+    { path: '/admin/sendto/:id', component: separate },
     { path: '/admin/rmcomment',
       component: mngCP,
       props: {
@@ -62,6 +67,6 @@ export default {
         cp: 'post',
         mng: 'recover'
       }
-    },
+    }
   ]
 }

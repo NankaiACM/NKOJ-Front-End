@@ -9,10 +9,11 @@
     <div class="nav-wrp">
       <router-link to="/admin/problem">添加题目</router-link>
       <router-link to="/admin/newpc">添加竞赛</router-link>
+      <router-link to="/admin/allcontest">竞赛列表</router-link>
       <router-link to="/admin/getpc">竞赛数据</router-link>
-      <router-link to="/admin/rejudge">重新评测</router-link>
-      <router-link to="/admin/edituser">编辑用户</router-link>
       <router-link to="/admin/editque">竞赛题目</router-link>
+      <router-link to="/admin/edituser">竞赛用户</router-link>
+      <router-link to="/admin/rejudge">重新评测</router-link>
       <router-link to="/admin/editpost">编辑讨论</router-link>
       <router-link to="/admin/rmpost">删除讨论</router-link>
       <router-link to="/admin/rcpost">恢复讨论</router-link>
@@ -95,16 +96,18 @@ export default {
     border-right: solid 1px #ccc;
     a {
       display: block;
-      width: 100%;
-      height: 30px;
-      line-height: 30px;
+      width: calc(100% - 2em);
+      height: 3em;
+      line-height: 3em;
       text-decoration: none;
       text-align: center;
-      margin: 2em 0;
-      color: #233;
+      margin: 1em 1em;
+      border-radius: 0;
       transition: all .41s;
+      background: #6cf;
+      color: #fff;
       &:hover {
-        color: #1e88e5;
+        transform: rotateX(0deg) rotateY(0deg) rotate(4.1deg) translateZ(300px) scale(1.1);
       }
     }
   }

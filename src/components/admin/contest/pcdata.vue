@@ -33,6 +33,12 @@ export default {
           console.log(JSON.stringify(e))
         })
     }
+  },
+  mounted () {
+    if (this.$route.params.id) {
+      this.id = this.$route.params.id
+      this.getPC()
+    }
   }
 }
 </script>

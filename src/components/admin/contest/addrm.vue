@@ -63,6 +63,11 @@ export default {
     minus: function (pos) {
       this.subId.splice(pos, 1)
     }
+  },
+  mounted () {
+    if (this.$route.params.id) {
+      this.supId = this.$route.params.id
+    }
   }
 }
 </script>
@@ -78,7 +83,7 @@ export default {
   position: absolute;
   left: 0;
   right: 0;
-  top: 0;
+  /* top: 0; */
   min-height: 100%;
   flex-direction: column;
   padding: 60px 0;

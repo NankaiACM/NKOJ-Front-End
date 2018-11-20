@@ -21,6 +21,14 @@
         <span class="l">权限设置</span>
         <div class="r"><input placeholder="private" type="checkbox" name="private" value="false"></div>
       </div>
+
+      <div class="section">
+        <span class="l">编辑题目</span>
+        <div class="r">
+          <router-link tag="a" :to="'/admin/editque/' + id" class="upf" target="_blank">点击前往</router-link>
+        </div>
+      </div>
+
       <div class="section">
         <span class="l">上传markdown文件</span>
         <div class="r">
@@ -157,6 +165,8 @@ export default {
     cursor: pointer;
     background: #f1f1f1;
     border-radius: 4px;
+    color: #333;
+    text-decoration: none;
     &:hover {
       background: #e2e2e2;
     }

@@ -8,7 +8,15 @@
 import addrm from './addrm'
 export default {
   name: 'edituser',
-  components: {addrm}
+  components: {addrm},
+  mounted () {
+    if (this.$route.params.id) {
+      this.$http.get(`${noPointHost}/api/contest/${this.$route.params.id}`)
+        .then(function (res) {
+          console.log(res)
+        })
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
