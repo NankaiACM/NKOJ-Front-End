@@ -2,7 +2,7 @@
   <div id="contest-rank-container-out" class="container-fluid">
     <div id="contest-rank-container-in" class="container-fluid">
       <div v-for="(person, index) in persons" :key="index" class="person-rank-container">
-        <img class="per-img" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3374441262,1576405698&fm=27&gp=0.jpg"/>
+        <img class="per-img" :src="`${preUrl}/api/avatar/` + person.user_id"/>
         <div class="per-cnt-ctn media-body container">
           <div class="luck">
           <span class="line"><span class="split-mius">#</span><span :style="t()">{{index + 1}}</span></span><br>
@@ -41,7 +41,8 @@ export default {
       queryleft: 1,
       queryright: 20,
       pageSize: 20,
-      userData: undefined
+      userData: undefined,
+      preUrl: noPointHost
     }
   },
   methods: {
