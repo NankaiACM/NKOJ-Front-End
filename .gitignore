@@ -18,3 +18,4 @@ selenium-debug.log
 
 /node_modules/
 package-lock.json
+src/encrypt/id_rsa.pub.js
