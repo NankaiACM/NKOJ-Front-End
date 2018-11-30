@@ -1,3 +1,3 @@
-window.noPointHost = 'http://acm.nankai.edu.cn:80'
-window.noPointPreURL = 'http://localhost:81'
+window.noPointHost = 'http://acm.nankai.edu.cn'
+window.noPointPreURL = 'acm.nankai.edu.cn'
 window.noPointPort = ''
