@@ -17,11 +17,11 @@ const myStatus = function (http, sets) {
         for (let i of idsets) {
           let node = {id: i, status: ''}
           if (ac.indexOf(i) !== -1) {
-            node.status = 'ac'
+            node.status = 2 // 'ac'
           } else if (all.indexOf(i) !== -1) {
-            node.status = 'trying'
+            node.status = 1 // 'trying'
           } else {
-            node.status = 'none'
+            node.status = 0 // 'none'
           }
           ret.push(node)
         }
@@ -58,13 +58,22 @@ const pcStatus = function (http, sets, oldstatus, startime, endtime) { // 这是
   })
 }
 
-const contestStatus = function (http, sid, lastid) {
+const contestStatus = function (http, sid, lastid, start, end) {
+  start = new Date(start).getTime()
+  end = new Date(end).getTime()
   lastid = Number(lastid || 0)
-  console.log(sid, lastid)
+  console.log(sid, lastid, start, end)
   return new Promise(function (resolve, reject) {
     http.get(window.noPointHost + '/api/status/contest/' + sid + '/' + lastid)
       .then(function (res) {
-        resolve(res.body.data)
+        let ret = []
+        if (res.body.data) {
+          for (let it of res.body.data) {
+            let t = new Date(it['when']).getTime()
+            if (t > start && t < end) ret.push(it)
+          }
+        }
+        resolve(ret)
       }, function (err) {
         reject(err)
       })

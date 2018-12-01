@@ -126,7 +126,7 @@
           <ul>
             <li v-for="(problem,index) in problems" :key="problem.problem_id">
               <problem-list :problem-index="index" :problem-name="problem.title"
-                            :status="0" :ac="problem.ac" :all="problem.all" :id="problem.problem_id.toString()"
+                            :status="mystatus[index] ? mystatus[index].status : 0" :ac="problem.ac" :all="problem.all" :id="problem.problem_id.toString()"
                             :spj="problem.special_judge ? problem.special_judge : false"
                             :dtj="problem.detail_judge ? problem.detail_judge : false"/>
             </li>
@@ -142,7 +142,7 @@
         <!--提交状态列表-->
         <div class="container padding-t-40">
           <status :status="status"></status>
-          <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
+          <div class="view-more"><router-link :to="{path: 'status'}" append>View More<span class="glyphicon glyphicon-chevron-right"></span></router-link></div>
         </div>
       </div>
 
@@ -220,7 +220,8 @@ export default {
       dialogMessage: '',
 
       status: [],
-      tick: []
+      tick: [],
+      mystatus: []
       // oldstatus: new Set([])
     }
   },
@@ -232,10 +233,9 @@ export default {
       console.log(this.status.concat(ct_new_status))
     },
     async statusUpdata () {
-      const new_status = await contestStatus(this.$http, this.contestid, this.status[0] ? this.status[0]['solution_id'] : 0)
-      console.log(new_status)
-      if (new_status) this.status = new_status.concat(this.status.concat)
-      console.log(this.status)
+      const new_status = await contestStatus(this.$http, this.contestid, this.status[0] ? this.status[0]['solution_id'] : 0, this.startTime, this.endTime)
+      if (new_status) this.status = new_status.concat(this.status)
+      this.mystatus = await myStatus(this.$http, this.problems)
     },
     handleScroll () {
       let scrolled = document.documentElement.scrollTop || document.body.scrollTop
@@ -342,7 +342,7 @@ export default {
       var vue = this
       vue.$http
         .get(
-          `${noPointHost}/api/user/login/check`,
+          `${noPointHost}/api/user`,
           {
             crossDomain: true,
             xhrFields: { withCredentials: true },
@@ -355,6 +355,7 @@ export default {
           res => {
             if (res.body.code === 0) {
               vue.userData = res.body.data
+              console.log('user data', vue.userData)
             } else {
               vue.userData = undefined
             }
@@ -450,10 +451,11 @@ export default {
     // this.$nextTick(function () {
     console.log('warning', this.dealWarning())
     window.addEventListener('scroll', this.handleScroll)
-    this.tick.push(setInterval(this.statusUpdata, 3000))
     this.initDatas()
     this.initUser()
     this.changeProblemListHeight()
+    this.statusUpdata()
+    this.tick.push(setInterval(this.statusUpdata, 4000))
     // })
   },
   beforeDestroy: function () {

@@ -104,8 +104,8 @@ export default {
       margin: 1em 1em;
       border-radius: 0;
       transition: all .41s;
-      background: #6cf;
-      color: #fff;
+      background: none;
+      color: #999;
       &:hover {
         transform: rotateX(0deg) rotateY(0deg) rotate(4.1deg) translateZ(300px) scale(1.1);
       }

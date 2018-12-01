@@ -18,7 +18,7 @@ export default {
   props: ['status'],
   data () {
     return {
-      whatineed: ['solution_id', 'nickname', 'problem_id', 'msg_en', 'code_size', 'memory', 'time']
+      whatineed: ['solution_id', 'nickname', 'problem_id', 'msg_en', 'code_size', 'memory', 'time', 'when']
     }
   },
   mounted () {

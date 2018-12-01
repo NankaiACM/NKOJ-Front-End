@@ -72,6 +72,9 @@ const rank = () => import(
 const notFound = () => import(
   /* webpackChunkName: "404" */
   '../components/404.vue')
+const allContestStatus = () => import(
+  /* webpackChunkName: "allconteststatus" */
+  '../components/contest/allstatus.vue')
 
 Vue.use(Router)
 console.log(window.noPointHost)
@@ -143,6 +146,10 @@ const router = new Router({
     props: {
       iswarning: false
     }
+  }, {
+    path: '/NKPC/:contestid/status',
+    component: allContestStatus,
+    props: true
   }
   ]
 })
@@ -173,6 +180,8 @@ router.checkUser = function (store, logined, notLogging, catchError) {
     credentials: true
   }).then(function (res) {
     if (res.body.code === 0) {
+      console.log('sdfsdf')
+      console.log(res.body.data)
       store.commit({
         type: 'setuserDate',
         isLogin: true,

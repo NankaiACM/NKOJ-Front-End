@@ -1,7 +1,7 @@
 <template>
   <div id="contest-rank-container-out" class="container-fluid">
     <div id="contest-rank-container-in" class="container-fluid">
-      <div v-for="(person, index) in persons" :key="index" class="person-rank-container">
+      <div v-for="(person, index) in persons" :key="index" v-if="index < howmany" class="person-rank-container">
         <img class="per-img" :src="`${preUrl}/api/avatar/` + person.user_id"/>
         <div class="per-cnt-ctn media-body container">
           <div class="luck">
@@ -19,7 +19,6 @@
         <div class="clearfix"></div>
       </div>
       <div class="clearfix"></div>
-      <problems-pagination @viewingleap="handleViewing"></problems-pagination>
     </div>
     <div id="draw-container" @click="toMyRank" v-if="userData">
       <div class="plate">
@@ -29,18 +28,13 @@
   </div>
 </template>
 <script>
-import ProblemsPagination from '../problem/pagination'
 export default {
   name: 'contestRank',
   data: function () {
     return {
       persons: [
-        /* old format: {list:[0,1,2,3,4,5,6,7,8,9],ac:[0,1,2,3,4,9]}, */
       ],
-      viewing: 1,
-      queryleft: 1,
-      queryright: 20,
-      pageSize: 20,
+      howmany: 10,
       userData: undefined,
       preUrl: noPointHost
     }
@@ -53,11 +47,6 @@ export default {
       }
       return b
     },
-    handleViewing: function (newv) {
-      this.viewing = newv.viewing
-      this.queryleft = (newv.viewing - 1) * this.pageSize + 1 +1000
-      this.queryright = this.queryleft + this.pageSize - 1
-    },
     toMyRank: function() {
       console.log(this.userData)
     }
@@ -68,12 +57,9 @@ export default {
         .then(function (res) {
           res = res.body.data
           this.persons = res
-          console.log(res)
+          console.log('rank', res)
         })
     })
-  },
-  components: {
-    ProblemsPagination
   }
 }
 </script>
@@ -153,15 +139,6 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
   max-width: 20em;
-}
-.luck .line:hover .split-mius.l::after {
-  content: '>';
-}
-
-.luck .line:hover .split-mius.r::after {
-  content: '<';
-  animation: luckright .72s ease-out 0s 1;
-  color: greenyellow;
 }
 
 .pro-table {
