@@ -154,8 +154,8 @@
         <h3><span class=" glyphicon glyphicon-signal"></span>RANK</h3>
         <!--排名列表-->
         <div class="container padding-t-40">
-          <ranks/>
-          <div class="view-more"><a>View More<span class="glyphicon glyphicon-chevron-right"></span></a></div>
+          <ranks :limit="10"/>
+          <div class="view-more"><router-link :to="{path: 'rank'}" append>View More<span class="glyphicon glyphicon-chevron-right"></span></router-link></div>
         </div>
       </div>
 
@@ -186,7 +186,7 @@ import saurusFooter from './components/footer'
 import vueLoading from 'vue-loading-template'
 import marked from 'marked'
 // const marked = () => import(/* webpackChunkName: "marked" */ 'marked')
-import {myStatus, contestStatus} from './components/contest/virtualApi.js'
+import {myStatus, contestStatus, rankList} from './components/contest/virtualApi.js'
 
 export default {
   name: 'NKPC',
@@ -501,7 +501,6 @@ export default {
       }
     },
     contestStatus: function () {
-      console.log()
       if (new Date(this.nowTime).getTime() > new Date(this.endTime).getTime()) {
         // end
         return 2

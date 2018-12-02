@@ -1,18 +1,18 @@
 <template>
   <div id="contest-rank-container-out" class="container-fluid">
     <div id="contest-rank-container-in" class="container-fluid">
-      <div v-for="(person, index) in persons" :key="index" v-if="index < howmany" class="person-rank-container">
-        <img class="per-img" :src="`${preUrl}/api/avatar/` + person.user_id"/>
+      <div v-for="(person, index) in persons" :key="index" v-if="isNaN(limit) ? true : (index < limit)" class="person-rank-container">
+        <img class="per-img" :src="`${preUrl}/api/avatar/` + person.uid"/>
         <div class="per-cnt-ctn media-body container">
           <div class="luck">
           <span class="line"><span class="split-mius">#</span><span :style="t()">{{index + 1}}</span></span><br>
-          <span class="line nick" :title="'nikename'"><span class="split-mius l"></span>{{person.user_id}}<span class="split-mius r"></span></span><br>
-          <span class="line"><span class="split-mius l"></span>solved<span class="split-mius r"></span></span><br>
-          <span class="line"><span class="split-mius l"></span>fraction<span class="split-mius r"></span></span>
+          <span class="line nick" :title="'nikename'"><span class="split-mius l"></span>{{person.nickname}}<span class="split-mius r"></span></span><br>
+          <span class="line"><span class="split-mius l"></span>solved<span class="split-mius r">{{person.allac}} / {{o.problems.length}}</span></span><br>
+          <span class="line"><span class="split-mius l"></span>fraction<span class="split-mius r">{{person.alltime}}</span></span>
           </div>
         </div>
         <div class="pro-table  media-body container">
-          <div v-for="(item, index) in new Array(10)" :key="index" class="pro-item" :class="{'ac': Math.random() > .5}">
+          <div v-for="(item, index) in o.problems" :key="index" class="pro-item" :class="{'ac': person.one.has(item['problem_id'])}" :title="item.title">
             {{String.fromCharCode('A'.charCodeAt()+index)}}
           </div>
         </div>
@@ -28,12 +28,15 @@
   </div>
 </template>
 <script>
+import {rankList} from './virtualApi.js'
 export default {
   name: 'contestRank',
+  props: ['limit'],
   data: function () {
     return {
       persons: [
       ],
+      p: [],
       howmany: 10,
       userData: undefined,
       preUrl: noPointHost
@@ -51,7 +54,8 @@ export default {
       console.log(this.userData)
     }
   },
-  mounted: function () {
+  mounted: async function () {
+    /* this api seems do not work
     this.$nextTick(function () {
       this.$http.get(`${noPointHost}/api/contest/${this.$route.params.contestid}/user`)
         .then(function (res) {
@@ -60,6 +64,12 @@ export default {
           console.log('rank', res)
         })
     })
+    */
+    console.log(this.limit)
+    let tar = await rankList(this.$http, this.$route.params.contestid)
+    this.persons = tar[0]
+    this.o = tar[1]
+    console.log(this.persons)
   }
 }
 </script>

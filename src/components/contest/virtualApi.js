@@ -82,9 +82,13 @@ const contestStatus = function (http, sid, lastid, start, end) {
 
 const contestData = function (http, cid) {
   return new Promise(function (resolve, reject) {
-    http.get(window.noPointHost + '/api/contest/cid')
+    http.get(window.noPointHost + '/api/contest/' + cid)
       .then(function (res) {
         let ret = res.body.data
+        let during = ret.during
+        let [startime, endtime] = JSON.parse(during)
+        ret.startime = startime
+        ret.endtime = endtime
         resolve(ret)
       }, function (err) {
         reject(err)
@@ -93,10 +97,9 @@ const contestData = function (http, cid) {
 }
 
 const rankList = async function (http, cid) {
-  let during = await contestData(http, cid)
-  let [startime, endtime] = JSON.parse(during)
-  let status = await contestStatus(http, cid, 0, startime, endtime)
-  const suptime = new Date(startime).getTime()
+  let o = await contestData(http, cid)
+  let status = await contestStatus(http, cid, 0, o.startime, o.endtime)
+  const suptime = new Date(o.startime).getTime()
   const getUsers = function (list) {
     let sets = new Set([])
     let pack = {}
@@ -119,20 +122,16 @@ const rankList = async function (http, cid) {
     }
   }
   let users = getUsers(status)
-  // struct:
-  /* 0: how many ac
-     1: total time
-     2...: time (NaN is not ac yet)
-  */
+  console.log(users)
   const penalty = 20 * 60 * 1000
-  const ret = []
+  const list = []
   for (let it of users.sets) {
     let one = new Map()
     let add = new Map()
     for (let ht of users.pack[it]) {
       const pid = ht['problem_id']
       const when = ht['love41']
-      if (ht['status_id'].toString() === 107) {
+      if (ht['status_id'].toString() === '107') {
         if (!one.has(pid)) {
           one.set(pid, when)
         } else {
@@ -150,25 +149,35 @@ const rankList = async function (http, cid) {
     }
     const allac = one.size
     let alltime = 0
-    for (let i in one) {
-      alltime += one[i]
-      if (add.has(i)) alltime += add[i]
+    for (let [key, value] of one) {
+      console.log(key, value)
+      alltime += value
+      console.log(alltime)
+      console.log(add.get(key))
+      if (add.has(key)) alltime += add.get(key)
     }
-    ret.push({
+    list.push({
       uid: it,
-      nickname: users.pack[0]['nickname'],
+      nickname: users.pack[it][0]['nickname'],
       allac: allac,
       alltime: alltime,
       one: one,
       add: add
     })
   }
-  return ret
+  list.sort(function (l, r) {
+    if (l.allac !== r.allac) {
+      return r.allac - l.allac
+    }
+    return l.alltime - r.alltime
+  })
+  return [list, o]
 }
 
 export {
   myStatus,
   pcStatus,
   contestStatus,
-  rankList
+  rankList,
+  contestData
 }

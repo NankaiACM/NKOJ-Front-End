@@ -75,6 +75,10 @@ const notFound = () => import(
 const allContestStatus = () => import(
   /* webpackChunkName: "allconteststatus" */
   '../components/contest/allstatus.vue')
+const allContestRank = () => import(
+  /* webpackChunkName: "allContestRank" */
+  '../components/contest/contestRank.vue'
+)
 
 Vue.use(Router)
 console.log(window.noPointHost)
@@ -150,6 +154,12 @@ const router = new Router({
     path: '/NKPC/:contestid/status',
     component: allContestStatus,
     props: true
+  }, {
+    path: '/NKPC/:contestid/rank',
+    component: allContestRank,
+    props: {
+      limit: NaN
+    }
   }
   ]
 })
