@@ -201,6 +201,10 @@ export default {
         {crossDomain: true, credentials: true}).then(res => {
         if (res.body.code !== 0) {
           alert(`Error: ${res.body.code}`)
+        } else if (res.body.data === 'data not found') {
+          this.initView();
+          this.buttonInfo = '修改题目'
+          this.isModify = true
         } else {
           console.log(res)
           this.pDescription = res.body.data.content.description
