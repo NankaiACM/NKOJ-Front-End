@@ -10,7 +10,7 @@
             <a :class="{'hover':hoverNav==index}" @click="scrollBand(index)">{{item.toUpperCase()}}</a>
           </li>
           <li v-if="userData===undefined"><a class="btn btn-ghost" @click="userPage='login'">登录</a></li>
-          <li v-if="userData===undefined"><a class="btn btn-default" @click="userPage='signUp'">注册</a></li>
+          <li v-if="userData===undefined"><router-link to="/sign_up" class="btn btn-default" >注册</router-link></li>
           <li v-if="userData!==undefined">
               <div class="avatar">
                 <div class="text">{{userData.nickname}}</div>
