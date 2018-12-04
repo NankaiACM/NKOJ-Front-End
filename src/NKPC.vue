@@ -467,10 +467,10 @@ export default {
       // console.log(contestStatus)
       if (this.contestStatus == 2) {
         return {
-          ds: NaN,
-          hrs: NaN,
-          mins: NaN,
-          secs: NaN
+          ds: 0,
+          hrs: 0,
+          mins: 0,
+          secs: 0
         }
       }
       var targetTime = this.contestStatus == 1 ? this.endTime : this.startTime
