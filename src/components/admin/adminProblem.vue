@@ -99,32 +99,32 @@
       <div id="editbox-wrp">
         <div>
           <label>题目描述</label>
-          <div ref="pDescription" class="adminEditor"></div>
+          <mavon-editor v-model="pDescription"/>
         </div>
         <hr>
         <div>
           <label>输入描述</label>
-          <div ref="pInput" class="adminEditor"></div>
+          <mavon-editor v-model="pInput"/>
         </div>
         <hr>
         <div>
           <label>输出描述</label>
-          <div ref="pOutput" class="adminEditor"></div>
+          <mavon-editor v-model="pOutput"/>
         </div>
         <hr>
         <div>
           <label>样例输入</label>
-          <div ref="pSInput" class="adminEditor"></div>
+          <mavon-editor v-model="pSInput"/>
         </div>
         <hr>
         <div>
           <label>样例输出</label>
-          <div ref="pSOutput" class="adminEditor"></div>
+          <mavon-editor v-model="pSOutput"/>
         </div>
         <hr>
         <div>
           <label>Hint</label>
-          <div ref="pHint" class="adminEditor"></div>
+          <mavon-editor v-model="pHint"/>
         </div>
         <hr>
       </div>
@@ -244,7 +244,7 @@ export default {
       e.preventDefault()
       let sendPackge = {}
       sendPackge.title = this.pTitle
-      sendPackge.cases = this.pCase
+      sendPackge.cases = Number(this.pCase)
       sendPackge.time_limit = this.pTime
       sendPackge.memory_limit = this.pMemory
       sendPackge.type = '0'
@@ -296,12 +296,14 @@ export default {
       editor.txt.html(this[y])
     },
     initView: function () {
+      /*
       this.createEditor(this.$refs.pDescription, 'pDescription')
       this.createEditor(this.$refs.pInput, 'pInput')
       this.createEditor(this.$refs.pOutput, 'pOutput')
       this.createEditor(this.$refs.pSInput, 'pSInput')
       this.createEditor(this.$refs.pSOutput, 'pSOutput')
       this.createEditor(this.$refs.pHint, 'pHint')
+      */
     }
   },
   mounted () {

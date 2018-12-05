@@ -122,7 +122,17 @@
 </template>
 <script>
 import isScrolled from '../../scroll'
-import marked from 'marked'
+import markdownIt from 'markdown-it'
+import markdownItMathjax from 'markdown-it-mathjax'
+import markdownItLatex from 'markdown-it-latex'
+import 'markdown-it-latex/dist/index.css'
+
+const markdownit = markdownIt()
+markdownit.use(markdownItMathjax)
+markdownit.use(markdownItLatex)
+
+window.markdownit = markdownit
+
 // const marked = () => import(/* webpackChunkName: "marked" */ 'marked')
 export default {
   name: 'problems-page',
@@ -156,16 +166,8 @@ export default {
       submitInfo: 'hhhhhhhhhhhhh',
       solutionId: undefined,
       isInfo: false,
-      titleclass: 'normal'
-    }
-  },
-  computed: {
-    problemMarkDown: function () {
-      let markdown = ''
-      for (let i in this.keyArr) {
-        markdown += '### ' + i.replace(/\b\w/g, l => l.toUpperCase()) + '\n' + this.contentObj[i] + '\n'
-      }
-      return marked(markdown, {sanitize: false})
+      titleclass: 'normal',
+      problemMarkDown: ''
     }
   },
   mounted: function () {
@@ -174,6 +176,16 @@ export default {
     })
   },
   methods: {
+    getMarkMathjaxLatex () {
+      let markdown = ''
+      for (let i in this.keyArr) {
+        markdown += '### ' + i.replace(/\b\w/g, l => l.toUpperCase()) + '\n' + this.contentObj[i] + '\n'
+      }
+      console.log(markdown)
+      window.markdown = markdown
+      console.log(markdownit.render(markdown))
+      return markdownit.render(markdown)
+    },
     toggleEditTag () {
       console.log('edit')
       this.isEditingTag = !this.isEditingTag
@@ -232,6 +244,7 @@ export default {
           this.contentObj = res.body.data.content
           this.o = res.body.data
           this.isStart = true
+          this.problemMarkDown = this.getMarkMathjaxLatex()
           this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/tag`).then(res => {
             res.body.data.forEach((val1, index) => {
               this.o.tags.forEach((val2, index) => {
@@ -320,7 +333,6 @@ export default {
 
 <style scoped lang="less">
 @import '../../less/global.less';
-
 html {
   #problemPage pre {
     text-align: left;
