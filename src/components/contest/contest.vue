@@ -112,7 +112,7 @@ export default {
               a = NaN
               b = NaN
             }
-            it.during = moment(a).format('YYYY-MM-DD h:mm') + '\n ~ \n' + moment(b).format('YYYY-MM-DD h:mm')
+            it.during = moment(a).format('YYYY-MM-DD HH:mm') + '\n ~ \n' + moment(b).format('YYYY-MM-DD HH:mm')
             console.log(it.description)
             it.description = marked(it.description)
             it.a = a
