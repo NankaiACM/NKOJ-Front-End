@@ -112,7 +112,7 @@ export default {
       this.$http.get(window.noPointHost + '/api/message/announcement')
         .then(function (res) {
           if (res.body.code === 0) {
-            this.annoucement = res.body.data[0].content
+            if (res.body.data[0]) this.annoucement = res.body.data[0].content
           }
         })
     },
