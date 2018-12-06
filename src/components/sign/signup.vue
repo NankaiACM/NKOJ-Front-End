@@ -168,11 +168,9 @@ export default {
               } else {
                 vue.statusMessage = resp.error
                 this.signupStatus = 0
+                vue.signupAttribute.signupCaptcha = ""
+                vue.captchaUrl = `${noPointHost}/api/captcha/sendmail?_t=` + Math.random()
               }
-              // 取消图片验证码清空
-              // 免使看起来需要输入两次验证码
-              // vue.signupAttribute.signupCaptcha = "";
-              // vue.captchaUrl = `${noPointHost}/api/captcha/sendmail?_t=` + Math.random();
             },
             res => {
               var vue = this
