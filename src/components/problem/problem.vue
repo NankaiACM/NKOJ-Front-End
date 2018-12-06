@@ -128,6 +128,7 @@ import markdownItLatex from 'markdown-it-latex'
 import 'markdown-it-latex/dist/index.css'
 
 const markdownit = markdownIt()
+markdownit.enable(['style', 'image', 'img'])
 markdownit.use(markdownItMathjax)
 markdownit.use(markdownItLatex)
 
