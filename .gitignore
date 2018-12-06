@@ -8,6 +8,7 @@ yarn-error.log*
 /test/e2e/reports/
 selenium-debug.log
 static/font
+static/mavon
 
 # Editor directories and files
 .idea
