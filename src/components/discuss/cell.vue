@@ -109,7 +109,7 @@ export default {
       return moment(new Date(stamp), 'x').fromNow()
     },
     dd: function (stamp) {
-      return moment(stamp).format('YYYY-MM-DD hh:mm:ss')
+      return moment(stamp).format('YYYY-MM-DD HH:mm:ss')
     },
     at: function (prid, uid) {
       this.placeholder = '评论 @' + uid
