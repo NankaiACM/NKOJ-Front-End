@@ -292,7 +292,10 @@ export default {
           vue.navbarItems = []
           vue.MDtext = new Array(1)
           vue.MDtext[0] = res.description
-          vue.problems = res.problems
+          vue.problems = res.problems.sort(function (l, r) {
+            return l.problem_id - r.problem_id
+          })
+          console.log(vue.problems)
           console.log('md', vue.MDtext)
         })
       setInterval(() => vue.nowTime = new Date(), 1000)

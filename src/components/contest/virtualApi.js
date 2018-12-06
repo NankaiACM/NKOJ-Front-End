@@ -89,6 +89,10 @@ const contestData = function (http, cid) {
         let [startime, endtime] = JSON.parse(during)
         ret.startime = startime
         ret.endtime = endtime
+        console.log(ret)
+        ret.problems = ret.problems.sort(function (l, r) {
+          return l.problem_id - r.problem_id
+        })
         resolve(ret)
       }, function (err) {
         reject(err)
