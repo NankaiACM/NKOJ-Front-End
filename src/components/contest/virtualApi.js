@@ -42,7 +42,7 @@ const pcStatus = function (http, sets, oldstatus, startime, endtime) { // 这是
         let ret = []
         const status = res.body.data
         for (let s of status) {
-          console.log(s)
+          // console.log(s)
           if (idsets.indexOf(s.problem_id) === -1) continue
           if (oldstatus.has(s.solution_id)) continue
           let when = new Date(s.when).getTime()
@@ -62,7 +62,7 @@ const contestStatus = function (http, sid, lastid, start, end) {
   start = new Date(start).getTime()
   end = new Date(end).getTime()
   lastid = Number(lastid || 0)
-  console.log(sid, lastid, start, end)
+  // console.log(sid, lastid, start, end)
   return new Promise(function (resolve, reject) {
     http.get(window.noPointHost + '/api/status/contest/' + sid + '/' + lastid)
       .then(function (res) {
@@ -89,7 +89,7 @@ const contestData = function (http, cid) {
         let [startime, endtime] = JSON.parse(during)
         ret.startime = startime
         ret.endtime = endtime
-        console.log(ret)
+        // console.log(ret)
         ret.problems = ret.problems.sort(function (l, r) {
           return l.problem_id - r.problem_id
         })
@@ -126,7 +126,7 @@ const rankList = async function (http, cid) {
     }
   }
   let users = getUsers(status)
-  console.log(users)
+  // console.log(users)
   const penalty = 20 * 60 * 1000
   const list = []
   for (let it of users.sets) {
@@ -139,14 +139,14 @@ const rankList = async function (http, cid) {
         if (!one.has(pid)) {
           one.set(pid, when)
         } else {
-          one[pid] = Math.min(one[pid], when)
+          one.set(pid, Math.min(one.get(pid), when))
         }
       } else {
         if (!one.has(pid)) {
           if (!add.has(pid)) {
             add.set(pid, penalty)
           } else {
-            add[pid] += penalty
+            add.set(pid, add.get(pid) + penalty)
           }
         }
       }
@@ -154,10 +154,9 @@ const rankList = async function (http, cid) {
     const allac = one.size
     let alltime = 0
     for (let [key, value] of one) {
-      console.log(key, value)
+      // console.log(key, value)
       alltime += value
-      console.log(alltime)
-      console.log(add.get(key))
+      // console.log(alltime)
       if (add.has(key)) alltime += add.get(key)
     }
     list.push({

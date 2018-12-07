@@ -12,7 +12,10 @@
           </div>
         </div>
         <div class="pro-table  media-body container">
-          <div v-for="(item, index) in o.problems" :key="index" class="pro-item" :class="{'ac': person.one.has(item['problem_id'])}" :title="item.title">
+          <div v-for="(item, index) in o.problems" :key="index" class="pro-item" :class="{'ac': person.one.has(item['problem_id'])}"
+          :title="item.title + ': ' + 
+          '[penalty: ' + (person.add.has(item['problem_id']) ? (~~(person.add.get(item['problem_id']) / 1000 / 60 /20) + ' * 20m') : 'No penalty') + '], ' +
+          '[ac: ' + (person.one.has(item['problem_id']) ? (~~(person.one.get(item['problem_id']) / 1000 / 60) +  'm | ' + hms(person.one.get(item['problem_id']))) : 'Not yet') + ']'">
             {{String.fromCharCode('A'.charCodeAt()+index)}}
           </div>
         </div>
@@ -43,6 +46,10 @@ export default {
     }
   },
   methods: {
+    hms: function (t) {
+      t = ~~(t / 1000)
+      return ~~(t / 60 / 60) + ' h ' + ~~((t % 3600) / 60) + ' m ' + t % 60 + 's'
+    },
     t: function () {
       let b = {
         'color':'#'+(~~(Math.random()*16777215)).toString(16),
