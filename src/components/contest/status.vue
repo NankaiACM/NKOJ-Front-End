@@ -1,7 +1,7 @@
 <template>
   <div class="statusboard">
     <div v-for="(it, id) in status" v-if="id < 20 && it['solution_id']" :key="id" class="statuscard"
-      :class="(it['msg_en'] || '').toString().replace(/\s*/g, '').toLowerCase().substr(0, 3)">
+      :class="'s' + ((it['msg_en'] || '').toString().replace(/\s*/g, '').toLowerCase().substr(0, 4))">
       <span v-for="(ht, hd) in whatineed" :key="hd" :title="ht.replace(/_*/g, '') + ':'"
         :class="ht.replace(/\_*/g, '')">
         {{it[ht]}}
@@ -78,16 +78,16 @@ export default {
     color: mediumaquamarine;
   }
 }
-.acc {
+.sacce {
   .sucess;
 }
-.wro, .tim, .mem, .out, .fun, .sys {
+.swron, .stime, .smemo, .soutp, .sfunc, .ssyst, .srunt {
   .fatal;
 }
-.pre, .com {
+.spres, .scomp {
   .warning;
 }
-.jud {
+.sjudg, .srunn {
   .waiting;
 }
 </style>
