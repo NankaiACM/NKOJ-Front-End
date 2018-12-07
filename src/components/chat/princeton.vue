@@ -86,6 +86,7 @@ export default {
     ptmsg: function (evt) {
       console.log('pt msg')
       console.log('type:' + (typeof evt.data))
+      console.log(evt)
       if (typeof evt.data === 'string') {
         console.log('rec:' + evt.data)
         var dtmp = this.dealable(evt.data)
@@ -93,6 +94,7 @@ export default {
         this.danmakus.push(dtmp)
         if (this.bot.isOnHook) {
           if (dtmp.indexOf(this.bot.last) === -1) {
+            console.log('call bot')
             setTimeout(this.botalk, 1000, dtmp)
           }
         }
@@ -164,6 +166,13 @@ export default {
       let n = `<span class="user-${color}">${admin ? '[管]' : ''}${user}</span>: ${message}`
       this.danmakus = [n, ...this.danmakus]
       // Color Schema: https://github.com/hukl/Smyck-Color-Scheme/blob/master/colors
+
+      if (this.bot.isOnHook) { // call bot talk
+        let dtmp = message
+        if (dtmp.indexOf(this.bot.last) === -1) {
+          setTimeout(this.botalk, 1000, dtmp)
+        }
+      }
     }
   },
   computed: {
