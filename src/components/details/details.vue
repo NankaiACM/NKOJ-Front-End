@@ -23,7 +23,7 @@
       </div>
       <div>
         <h3><span class="glyphicon glyphicon-console"></span> 编译信息</h3>
-        <div class="alert alert-info"><samp style="white-space: pre">{{o.compile_info || '无输出'}}</samp></div>
+        <div class="alert alert-info"><samp style="white-space: pre-wrap">{{o.compile_info || '无输出'}}</samp></div>
       </div>
       <div>
         <h3><span class="glyphicon glyphicon-pencil"></span> 代码
@@ -44,18 +44,32 @@
             <div class=" alert alert-info">
               <div class="poly-container">
                 <div class="poly-row">
-                  <div class="poly-col-sm">标准输入</div>
-                  <div class="poly-col-sm">标准输出</div>
-                  <div class="poly-col-sm">程序输出</div>
+                  <div class="poly-col">
+                    <div>标准输入</div>
+                  </div>
                 </div>
                 <div class="poly-row">
-                  <div class="poly-col-sm">
+                  <div class="poly-col">
                     <pre>{{item.stdin}}</pre>
                   </div>
-                  <div class="poly-col-sm">
+                </div>
+                <div class="poly-row">
+                  <div class="poly-col">
+                    <div>标准输出</div>
+                  </div>
+                </div>
+                <div class="poly-row">
+                  <div class="poly-col">
                     <pre>{{item.stdout}}</pre>
                   </div>
-                  <div class="poly-col-sm">
+                </div>
+                <div class="poly-row">
+                  <div class="poly-col">
+                    <div>程序输出</div>
+                  </div>
+                </div>
+                <div class="poly-row">
+                  <div class="poly-col">
                     <pre>{{item.execout}}</pre>
                   </div>
                 </div>
@@ -136,14 +150,14 @@ export default {
         })
     },
     getOutput: function (caseId) {
+      console.log(caseId)
       const vm = this
-      console.log('this is ', this)
       vm.$http.get(window.noPointHost + '/api/status/detail/' + vm.solution_id + '/case/' + caseId)
         .then(function (res) {
           if (res.body.code !== 0) return 0
-          console.log('that is ', this)
           vm.evaluateNodes.push(res.body.data)
-          if (caseId < vm.casesNum) vm.getOutput(caseId + 1)
+          // if (caseId < vm.casesNum) vm.getOutput(caseId + 1)
+          vm.getOutput(caseId + 1)
         })
     }
   },
@@ -200,10 +214,12 @@ export default {
     flex-wrap: wrap;
     margin-right: -15px;
     margin-left: -15px;
+    margin-top: .5em;
+    margin-bottom: .5em;
   }
 
   @media (min-width: 576px) {
-    .poly-col-sm {
+    .poly-col {
       -ms-flex-preferred-size: 0;
       flex-basis: 0;
       -ms-flex-positive: 1;
@@ -212,7 +228,7 @@ export default {
     }
   }
 
-  .poly-col-sm {
+  .poly-col {
     position: relative;
     width: 100%;
     min-height: 1px;
@@ -220,7 +236,7 @@ export default {
     padding-left: 15px;
   }
 
-  .poly-col-sm > pre {
+  .poly-col > pre {
     height: 100%;
   }
 </style>
