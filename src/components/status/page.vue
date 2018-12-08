@@ -46,7 +46,7 @@
                 :class="['btn btn-sm status',getStatusClass(status.status_id)]"
                 :style="'background-color: '+status.color"
                 type="button"
-                :to="{path:'details/'+status.solution_id}"
+                :to="{path:'/details/'+status.solution_id}"
                 tag="button"
               >
                 {{getStatusText(status.status_id) || status.msg_en}}
@@ -55,7 +55,7 @@
             <td>{{lang_hash[status.language]}}</td>
             <td>
               {{status.code_size}} byte
-              <router-link v-if="status.code_id" :to="{path:'code/'+status.code_id}">
+              <router-link v-if="status.code_id" :to="{path:'/code/'+status.code_id}">
                 <span class="label label-default">
                 <i class="glyphicon glyphicon-eye-open"></i>
               </span>
