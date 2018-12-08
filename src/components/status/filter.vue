@@ -3,6 +3,7 @@
     <div class="l">
       <input type="text" class="l" placeholder="problem ID" v-model="filter.problemID" >
       <input type="text" class="l" placeholder="user ID" v-model="filter.userID">
+      <input type="text" class="l" placeholder="nickname" v-model="filter.nickname">
     </div>
     <div class="r">
       <div class="menubox">
@@ -38,11 +39,16 @@
           </div>
         </div>
       </div>
+      <div class="menubox">
+        <div class="text" @click="pushTo">Search Now</div>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import {statusMap, langMap} from './map.js'
+import { statusSearchStr } from '../contest/virtualApi.js';
+import { localeData } from 'moment';
 export default {
   data: function () {
     return {
@@ -70,6 +76,11 @@ export default {
         return 0
       }
       this.filter[key] = ''
+    },
+    pushTo: function () {
+      console.log(this.filter)
+      this.$router.push({path: '/status/'})
+      this.$router.push({path: '/status/' + statusSearchStr(this.filter.problemID, this.filter.userID, this.filter.status, this.filter.nickname)})
     }
   }
 }

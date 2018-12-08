@@ -73,7 +73,7 @@
           </tr>
         </transition-group>
       </table>
-      <infinite-loading @infinite="infiniteHandler" v-if="isInfinite===true" class="no-more">
+      <infinite-loading @infinite="infiniteHandler" v-if="isInfinite===true" class="no-more" ref="infinite">
           <span slot="no-more">
             There is no more status :) | 都已经全被你知道了啦QAQ
           </span>
@@ -90,7 +90,9 @@
 import InfiniteLoading from 'vue-infinite-loading'
 import notify from '../shell/notify'
 import {statusMap, langHash} from './map.js'
+import {statusSearchStr, statusSearchData} from '../contest/virtualApi.js'
 import moment from 'moment'
+
 // const moment = () => import(webpackChunkName: "moment" */ 'moment')
 
 export default {
@@ -117,13 +119,28 @@ export default {
         status: '',
         lang: '',
         limit: 150, // 单次请求最大量
-        last: -1
+        last: -1,
+        nickname: ''
       },
       maxId: -1,
       minId: -1
     }
   },
   methods: {
+    clearData: function () {
+      this.filter.last = -1
+      this.maxId = -1
+      this.minId = -1
+      this.details.datas = []
+      this.statusList = []
+      /* bug
+      console.log(this.$refs.infinite)
+      window.emit = this.$refs.infinite.$emit
+      this.$refs.infinite.$emit('$InfiniteLoading:reset')
+      */
+      // 替代
+      window.location.reload()
+    },
     rejudge: function (solutionId) {
       const vm = this
       vm.$http.get(window.noPointHost + '/api/judge/rejudge/' + solutionId)
@@ -173,10 +190,11 @@ export default {
       let vm = this
       if (vm.statusList.length === 0) {
         console.log('第一次向魔法机发起状态请求')
-        vm.$http.get(vm.apiUrl)
+        vm.$http.get(vm.apiUrl + '?' + vm.$route.params.querryString)
           .then(function (res) {
             if (!res.body.data) {
               console.log('init feedback erro')
+              if ($state.complete) $state.complete()
               return -1
             }
             vm.statusList = res.body.data
@@ -191,7 +209,7 @@ export default {
       let from = vm.statusList.length
       let limit = vm.filter.limit
       console.log('向魔法机请求更久远的数据')
-      vm.$http.get(vm.apiUrl + '/' + from + '/' + limit)
+      vm.$http.get(vm.apiUrl + '/' + from + '/' + limit + '?' + vm.$route.params.querryString)
         .then(function (res) {
           let tmp = vm.statusList
           if (!res.body.data) {
@@ -208,13 +226,14 @@ export default {
           if ($state.loaded) $state.loaded()
         }, function (e) {
           console.log('infinite erro')
+          if ($state.complete) $state.complete()
         })
     },
     hook: function () {
       let vm = this
       if (vm.statusList.length === 0) return -1
       let till = vm.statusList[0].solution_id
-      vm.$http.get(vm.apiUrl + '/' + till)
+      vm.$http.get(vm.apiUrl + '/' + till + '?' + + vm.$route.params.querryString)
         .then(function (res) {
           if (!res.body.data) {
             console.log('无返回')
@@ -256,6 +275,17 @@ export default {
     maxId: function (n, o) {
       console.log('new maxId: ' + n)
     },
+    '$route': function (n, o) {
+      console.log(this.$route.params.querryString)
+      let vm = this
+      for (let i in vm.pool) {
+        window.clearInterval(vm.pool[i])
+      }
+      vm.clearData()
+      vm.pool.push(window.setInterval(vm.hook, 10000))
+    }
+    /* 不需要再跟 state 通信了
+    ,
     '$store.state.statusFilter': {
       deep: true,
       handler: function (n, o) {
@@ -265,7 +295,7 @@ export default {
         console.log('deepsee2')
         console.log(this.filter.status)
       }
-    }
+    } */
   },
   computed: {
     myId: function () {

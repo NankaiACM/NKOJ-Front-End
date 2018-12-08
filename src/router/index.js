@@ -107,6 +107,15 @@ const router = new Router({
         }
       },
       {
+        path: '/status/:querryString',
+        component: status,
+        props: {
+          isInfinite: true,
+          isBtn: false,
+          apiUrl: window.noPointHost + '/api/status'
+        }
+      },
+      {
         path: '/discuss',
         component: discuss
       },

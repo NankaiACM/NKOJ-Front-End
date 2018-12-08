@@ -100,6 +100,37 @@ const contestData = function (http, cid) {
   })
 }
 
+const statusSearchStr = function (_pid, _uid, _sid, _nickname) {
+  const valuecheck = function (v) {
+    return (v === '' || v === 'undefined')
+  }
+  let pack = {
+    pid: _pid + '',
+    uid: _uid + '',
+    sid: _sid + '',
+    nickname: _nickname + ''
+  }
+  let querryCheck = []
+  for (let key in pack) {
+    let value = pack[key]
+    if (valuecheck(value)) continue
+    querryCheck.push(key + '=' + value)
+  }
+  return querryCheck.join('&')
+}
+
+const statusSearchData = function (http, querryString) {
+  return new Promise(function (resolve, reject) {
+    http.get(window.nowPointHost + '/api/status/' + '?' + querryString)
+      .then(function (res) {
+        if (res.body.code.toString() === '0') resolve(res.body.data)
+        else reject(res)
+      }, function (err) {
+        reject(err)
+      })
+  })
+}
+
 const rankList = async function (http, cid) {
   let o = await contestData(http, cid)
   let status = await contestStatus(http, cid, 0, o.startime, o.endtime)
@@ -182,5 +213,7 @@ export {
   pcStatus,
   contestStatus,
   rankList,
-  contestData
+  contestData,
+  statusSearchStr,
+  statusSearchData
 }

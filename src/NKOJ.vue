@@ -13,7 +13,7 @@
               @toDiscuss="localTo('discuss')"
               :nowPage=nowPageF :userPage=userPage>
     <question-filter v-if="this.$route.path === '/problems'" class="abb"></question-filter>
-    <status-filter v-if="this.$route.path === '/status'" class="abb"></status-filter>
+    <status-filter v-if="this.$route.path.indexOf('/status') !== -1" class="abb"></status-filter>
     <rank-filter v-if="this.$route.path === '/ranklist'" class="abb"></rank-filter>
     </head-bar>
   </header>
