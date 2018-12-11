@@ -37,7 +37,7 @@
               </router-link>
             </td>
             <td>
-              <router-link :to="{path:'problem/'+status.problem_id}">
+              <router-link :to="{path:'/problem/'+status.problem_id}">
                 <span class="label label-info">{{status.problem_id}}</span>
               </router-link>
             </td>
