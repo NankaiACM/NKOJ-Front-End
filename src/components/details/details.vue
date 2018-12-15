@@ -41,8 +41,8 @@
                :key="index"
                class="eva-node">
             <h4> NO.{{index}}</h4>
-            <div class="alert alert-success" :class="item.stdout === item.execout ? 'alert-success' : 'alert-danger'">
-              {{item.stdout === item.execout ? 'PASS' : 'NOT YET'}}
+            <div class="alert alert-success" :class="item.stdout.replace(/\r\n/g, '\n') === item.execout.replace(/\r\n/g, '\n') ? 'alert-success' : 'alert-danger'">
+              {{item.stdout.replace(/\r\n/g, '\n') === item.execout.replace(/\r\n/g, '\n') ? 'PASS' : 'NOT YET'}}
             </div>
             <div class=" alert alert-info">
               <div class="poly-container">
