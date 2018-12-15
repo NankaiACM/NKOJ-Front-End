@@ -190,7 +190,7 @@ export default {
       let vm = this
       if (vm.statusList.length === 0) {
         console.log('第一次向魔法机发起状态请求')
-        vm.$http.get(vm.apiUrl + '?' + vm.$route.params.querryString)
+        vm.$http.get(vm.apiUrl + '?' + (vm.$route.params.querryString ? vm.$route.params.querryString : '') )
           .then(function (res) {
             if (!res.body.data) {
               console.log('init feedback erro')
@@ -209,7 +209,7 @@ export default {
       let from = vm.statusList.length
       let limit = vm.filter.limit
       console.log('向魔法机请求更久远的数据')
-      vm.$http.get(vm.apiUrl + '/' + from + '/' + limit + '?' + vm.$route.params.querryString)
+      vm.$http.get(vm.apiUrl + '/' + from + '/' + limit + '?' + (vm.$route.params.querryString ? vm.$route.params.querryString : ''))
         .then(function (res) {
           let tmp = vm.statusList
           if (!res.body.data) {
@@ -233,7 +233,7 @@ export default {
       let vm = this
       if (vm.statusList.length === 0) return -1
       let till = vm.statusList[0].solution_id
-      vm.$http.get(vm.apiUrl + '/' + till + '?' + + vm.$route.params.querryString)
+      vm.$http.get(vm.apiUrl + '/' + till + '?' + (vm.$route.params.querryString ? vm.$route.params.querryString : ''))
         .then(function (res) {
           if (!res.body.data) {
             console.log('无返回')

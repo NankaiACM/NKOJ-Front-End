@@ -58,6 +58,11 @@ const statusMap = [
     'value': '120',
     'status': 'Compiling status',
     'label_class': 'btn-info'
+  },
+  {
+    'value': '110',
+    'status': 'Detail Mode',
+    'label_class': 'btn-info'
   }
 ]
 const langMap = [{
