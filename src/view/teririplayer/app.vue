@@ -97,7 +97,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 @import url('./bulma.min.css');
 @import url('./video-js.min.css');
 #wrap {
