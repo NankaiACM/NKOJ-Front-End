@@ -79,6 +79,10 @@ const allContestRank = () => import(
   /* webpackChunkName: "allContestRank" */
   '../components/contest/contestRank.vue'
 )
+const teriri = () => import(
+  /* webpackChunkName: "teriri" */
+  '../view/teririplayer/app.vue'
+)
 
 Vue.use(Router)
 console.log(window.noPointHost)
@@ -169,6 +173,9 @@ const router = new Router({
     props: {
       limit: NaN
     }
+  }, {
+    path: '/teriri',
+    component: teriri
   }
   ]
 })

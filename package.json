@@ -28,6 +28,7 @@
     "mavon-editor": "^2.6.9",
     "moment": "^2.22.1",
     "particles.js": "^2.0.0",
+    "video.js": "^7.3.0",
     "vue": "^2.5.16",
     "vue-infinite-loading": "^2.3.1",
     "vue-loading-template": "^0.1.7",

@@ -26,6 +26,8 @@
         <li :class="{focusing:nowPage==='discuss'}" v-on:click="$emit('toDiscuss')"><span
           class="glyphicon glyphicon-comment"></span>讨论
         </li>
+        <li @click="teriri()"><span class="glyphicon glyphicon-expand"></span>视频
+        </li>
       </ul>
       <div class="usersBar" :class="{'login-usersBar':userData.isLogin}">
         <div class="field" @click="toggleAnnouncement">
@@ -126,6 +128,9 @@ export default {
           console.log('erro')
           console.log(e)
         })
+    },
+    teriri: function () {
+      window.open('http://acm.nankai.edu.cn/teriri')
     }
   },
   mounted: function () {

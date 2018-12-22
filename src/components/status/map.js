@@ -65,6 +65,73 @@ const statusMap = [
     'label_class': 'btn-info'
   }
 ]
+const statusHash = {
+  107: {
+    'value': '107',
+    'status': 'Accepted',
+    'label_class': 'btn-success'
+  },
+  102: {
+    'value': '102',
+    'status': 'Wrong Answer',
+    'label_class': 'btn-danger'
+  },
+  108: {
+    'value': '108',
+    'status': 'Presentation Error',
+    'label_class': 'btn-warning'
+  },
+  101: {
+    'value': '101',
+    'status': 'Compilation Error',
+    'label_class': 'btn-light'
+  },
+  103: {
+    'value': '103',
+    'status': 'Runtime Error',
+    'label_class': 'btn-warning'
+  },
+  105: {
+    'value': '105',
+    'status': 'Time Limit Exceeded',
+    'label_class': 'btn-warning'
+  },
+  104: {
+    'value': '104',
+    'status': 'Memory Limit Exceeded',
+    'label_class': 'btn-warning'
+  },
+  106: {
+    'value': '106',
+    'status': 'Output Limit Exceeded',
+    'label_class': 'btn-warning'
+  },
+  109: {
+    'value': '109',
+    'status': 'Function Limit Exceeded',
+    'label_class': 'btn-warning'
+  },
+  100: {
+    'value': '100',
+    'status': 'Judging',
+    'label_class': 'btn-info'
+  },
+  118: {
+    'value': '118',
+    'status': 'System Error',
+    'label_class': 'btn-warning'
+  },
+  120: {
+    'value': '120',
+    'status': 'Compiling status',
+    'label_class': 'btn-info'
+  },
+  110: {
+    'value': '110',
+    'status': 'Detail Mode',
+    'label_class': 'btn-info'
+  }
+}
 const langMap = [{
   'value': '0',
   'lang': 'C99'
@@ -76,4 +143,4 @@ const langHash = {
   '0': 'C99',
   '1': 'C++14'
 }
-export {statusMap, langMap, langHash}
+export {statusMap, statusHash, langMap, langHash}
