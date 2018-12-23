@@ -41,8 +41,8 @@
                :key="index"
                class="eva-node">
             <h4> NO.{{index}}</h4>
-            <div class="alert alert-success" :class="item.stdout.replace(/\r\n/g, '\n') === item.execout.replace(/\r\n/g, '\n') ? 'alert-success' : 'alert-danger'">
-              {{item.stdout.replace(/\r\n/g, '\n') === item.execout.replace(/\r\n/g, '\n') ? 'PASS' : 'NOT YET'}}
+            <div class="alert alert-success" :class="item.status_id === 107 ? 'alert-success' : 'alert-danger'">
+              {{statusHash[item.status_id].status}}
             </div>
             <div class=" alert alert-info">
               <div class="poly-container">
@@ -86,11 +86,13 @@
   </div>
 </template>
 <script>
+import {statusHash} from '../status/map.js'
 import notify from '../shell/notify'
 export default {
   name: 'details-page',
   data: function () {
     return {
+      statusHash: statusHash,
       notify: {
         title: '',
         message: '',
