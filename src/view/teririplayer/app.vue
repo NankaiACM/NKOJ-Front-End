@@ -1,4 +1,5 @@
 <template>
+<div id="teririid">
   <div id="wrap" class="hero is-clipped">
     <nav class="navbar is-success">
       <div class="navbar-menu container">
@@ -45,6 +46,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 <script>
 import videojs from 'video.js';
@@ -108,9 +110,10 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
 // @import './bulma.min.css';
 // @import './video-js.min.css';
+#teririid {
 #wrap {
   background: url('./2018-04-17.jpg') 0 / cover scroll;
   background-position: 0% 0%;
@@ -164,6 +167,7 @@ export default {
 .vjs-matrix .vjs-play-progress,
 .vjs-matrix .vjs-slider-bar {
   background: #fff;
+}
 }
 </style>
 
