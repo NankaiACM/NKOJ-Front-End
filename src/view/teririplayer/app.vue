@@ -57,14 +57,25 @@ export default {
       title: '魔法少女teriri',
     };
   },
-  async mounted () {
-    this.teriri = videojs('teriri', {
-      controls: true,
-      autoplay: false,
-      preload: 'auto'
+  mounted () {
+    this.$nextTick(async function () {
+      document.querySelector('head').removeChild(document.querySelector('#bs3'));
+      let l1 = document.createElement('link');
+      let l2 = document.createElement('link');
+      l1.type = l2.type = 'text/css';
+      l1.rel = l2.rel = 'stylesheet';
+      l1.href = '/static/bulma.min.css';
+      document.querySelector('head').appendChild(l1);
+      l2.href = '/static/video-js.min.css';
+      document.querySelector('head').appendChild(l2);
+      this.teriri = videojs('teriri', {
+        controls: true,
+        autoplay: false,
+        preload: 'auto'
+      });
+      this.list = await this.aget('http://acm.nankai.edu.cn/api/video/list');
+      this.setsrc(0);
     });
-    this.list = await this.aget('http://acm.nankai.edu.cn/api/video/list');
-    this.setsrc(0);
   },
   methods: {
     videourl (name) {
@@ -97,9 +108,9 @@ export default {
   }
 }
 </script>
-<style scoped>
-@import url('./bulma.min.css');
-@import url('./video-js.min.css');
+<style lang="less" scoped>
+// @import './bulma.min.css';
+// @import './video-js.min.css';
 #wrap {
   background: url('./2018-04-17.jpg') 0 / cover scroll;
   background-position: 0% 0%;
