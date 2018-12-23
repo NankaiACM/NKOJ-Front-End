@@ -131,6 +131,9 @@ export default {
   position: relative;
   background: rgba(255,255,255,.41);
 }
+header {
+  position: relative;
+}
 #teriri {
   width: 100%;
 }
