@@ -11,10 +11,24 @@
         <hr class=".hr">
         <img style="max-width: 80%; display: block; margin: auto" src="../../assets/qqgroup.jpg"/>
       </home-component>
-      <princeton></princeton>
+      <!--<princeton></princeton>--><!--消失了喵~-->
     </div>
     <div style="clear:both;"></div>
   </div>
+  <!--
+  <div class="card">
+    <home-problem></home-problem>
+  </div>
+  <div class="card">
+    <home-contest></home-contest>
+  </div>
+  <div class="card">
+    <home-component :title="'纳新喵~'">
+        <hr class=".hr">
+        <img style="max-width: 80%; display: block; margin: auto" src="../../assets/qqgroup.jpg"/>
+    </home-component>
+  </div>
+  -->
 </div>
 </template>
 <script>
@@ -36,6 +50,23 @@ export default {
 </script>
 <style lang="less" scoped>
 @import '../../less/global.less';
+
+#home {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  .card {
+    position: relative;
+    width: 100%;
+    padding: 1em 20%;
+    height: 100%;
+  }
+}
 
 #alpha {
   position: fixed;
