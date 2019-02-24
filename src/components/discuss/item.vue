@@ -29,15 +29,14 @@
 </div>
 </template>
 <script>
-import moment from 'moment'
-// const moment = () => import(webpackChunkName: "moment" */ 'moment')
+import dayjs from 'dayjs'
 export default {
   name: 'item',
   props: ['it'],
   methods: {
     interval: function (timestamp) {
       console.log(new Date(timestamp))
-      return moment(new Date(timestamp), 'x').fromNow()
+      return dayjs(new Date(timestamp), 'x').fromNow()
     },
     dosth: function (opa, id) {
       const vm = this

@@ -16,8 +16,7 @@
 </style>
 <script>
 
-import moment from 'moment'
-// const moment = () => import(webpackChunkName: "moment" */ 'moment')
+import dayjs from 'dayjs'
 export default {
   name: 'ver',
   data: function () {
@@ -38,7 +37,7 @@ export default {
       }
     },
     fromNow: function (timestamp) {
-      return moment(timestamp).fromNow()
+      return dayjs(timestamp).fromNow()
     }
   },
   mounted: function () {

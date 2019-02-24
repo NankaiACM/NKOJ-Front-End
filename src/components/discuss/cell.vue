@@ -76,8 +76,7 @@
   </div>
 </template>
 <script>
-import moment from 'moment'
-// const moment = () => import(webpackChunkName: "moment" */ 'moment')
+import dayjs from 'dayjs'
 import markdownBox from './markdownBox.vue'
 export default {
   name: 'discussCell',
@@ -106,10 +105,10 @@ export default {
         })
     },
     cc: function (stamp) {
-      return moment(new Date(stamp), 'x').fromNow()
+      return dayjs(new Date(stamp), 'x').fromNow()
     },
     dd: function (stamp) {
-      return moment(stamp).format('YYYY-MM-DD HH:mm:ss')
+      return dayjs(stamp).format('YYYY-MM-DD HH:mm:ss')
     },
     at: function (prid, uid) {
       this.placeholder = '评论 @' + uid

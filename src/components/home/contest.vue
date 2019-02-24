@@ -24,7 +24,7 @@
 </template>
 <script>
 import homeComponent from './homeComponent.vue'
-import moment from 'moment'
+import dayjs from 'dayjs'
 export default {
   name: 'component-home-contest',
   components: {homeComponent},
@@ -50,9 +50,8 @@ export default {
       const [f, s] = during.split(',')
       const a = f.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)[0]
       const b = s.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)[0]
-      console.log(a, moment, b)
       if (!a || !b) return 'unknow'
-      return moment().isBetween(a, b) ? '进行中' : moment().isAfter(b) ? '已结束' : '即将开始'
+      return dayjs().isBetween(a, b) ? '进行中' : dayjs().isAfter(b) ? '已结束' : '即将开始'
     }
   }
 }

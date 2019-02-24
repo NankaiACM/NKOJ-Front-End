@@ -20,7 +20,7 @@
 <script>
 import pagination from "./contestComponents/pagination.vue";
 import ContestsListBox from './contestComponents/contestsListBox.vue'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import marked from 'marked'
 
 export default {
@@ -58,14 +58,14 @@ export default {
               a = NaN
               b = NaN
             }
-            it.during = moment(a).format('YYYY-MM-DD h:mm') + '\n ~ \n' + moment(b).format('YYYY-MM-DD h:mm')
+            it.during = dayjs(a).format('YYYY-MM-DD h:mm') + '\n ~ \n' + dayjs(b).format('YYYY-MM-DD h:mm')
             console.log(it.description)
             it.description = marked(it.description)
             it.a = a
             it.b = b
-            if (moment().isBetween(a, b)) {
+            if (dayjs().isBetween(a, b)) {
               it.active = 0
-            } else if (moment().isBefore(a)) {
+            } else if (dayjs().isBefore(a)) {
               it.active = 1
             } else {
               it.active = -1
