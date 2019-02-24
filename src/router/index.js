@@ -176,6 +176,9 @@ const router = new Router({
   }, {
     path: '/teriri',
     component: teriri
+  }, {
+    path: '*',
+    redirect: '/notFound'
   }
   ]
 })
