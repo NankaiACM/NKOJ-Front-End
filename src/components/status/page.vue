@@ -92,6 +92,9 @@ import notify from '../shell/notify'
 import {statusMap, langHash} from './map.js'
 import {statusSearchStr, statusSearchData} from '../contest/virtualApi.js'
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
 
 export default {
   name: 'status',

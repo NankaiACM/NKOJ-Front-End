@@ -25,6 +25,9 @@
 <script>
 import homeComponent from './homeComponent.vue'
 import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+
+dayjs.extend(isBetween)
 export default {
   name: 'component-home-contest',
   components: {homeComponent},

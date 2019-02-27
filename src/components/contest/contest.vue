@@ -48,7 +48,11 @@
 <script>
 import ContestsListBox from './contestComponents/contestsListBox.vue'
 import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
 import marked from 'marked'
+
+dayjs.extend(isBetween)
+
 export default {
   name: 'contestPage',
   components: {
