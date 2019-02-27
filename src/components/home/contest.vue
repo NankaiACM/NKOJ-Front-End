@@ -15,7 +15,7 @@
             {{contest.title}}
           </router-link>
         </div>
-        <div>{{(contest.during).match(/\d{4}-\d{2}-\d{2}\s\d{2}\:\d{2}\:\d+/)[0]}}</div>
+        <div>{{timestr(contest.during)}}</div>
         <div>{{isDuring(contest.during)}}</div>
       </li>
     </ul>
@@ -47,14 +47,21 @@ export default {
       // 暂时使用contest api的数据
       this.$http.get(`${window.noPointHost}/api/contests/`).then(function (res) {
         _this.newContests = res.body.data.list.slice(0, 5)
+        console.log(_this.newContests)
       })
     },
     isDuring (during) {
       const [f, s] = during.split(',')
-      const a = f.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)[0]
-      const b = s.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)[0]
+      console.log(f, s)
+      const a = f.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)
+      const b = s.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)
       if (!a || !b) return 'unknow'
-      return dayjs().isBetween(a, b) ? '进行中' : dayjs().isAfter(b) ? '已结束' : '即将开始'
+      return dayjs().isBetween(a[0], b[0]) ? '进行中' : dayjs().isAfter(b[0]) ? '已结束' : '即将开始'
+    },
+    timestr (str) {
+      const a = str.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)
+      if (!a) return 'unknow'
+      return a[0]
     }
   }
 }
