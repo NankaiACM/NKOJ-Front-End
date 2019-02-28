@@ -45,7 +45,6 @@
   </div>
 </template>
 <script>
-import dayjs from 'dayjs'
 export default {
   name: 'editor',
   props: ['url'],
@@ -106,10 +105,10 @@ export default {
             s = s.split(',')
             console.log(s)
             if (s[0].length !== 0) {
-              document.querySelector('input[name=start]').value = dayjs(s[0]).toISOString().substr(0, 23)
+              document.querySelector('input[name=start]').value = this.$dayjs(s[0]).toISOString().substr(0, 23)
             }
             if (s[1].length !== 0) {
-              document.querySelector('input[name=end]').value = dayjs(s[1]).toISOString().substr(0, 23)
+              document.querySelector('input[name=end]').value = this.$dayjs(s[1]).toISOString().substr(0, 23)
             }
           }
           this.notify.title = 'fetch contest state:'

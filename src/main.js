@@ -10,9 +10,21 @@ import mavonEditor from 'mavon-editor'
 // const mavonEditor = () => import(
 //   /* webpackChunkName: "mavon-editor" */
 //   'mavon-editor')
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import isBetween from 'dayjs/plugin/isBetween'
+import 'dayjs/locale/zh-cn'
+
 Vue.config.productionTip = false
 Vue.use(VueResource)
 Vue.use(mavonEditor)
+
+dayjs.locale('zh-cn')
+dayjs.extend(isBetween)
+dayjs.extend(relativeTime)
+
+Vue.prototype.$dayjs = dayjs
+
 Vue.component('vue-slide-up-down',
   () => import('vue-slide-up-down')
 )

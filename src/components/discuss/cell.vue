@@ -76,7 +76,6 @@
   </div>
 </template>
 <script>
-import dayjs from 'dayjs'
 import markdownBox from './markdownBox.vue'
 export default {
   name: 'discussCell',
@@ -105,10 +104,10 @@ export default {
         })
     },
     cc: function (stamp) {
-      return dayjs(new Date(stamp), 'x').fromNow()
+      return this.$dayjs(new Date(stamp), 'x').fromNow()
     },
     dd: function (stamp) {
-      return dayjs(stamp).format('YYYY-MM-DD HH:mm:ss')
+      return this.$dayjs(stamp).format('YYYY-MM-DD HH:mm:ss')
     },
     at: function (prid, uid) {
       this.placeholder = '评论 @' + uid

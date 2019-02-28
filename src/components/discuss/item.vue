@@ -29,10 +29,6 @@
 </div>
 </template>
 <script>
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-
-dayjs.extend(relativeTime)
 
 export default {
   name: 'item',
@@ -40,7 +36,7 @@ export default {
   methods: {
     interval: function (timestamp) {
       console.log(new Date(timestamp))
-      return dayjs(new Date(timestamp), 'x').fromNow()
+      return this.$dayjs(new Date(timestamp), 'x').fromNow()
     },
     dosth: function (opa, id) {
       const vm = this

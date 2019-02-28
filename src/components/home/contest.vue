@@ -24,10 +24,7 @@
 </template>
 <script>
 import homeComponent from './homeComponent.vue'
-import dayjs from 'dayjs'
-import isBetween from 'dayjs/plugin/isBetween'
 
-dayjs.extend(isBetween)
 export default {
   name: 'component-home-contest',
   components: {homeComponent},
@@ -56,7 +53,7 @@ export default {
       const a = f.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)
       const b = s.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)
       if (!a || !b) return 'unknow'
-      return dayjs().isBetween(a[0], b[0]) ? '进行中' : dayjs().isAfter(b[0]) ? '已结束' : '即将开始'
+      return this.$dayjs().isBetween(a[0], b[0]) ? '进行中' : this.$dayjs().isAfter(b[0]) ? '已结束' : '即将开始'
     },
     timestr (str) {
       const a = str.match(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d+/)

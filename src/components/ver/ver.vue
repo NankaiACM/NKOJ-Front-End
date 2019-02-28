@@ -16,11 +16,6 @@
 </style>
 <script>
 
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-
-dayjs.extend(relativeTime)
-
 export default {
   name: 'ver',
   data: function () {
@@ -41,7 +36,7 @@ export default {
       }
     },
     fromNow: function (timestamp) {
-      return dayjs(timestamp).fromNow()
+      return this.$dayjs(timestamp).fromNow()
     }
   },
   mounted: function () {

@@ -47,11 +47,7 @@
 
 <script>
 import ContestsListBox from './contestComponents/contestsListBox.vue'
-import dayjs from 'dayjs'
-import isBetween from 'dayjs/plugin/isBetween'
 import marked from 'marked'
-
-dayjs.extend(isBetween)
 
 export default {
   name: 'contestPage',
@@ -116,14 +112,14 @@ export default {
               a = NaN
               b = NaN
             }
-            it.during = dayjs(a).format('YYYY-MM-DD HH:mm') + '\n ~ \n' + dayjs(b).format('YYYY-MM-DD HH:mm')
+            it.during = this.$dayjs(a).format('YYYY-MM-DD HH:mm') + '\n ~ \n' + this.$dayjs(b).format('YYYY-MM-DD HH:mm')
             console.log(it.description)
             it.description = marked(it.description)
             it.a = a
             it.b = b
-            if(dayjs().isBetween(a, b)) {
+            if(this.$dayjs().isBetween(a, b)) {
               this.activeContests.push(it)
-            } else if (dayjs().isBefore(a)) {
+            } else if (this.$dayjs().isBefore(a)) {
               this.commings.push(it)
             } else {
               this.archivedContests.push(it)

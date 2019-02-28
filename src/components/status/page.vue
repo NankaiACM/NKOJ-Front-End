@@ -63,7 +63,7 @@
             </td>
             <td>{{status.time}} ms</td>
             <td>{{status.memory}} kB</td>
-            <td :title="new Date(status.when).toLocaleString()">{{dayjs(status.when).fromNow()}}</td>
+            <td :title="new Date(status.when).toLocaleString()">{{$dayjs(status.when).fromNow()}}</td>
             <td>
               <span class="share">
                 <span v-if="status.shared">yes <span v-if="status.user_id === myId" class="rm" @click="$router.removeShare(vm, status.solution_id, status)">x</span></span>
@@ -91,10 +91,6 @@ import InfiniteLoading from 'vue-infinite-loading'
 import notify from '../shell/notify'
 import {statusMap, langHash} from './map.js'
 import {statusSearchStr, statusSearchData} from '../contest/virtualApi.js'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-
-dayjs.extend(relativeTime)
 
 export default {
   name: 'status',
@@ -251,8 +247,7 @@ export default {
         }, function (e) {
           console.log(JSON.stringify(e))
         })
-    },
-    dayjs: dayjs
+    }
   },
   mounted: function () {
     let vm = this

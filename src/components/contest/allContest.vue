@@ -20,11 +20,7 @@
 <script>
 import pagination from "./contestComponents/pagination.vue";
 import ContestsListBox from './contestComponents/contestsListBox.vue'
-import dayjs from 'dayjs'
-import isBetween from 'dayjs/plugin/isBetween'
 import marked from 'marked'
-
-dayjs.extend(isBetween)
 
 export default {
   name:'allContest',
@@ -61,14 +57,14 @@ export default {
               a = NaN
               b = NaN
             }
-            it.during = dayjs(a).format('YYYY-MM-DD h:mm') + '\n ~ \n' + dayjs(b).format('YYYY-MM-DD h:mm')
+            it.during = this.$dayjs(a).format('YYYY-MM-DD h:mm') + '\n ~ \n' + this.$dayjs(b).format('YYYY-MM-DD h:mm')
             console.log(it.description)
             it.description = marked(it.description)
             it.a = a
             it.b = b
-            if (dayjs().isBetween(a, b)) {
+            if (this.$dayjs().isBetween(a, b)) {
               it.active = 0
-            } else if (dayjs().isBefore(a)) {
+            } else if (this.$dayjs().isBefore(a)) {
               it.active = 1
             } else {
               it.active = -1
