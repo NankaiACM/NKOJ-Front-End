@@ -8,6 +8,7 @@
             <th>nickname</th>
             <th>problem id</th>
             <th>result</th>
+            <th>score</th>
             <th>language</th>
             <th>code length</th>
             <th>time</th>
@@ -51,6 +52,9 @@
               >
                 {{getStatusText(status.status_id) || status.msg_en}}
               </router-link>
+            </td>
+            <td>
+              {{status.score}}
             </td>
             <td>{{lang_hash[status.language]}}</td>
             <td>

@@ -19,6 +19,7 @@
         <h3><span class="glyphicon glyphicon-search"></span>评测结果</h3>
         <div class="alert alert-info">
           {{o.msg_en}} / {{o.msg_cn}} <br>
+          分数: {{o.score}}
         </div>
       </div>
       <div>
