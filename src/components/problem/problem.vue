@@ -23,9 +23,11 @@
               </span></button>
             <ul class="dropdown-menu">
               <li><a v-on:click="setLan('C++')">C++</a></li>
-              <!--<li><a v-on:click="setLan('Java')">Java</a></li>-->
-              <!--<li><a v-on:click="setLan('Python')">Python</a></li>-->
-              <!--<li><a v-on:click="setLan('JavaScript')">JavaScrpit</a></li>-->
+              <li><a v-on:click="setLan('C')">C</a></li>
+              <li><a v-on:click="setLan('Python')">Python</a></li>
+              <li><a v-on:click="setLan('JavaScript')">JavaScrpit</a></li>
+              <li><a v-on:click="setLan('Go')">Go</a></li>
+              <li><a v-on:click="setLan('Text')">Text</a></li>
               <!--<li><a v-on:click="setLan('Pascal')">Pascall</a></li>-->
               <!--<li><a v-on:click="setLan('Html')">Html</a></li>-->
               <!--<li><a v-on:click="setLan('Css')">Css</a></li>-->
@@ -126,6 +128,7 @@ import markdownIt from 'markdown-it'
 import markdownItMathjax from 'markdown-it-mathjax'
 import markdownItLatex from 'markdown-it-latex'
 import 'markdown-it-latex/dist/index.css'
+import {lang2code} from '../status/map.js'
 
 const markdownit = markdownIt({
   html: true,
@@ -275,7 +278,7 @@ export default {
     submit: function () {
       const sendPackage = {
         pid: this.$route.params.problemId,
-        lang: 1,
+        lang: lang2code[this.submitLan],
         code: this.submitCode
       }
       let _this = this
@@ -299,6 +302,7 @@ export default {
     },
     setLan: function (Lan) {
       this.submitLan = Lan
+      this.submitCode = ''
     },
     editorInit: function () {
       require('brace/mode/html')
