@@ -21,7 +21,10 @@
         <span class="l">权限设置</span>
         <div class="r"><input placeholder="private" type="checkbox" name="private" value="false"></div>
       </div>
-
+      <div class="section">
+        <span class="l">赛制设置</span>
+        <div class="r"><select id="rule" name="rule"><option value="acm">ACM</option><option value="oi">OI</option></select></div>
+      </div>
       <div class="section">
         <span class="l">编辑题目</span>
         <div class="r">
@@ -94,6 +97,7 @@ export default {
           document.querySelector('textarea[name=description]').value = r.description
           document.querySelector('input[name=perm]').value = r.perm
           document.querySelector('input[name=private]').checked = r.private
+          document.querySelector('select[name=rule]').value = r.rule
           var s = JSON.stringify(r.during.toString())
           s = s.replace(/\"/g, '')
           s = s.replace(/\\/g, '')
