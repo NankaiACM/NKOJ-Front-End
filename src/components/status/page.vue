@@ -262,7 +262,6 @@ export default {
   beforeDestroy: function () {
     let vm = this
     console.log('清理魔法池')
-    console.log(vm.pool)
     for (let i in vm.pool) {
       window.clearInterval(vm.pool[i])
     }

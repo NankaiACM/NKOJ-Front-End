@@ -66,7 +66,6 @@ export default {
   mounted: function () {
     this.$nextTick(function () {
       this.filter = this.$store.state.statusFilter // 浅拷贝
-      console.log(this.filter)
     })
   },
   methods: {
@@ -78,7 +77,6 @@ export default {
       this.filter[key] = ''
     },
     pushTo: function () {
-      console.log(this.filter)
       this.$router.push({path: '/status/'})
       this.$router.push({path: '/status/' + statusSearchStr(this.filter.problemID, this.filter.userID, this.filter.status, this.filter.nickname)})
     }
