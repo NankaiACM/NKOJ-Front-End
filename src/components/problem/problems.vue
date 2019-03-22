@@ -92,12 +92,10 @@ export default {
   },
   methods: {
     initView: function () {
-      console.log(this.queryright)
       this.$http.get(`${window.noPointHost}/api/problems/list/${this.queryleft}/${this.queryright}`)
         .then(function (res) {
           this.rawNetList = res.body.data.list
           this.rawNetTotal = res.body.data.served
-          console.log(matchSorter)
         })
     },
     stateAstarRender: function (tmp) {
@@ -126,10 +124,8 @@ export default {
       else if (right < 0) right = 0
       const tmp = this.rawList.slice(left, right)
       this.problemList = this.stateAstarRender(tmp)
-      console.log(tmp)
     },
     handleViewing: function (newv) {
-      console.info(newv.viewing)
       this.viewing = newv.viewing
       this.raw2listrender()
     }
@@ -141,7 +137,6 @@ export default {
       this.onlist = newv.on
     },
     rawList: function (n, o) {
-      console.log('render')
       this.raw2listrender()
     },
     kWords: function () {

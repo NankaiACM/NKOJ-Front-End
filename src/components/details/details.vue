@@ -140,7 +140,6 @@ export default {
         alert('参数错误')
         return console.erro(vm.$route.params)
       }
-      console.log(solutionId)
       vm.solution_id = solutionId
       vm.getO()
     },
@@ -156,7 +155,6 @@ export default {
         })
     },
     getOutput: function (caseId) {
-      console.log(caseId)
       const vm = this
       vm.$http.get(window.noPointHost + '/api/status/detail/' + vm.solution_id + '/case/' + caseId)
         .then(function (res) {

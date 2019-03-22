@@ -24,7 +24,6 @@ export default {
       .then(function (res) {
         res = res.body.data.list
         this.all = res
-        console.log(res)
       })
   },
   methods: {

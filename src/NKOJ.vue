@@ -56,12 +56,10 @@ export default {
   },
   methods: {
     localTo: function (str) {
-      console.info(this.$route.path)
       this.nowPage = str
       this.$router.push({
         path: '/' + str
       })
-      console.info(this.$route.path)
     },
     changeTo404: function () {
       this.nowPage = '404'

@@ -71,13 +71,11 @@ export default new Vuex.Store({
         }
       }
       state.problemFilter[payload.key] = payload.value
-      console.log(JSON.stringify(state.problemFilter))
     },
     setStatusFilter (state, payload) { // status filter
       for (let i in payload) {
         state.statusFilter[i] = payload[i]
       }
-      console.log(JSON.stringify(state.statusFilter))
     },
     setRFilter (state, payload) {
       state.rankFilter[payload.key] = payload.value
@@ -98,7 +96,6 @@ export default new Vuex.Store({
           state.userData.perm = {}
           state.userData.o = {}
           console.log('清空用户数据')
-          console.log(JSON.stringify(state.userData))
         } else {
           state.userData.isLogin = true
           state.userData['user_id'] = payload['user_id']

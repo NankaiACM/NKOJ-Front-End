@@ -74,7 +74,6 @@ export default {
     getPage: function () {
     },
     jump: function (v) {
-      console.log(this.all_pages)
       if (v >= 1 && v <= this.all_pages) {
         this.viewing = v
       }
@@ -89,7 +88,6 @@ export default {
       return 100
     },
     num_list: function () {
-      console.log(this.viewing)
       if (this.viewing <= 5) {
         return [1, 2, 3, 4, 5]
       }

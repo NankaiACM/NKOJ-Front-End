@@ -48,17 +48,14 @@ export default {
         .then(function (res) {
           res = res.body.data.list
           for (let it of res) {
-            console.log(it)
             var a, b
             try {
               [a, b] = JSON.parse(it.during)
-              console.log(a, b)
             } catch (e) {
               a = NaN
               b = NaN
             }
             it.during = this.$dayjs(a).format('YYYY-MM-DD h:mm') + '\n ~ \n' + this.$dayjs(b).format('YYYY-MM-DD h:mm')
-            console.log(it.description)
             it.description = marked(it.description)
             it.a = a
             it.b = b

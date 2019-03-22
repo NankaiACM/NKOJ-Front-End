@@ -92,10 +92,8 @@ export default {
   methods: {
     hit: function () {
       this.input = document.querySelector('#input-hack').innerText
-      console.log(this.input)
       this.$http.post(window.noPointHost + '/api/post' + this.rOc + this.rid, {content: this.input})
         .then(function (r) {
-          console.log(JSON.stringify(r))
           if (r.body.code === 0) this.r()
           this.input = ''
           this.focusState = false
@@ -151,7 +149,6 @@ export default {
     rm: function (fash, rid) {
       this.$http.get(window.noPointHost + '/api/post/rmvote/' + rid)
         .then(function (r) {
-          console.log(r)
           if (r.body.code === 0) {
             this[fash](rid)
             this.r()

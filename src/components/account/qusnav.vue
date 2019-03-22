@@ -11,7 +11,6 @@ export default {
   props: ['chose'],
   mounted: function () {
     this.$nextTick(function () {
-      console.log(this.chose)
     })
   }
 }

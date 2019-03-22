@@ -23,7 +23,6 @@ export default {
     reload: function () {
       this.$http.get(window.noPointHost + '/api/post/' + this.$route.params['id'])
         .then(function (r) {
-          console.log(r.body)
           if (r.body.code !== 0) return console.log('code', r.body.code)
           if (r.body.data.length < 1) return console.log('none')
           this.os = r.body.data

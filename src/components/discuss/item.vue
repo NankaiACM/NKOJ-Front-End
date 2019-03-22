@@ -35,7 +35,6 @@ export default {
   props: ['it'],
   methods: {
     interval: function (timestamp) {
-      console.log(new Date(timestamp))
       return this.$dayjs(new Date(timestamp), 'x').fromNow()
     },
     dosth: function (opa, id) {

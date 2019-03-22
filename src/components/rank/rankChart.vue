@@ -123,7 +123,6 @@ export default {
         if (rwd[i].faction > zmaxn) zmaxn = rwd[i].faction
       }
       this.options.series[0].data = tmp
-      console.log(JSON.stringify(tmp))
       this.options.visualMap.max = zmaxn
       this.dom.setOption(this.options)
       if (this.isloop) this.loopnum = setTimeout(this.loop, 1100)

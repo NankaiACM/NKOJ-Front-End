@@ -283,9 +283,7 @@ export default {
       vue.$http.get(`${noPointHost}/api/contest/${vue.contestid}`)
         .then(function (res) {
           res = res.body.data
-          console.log(res)
           const [f, t] = JSON.parse(res.during)
-          console.log(f, t)
           vue.startTime = f
           vue.endTime = t
           vue.contestTitle = res.title
@@ -295,8 +293,6 @@ export default {
           vue.problems = res.problems.sort(function (l, r) {
             return l.problem_id - r.problem_id
           })
-          console.log(vue.problems)
-          console.log('md', vue.MDtext)
         })
       setInterval(() => vue.nowTime = new Date(), 1000)
       /*
@@ -374,7 +370,6 @@ export default {
         })
     },
     getMD: function (text) {
-      console.log('hh', text)
       return marked(text, {sanitize: true})
     },
     changeUserInfo: function (info) {
@@ -442,7 +437,6 @@ export default {
       })
     },
     dealWarning: function () {
-      console.log(this.iswarning)
       if (this.iswarning !== true) return true
       return false
     },

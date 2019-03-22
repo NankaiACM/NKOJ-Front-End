@@ -209,8 +209,6 @@ router.checkUser = function (store, logined, notLogging, catchError) {
     credentials: true
   }).then(function (res) {
     if (res.body.code === 0) {
-      console.log('sdfsdf')
-      console.log(res.body.data)
       store.commit({
         type: 'setuserDate',
         isLogin: true,
@@ -225,7 +223,6 @@ router.checkUser = function (store, logined, notLogging, catchError) {
       logined() // 成功时的回调
     } else {
       console.log('未知状态')
-      console.log(res)
     }
   }, function (e) {
     if (e.body.code === 401) {
@@ -244,7 +241,6 @@ router.checkUser = function (store, logined, notLogging, catchError) {
   })
 }
 router.addShare = function (vm, solutionId, status) {
-  console.log(vm)
   vm.$http.get(window.noPointHost + '/api/status/share/add/' + solutionId)
     .then(function (r) {
       if (r.body.code === 0) {

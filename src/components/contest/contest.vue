@@ -99,21 +99,17 @@ export default {
     this.$nextTick(function () {
       this.$http.get(`${noPointHost}/api/contests/`)
         .then(function (res) {
-          console.log(res)
           res = res.body.data
           this.contests = res.list
           for (let it of this.contests) {
-            console.log(it)
             var a, b
             try {
               [a, b] = JSON.parse(it.during)
-              console.log(a, b)
             } catch (e) {
               a = NaN
               b = NaN
             }
             it.during = this.$dayjs(a).format('YYYY-MM-DD HH:mm') + '\n ~ \n' + this.$dayjs(b).format('YYYY-MM-DD HH:mm')
-            console.log(it.description)
             it.description = marked(it.description)
             it.a = a
             it.b = b

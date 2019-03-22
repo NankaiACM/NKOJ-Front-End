@@ -11,7 +11,6 @@ export default {
   components: {editor},
   methods: {
     save: function () {
-      console.log(this.$route.params.id)
       this.$refs.editor.submit()
     }
   }

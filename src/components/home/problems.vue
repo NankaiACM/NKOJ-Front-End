@@ -40,7 +40,6 @@ export default {
       var _this = this
       // 暂时使用problems api的数据
       this.$http.get(`${window.noPointHost}/api/problems/list/0/6`).then(function (res) {
-        console.log('')
         _this.newProblems = res.body.data.list
       })
     }

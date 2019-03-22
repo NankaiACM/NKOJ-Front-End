@@ -34,11 +34,10 @@ export default {
   methods: {
     async updatestatus () {
       let newstatus = await contestStatus(this.$http, this.contestid, this.status[0] ? this.status[0].solution_id : 0, this.o.startime, this.o.endtime)
-      if (newstatus) console.log(this.status = newstatus.concat(this.status))
+      if (newstatus) this.status = newstatus.concat(this.status)
     }
   },
   async mounted () {
-    console.log(this.contestid)
     this.updatestatus()
     this.o = await contestData(this.$http, this.contestid)
     this.pool.push(setInterval(this.updatestatus, 3000))

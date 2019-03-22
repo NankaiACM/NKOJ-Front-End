@@ -188,13 +188,10 @@ export default {
       for (let i in this.keyArr) {
         markdown += '### ' + i.replace(/\b\w/g, l => l.toUpperCase()) + '\n' + this.contentObj[i] + '\n'
       }
-      console.log(markdown)
       window.markdown = markdown
-      console.log(markdownit.render(markdown))
       return markdownit.render(markdown)
     },
     toggleEditTag () {
-      console.log('edit')
       this.isEditingTag = !this.isEditingTag
     },
     tagCancel: function (it, e) {
@@ -207,16 +204,13 @@ export default {
             }
             val.attitude = undefined
             this.$set(this.o.tags, index, val)
-            console.log(this.o.tags)
           })
         }
       })
     },
     no: function (it, e) {
       this.o.tags.forEach((val, index) => {
-        console.log(val, it.name)
         if (val.name === it.name) {
-          console.log(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/downvote/${val.id}`)
           this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/downvote/${val.id}`).then(res => {
             if (res.body.code === 0) {
               val.n = val.n + 1
@@ -229,9 +223,7 @@ export default {
     },
     yes: function (it, e) {
       this.o.tags.forEach((val, index) => {
-        console.log(val, it.name)
         if (val.name === it.name) {
-          console.log(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/upvote/${val.id}`)
           this.$http.get(`${window.noPointHost}/api/problem/${this.$route.params.problemId}/upvote/${val.id}`).then(res => {
             if (res.body.code === 0) {
               val.p = val.p + 1
@@ -246,7 +238,6 @@ export default {
       window.addEventListener('scroll', this.hScroll)
       this.$http.get(`${window.noPointHost}/api/problem/` + this.$route.params.problemId).then(
         (res) => {
-          console.log(res.body)
           this.keyArr = res.body.data.content
           this.contentObj = res.body.data.content
           this.o = res.body.data
@@ -283,7 +274,6 @@ export default {
       }
       let _this = this
       this.$http.post(`${window.noPointHost}/api/judge`, sendPackage).then(res => {
-        console.log(res)
         _this.isInfo = true
         if (res.body.code === 0) {
           _this.submitInfo = '成功提交！'

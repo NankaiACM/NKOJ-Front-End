@@ -25,7 +25,7 @@ export default {
       if (newValue) {
         menu.style.display = 'block'
         Velocity(menu, {opacity: ['1', '0'], scale: ['1', '0.9']}, {duration: 150})
-        console.log('out')
+        console.log('goodbye, see you')
       } else {
         Velocity(menu, {opacity: ['0', '1'], scale: ['0.9', '1']}, {duration: 150,
           complete: function () {

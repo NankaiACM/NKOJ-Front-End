@@ -171,8 +171,6 @@ export default {
   methods: {
     dataSubmit: function (e) {
       e.preventDefault()
-      console.log(this)
-      console.log(this.$refs)
       if (this.$refs.fileData.files.length > 0) {
         let sendPackage = new FormData()
         sendPackage.append('file', this.$refs.fileData.files[0])

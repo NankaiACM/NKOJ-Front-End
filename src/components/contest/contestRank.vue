@@ -58,7 +58,6 @@ export default {
       return b
     },
     toMyRank: function() {
-      console.log(this.userData)
     }
   },
   mounted: async function () {
@@ -72,11 +71,9 @@ export default {
         })
     })
     */
-    console.log(this.limit)
     let tar = await rankList(this.$http, this.$route.params.contestid)
     this.persons = tar[0]
     this.o = tar[1]
-    console.log(this.persons)
   }
 }
 </script>

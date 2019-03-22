@@ -273,10 +273,8 @@ export default {
   },
   watch: {
     maxId: function (n, o) {
-      console.log('new maxId: ' + n)
     },
     '$route': function (n, o) {
-      console.log(this.$route.params.querryString)
       let vm = this
       for (let i in vm.pool) {
         window.clearInterval(vm.pool[i])
@@ -313,20 +311,16 @@ export default {
       const filter = this.filter
       const lmap = ['problemID', 'userID', 'status', 'lang']
       const rmap = ['problem_id', 'user_id', 'status_id', 'language']
-      console.log(JSON.stringify(filter))
-      console.log(this.statusList)
       const ans = this.statusList.filter(function (v) {
         for (let index in lmap) {
           if (filter[lmap[index]] !== '') {
             if (filter[lmap[index]].toString() !== v[rmap[index]].toString()) {
-              console.log(filter[lmap[index]], v[rmap[index]])
               return false
             }
           }
         }
         return true
       })
-      console.log(ans)
       return ans
     }
   }

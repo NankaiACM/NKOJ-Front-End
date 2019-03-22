@@ -68,12 +68,10 @@ export default {
           return '0x203'
         })
         .then(function (v) {
-          console.log(vm)
         })
     },
     init: function () {
       const lg = this.$store.getters.usrLogGet
-      console.log(lg)
       if (lg) {
         this.fetchAPI('anm', '/api/message/announcement')
         this.fetchAPI('system', '/api/message/system')
@@ -88,8 +86,6 @@ export default {
   },
   watch: {
     lg: function (n, o) {
-      console.log(o)
-      console.log(n)
       this.init()
     }
   }

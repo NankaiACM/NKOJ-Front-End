@@ -67,7 +67,6 @@ export default {
             var delay=this.insertIndex.findIndex(function(value, index, arr){
                 return el.dataset.index==value
             })*(eachTime-startTime)
-            console.log(delay)
             setTimeout(function () {
                 Velocity(el,
                     { marginLeft: "3px", marginRight:"3px", padding: "3px",width:"30px"},
@@ -80,7 +79,6 @@ export default {
             var delay=this.eraseIndex.findIndex(function (value,index,arr) {
                 return el.dataset.index==value
             })*(eachTime-startTime)
-            console.log(delay)
             setTimeout(function () {
                 Velocity(el,
                     {width:'0px',paddingLeft:'0px',paddingRight:'0px',marginLeft: '0px', marginRight:'0px'},

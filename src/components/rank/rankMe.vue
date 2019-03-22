@@ -48,9 +48,7 @@ export default {
       this.$http.get('http://rapapi.org/mockjsdata/33622/rankme')
         .then(function (r) {
           this.rawdata = r.body.zip
-          console.log(JSON.stringify(this.rawdata))
           this.afterGet()
-          console.log(JSON.stringify(this.options))
         }, function (e) {
           console.log(e)
         })
