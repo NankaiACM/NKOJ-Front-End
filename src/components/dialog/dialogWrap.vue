@@ -50,7 +50,7 @@ export default {
   right: 0;
   bottom: 0;
   background-color: black;
-  z-index: 4;
+  z-index: 6;
   display: flex;
   align-items: center;
   justify-content: center;

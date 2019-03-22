@@ -20,7 +20,7 @@
   <!--wall-paper></wall-paper-->
   <div class="struct">
     <div :class="xclass">
-      <router-view></router-view>
+      <router-view @logIn='changeToLogin'></router-view>
     </div>
     <foot></foot>
   </div>

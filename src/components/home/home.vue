@@ -15,6 +15,7 @@
     </div>
     <div style="clear:both;"></div>
   </div>
+  <activity v-if="isactivity" @logIn="logIn"></activity>
   <!--
   <div class="card">
     <home-problem></home-problem>
@@ -37,6 +38,7 @@ import homeContest       from './contest.vue'
 import homeDiscuss       from './discuss.vue'
 import homeProblem       from './problems.vue'
 import homeComponent     from './homeComponent'
+import activity          from './activity.vue'
 export default {
   name: 'component-home',
   components: {
@@ -44,8 +46,19 @@ export default {
     princeton,
     homeContest,
     homeDiscuss,
-    homeProblem
-  }
+    homeProblem,
+    activity
+  },
+  methods: {
+    logIn () {
+      this.$emit('logIn')
+    }
+  },
+  computed: {
+    isactivity () {
+      return localStorage.getItem('activity') !== 'hide'
+    }
+  },
 }
 </script>
 <style lang="less" scoped>
