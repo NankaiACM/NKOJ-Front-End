@@ -5,7 +5,7 @@
   <div class="summary">
     <router-link :to="'/discuss/' + it['post_id']" class="title">{{it.title}}</router-link>
     <div class="info">
-      <router-link :to="'/space/uid/' + it['user_id']">{{it['user_id']}}</router-link>
+      <router-link :to="'/space/uid/' + it['user_id']">{{it['nickname'] || '无名'}}</router-link>
       <span>{{interval(it.since)}} 前发布</span>
       <div v-if="it['last_active_user']">
         <router-link :to="'/space/uid/' + it['user_id']">{{it['last_active_user']}}</router-link>

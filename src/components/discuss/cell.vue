@@ -8,7 +8,7 @@
       </div>
       <router-link :to="{path: '/discuss/'+item['post_id']}" class="title-a">
         <div v-if="pos === 0" :title="item.title">{{item.title}}</div>
-        <div v-if="pos !== 0" :title="'回复'">回复 #0 @ {{item['parent_id']}}</div>
+        <div v-if="pos !== 0" :title="'回复'">回复 # {{ item['parent_id'] }}</div>
       </router-link>
       <div v-if="(!item['parent_id']) && (pos === 0)" class="addAns" @click="reply(item['post_id'], item['user_id'])">添加答案</div>
     </div>
@@ -26,7 +26,7 @@
         <span>{{item.negative}}</span>
       </div>
       <div class="sponsor i">
-        <span>user [{{item['user_id']}}] post </span>
+        <span>user {{ item['nickname'] || item['user_id'] }} post </span>
         {{cc(item.since)}}
       </div>
       <div class="terminator i">
@@ -47,8 +47,8 @@
           </a>
         </div>
         <div class="rep-right">
-          <span class="rep-user">{{it['user_id']}}</span>
-          <span>评论 @{{it['reply_to']}}</span>
+          <span class="rep-user">{{ it['nickname'] || it['user_id']}}</span>
+          <span>评论 # {{it['reply_to']}}</span>
           <markdown-box class="rep-content" :mdstr="it.content"></markdown-box>
           <div class="info">
             <span class="time">{{dd(it.since)}}</span>
@@ -86,7 +86,9 @@ export default {
       placeholder: '',
       focusState: false,
       rid: '',
-      rOc: '/reply/'
+      rOc: '/reply/',
+      nickname: {
+      }
     }
   },
   methods: {
@@ -157,7 +159,7 @@ export default {
     },
     r: function () {
       this.$emit('reload')
-    }
+    },
   },
   computed: {
     avatarSubUrl: function () {

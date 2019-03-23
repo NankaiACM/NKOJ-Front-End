@@ -11,7 +11,7 @@
         <hr class=".hr">
         <img style="max-width: 80%; display: block; margin: auto" src="../../assets/qqgroup.jpg"/>
       </home-component>
-      <!--<princeton></princeton>--><!--消失了喵~-->
+      <princeton></princeton>--><!--又出现了喵~-->
     </div>
     <div style="clear:both;"></div>
   </div>
