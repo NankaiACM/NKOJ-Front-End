@@ -24,7 +24,7 @@
             <ul class="dropdown-menu">
               <li><a v-on:click="setLan('C++')">C++</a></li>
               <li><a v-on:click="setLan('C')">C</a></li>
-              <li>--分割线以下处于试验阶段--</li>
+              <li><a>--以下处于试验阶段--</a></li>
               <li><a v-on:click="setLan('Python')">Python</a></li>
               <li><a v-on:click="setLan('JavaScript')">JavaScrpit</a></li>
               <li><a v-on:click="setLan('Go')">Go</a></li>
