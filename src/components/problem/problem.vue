@@ -163,6 +163,42 @@ export default {
       },
       submitLan: 'C++',
       submitCode: '#include <iostream>\n',
+      disCode: {
+        'C': 
+`#include <stdio.h>
+int main(int args, char **argv, char **envp){
+  return 0;
+}`,
+        'C++':
+`#include <bits/stdc++.h>
+using namespace std;
+int main(){
+  cout<<"hello world"<<endl;
+  return 0;
+}`,
+        'Java':
+`import java.util.*;
+import java.io.*;
+public class Main{
+  public static void main(){
+    System.out.println('hello world');
+  }
+}`,
+        'Python':
+`#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+print('hello world')
+`,
+        'JavaScript':
+`console.log('hello world');`,
+        'Text': '',
+        'Go':
+`package main
+import fmt
+func main(){
+  fmt.Println("hello world")
+}`
+      },
       isScrolled,
       isSee: false,
       isStart: false,
@@ -236,6 +272,7 @@ export default {
     },
     initView: function () {
       window.addEventListener('scroll', this.hScroll)
+      this.setLan('C++')
       this.$http.get(`${window.noPointHost}/api/problem/` + this.$route.params.problemId).then(
         (res) => {
           this.keyArr = res.body.data.content
@@ -292,7 +329,7 @@ export default {
     },
     setLan: function (Lan) {
       this.submitLan = Lan
-      this.submitCode = ''
+      this.submitCode = this.disCode[Lan]
     },
     editorInit: function () {
       require('brace/mode/html')
@@ -349,7 +386,7 @@ html {
     position: fixed;
     z-index: 2;
     right: 60px;
-    top: 100px;
+    bottom: 100px;
     padding: 5px;
     margin-top: 40px;
     width: 300px;
@@ -452,9 +489,9 @@ html {
   #problemPage .submitGirl {
     position: fixed;
     bottom: -25px;
-    left: 75%;
+    right: 300px;
     z-index: 2;
-    opacity: 0.65;
+    opacity: 0.85;
   }
 
   #problemPage .submitGirl:hover {
