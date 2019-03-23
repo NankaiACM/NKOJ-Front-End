@@ -24,10 +24,10 @@
             <ul class="dropdown-menu">
               <li><a v-on:click="setLan('C++')">C++</a></li>
               <li><a v-on:click="setLan('C')">C</a></li>
-              <li><a v-on:click="setLan('Python')">Python</a></li>
+              <!-- <li><a v-on:click="setLan('Python')">Python</a></li>
               <li><a v-on:click="setLan('JavaScript')">JavaScrpit</a></li>
               <li><a v-on:click="setLan('Go')">Go</a></li>
-              <li><a v-on:click="setLan('Text')">Text</a></li>
+              <li><a v-on:click="setLan('Text')">Text</a></li> -->
               <!--<li><a v-on:click="setLan('Pascal')">Pascall</a></li>-->
               <!--<li><a v-on:click="setLan('Html')">Html</a></li>-->
               <!--<li><a v-on:click="setLan('Css')">Css</a></li>-->
