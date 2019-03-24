@@ -34,7 +34,7 @@ export default {
       danmakus: [],
       limit_hit: 140,
       princeton: 0,
-      url: 'ws://' + noPointPreURL,
+      url: 'ws://222.30.51.68',
       hisurl: noPointHost + '/api/danmaku',
       bot: {
         url: 'http://www.tuling123.com/openapi/api',
