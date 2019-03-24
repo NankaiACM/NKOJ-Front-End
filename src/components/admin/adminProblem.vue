@@ -32,18 +32,13 @@
       </div>
       <div class="form-group adminFormGroup" style="margin-bottom: 70px">
         <label class="col-sm-3 control-label">Special Judge 语言</label>
-        <div class="col-sm-1" style="padding-top: 7px">
-          <input type="checkbox" v-model="isCpp">
-          <label>cpp</label>
-        </div>
-        <div class="col-sm-1" style="padding-top: 7px">
-          <input type="checkbox" v-model="isJava">
-          <label>java</label>
-        </div>
-        <div class="col-sm-1" style="padding-top: 7px">
-          <input type="checkbox" v-model="isPython">
-          <label>python</label>
-        </div>
+        <select class="form-control" v-model="spjlang">
+          <option value="0">C</option>
+          <option value="1">C++</option>
+          <option value="2">JavaScript</option>
+          <option value="3">Python</option>
+          <option value="4">Go</option>
+        </select>
       </div>
       <hr>
       <button type="submit" class="btn btn-default" @click="dataSubmit"
@@ -69,12 +64,29 @@
         </div>
       </div>
       <div class="form-group adminFormGroup">
+        <label class="col-sm-3 control-label">用户程序最大输出(kb)</label>
+        <div class="col-sm-6">
+          <input class="form-control" placeholder="number" v-model="max_output">
+        </div>
+      </div>
+      <div class="form-group adminFormGroup">
+        <label class="col-sm-3 control-label">最大核心数</label>
+        <div class="col-sm-6">
+          <input class="form-control" placeholder="number" v-model="max_core">
+        </div>
+      </div>
+      <div class="form-group adminFormGroup">
         <label  class="col-sm-3 control-label">
           评测类型
         </label>
         <div class="col-sm-1 checkbox">
           <label>
-            <input type="checkbox" v-model="pSpj"> Special Judge
+            Special Judge
+            <select class="form-control" v-model="pSpj">
+              <option value="0">无</option>
+              <option value="1">compare</option>
+              <option value="2">interactive</option>
+            </select>
           </label>
         </div>
         <div class="col-sm-1 checkbox">
@@ -163,9 +175,9 @@ export default {
       isData: false,
       isModify: false,
       buttonInfo: '创建新题',
-      isCpp: false,
-      isJava: false,
-      isPython: false
+      spjlang: '0',
+      max_ouput: 65536,
+      max_core: 10,
     }
   },
   methods: {
@@ -181,7 +193,7 @@ export default {
       if (this.$refs.fileSpj.files.length > 0) {
         let sendPackage = new FormData()
         sendPackage.append('file', this.$refs.fileSpj.files[0])
-        sendPackage.append('lang', this.isCpp ? 0 : this.isJava ? 1 : 2)
+        sendPackage.append('lang', this.spjlang)
         this.$http.post(`${window.noPointHost}/api/admin/problem/spj/${this.pId}`, sendPackage, res => {
           console.log(res)
         })
@@ -256,6 +268,8 @@ export default {
       sendPackge.sample_output = this.pSOutput
       sendPackge.hint = this.pHint
       sendPackge.level = this.pLevel
+      sendPackge.max_ouput = this.max_ouput
+      sendPackge.max_core = this.max_core
       console.log(JSON.stringify(sendPackge))
       let _this = this
       this.$http.post(this.isModify ? `${window.noPointHost}/api/admin/problem/update/${this.pId}`
