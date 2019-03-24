@@ -32,13 +32,15 @@
       </div>
       <div class="form-group adminFormGroup" style="margin-bottom: 70px">
         <label class="col-sm-3 control-label">Special Judge 语言</label>
-        <select class="form-control" v-model="spjlang">
-          <option value="0">C</option>
-          <option value="1">C++</option>
-          <option value="2">JavaScript</option>
-          <option value="3">Python</option>
-          <option value="4">Go</option>
-        </select>
+        <div class="col-sm-6">
+          <select class="form-control" v-model="spjlang">
+            <option value="0">C</option>
+            <option value="1">C++</option>
+            <option value="2">JavaScript</option>
+            <option value="3">Python</option>
+            <option value="4">Go</option>
+          </select>
+        </div>
       </div>
       <hr>
       <button type="submit" class="btn btn-default" @click="dataSubmit"
@@ -77,21 +79,23 @@
       </div>
       <div class="form-group adminFormGroup">
         <label  class="col-sm-3 control-label">
-          评测类型
+          Special Judge
+        </label>
+        <div class="col-sm-2 checkbox">
+          <select class="form-control" v-model="pSpj">
+            <option value="0">无</option>
+            <option value="1">compare</option>
+            <option value="2">interactive</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group adminFormGroup">
+        <label  class="col-sm-3 control-label">
+          Detailed Mode
         </label>
         <div class="col-sm-1 checkbox">
           <label>
-            Special Judge
-            <select class="form-control" v-model="pSpj">
-              <option value="0">无</option>
-              <option value="1">compare</option>
-              <option value="2">interactive</option>
-            </select>
-          </label>
-        </div>
-        <div class="col-sm-1 checkbox">
-          <label>
-            <input type="checkbox" v-model="pDM"> Detailed Mode
+            <input type="checkbox" v-model="pDM"> 
           </label>
         </div>
       </div>
@@ -176,7 +180,7 @@ export default {
       isModify: false,
       buttonInfo: '创建新题',
       spjlang: '0',
-      max_ouput: 65536,
+      max_output: 65536,
       max_core: 10,
     }
   },
@@ -187,7 +191,6 @@ export default {
         let sendPackage = new FormData()
         sendPackage.append('file', this.$refs.fileData.files[0])
         this.$http.post(`${window.noPointHost}/api/admin/problem/data/${this.pId}`, sendPackage, res => {
-          console.log(res)
         })
       }
       if (this.$refs.fileSpj.files.length > 0) {
@@ -195,7 +198,6 @@ export default {
         sendPackage.append('file', this.$refs.fileSpj.files[0])
         sendPackage.append('lang', this.spjlang)
         this.$http.post(`${window.noPointHost}/api/admin/problem/spj/${this.pId}`, sendPackage, res => {
-          console.log(res)
         })
       }
       
@@ -216,7 +218,6 @@ export default {
           this.buttonInfo = '修改题目'
           this.isModify = true
         } else {
-          console.log(res)
           this.pDescription = res.body.data.content.description
           this.pInput = res.body.data.content.input
           this.pOutput = res.body.data.content.output
@@ -241,7 +242,6 @@ export default {
           this.isModify = true
         }
       }, err => {
-        console.log(err)
         alert('Error: ' + err.body.code)
       })
     },
@@ -268,14 +268,12 @@ export default {
       sendPackge.sample_output = this.pSOutput
       sendPackge.hint = this.pHint
       sendPackge.level = this.pLevel
-      sendPackge.max_ouput = this.max_ouput
+      sendPackge.max_output = this.max_output
       sendPackge.max_core = this.max_core
-      console.log(JSON.stringify(sendPackge))
       let _this = this
       this.$http.post(this.isModify ? `${window.noPointHost}/api/admin/problem/update/${this.pId}`
         : `${window.noPointHost}/api/admin/problem/add`, sendPackge,
       {crossDomain: true, credentials: true}).then(res => {
-        console.log(res)
         _this.isInfo = true
         if (res.body.code === 0) {
           _this.submitInfo = '成功提交！'
