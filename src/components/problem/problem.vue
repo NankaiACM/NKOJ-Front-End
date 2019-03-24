@@ -182,7 +182,7 @@ int main(){
 import java.io.*;
 public class Main{
   public static void main(){
-    System.out.println('hello world');
+    System.out.println("hello world");
   }
 }`,
         'Python':
@@ -195,7 +195,7 @@ print('hello world')
         'Text': '',
         'Go':
 `package main
-import fmt
+import "fmt"
 func main(){
   fmt.Println("hello world")
 }`
