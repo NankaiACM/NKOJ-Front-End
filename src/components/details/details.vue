@@ -54,14 +54,14 @@
                 </div>
                 <div class="poly-row">
                   <div class="poly-col">
-                    <pre>
-                      time: {{o.detail[index].time}} ms
-                      extra: {{o.detail[index].extra}}
-                      memory: {{o.detail[index].memory}} kb
-                      result: {{o.detail[index].result}}
-                      statuscode: {{o.detail[index].status}}
-                      exitcode: {{o.detail[index].exitcode}}
-                    </pre>
+                    <div class="alert alert-info">
+                    time: {{o.detail[index - 1].time}} ms <br>
+                    extra: {{o.detail[index - 1].extra}} <br>
+                    memory: {{o.detail[index - 1].memory}} kb <br>
+                    result: {{o.detail[index - 1].result}} <br>
+                    statuscode: {{o.detail[index - 1].status}} <br>
+                    exitcode: {{o.detail[index - 1].exitcode}} <br>
+                    </div>
                   </div>
                 </div>
                 <div class="poly-row">
@@ -177,6 +177,7 @@ export default {
         .then(function (res) {
           if (res.body.code !== 0) return 0
           vm.evaluateNodes.push(res.body.data)
+          console.log(vm.evaluateNodes)
           // if (caseId < vm.casesNum) vm.getOutput(caseId + 1)
           vm.getOutput(caseId + 1)
         })
