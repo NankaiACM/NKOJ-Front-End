@@ -49,6 +49,23 @@
               <div class="poly-container">
                 <div class="poly-row">
                   <div class="poly-col">
+                    <div>单点信息</div>
+                  </div>
+                </div>
+                <div class="poly-row">
+                  <div class="poly-col">
+                    <pre>
+                      time: {{o.detail[index].time}} ms
+                      extra: {{o.detail[index].extra}}
+                      memory: {{o.detail[index].memory}} kb
+                      result: {{o.detail[index].result}}
+                      statuscode: {{o.detail[index].status}}
+                      exitcode: {{o.detail[index].exitcode}}
+                    </pre>
+                  </div>
+                </div>
+                <div class="poly-row">
+                  <div class="poly-col">
                     <div>标准输入</div>
                   </div>
                 </div>
