@@ -86,7 +86,7 @@ export default {
 .spres, .scomp {
   .warning;
 }
-.sjudg, .srunn {
+.sjudg, .srunn, .ssecr {
   .waiting;
 }
 </style>
