@@ -100,22 +100,15 @@
         </div>
       </div>
     </div>
-    <notify :title="notify.title" :message="notify.message" :count="notify.count"></notify>
   </div>
 </template>
 <script>
 import {statusHash} from '../status/map.js'
-import notify from '../shell/notify'
 export default {
   name: 'details-page',
   data: function () {
     return {
       statusHash: statusHash,
-      notify: {
-        title: '',
-        message: '',
-        count: 0
-      },
       solution_id: -1,
       casesNum: 0,
       share: false,
@@ -188,7 +181,6 @@ export default {
       this.initView()
     })
   },
-  components: {notify}
 }
 </script>
 <style lang="less" scoped>

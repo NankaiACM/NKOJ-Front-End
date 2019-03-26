@@ -12,7 +12,6 @@
       </template>
       <div class="a" @click="add">添加</div><div class="d" @click="rm">删除</div>
     </div>
-    <notify :title="notify.title" :message="notify.message" :count="notify.count"></notify>
   </div>
 </template>
 <script>
@@ -21,11 +20,6 @@ export default {
   props: ['supitem', 'subitem', 'addAPI', 'rmAPI'],
   data: function () {
     return {
-      notify: {
-        title: '',
-        message: '',
-        count: 0
-      },
       subId: ['1'],
       supId: '1007'
     }
@@ -33,27 +27,41 @@ export default {
   methods: {
     add: function () {
       for (let id of this.subId) {
-        this.notify.title = 'status:'
-        this.notify.message = 'waiting...\n'
-        this.notify.count++
+        this.$store.commit('setNotify', {
+          title: 'status:',
+          message: 'waiting...'
+        })
         this.$http.get(window.noPointHost + '/api/admin/contest/' + this.supId + this.addAPI + id)
           .then(function (r) {
-            this.notify.message += JSON.stringify(r.body) + '\n'
+            this.$store.commit('setNotify', {
+              title: 'res:',
+              message: JSON.stringify(r.body, null, 2)
+            })
           }, function (e) {
-            this.notify.message += JSON.stringify(e.body) + '\n'
+            this.$store.commit('setNotify', {
+              title: 'res:',
+              message: JSON.stringify(e.body, null, 2)
+            })
           })
       }
     },
     rm: function () {
       for (let id of this.subId) {
-        this.notify.title = 'status:'
-        this.notify.message = 'waiting...\n'
-        this.notify.count++
+        this.$store.commit('setNotify', {
+          title: 'status:',
+          message: 'waiting...'
+        })
         this.$http.get(window.noPointHost + '/api/admin/contest/' + this.supId + this.rmAPI + id)
           .then(function (r) {
-            this.notify.message += JSON.stringify(r.body) + '\n'
+            this.$store.commit('setNotify', {
+              title: 'res:',
+              message: JSON.stringify(r.body, null, 2)
+            })
           }, function (e) {
-            this.notify.message += JSON.stringify(e.body) + '\n'
+            this.$store.commit('setNotify', {
+              title: 'res:',
+              message: JSON.stringify(e.body, null, 2)
+            })
           })
       }
     },

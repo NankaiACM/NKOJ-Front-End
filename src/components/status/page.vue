@@ -87,12 +87,10 @@
         </div>
       </div>
     </div>
-    <notify :title="notify.title" :message="notify.message" :count="notify.count"></notify>
   </div>
 </template>
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
-import notify from '../shell/notify'
 import {statusMap, langHash} from './map.js'
 import {statusSearchStr, statusSearchData} from '../contest/virtualApi.js'
 
@@ -102,10 +100,7 @@ export default {
   data: function () {
     return {
       notify: {
-        title: '',
-        message: '',
-        count: '',
-        mptdex: -1
+        mptdex: -1,
       },
       pool: [],
       statusList: [],
@@ -146,15 +141,17 @@ export default {
       const vm = this
       vm.$http.get(window.noPointHost + '/api/judge/rejudge/' + solutionId)
         .then(function (res) {
-          vm.notify.title = 'rejudge status'
-          vm.notify.message = JSON.stringify(res.body)
-          vm.notify.count++
           vm.notify.mptdex = -1
-        }, function (e) {
-          vm.notify.title = 'rejudge status: error'
-          vm.notify.message = JSON.stringify(e.body)
-          vm.notify.count++
+          vm.$store.commit('setNotify', {
+            title: 'res:',
+            message: JSON.stringify(res.body, null, 2)
+          })
+        }, function (err) {
           vm.notify.mptdex = -1
+          vm.$store.commit('setNotify', {
+            title: 'err:',
+            message: JSON.stringify(err.body, null, 2)
+          })
         })
     },
     getStatusClass: function (statusId) {
@@ -268,7 +265,6 @@ export default {
   },
   components: {
     InfiniteLoading,
-    notify
   },
   watch: {
     maxId: function (n, o) {

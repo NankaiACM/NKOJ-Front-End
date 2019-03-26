@@ -244,30 +244,34 @@ router.addShare = function (vm, solutionId, status) {
   vm.$http.get(window.noPointHost + '/api/status/share/add/' + solutionId)
     .then(function (r) {
       if (r.body.code === 0) {
-        vm.notify.title = 'add status'
-        vm.notify.message = 'add succeed'
-        vm.notify.count++
+        vm.$store.commit('setNotify', {
+          title: 'add status',
+          message: 'add succeed'
+        })
         if (status) status.shared = true
         return 0
       }
-      vm.notify.title = 'add status'
-      vm.notify.message = 'add failed'
-      vm.notify.count++
+      vm.$store.commit('setNotify', {
+        title: 'add status',
+        message: 'add failed'
+      })
     })
 }
 router.removeShare = function (vm, solutionId, status) {
   vm.$http.get(window.noPointHost + '/api/status/share/remove/' + solutionId)
     .then(function (r) {
       if (r.body.code === 0) {
-        vm.notify.title = 'remove status'
-        vm.notify.message = 'remove succeed'
-        vm.notify.count++
+        vm.$store.commit('setNotify', {
+          title: 'remove status',
+          message: 'remove succeed'
+        })
         if (status) status.shared = false
         return 0
       }
-      vm.notify.title = 'remove status'
-      vm.notify.message = 'remove failed'
-      vm.notify.count++
+      vm.$store.commit('setNotify', {
+        title: 'remove status',
+        message: 'remove failed'
+      })
     })
 }
 router.mngCP = function (vm, cp, mng, id) {
