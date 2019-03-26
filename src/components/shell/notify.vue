@@ -46,8 +46,11 @@ export default {
     word-break: break-word;
     max-height: 60vh;
     overflow-y: auto;
+    overflow-x: auto;
+    white-space: pre;
     &::-webkit-scrollbar {
-      width: 6px;
+      width: 7px;
+      height: 7px;
     }
     &::-webkit-scrollbar-thumb {
       background: #ccd0d7;

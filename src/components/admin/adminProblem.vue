@@ -185,20 +185,28 @@ export default {
     }
   },
   methods: {
+    notify: function (data) {
+      this.$store.commit('setNotify', {
+        title: '注意',
+        message: JSON.stringify(data.body, null, 2)
+      })
+    },
     dataSubmit: function (e) {
       e.preventDefault()
       if (this.$refs.fileData.files.length > 0) {
         let sendPackage = new FormData()
         sendPackage.append('file', this.$refs.fileData.files[0])
-        this.$http.post(`${window.noPointHost}/api/admin/problem/data/${this.pId}`, sendPackage, res => {
-        })
+        this.$http.post(`${window.noPointHost}/api/admin/problem/data/${this.pId}`, sendPackage)
+          .then(res => this.notify(res), err => this.notify(err)
+        )
       }
       if (this.$refs.fileSpj.files.length > 0) {
         let sendPackage = new FormData()
         sendPackage.append('file', this.$refs.fileSpj.files[0])
         sendPackage.append('lang', this.spjlang)
-        this.$http.post(`${window.noPointHost}/api/admin/problem/spj/${this.pId}`, sendPackage, res => {
-        })
+        this.$http.post(`${window.noPointHost}/api/admin/problem/spj/${this.pId}`, sendPackage)
+          .then(res => this.notify(res), err => this.notify(err)
+        )
       }
       
     },
@@ -211,6 +219,10 @@ export default {
       this.isModify = false
       this.$http.get(`${window.noPointHost}/api/problem/${this.pId}`,
         {crossDomain: true, credentials: true}).then(res => {
+          this.$store.commit('setNotify', {
+            title: 'getData',
+            message: JSON.stringify(res.body, null, 2)
+          })
         if (res.body.code !== 0) {
           alert(`Error: ${res.body.code}`)
         } else if (res.body.data === 'data not found') {
@@ -279,6 +291,10 @@ export default {
           _this.submitInfo = '成功提交！'
         } else {
           _this.submitInfo = '未知错误！'
+          this.$store.commit('setNotify', {
+            title: '错误',
+            message: JSON.stringify(res.body, null, 2)
+          })
         }
       }, err => {
         _this.isInfo = true
@@ -286,6 +302,10 @@ export default {
           _this.submitInfo = '请您登陆！'
         } else {
           _this.submitInfo = '未知错误！'
+          this.$store.commit('setNotify', {
+            title: '错误',
+            message: JSON.stringify(res.body, null, 2)
+          })
         }
       })
     },
