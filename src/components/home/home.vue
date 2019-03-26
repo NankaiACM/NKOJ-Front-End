@@ -75,7 +75,7 @@ export default {
      
      @NKUACM 2019
 `, 'color: #6cf')
-    console.log('%c Release 2.6.1. Sunrisefox & Saurus & 墨染 shs & 什锦', 'color: #6cf')
+    console.log('%c Release 2.6.1. Sunrisefox & Saurus & 墨染 SaucerHi & 什锦', 'color: #6cf')
   },
 }
 </script>

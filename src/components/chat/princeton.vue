@@ -57,7 +57,7 @@ export default {
       this.danmakus = []
     },
     ptopen: function (evt) {
-      console.log('pt open')
+      // console.log('pt open')
       // console.info(evt)
       this.$http.get(this.hisurl)
         .then(function (res) {
@@ -74,7 +74,7 @@ export default {
         clearTimeout(slf.princeton.rmt[i])
       }
       slf.princeton.rmt = []
-      console.log('清除了定时器')
+      // console.log('清除了定时器')
       slf.princeton.rmt.push = setTimeout(function () {
         console.log('失恋了')
         console.log(slf.princeton)
@@ -84,24 +84,24 @@ export default {
       }, 30000)
     },
     ptmsg: function (evt) {
-      console.log('pt msg')
-      console.log('type:' + (typeof evt.data))
+      // console.log('pt msg')
+      // console.log('type:' + (typeof evt.data))
       if (typeof evt.data === 'string') {
-        console.log('rec:' + evt.data)
+        // console.log('rec:' + evt.data)
         var dtmp = this.dealable(evt.data)
-        console.log('after deal:' + dtmp)
+        // console.log('after deal:' + dtmp)
         this.danmakus.push(dtmp)
         if (this.bot.isOnHook) {
           if (dtmp.indexOf(this.bot.last) === -1) {
-            console.log('call bot')
+            // console.log('call bot')
             setTimeout(this.botalk, 1000, dtmp)
           }
         }
       } else if (evt.data instanceof ArrayBuffer) {
-        console.log('rec ArrayBuffer')
+        // console.log('rec ArrayBuffer')
         this.formMessage(evt.data)
       } else if (evt.data instanceof Blob) {
-        console.log('rec Blob')
+        // console.log('rec Blob')
       }
       this.ptpong()
     },
@@ -109,9 +109,9 @@ export default {
       console.log('pt close')
     },
     pterro: function (evt) {
-      console.log(evt)
-      console.log('the msg:')
-      console.log(this.danmaku)
+      // console.log(evt)
+      // console.log('the msg:')
+      // console.log(this.danmaku)
       console.log('maybe fail to send')
     },
     ptsend: function (str) {
@@ -119,7 +119,7 @@ export default {
       var sendmsg = this.danmaku || str
       this.danmaku = ''
       if (sendmsg === '\n' || sendmsg === '') return 0
-      console.info('tring to send:' + sendmsg)
+      // console.info('tring to send:' + sendmsg)
       this.bot.last = sendmsg
       this.princeton.send(sendmsg)
     },
@@ -129,10 +129,10 @@ export default {
         .then(function (res) {
           var jsn = res.data
           var ret = jsn.text
-          console.log('bot feedback:' + ret)
+          // console.log('bot feedback:' + ret)
           vm.ptsend(ret)
         }, function (e) {
-          console.log(e)
+          console.log('error' + e)
         })
     },
     dealhis: function (his) {
