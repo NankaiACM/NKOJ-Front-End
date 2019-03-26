@@ -69,7 +69,7 @@ export default {
       width: 80px;
     }
     &:nth-child(3){
-      width: 141px;
+      width: 241px;
     }
   }
   &:nth-child(1){

@@ -4,7 +4,7 @@
     <div class="mainbar">
       <home-problem></home-problem>
       <home-contest></home-contest>
-      <!--<home-discuss></home-discuss>-->
+      <home-discuss></home-discuss>
     </div>
     <div class="sidebar">
       <home-component :title="'纳新喵~'">

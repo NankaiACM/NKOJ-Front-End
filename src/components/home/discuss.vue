@@ -4,24 +4,24 @@
     <ul>
       <li class="media" v-for="talk in newDiscuss" :key="talk.id">
         <div class="media-left">
-          <router-link :to="{path:'member/'+talk.sponsor}">
-            <img class="media-object leftimg" :src="talk.imgurl" :alt="talk.imgalt">
+          <router-link :to="{path:'/space/uid/'+talk.user_id}">
+            <img class="media-object leftimg" :src="imgurl(talk.user_id)" :alt="talk.nickname">
           </router-link>
         </div>
         <div class="media-body text-muted">
-          <router-link :to="{path:'discuss/'+talk.id}" class="meadia-heading btn-link node">
+          <router-link :to="{path:'/discuss/'+talk.post_id}" class="meadia-heading btn-link node">
             <h4>{{talk.title}}</h4>
           </router-link>
-          <router-link :to="{path:'discussnode/'+talk.node}" class="btn btn-xs btn-default node">
-            {{talk.node}}
+          <router-link :to="{path:'/discuss/'}" class="btn btn-xs btn-default node">
+            {{talk.node || '默认话题'}}
           </router-link>
           •
-          <router-link :to="{path:'member/'+talk.sponsor}" class="member-link">
-            {{talk.sponsor}}
+          <router-link :to="{path:'/space/uid/' + talk.user_id}" class="member-link">
+            {{talk.nickname || '无名'}}
           </router-link>
-          • {{stamp2str(talk.timestamp)}} • 最后回复来自
-          <router-link :to="{path:'member/'+talk.terminator}" class="member-link">
-            {{talk.terminator}}
+          • {{stamp2str(talk["since"])}} • 最后回复来自
+          <router-link :to="{path:'/space/uid/'+talk['last_active_user']}" class="member-link">
+            {{talk["last_active_user"] || '没有人'}}
           </router-link>
         </div>
       </li>
@@ -45,15 +45,17 @@ export default {
     })
   },
   methods: {
+    imgurl: function (uid) {
+      return noPointHost + '/api/avatar/' + uid
+    },
     initView: function () {
-      this.$http.get('/static/rm/newDiscuss.json')
+      this.$http.get(window.noPointHost + '/api/posts/0')
         .then(function (res) {
-          this.newDiscuss = res.body.data
+          this.newDiscuss = res.body.data.list
         })
     },
     stamp2str: function (timestamp) {
-      timestamp = Number(timestamp)
-      if (isNaN(timestamp)) return '时间之外'
+      timestamp = new Date(timestamp)
       var nowstamp = new Date().getTime()
       var d = nowstamp - timestamp
       d /= 1000
@@ -76,8 +78,9 @@ export default {
 }
 
 .leftimg {
-  width: 64px;
-  height: 64px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
   border: none !important;
   background: #fff;
 }
