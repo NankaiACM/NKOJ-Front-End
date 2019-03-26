@@ -169,10 +169,7 @@ const router = new Router({
     props: true
   }, {
     path: '/NKPC/:contestid/rank',
-    component: allContestRank,
-    props: {
-      limit: NaN
-    }
+    component: allContestRank
   }, {
     path: '/teriri',
     component: teriri

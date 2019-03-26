@@ -154,7 +154,8 @@
         <h3><span class=" glyphicon glyphicon-signal"></span>RANK</h3>
         <!--排名列表-->
         <div class="container padding-t-40">
-          <ranks :limit="10"/>
+          <acmrank v-if="rule === 'acm'" :limit="10"/>
+          <oirank v-if="rule === 'oi'" :limit="10"/>
           <div class="view-more"><router-link :to="{path: 'rank'}" append>View More<span class="glyphicon glyphicon-chevron-right"></span></router-link></div>
         </div>
       </div>
@@ -179,7 +180,8 @@
 <script>
 import problemList from './components/contest/contestOpenCompenents/problemList.vue'
 import status from './components/contest/status.vue'
-import ranks from './components/contest/contestRank.vue'
+import acmrank from './components/contest/acmrank.vue'
+import oirank from './components/contest/oirank.vue'
 import loginPage from './components/dialog/loginDialog'
 import dialogWrap from './components/dialog/dialogWrap.vue'
 import saurusFooter from './components/footer'
@@ -193,7 +195,8 @@ export default {
   components: {
     problemList,
     status,
-    ranks,
+    acmrank,
+    oirank,
     loginPage,
     saurusFooter,
     dialogWrap,
@@ -214,6 +217,7 @@ export default {
       problems: [],
       MDtext: [],
       navbarItems: [],
+      rule: [],
 
       userPage: 'None',
       userData: undefined,
@@ -227,10 +231,10 @@ export default {
   },
   methods: {
     async test () {
-      if (this.userData) console.log(await myStatus(this.$http, this.problems))
+      if (this.userData) await myStatus(this.$http, this.problems)
       // const pc_new_status = await pcStatus(this.$http, this.problems, this.oldstatus, this.startTime, this.endTime)
       const ct_new_status = await contestStatus(this.$http, this.contestid, this.status[0] ? this.status[0]['solution_id'] : 0)
-      console.log(this.status.concat(ct_new_status))
+      this.status.concat(ct_new_status)
     },
     async statusUpdata () {
       const new_status = await contestStatus(this.$http, this.contestid, this.status[0] ? this.status[0]['solution_id'] : 0, this.startTime, this.endTime)
@@ -290,6 +294,7 @@ export default {
           vue.navbarItems = []
           vue.MDtext = new Array(1)
           vue.MDtext[0] = res.description
+          vue.rule = res.rule
           vue.problems = res.problems.sort(function (l, r) {
             return l.problem_id - r.problem_id
           })
@@ -354,7 +359,6 @@ export default {
           res => {
             if (res.body.code === 0) {
               vue.userData = res.body.data
-              console.log('user data', vue.userData)
             } else {
               vue.userData = undefined
             }
