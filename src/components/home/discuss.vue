@@ -72,7 +72,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .home-discuss {
   text-align: left;
 }
@@ -85,13 +85,17 @@ export default {
   background: #fff;
 }
 
+.media:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
 .node {
-  background: #f5f5f5;
+  background: none !important;
   color: #999;
+  text-decoration: none !important;
 }
 
 .node:hover {
-  background: #e2e2e2;
   color: #777;
 }
 
