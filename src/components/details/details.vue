@@ -12,7 +12,10 @@
           </span>
         </h3>
         <div class="alert alert-info">
-          时间: {{new Date(o.when).toLocaleString()}} / 用时: {{o.time}} ms / 内存: {{o.memory}} kB / 代码长度: {{o.code_size}} byte
+          时间: {{new Date(o.when).toLocaleString()}}<br>
+          用时: {{o.time}} ms<br>
+          内存: {{o.memory}} kB <br>
+          代码长度: {{o.code_size}} byte
         </div>
       </div>
       <div>
@@ -42,9 +45,6 @@
                :key="index"
                class="eva-node">
             <h4> NO.{{index}}</h4>
-            <div class="alert alert-success" :class="item.status_id === 107 ? 'alert-success' : 'alert-danger'">
-              {{statusHash[item.status_id].status}}
-            </div>
             <div class=" alert alert-info">
               <div class="poly-container">
                 <div class="poly-row">
@@ -54,13 +54,13 @@
                 </div>
                 <div class="poly-row">
                   <div class="poly-col">
-                    <div class="alert alert-info">
-                    time: {{o.detail[index - 1].time}} ms <br>
-                    extra: {{o.detail[index - 1].extra}} <br>
-                    memory: {{o.detail[index - 1].memory}} kb <br>
-                    result: {{o.detail[index - 1].result}} <br>
-                    statuscode: {{o.detail[index - 1].status}} <br>
-                    exitcode: {{o.detail[index - 1].exitcode}} <br>
+                    <div class="alert"  v-if="o.detail[index - 1]" :class="o.detail[index - 1].result === 'accepted' ? 'alert-success' : 'alert-danger'">
+                      time: {{o.detail[index - 1].time + 4000}} ms <br>
+                      extra: {{o.detail[index - 1].extra}} <br>
+                      memory: {{o.detail[index - 1].memory}} kb <br>
+                      result: {{o.detail[index - 1].result}} <br>
+                      statuscode: {{o.detail[index - 1].status}} <br>
+                      exitcode: {{o.detail[index - 1].exitcode}} <br>
                     </div>
                   </div>
                 </div>
@@ -170,7 +170,6 @@ export default {
         .then(function (res) {
           if (res.body.code !== 0) return 0
           vm.evaluateNodes.push(res.body.data)
-          console.log(vm.evaluateNodes)
           // if (caseId < vm.casesNum) vm.getOutput(caseId + 1)
           vm.getOutput(caseId + 1)
         })
