@@ -116,7 +116,7 @@ export default {
           if (res.body.code === 0) {
             if (res.body.data[0]) this.annoucement = res.body.data[0].content
           }
-        })
+        }, err => {})
     },
     logout: function () {
       this.$http.get(this.logoutUrl, {credentials: true})

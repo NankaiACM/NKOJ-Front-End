@@ -97,7 +97,7 @@ export default {
           if (res.body.code === 0) {
             vm.global = res.body.data
           }
-        })
+        }, err => {})
     }
   },
   mounted: function () {
