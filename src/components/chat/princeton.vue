@@ -65,7 +65,7 @@ export default {
           this.danmakus = [...this.dealhis(res.body.data), ...this.danmakus]
           this.danmakus = this.danmakus.reverse()
         }, function (e) {
-          console.log(e)
+          console.log('error' + e)
         })
     },
     ptpong: function () {
@@ -86,7 +86,6 @@ export default {
     ptmsg: function (evt) {
       console.log('pt msg')
       console.log('type:' + (typeof evt.data))
-      console.log(evt)
       if (typeof evt.data === 'string') {
         console.log('rec:' + evt.data)
         var dtmp = this.dealable(evt.data)
