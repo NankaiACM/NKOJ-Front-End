@@ -49,6 +49,7 @@
                 type="button"
                 :to="{path:'/details/'+status.solution_id}"
                 tag="button"
+                :title="status.status_id"
               >
                 {{getStatusText(status.status_id) || status.msg_en}}
               </router-link>
@@ -309,7 +310,7 @@ export default {
       const ans = this.statusList.filter(function (v) {
         for (let index in lmap) {
           if (filter[lmap[index]] !== '') {
-            if (filter[lmap[index]].toString() !== v[rmap[index]].toString()) {
+            if (filter[lmap[index]]!== v[rmap[index]]) {
               return false
             }
           }

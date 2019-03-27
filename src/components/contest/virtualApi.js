@@ -100,7 +100,7 @@ const contestData = function (http, cid) {
   })
 }
 
-const statusSearchStr = function (_pid, _uid, _sid, _nickname) {
+const statusSearchStr = function (_pid, _uid, _sid, _nickname, _lang) {
   const valuecheck = function (v) {
     return (v === '' || v === 'undefined')
   }
@@ -108,7 +108,8 @@ const statusSearchStr = function (_pid, _uid, _sid, _nickname) {
     pid: _pid + '',
     uid: _uid + '',
     sid: _sid + '',
-    nickname: _nickname + ''
+    nickname: _nickname + '',
+    lang: _lang + ''
   }
   let querryCheck = []
   for (let key in pack) {

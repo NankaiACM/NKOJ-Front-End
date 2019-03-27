@@ -66,7 +66,7 @@ const statusMap = [
   },
   {
     'value': '233',
-    'status': 'Secret Mode',
+    'status': 'Secret',
     'label_class': 'btn-info'
   }
 ]
@@ -134,6 +134,11 @@ const statusHash = {
   110: {
     'value': '110',
     'status': 'Detail Mode',
+    'label_class': 'btn-info'
+  },
+  233: {
+    'value': '233',
+    'status': 'Secret',
     'label_class': 'btn-info'
   }
 }

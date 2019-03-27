@@ -78,7 +78,7 @@ export default {
     },
     pushTo: function () {
       this.$router.push({path: '/status/'})
-      this.$router.push({path: '/status/' + statusSearchStr(this.filter.problemID, this.filter.userID, this.filter.status, this.filter.nickname)})
+      this.$router.push({path: '/status/' + statusSearchStr(this.filter.problemID, this.filter.userID, this.filter.status, this.filter.nickname, this.filter.lang)})
     }
   }
 }
