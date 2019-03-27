@@ -55,7 +55,7 @@
                 <div class="poly-row">
                   <div class="poly-col">
                     <div class="alert"  v-if="o.detail[index - 1]" :class="o.detail[index - 1].result === 'accepted' ? 'alert-success' : 'alert-danger'">
-                      time: {{o.detail[index - 1].time + 4000}} ms <br>
+                      time: {{o.detail[index - 1].time}} ms <br>
                       extra: {{o.detail[index - 1].extra}} <br>
                       memory: {{o.detail[index - 1].memory}} kb <br>
                       result: {{o.detail[index - 1].result}} <br>
