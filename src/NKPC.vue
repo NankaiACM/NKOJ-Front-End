@@ -128,7 +128,8 @@
               <problem-list :problem-index="index" :problem-name="problem.title"
                             :status="mystatus[index] ? mystatus[index].status : 0" :ac="problem.ac" :all="problem.all" :id="problem.problem_id.toString()"
                             :spj="problem.special_judge ? problem.special_judge : false"
-                            :dtj="problem.detail_judge ? problem.detail_judge : false"/>
+                            :dtj="problem.detail_judge ? problem.detail_judge : false"
+                            :url=" rule === 'acm' ? '/problem/' + problem.problem_id : '/public/coding/' + contestid + '/' + problem.problem_id"/>
             </li>
           </ul>
         </div>

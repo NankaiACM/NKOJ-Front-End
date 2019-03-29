@@ -21,6 +21,7 @@ export default {
     problemName: String,
     problemIndex: Number,
     id: String,
+    url: String,
     ac: Number,
     all: Number,
     spj: Boolean,
@@ -33,7 +34,8 @@ export default {
   },
   methods: {
     pushTo () {
-      this.$router.push('/problem/' + this.id)
+      console.log(this.url)
+      window.open(this.url)
     }
   },
   computed:{
