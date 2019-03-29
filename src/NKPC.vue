@@ -124,7 +124,7 @@
         <!--题目列表-->
         <div class="container padding-t-40">
           <ul>
-            <li v-for="(problem,index) in problems" :key="problem.problem_id">
+            <li v-for="(problem,index) in problems" :key="index">
               <problem-list :problem-index="index" :problem-name="problem.title"
                             :status="mystatus[index] ? mystatus[index].status : 0" :ac="problem.ac" :all="problem.all" :id="problem.problem_id.toString()"
                             :spj="problem.special_judge ? problem.special_judge : false"
@@ -189,6 +189,7 @@ import vueLoading from 'vue-loading-template'
 import marked from 'marked'
 // const marked = () => import(/* webpackChunkName: "marked" */ 'marked')
 import {myStatus, contestStatus, rankList} from './components/contest/virtualApi.js'
+import pidorders from './components/contest/pidorders.js'
 
 export default {
   name: 'NKPC',
@@ -298,6 +299,12 @@ export default {
           vue.problems = res.problems.sort(function (l, r) {
             return l.problem_id - r.problem_id
           })
+          if (pidorders[vue.contestid]) {
+            let mp = pidorders[vue.contestid]
+            vue.problems = res.problems.sort(function (l, r) {
+              return (mp[l.problem_id].charCodeAt() || 0) - (mp[r.problem_id].charCodeAt() || 0)
+            })
+          }
         })
       setInterval(() => vue.nowTime = new Date(), 1000)
       /*
