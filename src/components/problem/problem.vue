@@ -29,6 +29,7 @@
               <li><a v-on:click="setLan('JavaScript')">JavaScrpit</a></li>
               <li><a v-on:click="setLan('Go')">Go</a></li>
               <li><a v-on:click="setLan('Text')">Text</a></li>
+              <li><a v-on:click="setLan('pypy3')">pypy3</a></li>
               <!--<li><a v-on:click="setLan('Pascal')">Pascall</a></li>-->
               <!--<li><a v-on:click="setLan('Html')">Html</a></li>-->
               <!--<li><a v-on:click="setLan('Css')">Css</a></li>-->
@@ -198,7 +199,12 @@ print('hello world')
 import "fmt"
 func main(){
   fmt.Println("hello world")
-}`
+}`,
+        'pypy3':
+`#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+print('hello world')
+`
       },
       isScrolled,
       isSee: false,

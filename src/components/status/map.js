@@ -160,6 +160,9 @@ const langMap = [{
 }, {
   'value': '5',
   'lang': 'Text'
+}, {
+  'value': '6',
+  'lang': 'pypy3'
 }]
 const langHash = {
   '0': 'C',
@@ -167,7 +170,8 @@ const langHash = {
   '2': 'JavaScript',
   '3': 'Python',
   '4': 'Go',
-  '5': 'Text'
+  '5': 'Text',
+  '6': 'pypy3'
 }
 const lang2code = {
   'C': 0,
@@ -175,6 +179,7 @@ const lang2code = {
   'JavaScript': 2,
   'Python': 3,
   'Go': 4,
-  'Text': 5
+  'Text': 5,
+  'pypy3': 6
 }
 export {statusMap, statusHash, langMap, langHash, lang2code}

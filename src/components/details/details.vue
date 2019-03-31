@@ -12,9 +12,11 @@
           </span>
         </h3>
         <div class="alert alert-info">
+          用户ID: {{o.user_id}}<br>
           时间: {{new Date(o.when).toLocaleString()}}<br>
           用时: {{o.time}} ms<br>
-          内存: {{o.memory}} kB <br>
+          内存: {{o.memory}} kB<br>
+          语言: {{langHash[o.language]}}<br>
           代码长度: {{o.code_size}} byte
         </div>
       </div>
@@ -103,12 +105,13 @@
   </div>
 </template>
 <script>
-import {statusHash} from '../status/map.js'
+import {statusHash, langHash} from '../status/map.js'
 export default {
   name: 'details-page',
   data: function () {
     return {
       statusHash: statusHash,
+      langHash: langHash,
       solution_id: -1,
       casesNum: 0,
       share: false,
