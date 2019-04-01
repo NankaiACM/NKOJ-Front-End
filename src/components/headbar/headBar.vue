@@ -130,7 +130,7 @@ export default {
         })
     },
     teriri: function () {
-      window.open('http://acm.nankai.edu.cn/teriri')
+      window.open(window.location.origin+'/teriri')
     }
   },
   mounted: function () {

@@ -145,7 +145,7 @@ export default {
     },
     wdttdwl () {
       if (this.islogin)
-        window.open('http://acm.nankai.edu.cn/public', '_blank')
+        window.open(window.location.origin+'/public', '_blank')
       else
         this.$emit('logIn')
     },
@@ -392,7 +392,7 @@ function draw () {
     let clr = `rgba(${~~(i.v  - 1) * 155 + 100}, ${~~(i.x / w * 155) + 100}, ${~~(i.y / h * 255)}, .9)`;
     ctx.shadowColor = clr;
     ctx.shadowBlur = 5;
-    
+
     ctx.beginPath();
     ctx.strokeStyle = clr;
     ctx.lineWidth = 3;
@@ -402,13 +402,13 @@ function draw () {
     ctx.closePath();
 
     i.x += i.v * 5;
-    
+
     ctx.beginPath();
     ctx.fillStyle = clr;
     ctx.arc(~~i.x, ~~i.y, 1, Math.PI * 2, 0);
     ctx.fill();
     ctx.closePath();
-    
+
     if (i.x > w) {
       i.x = 0;
       i.v = Math.random() * 10 + 10;

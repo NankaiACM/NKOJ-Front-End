@@ -75,13 +75,13 @@ export default {
         autoplay: false,
         preload: 'auto'
       });
-      this.list = await this.aget('http://acm.nankai.edu.cn/api/video/list');
+      this.list = await this.aget(window.location.origin + '/api/video/list');
       this.setsrc(0);
     });
   },
   methods: {
     videourl (name) {
-      return 'http://acm.nankai.edu.cn/api/video' + name;
+      return window.location.origin + '/api/video' + name;
     },
     setsrc (index) {
       this.teriri.src(this.videourl(this.list[index]));

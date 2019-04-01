@@ -1,3 +1,3 @@
-window.noPointHost = 'http://acm.nankai.edu.cn'
-window.noPointPreURL = 'acm.nankai.edu.cn'
+window.noPointHost = window.location.origin
+window.noPointPreURL = window.location.host
 window.noPointPort = ''
