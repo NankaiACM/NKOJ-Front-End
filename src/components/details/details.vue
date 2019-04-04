@@ -182,7 +182,8 @@ export default {
       vm.$http.get(window.noPointHost + '/api/status/detail/' + vm.solution_id + '/case/' + caseId +'?all=1')
         .then(function (res) {
           if (res.body.code !== 0) return 0
-          vm.evaluateNodes[caseId] = res.body.data
+          console.log([...vm.evaluateNodes])
+          Object.assign(vm.evaluateNodes[caseId], res.body.data)
         })
     }
   },
