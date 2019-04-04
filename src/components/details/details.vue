@@ -51,7 +51,7 @@
               <div class="poly-container">
                 <div class="poly-row">
                   <div class="poly-col">
-                    <div>单点信息</div>
+                    <div>单点信息  <a @click="dtData(index - i)"><span class="glyphicon glyphicon-plus"></span> 展开</a></div>
                   </div>
                 </div>
                 <div class="poly-row">
@@ -106,6 +106,7 @@
 </template>
 <script>
 import {statusHash, langHash} from '../status/map.js'
+import func from '../../../vue-temp/vue-editor-bridge';
 export default {
   name: 'details-page',
   data: function () {
@@ -176,6 +177,14 @@ export default {
           // if (caseId < vm.casesNum) vm.getOutput(caseId + 1)
           vm.getOutput(caseId + 1)
         })
+    },
+    dtData: function (casedd) {
+      const vm = this
+      vm.$http.get(window.noPointHost + '/api/status/detail/' + vm.solution_id + '/case/' + (casedd+1) +'?all=1')
+        .then(function (res) {
+          if (res.body.code !== 0) return 0
+          vm.evaluateNodes[casedd] = res.body.data
+        })
     }
   },
   mounted: function () {
@@ -202,7 +211,7 @@ export default {
 
   .eva-node > .alert {
     // padding-top: 0em;
-    // why do these? 
+    // why do these?
   }
 
   .alert-info {
