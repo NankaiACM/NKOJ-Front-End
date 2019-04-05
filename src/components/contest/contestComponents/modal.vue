@@ -5,19 +5,21 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">
-          {{person.nickname}} at 
-          <button class="btn btn-primary" @click="$router.push('/problem/' + it['problem_id'])">
-            {{it['problem_id']}}
+          {{person.nickname}} at
+          <router-link class="btn btn-primary" :to="'/problem/' + it.problem_id">
+            {{it.problem_id}}
             <span class="badge">{{detail.tried.length}}</span>
-          </button>
+          </router-link>
         </h4>
       </div>
       <div class="modal-body">
         得分：<button class="btn btn-default">{{detail.score}}</button><br>
         点击提交id可查看提交详情<br>
-        裁定分数使用提交: <a class="btn btn-success" @click="$router.push('/details/'+detail.selected)">{{detail.selected}}</a><br>
+        裁定分数使用提交:
+        <router-link class="btn btn-success" :to="'/details/' + detail.selected" target="_blank">{{detail.selected}}</router-link>
+        <br>
         历史提交:<br>
-        <a v-for="(item,index) in detail.tried" :key="index" class="btn btn-primary" @click="$router.push('/details/' + item)">{{item}}</a>
+        <router-link v-for="(item,index) in detail.tried" :key="index" class="btn btn-primary" :to="'/details/' + item" target="_blank">{{item}}</router-link>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" @click="fadeout" >Close</button>

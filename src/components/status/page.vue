@@ -48,8 +48,8 @@
                 :style="'background-color: '+status.color"
                 type="button"
                 :to="{path:'/details/'+status.solution_id}"
-                tag="button"
                 :title="status.status_id"
+                _target="blank"
               >
                 {{getStatusText(status.status_id) || status.msg_en}}
               </router-link>
