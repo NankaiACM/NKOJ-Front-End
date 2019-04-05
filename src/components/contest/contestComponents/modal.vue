@@ -59,6 +59,9 @@ export default {
   align-items: center;
   justify-content: center;
 }
+.modal {
+  display: none;
+}
 .modal-content {
   width: 100%;
 }
