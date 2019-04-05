@@ -49,7 +49,7 @@
                 type="button"
                 :to="{path:'/details/'+status.solution_id}"
                 :title="status.status_id"
-                _target="blank"
+                target="_blank"
               >
                 {{getStatusText(status.status_id) || status.msg_en}}
               </router-link>

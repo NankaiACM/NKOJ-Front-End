@@ -6,7 +6,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="fadeout"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">
           {{person.nickname}} at
-          <router-link class="btn btn-primary" :to="'/problem/' + it.problem_id">
+          <router-link class="btn btn-primary" :to="'/problem/' + it.problem_id" target="_blank">
             {{it.problem_id}}
             <span class="badge">{{detail.tried.length}}</span>
           </router-link>
