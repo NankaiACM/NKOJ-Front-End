@@ -1,5 +1,6 @@
 <template>
   <div class="statusboard">
+    <vue-loading type="spin" color="black" :size="{ width: '50px', height: '50px' }" v-if="status.length==0"></vue-loading>
     <div v-for="(it, id) in status" v-if="id < 20 && it['solution_id']" :key="id" class="statuscard"
       :class="'s' + ((it['msg_en'] || '').toString().replace(/\s*/g, '').toLowerCase().substr(0, 4))">
       <span v-for="(ht, hd) in whatineed" :key="hd" :title="ht.replace(/_*/g, '') + ':'"
@@ -13,8 +14,10 @@
 </template>
 
 <script>
+import vueLoading from 'vue-loading-template'
 export default {
   name: 'conteststatus',
+  components: {vueLoading},
   props: ['status'],
   data () {
     return {
@@ -29,7 +32,7 @@ export default {
 <style lang="less" scoped>
 .statusboard {
   background: #fff;
-  padding: 1em 2em;
+  padding: 8em 4em;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

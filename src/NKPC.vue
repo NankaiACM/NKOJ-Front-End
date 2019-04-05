@@ -127,8 +127,8 @@
             <li v-for="(problem,index) in problems" :key="index">
               <problem-list :problem-index="index" :problem-name="problem.title"
                             :status="mystatus[index] ? mystatus[index].status : 0" :ac="problem.ac" :all="problem.all" :id="problem.problem_id.toString()"
-                            :spj="problem.special_judge ? problem.special_judge : false"
-                            :dtj="problem.detail_judge ? problem.detail_judge : false"
+                            :spj="problem.special_judge ? Boolean(problem.special_judge) : false"
+                            :dtj="problem.detail_judge ? Boolean(problem.detail_judge) : false"
                             :url=" rule === 'acm' ? '/problem/' + problem.problem_id : '/public/#/coding/' + contestid + '/' + problem.problem_id"/>
             </li>
           </ul>
@@ -142,7 +142,9 @@
         <h3><span class="glyphicon glyphicon-stats"></span>STATUS</h3>
         <!--提交状态列表-->
         <div class="container padding-t-40">
-          <status :status="status"></status>
+          <div class="text">
+            <status :status="status"></status>
+          </div>
           <div class="view-more"><router-link :to="{path: 'status'}" append>View More<span class="glyphicon glyphicon-chevron-right"></span></router-link></div>
         </div>
       </div>

@@ -1,21 +1,25 @@
 <template>
   <div id="contest-rank-container-out" class="container-fluid">
     <div id="contest-rank-container-in" class="container-fluid">
+      <problemdetail ref="problemdetail" />
+      <vue-loading type="spin" color="black" :size="{ width: '50px', height: '50px' }" v-if="!persons || persons.length<=0"/>
       <div class="person-rank-container" v-for="(person, index) in persons" :key="index" v-if="isNaN(limit) ? true : (index < limit)">
-        <img class="per-img" :src="`${preUrl}/api/avatar/` + person.user_id"/>
+        <img @click="toUser(person.nickname)" class="per-img" :src="`${preUrl}/api/avatar/` + person.user_id"/>
         <div class="per-cnt-ctn">
           <div class="luck">
             <span class="line"><span class="split-mius">#</span><span :style="t()">{{index + 1}}</span></span><br>
-            <span class="line nick" :title="'nikename'"><span class="split-mius l"></span>{{person.nickname}}<span class="split-mius r"></span></span><br>
+            <span class="line nick" :title="'nikename'" @click="toUser(person.nickname)"><span class="split-mius l"></span>{{person.nickname}}<span class="split-mius r"></span></span><br>
             <span class="line"><span class="split-mius l"></span>fraction<span class="split-mius r">{{person.score}}</span></span>
           </div>
         </div>
         <div class="pro-table">
           <div class="pro-item" v-for="(item, x) in problems" :key="x"
-            :class="{'ac': person[item['problem_id']] === 100}"
-            :title="'[' + item['problem_id'] + ']' + item.title + ': ' + (person[item['problem_id']] || 0)">
-            <span :style="tt()">{{item['problem_id']}}</span>
-            <span>{{(person[item['problem_id']] || 0)}}</span>
+            :class="{'ac': (person.details[item['problem_id']] ? person.details[item['problem_id']].score : 0) === 100}"
+            @click="showdetail(person, item)"
+            :title="'[' + item['problem_id'] + ']' + item.title + ': ' + (person.details[item['problem_id']] || 0) + '[点击查看详情]'"
+            >
+            <span>{{item['problem_id']}}</span>
+            <span>{{(person.details[item['problem_id']] ? person.details[item['problem_id']].score : 0)}}</span>
           </div>
         </div>
       </div>
@@ -29,8 +33,11 @@
   </div>
 </template>
 <script>
+import vueLoading from 'vue-loading-template'
+import problemdetail from './contestComponents/modal.vue'
 export default {
   name: 'oiRank',
+  components: {problemdetail, vueLoading},
   props: ['limit'],
   data: function () {
     return {
@@ -45,6 +52,14 @@ export default {
   computed: {
   },
   methods: {
+    toUser (nickname) {
+      this.$router.push('/space/nickname/'+nickname)
+    },
+    showdetail (person, it) {
+      this.$refs.problemdetail.it = it
+      console.log(this.$refs.problemdetail.person=person)
+      this.$refs.problemdetail.$el.style.display='flex'
+    },
     t: function () {
       let b = {
         'color':'#'+(~~(Math.random()*16777215)).toString(16),
@@ -63,7 +78,7 @@ export default {
         })
     },
     getOiRanks () {
-      this.$http.get(`${noPointHost}/api/contest/${this.$route.params.contestid}/oirank`)
+      this.$http.get(`${noPointHost}/api/contest/${this.$route.params.contestid}/oiresult`)
         .then(res => {
           this.persons = res.body.data
         })
@@ -108,6 +123,7 @@ export default {
   border-radius: 50%;
   vertical-align: middle;
   margin: 0 4em;
+  cursor: pointer;
 }
 
 .person-rank-container div.per-cnt-ctn,.pro-table {
@@ -173,6 +189,7 @@ export default {
   text-align: center;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 .pro-item span {
   line-height: 23px;
