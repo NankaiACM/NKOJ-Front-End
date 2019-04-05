@@ -199,9 +199,10 @@ export default {
 
 .pro-item.ac {
   position: relative;
+  color: black!important;
 }
 .pro-item.ac::before {
-  color: brown;
+  color: darkolivegreen;
   content: '❀';
   display: inline-block;
   position: absolute;
