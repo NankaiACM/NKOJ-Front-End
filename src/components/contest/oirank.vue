@@ -57,7 +57,7 @@ export default {
     },
     showdetail (person, it) {
       this.$refs.problemdetail.it = it
-      console.log(this.$refs.problemdetail.person=person)
+      this.$refs.problemdetail.person=person
       this.$refs.problemdetail.$el.style.display='flex'
     },
     t: function () {

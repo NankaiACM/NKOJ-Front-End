@@ -32,11 +32,12 @@
         <div class="alert alert-info"><samp style="white-space: pre-wrap">{{o.compile_info || '无输出'}}</samp></div>
       </div>
       <div>
-        <h3><span class="glyphicon glyphicon-pencil"></span> 代码
-          <small><span class="glyphicon glyphicon-edit"></span></small>
-        </h3>
+        <h3><span class="glyphicon glyphicon-pencil"></span> 代码</h3>
         <div>
-          <pre>{{o.code}}</pre>
+          <a @click="codeLimit = '114514px'" class="a"><span class="glyphicon glyphicon-plus"></span> 展开</a>
+          <a @click="dlFile('code.txt', o.code)" class="a"><span class="glyphicon glyphicon-save"></span> 下载代码</a>
+          <br>
+          <pre class="code" :style="{maxHeight: codeLimit}">{{o.code}}</pre>
         </div>
       </div>
       <div v-if="evaluateNodes.length !== 1">
@@ -51,7 +52,12 @@
               <div class="poly-container">
                 <div class="poly-row">
                   <div class="poly-col">
-                    <div>单点信息  <a @click="dtData(index)"><span class="glyphicon glyphicon-plus"></span> 展开</a></div>
+                    <div>单点信息 
+                      <a @click="dtData(index)" class="a"><span class="glyphicon glyphicon-plus"></span> 展开</a>
+                      <a @click="dtData(index, 'stdin.txt', 'stdin')" class="a"><span class="glyphicon glyphicon-save"></span> 下载标准输入</a>
+                      <a @click="dtData(index, 'stdout.txt', 'stdout')" class="a"><span class="glyphicon glyphicon-save"></span> 下载标准输出</a>
+                      <a @click="dtData(index, 'execout.txt', 'execout')" class="a"><span class="glyphicon glyphicon-save"></span> 下载程序输出</a>
+                    </div>
                   </div>
                 </div>
                 <div class="poly-row">
@@ -68,7 +74,8 @@
                 </div>
                 <div class="poly-row">
                   <div class="poly-col">
-                    <div>标准输入</div>
+                    <div>标准输入
+                    </div>
                   </div>
                 </div>
                 <div class="poly-row">
@@ -110,6 +117,7 @@ export default {
   name: 'details-page',
   data: function () {
     return {
+      codeLimit: '600px',
       statusHash: statusHash,
       langHash: langHash,
       solution_id: -1,
@@ -177,14 +185,25 @@ export default {
           vm.getOutput(caseId + 1)
         })
     },
-    dtData: function (caseId) {
+    dtData: function (caseId, filename, type) {
       const vm = this
       vm.$http.get(window.noPointHost + '/api/status/detail/' + vm.solution_id + '/case/' + caseId +'?all=1')
         .then(function (res) {
           if (res.body.code !== 0) return 0
-          console.log([...vm.evaluateNodes])
-          Object.assign(vm.evaluateNodes[caseId], res.body.data)
+          // console.log([...vm.evaluateNodes])
+          if (filename) {
+            this.dlFile(filename, res.body.data[type])
+          } else {
+            Object.assign(vm.evaluateNodes[caseId], res.body.data)
+          }
         })
+    },
+    dlFile: function (filename, content) {
+      let lnk=document.createElement('a');
+      let blob=new Blob([content])
+      lnk.download=filename
+      lnk.href = URL.createObjectURL(blob)
+      lnk.click()
     }
   },
   mounted: function () {
@@ -195,6 +214,9 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+  pre.code {
+    transition: all 1s;
+  }
   .a, .r {
     margin: 0 .5em;
     cursor: pointer;

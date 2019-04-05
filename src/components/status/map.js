@@ -17,7 +17,7 @@ const statusMap = [
   {
     'value': '101',
     'status': 'Compilation Error',
-    'label_class': 'btn-light'
+    'label_class': 'btn-info'
   },
   {
     'value': '103',

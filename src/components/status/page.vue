@@ -383,14 +383,14 @@ export default {
     font-size: 100%;
   }
 
-  .table-container td button.btn {
+  .table-container td a.btn {
     font-size: 80%;
     border-radius: 0.25em;
     font-weight: 700;
     transition: all 1.41s, outline 0.1s;
   }
 
-  .table-container td button.btn:hover {
+  .table-container td a.btn:hover {
     outline: 3px solid #ccc;
     border-radius: 0;
   }
