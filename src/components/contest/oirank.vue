@@ -8,18 +8,19 @@
         <div class="per-cnt-ctn">
           <div class="luck">
             <span class="line"><span class="split-mius">#</span><span :style="t()">{{index + 1}}</span></span><br>
-            <span class="line nick" :title="'nikename'" @click="toUser(person.nickname)"><span class="split-mius l"></span>{{person.nickname}}<span class="split-mius r"></span></span><br>
+            <span class="line nick" :title="'nickname'" @click="toUser(person.nickname)"><span class="split-mius l"></span>{{person.nickname}}<span class="split-mius r"></span></span><br>
             <span class="line"><span class="split-mius l"></span>fraction<span class="split-mius r">{{person.score}}</span></span>
           </div>
         </div>
         <div class="pro-table">
           <div class="pro-item" v-for="(item, x) in problems" :key="x"
+            :style="{'background': `rgba(110,216,0,${person.details[item['problem_id']] ? (person.details[item['problem_id']].score/100) : 0})`}"
             :class="{'ac': (person.details[item['problem_id']] ? person.details[item['problem_id']].score : 0) === 100}"
             @click="showdetail(person, item)"
-            :title="'[' + item['problem_id'] + ']' + item.title + ': ' + (person.details[item['problem_id']] || 0) + '[点击查看详情]'"
+            :title="'[' + item['problem_id'] + ']' + item.title + ': ' + (person.details[item['problem_id']] || {}).selected + '[点击查看详情]'"
             >
             <span>{{item['problem_id']}}</span>
-            <span>{{(person.details[item['problem_id']] ? person.details[item['problem_id']].score : 0)}}</span>
+            <span>{{(person.details[item['problem_id']] ? person.details[item['problem_id']].score : '-')}}</span>
           </div>
         </div>
       </div>
@@ -197,8 +198,19 @@ export default {
 }
 
 .pro-item.ac {
-  background: #70c1b3;
-  color: #fff;
+  position: relative;
+}
+.pro-item.ac::before {
+  color: brown;
+  content: '❀';
+  display: inline-block;
+  position: absolute;
+  font-size: 1.5rem;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 0;
 }
 
 #contest-rank-container-in .pagination>.active>a,
