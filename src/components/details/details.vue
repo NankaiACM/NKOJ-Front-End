@@ -52,7 +52,7 @@
               <div class="poly-container">
                 <div class="poly-row">
                   <div class="poly-col">
-                    <div>单点信息 
+                    <div>单点信息
                       <a @click="dtData(index)" class="a"><span class="glyphicon glyphicon-plus"></span> 展开</a>
                       <a @click="dtData(index, 'stdin.txt', 'stdin')" class="a"><span class="glyphicon glyphicon-save"></span> 下载标准输入</a>
                       <a @click="dtData(index, 'stdout.txt', 'stdout')" class="a"><span class="glyphicon glyphicon-save"></span> 下载标准输出</a>
@@ -66,8 +66,8 @@
                       time: {{o.detail[index - 1].time}} ms <br>
                       extra: {{o.detail[index - 1].extra}} <br>
                       memory: {{o.detail[index - 1].memory}} kb <br>
-                      result: {{o.detail[index - 1].result}} <br>
-                      statuscode: {{o.detail[index - 1].status}} <br>
+                      result: {{o.detail[index - 1].result}} <span v-if="o.detail[index - 1].signal">({{o.detail[index - 1].signal_str}})</span> <br>
+                      statuscode: {{o.detail[index - 1].status}} <span v-if="o.detail[index - 1].signal">({{o.detail[index - 1].signal}})</span> <br>
                       exitcode: {{o.detail[index - 1].exitcode}} <br>
                     </div>
                   </div>
