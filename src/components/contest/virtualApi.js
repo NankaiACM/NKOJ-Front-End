@@ -169,7 +169,7 @@ const rankList = async function (http, cid) {
       // 必须保证 ht 按照时间从小到大排序
       const pid = ht['problem_id']
       const when = ht['love41']
-      if (ht['status_id'].toString() === '107') {
+      if (ht['status_id'].toString() === '107' || ht['status_id'].toString() === '108') {
         if (!one.has(pid)) {
           one.set(pid, when)
         } else {

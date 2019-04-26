@@ -98,23 +98,9 @@ export default {
           document.querySelector('input[name=perm]').value = r.perm
           document.querySelector('input[name=private]').checked = r.private
           document.querySelector('select[name=rule]').value = r.rule
-          var s = JSON.stringify(r.during.toString())
-          s = s.replace(/\"/g, '')
-          s = s.replace(/\\/g, '')
-          s = s.replace('[', '')
-          s = s.replace(']', '')
-          s = s.replace('(', '')
-          s = s.replace(')', '')
-          if (s.indexOf(',') !== -1) {
-            s = s.split(',')
-            console.log(s)
-            if (s[0].length !== 0) {
-              document.querySelector('input[name=start]').value = this.$dayjs(s[0]).toISOString().substr(0, 23)
-            }
-            if (s[1].length !== 0) {
-              document.querySelector('input[name=end]').value = this.$dayjs(s[1]).toISOString().substr(0, 23)
-            }
-          }
+          var s = JSON.parse(r.during)
+          document.querySelector('input[name=start]').value = new Date(s[0] + '+0').toISOString().substr(0,23)
+          document.querySelector('input[name=end]').value = new Date(s[1] + '+0').toISOString().substr(0,23)
           this.notify.title = 'fetch contest state:'
           this.notify.message = JSON.stringify(r)
           this.notify.count++

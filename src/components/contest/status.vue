@@ -80,13 +80,13 @@ export default {
     color: mediumaquamarine;
   }
 }
-.sacce {
+.sacce,.spres {
   .sucess;
 }
 .swron, .stime, .smemo, .soutp, .sfunc, .ssyst, .srunt {
   .fatal;
 }
-.spres, .scomp {
+.scomp {
   .warning;
 }
 .sjudg, .srunn, .ssecr {

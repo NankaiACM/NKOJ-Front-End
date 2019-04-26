@@ -12,7 +12,7 @@ const statusMap = [
   {
     'value': '108',
     'status': 'Presentation Error',
-    'label_class': 'btn-warning'
+    'label_class': 'btn-success'
   },
   {
     'value': '101',
@@ -84,7 +84,7 @@ const statusHash = {
   108: {
     'value': '108',
     'status': 'Presentation Error',
-    'label_class': 'btn-warning'
+    'label_class': 'btn-success'
   },
   101: {
     'value': '101',

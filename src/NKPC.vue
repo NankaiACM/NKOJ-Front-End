@@ -90,7 +90,8 @@
     </div>
 
     <!--比赛前的介绍界面-->
-    <div v-if="contestStatus==0">
+    <!--<div v-if="contestStatus==0">-->
+    <div>
       <div v-for="(text,index) in MDtext" :key="text">
       <div class="band-with-80padding" :class="{'bg-gray':index%2==1,'bg-white':index%2==0}">
         <div class="container">
@@ -101,17 +102,18 @@
       </div>
 
       </div>
-
+      <!--
       <div class="band-with-80padding" :class="{'bg-gray':navbarItems.length%2==1,'bg-white':navbarItems.length%2==0}">
         <div class="container register-bar">
           <div class="text">已经看完了？或许你会想要……？</div>
           <div class="btn-div">
-            <!--a class="btn btn-ghost" @click="userPage='dialog'">反馈或提问</a-->
+            <a class="btn btn-ghost" @click="userPage='dialog'">反馈或提问</a>-->
             <!--<a v-if="!iswarning" class="btn btn-ghost" @click="registerAttempt">立刻报名</a>-->
-            <a v-if="iswarning" class="btn btn-ghost" @click="pushToPC">前往比赛</a>
+            <!--<a v-if="iswarning" class="btn btn-ghost" @click="pushToPC">前往比赛</a>
           </div>
         </div>
       </div>
+      -->
     </div>
 
     <!--比赛中的界面-->
@@ -129,7 +131,7 @@
                             :status="mystatus[index] ? mystatus[index].status : 0" :ac="problem.ac" :all="problem.all" :id="problem.problem_id.toString()"
                             :spj="problem.special_judge ? Boolean(problem.special_judge) : false"
                             :dtj="problem.detail_judge ? Boolean(problem.detail_judge) : false"
-                            :url=" rule === 'acm' ? '/problem/' + problem.problem_id : '/public/#/coding/' + contestid + '/' + problem.problem_id"/>
+                            :url="'/public/#/coding/' + contestid + '/' + problem.problem_id"/>
             </li>
           </ul>
         </div>
@@ -191,7 +193,7 @@ import saurusFooter from './components/footer'
 import vueLoading from 'vue-loading-template'
 import marked from 'marked'
 // const marked = () => import(/* webpackChunkName: "marked" */ 'marked')
-import {myStatus, contestStatus, rankList} from './components/contest/virtualApi.js'
+import {myStatus, contestStatus as contestStatusFunc, rankList} from './components/contest/virtualApi.js'
 import pidorders from './components/contest/pidorders.js'
 
 export default {
@@ -237,11 +239,11 @@ export default {
     async test () {
       if (this.userData) await myStatus(this.$http, this.problems)
       // const pc_new_status = await pcStatus(this.$http, this.problems, this.oldstatus, this.startTime, this.endTime)
-      const ct_new_status = await contestStatus(this.$http, this.contestid, this.status[0] ? this.status[0]['solution_id'] : 0)
+      const ct_new_status = await contestStatusFunc(this.$http, this.contestid, this.status[0] ? this.status[0]['solution_id'] : 0)
       this.status.concat(ct_new_status)
     },
     async statusUpdata () {
-      const new_status = await contestStatus(this.$http, this.contestid, this.status[0] ? this.status[0]['solution_id'] : 0, this.startTime, this.endTime)
+      const new_status = await contestStatusFunc(this.$http, this.contestid, this.status[0] ? this.status[0]['solution_id'] : 0, this.startTime, this.endTime)
       if (new_status) this.status = new_status.concat(this.status)
       this.mystatus = await myStatus(this.$http, this.problems)
     },
