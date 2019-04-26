@@ -1,6 +1,7 @@
 <template>
   <div id="contest-rank-container-out" class="container-fluid">
     <div id="contest-rank-container-in" class="container-fluid">
+      <vue-loading type="spin" color="black" :size="{ width: '50px', height: '50px' }" v-if="!persons || persons.length<=0"/>
       <div v-for="(person, index) in persons" :key="index" v-if="isNaN(limit) ? true : (index < limit)" class="person-rank-container">
         <img class="per-img" :src="`${preUrl}/api/avatar/` + person.uid"/>
         <div class="per-cnt-ctn media-body container">
@@ -32,9 +33,13 @@
 </template>
 <script>
 import {rankList} from './virtualApi.js'
+import vueLoading from 'vue-loading-template'
 export default {
   name: 'acmrank',
   props: ['limit'],
+  components: {
+    vueLoading
+  },
   data: function () {
     return {
       persons: [

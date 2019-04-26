@@ -10,7 +10,7 @@
         </div>
         <div class="media-body text-muted">
           <router-link :to="{path:'/discuss/'+talk.post_id}" class="meadia-heading btn-link node">
-            <h4>{{talk.title}}</h4>
+            <h5>{{talk.title}}</h5>
           </router-link>
           <router-link :to="{path:'/discuss/'}" class="btn btn-xs btn-default node">
             {{talk.node || '默认话题'}}

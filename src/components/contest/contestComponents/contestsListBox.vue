@@ -7,8 +7,8 @@
             <a v-if="active == 0" class="psR psL active" v-on:click.stop="viewThis">View Details</a>
             <a v-else-if="active == 1" class="psR psL disabled">Upcoming</a>
             <a v-else class="psR psL disabled">Ended</a>
-            <button v-if="active == 1" class="btn" v-on:click.stop="" style="visibility: hidden;">You cannot see this</button>
-            <button v-else-if="active == 0" class="btn" v-on:click.stop="enterThis">Enter</button>
+            <button v-if="active == 114524" class="btn" v-on:click.stop="" style="visibility: hidden;">You cannot see this</button>
+            <button v-else-if="active == 0 || active == 1" class="btn" v-on:click.stop="enterThis">Enter</button>
             <button v-else-if="active == -1" class="btn" v-on:click.stop="viewProblems">View Problems</button>
         </div>
     </div>
