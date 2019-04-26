@@ -92,7 +92,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 #contest-rank-container-out {
   align-items: center;
   width: 100%;

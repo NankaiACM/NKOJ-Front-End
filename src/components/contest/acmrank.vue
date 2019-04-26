@@ -12,10 +12,10 @@
           </div>
         </div>
         <div class="pro-table  media-body container">
-          <div v-for="(item, index) in o.problems" :key="index" class="pro-item" :class="{'ac': person.one.has(item['problem_id'])}"
+          <div v-for="(item, index) in o.problems" :key="index" class="pro-item" :class="{'ac': person.one.has(item['problem_id']), 'secret': person.secret.has(item['problem_id'])}"
           :title="item.title + ': ' + 
           '[penalty: ' + (person.add.has(item['problem_id']) ? (~~(person.add.get(item['problem_id']) / 1000 / 60 /20) + ' * 20m') : 'No penalty') + '], ' +
-          '[ac: ' + (person.one.has(item['problem_id']) ? (~~(person.one.get(item['problem_id']) / 1000 / 60) +  'm | ' + hms(person.one.get(item['problem_id']))) : 'Not yet') + ']'">
+          '[ac: ' + (person.one.has(item['problem_id']) ? (~~(person.one.get(item['problem_id']) / 1000 / 60) +  'm | ' + hms(person.one.get(item['problem_id']))) : person.secret.has(item['problem_id']) ? 'secret' : 'Not yet') + ']'">
             {{String.fromCharCode('A'.charCodeAt()+index)}}
           </div>
         </div>
@@ -77,7 +77,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 #contest-rank-container-out {
   align-items: center;
   width: 100%;
@@ -173,6 +173,11 @@ export default {
 
 .pro-item.ac {
   background: #70c1b3;
+  color: #fff;
+}
+
+.pro-item.secret {
+  background: rgb(235, 235, 116);
   color: #fff;
 }
 

@@ -164,7 +164,9 @@ const rankList = async function (http, cid) {
   for (let it of users.sets) {
     let one = new Map()
     let add = new Map()
+    let secret = new Map()
     for (let ht of users.pack[it]) {
+      // 必须保证 ht 按照时间从小到大排序
       const pid = ht['problem_id']
       const when = ht['love41']
       if (ht['status_id'].toString() === '107') {
@@ -172,6 +174,14 @@ const rankList = async function (http, cid) {
           one.set(pid, when)
         } else {
           one.set(pid, Math.min(one.get(pid), when))
+        }
+      } if (ht['status_id'].toString() === '233') {
+        if (!one.has(pid)) {
+          if (!secret.has(pid)) {
+            secret.set(pid, when)
+          } else {
+            secret.set(pid, Math.min(secret.get(pid), when))
+          }
         }
       } else {
         if (!one.has(pid)) {
@@ -197,7 +207,8 @@ const rankList = async function (http, cid) {
       allac: allac,
       alltime: alltime,
       one: one,
-      add: add
+      add: add,
+      secret: secret
     })
   }
   list.sort(function (l, r) {
