@@ -79,6 +79,8 @@ export default {
     let tar = await rankList(this.$http, this.$route.params.contestid)
     this.persons = tar[0]
     this.o = tar[1]
+    window.oo = this.o
+    this.o.problems = this.o.problems.sort((a,b) => a.title.charCodeAt(0) - b.title.charCodeAt(0))
   }
 }
 </script>
