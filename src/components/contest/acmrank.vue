@@ -63,9 +63,17 @@ export default {
       return b
     },
     toMyRank: function() {
+    },
+    fetchRank: async function () {
+      console.log('rank update')
+      let tar = await rankList(this.$http, this.$route.params.contestid)
+      this.persons = tar[0]
+      this.o = tar[1]
+      this.o.problems = this.o.problems.sort((a,b) => a.title.charCodeAt(0) - b.title.charCodeAt(0))
+      setTimeout(this.fetchRank, 5000)
     }
   },
-  mounted: async function () {
+  mounted: function () {
     /* this api seems do not work
     this.$nextTick(function () {
       this.$http.get(`${noPointHost}/api/contest/${this.$route.params.contestid}/user`)
@@ -76,11 +84,7 @@ export default {
         })
     })
     */
-    let tar = await rankList(this.$http, this.$route.params.contestid)
-    this.persons = tar[0]
-    this.o = tar[1]
-    window.oo = this.o
-    this.o.problems = this.o.problems.sort((a,b) => a.title.charCodeAt(0) - b.title.charCodeAt(0))
+   this.fetchRank()
   }
 }
 </script>
