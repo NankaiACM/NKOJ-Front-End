@@ -17,7 +17,7 @@
           :title="item.title + ': ' + 
           '[penalty: ' + (person.add.has(item['problem_id']) ? (~~(person.add.get(item['problem_id']) / 1000 / 60 /20) + ' * 20m') : 'No penalty') + '], ' +
           '[ac: ' + (person.one.has(item['problem_id']) ? (~~(person.one.get(item['problem_id']) / 1000 / 60) +  'm | ' + hms(person.one.get(item['problem_id']))) : person.secret.has(item['problem_id']) ? 'secret' : 'Not yet') + ']'">
-            {{String.fromCharCode('A'.charCodeAt()+index)}}
+            {{item['title'][0]}}
           </div>
         </div>
         <div class="clearfix"></div>
