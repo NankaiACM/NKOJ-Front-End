@@ -51,7 +51,7 @@
 <script>
 export default {
   name: 'problems-pagination',
-  props: ['pagesize', 'last'],
+  props: ['pagesize', 'last', 'index'],
   data: function () {
     return {
       viewing: 1
@@ -97,6 +97,11 @@ export default {
       console.log('大坟墓守护者')
       return this.rang(this.viewing)
     }
+  },
+  mounted: function () {
+    this.$nextTick(function () {
+      this.viewing = Number(this.$props.index)
+    })
   },
   watch: {
     'viewing': function (newv, oldv) {

@@ -26,12 +26,12 @@
         </span>
       </div>
       <div>
-        <router-link :to="{path:'problem/'+problem.problem_id}">
+        <router-link :to="{path:'/problem/'+problem.problem_id}">
           {{problem.problem_id}}
         </router-link>
       </div>
       <div>
-        <router-link :to="{path:'problem/'+problem.problem_id}">
+        <router-link :to="{path:'/problem/'+problem.problem_id}">
           {{problem.title}}
         </router-link>
       </div>
@@ -40,7 +40,7 @@
       </div>
     </div>
   </div>
-  <problems-pagination @viewingleap="handleViewing" :pagesize="this.pageSize" :last="this.total"></problems-pagination>
+  <problems-pagination @viewingleap="handleViewing" :pagesize="this.pageSize" :last="this.total" :index="this.index"></problems-pagination>
 </div>
 </template>
 <script>
@@ -53,7 +53,7 @@ import matchSorter from 'match-sorter'
 
 export default {
   name: 'component-problems',
-  props: ['user_pros_msg'],
+  props: ['user_pros_msg', 'index'],
   components: {
     problemsPagination: () => import(/* webpackChunkName: "problem" */ './pagination.vue'),
     questionFilter: () => import(/* webpackChunkName: "problem" */ './questionFilter.vue')
@@ -66,10 +66,7 @@ export default {
       starlist: [],
       aclist: [],
       onlist: [],
-      pageSize: 20,
-      queryleft: 0,
-      queryright: 50,
-      viewing: 1 // >=1
+      pageSize: 20
     }
   },
   mounted: function () {
@@ -88,11 +85,14 @@ export default {
     },
     total: function () {
       return this.rawList.length
-    }
+    },
+    queryleft: function () {
+      return 20 * Number(this.index - 1)
+    },
   },
   methods: {
     initView: function () {
-      this.$http.get(`${window.noPointHost}/api/problems/list/${this.queryleft}/${this.queryright}`)
+      this.$http.get(`${window.noPointHost}/api/problems/list/${this.queryleft}/${this.pageSize}`)
         .then(function (res) {
           this.rawNetList = res.body.data.list
           this.rawNetTotal = res.body.data.served
@@ -116,18 +116,17 @@ export default {
       return tmp
     },
     raw2listrender: function () {
-      let left = (this.viewing - 1) * this.pageSize
-      if (left > this.total) left = this.total
-      else if (left < 0) left = 0
-      let right = this.viewing * this.pageSize
-      if (right > this.total) right = this.total
-      else if (right < 0) right = 0
-      const tmp = this.rawList.slice(left, right)
-      this.problemList = this.stateAstarRender(tmp)
+      // let left = (this.index-1) * this.pageSize
+      // if (left > this.total) left = this.total
+      // else if (left < 0) left = 0
+      // let right = this.index * this.pageSize
+      // if (right > this.total) right = this.total
+      // else if (right < 0) right = 0
+      // const tmp = this.rawList.slice(left, right)
+      this.problemList = this.stateAstarRender(this.rawList)
     },
     handleViewing: function (newv) {
-      this.viewing = newv.viewing
-      this.raw2listrender()
+      this.$router.push('/problems/' + (newv.viewing))
     }
   },
   watch: {
@@ -141,6 +140,9 @@ export default {
     },
     kWords: function () {
       console.log('happen')
+    },
+    index: function () {
+      this.initView()
     }
   }
 }
