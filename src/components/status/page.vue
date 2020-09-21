@@ -1,24 +1,24 @@
 <template>
   <div id="status-page">
     <div class="container-fluid table-container">
-      <table id="statusTable" class="table table-hover">
+      <table id="statusTable" class="table table-hover" aria-describedby="statusTable">
         <thead class="thread-height">
           <tr>
-            <th class="hidden-xs">run id</th>
-            <th>nickname</th>
-            <th>problem id</th>
-            <th>result</th>
-            <th>score</th>
-            <th>language</th>
-            <th>code length</th>
-            <th>time</th>
-            <th>memory</th>
-            <th>submit time</th>
-            <th>shared</th>
+            <th class="hidden-xs" scope="col">run id</th>
+            <th scope="col">nickname</th>
+            <th scope="col">problem id</th>
+            <th scope="col">result</th>
+            <th scope="col">score</th>
+            <th scope="col">language</th>
+            <th scope="col">code length</th>
+            <th scope="col">time</th>
+            <th scope="col">memory</th>
+            <th scope="col">submit time</th>
+            <th scope="col">shared</th>
           </tr>
         </thead>
         <transition-group tag="tbody" name="list">
-          <tr v-for="(status, index) in afterFilterStatusList" :key="index">
+          <tr v-for="(status, index) in afterFilterStatusList" :key="status.solution_id">
             <td class="hidden-xs idbox">
               <span :class="{'has-contest' : status.contest_id}">{{status.solution_id}}<span v-if="status.contest_id">({{status.contest_id}})</span></span>
               <span v-if="isAdmin" class="rejudge glyphicon glyphicon-repeat" @click="notify.mptdex = index" title="rejudge this"></span>
@@ -62,7 +62,7 @@
               {{status.code_size}} byte
               <router-link v-if="status.code_id" :to="{path:'/code/'+status.code_id}">
                 <span class="label label-default">
-                <i class="glyphicon glyphicon-eye-open"></i>
+                <em class="glyphicon glyphicon-eye-open"></em>
               </span>
               </router-link>
             </td>
@@ -93,7 +93,7 @@
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
 import {statusMap, langHash} from './map.js'
-import {statusSearchStr, statusSearchData} from '../contest/virtualApi.js'
+// import {statusSearchStr, statusSearchData} from '../contest/virtualApi.js'
 
 export default {
   name: 'status',
@@ -101,7 +101,7 @@ export default {
   data: function () {
     return {
       notify: {
-        mptdex: -1,
+        mptdex: -1
       },
       pool: [],
       statusList: [],
@@ -189,7 +189,7 @@ export default {
       let vm = this
       if (vm.statusList.length === 0) {
         console.log('第一次向魔法机发起状态请求')
-        vm.$http.get(vm.apiUrl + '?' + (vm.$route.params.querryString ? vm.$route.params.querryString : '') )
+        vm.$http.get(vm.apiUrl + '?' + (vm.$route.params.querryString ? vm.$route.params.querryString : ''))
           .then(function (res) {
             if (!res.body.data) {
               console.log('init feedback erro')
@@ -265,7 +265,7 @@ export default {
     }
   },
   components: {
-    InfiniteLoading,
+    InfiniteLoading
   },
   watch: {
     maxId: function (n, o) {
@@ -310,7 +310,7 @@ export default {
       const ans = this.statusList.filter(function (v) {
         for (let index in lmap) {
           if (filter[lmap[index]] !== '') {
-            if (filter[lmap[index]]!== v[rmap[index]]) {
+            if (filter[lmap[index]] !== v[rmap[index]]) {
               return false
             }
           }
