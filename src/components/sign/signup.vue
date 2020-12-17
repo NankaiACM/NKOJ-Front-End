@@ -60,6 +60,13 @@
               <span class="glyphicon" :class="{'glyphicon-eye-close':isLookPw==='password','glyphicon-eye-open':isLookPw==='text'}"
                 @click="isLookPw=isLookPw==='text'?'password':'text'"></span>
             </div>
+            <div class="form-group pw" :class="{'hastext':signupAttribute.confirmPassword!='','focus':focusing==2}">
+              <label @click="labelClick">确认密码</label>
+              <input :type="isLookPw" class="form-control" :class="{'disabled':signupStatus===5}" @focus="focusing=2" @blur="focusing=0"
+                     v-model="signupAttribute.confirmPassword" :disabled="signupStatus===5">
+              <span class="glyphicon" :class="{'glyphicon-eye-close':isLookPw==='password','glyphicon-eye-open':isLookPw==='text'}"
+                @click="isLookPw=isLookPw==='text'?'password':'text'"></span>
+            </div>
             <div class="form-group" :class="{'hastext':signupAttribute.signupSchool!='','focus':focusing==3}">
               <label @click="labelClick">所属学校（非必填）</label>
               <input type="text" class="form-control" :class="{'disabled':signupStatus===5}" @focus="focusing=3" @blur="focusing=0"
@@ -117,6 +124,7 @@ export default {
       inputEmail: '',
       signupAttribute: {
         signupPassword: '',
+        confirmPassword: '',
         signupName: '',
         signupEmail: '',
         signupCaptcha: '',
@@ -291,6 +299,12 @@ export default {
         })
     },
     signupAttempt: function (event) {
+      if (this.signupAttribute.signupPassword != this.signupAttribute.confirmPassword) {
+        var vue = this
+        vue.statusMessage = [{ name: '错误', message: '两次输入的密码不一致！' }]
+        vue.signupStatus = 4
+        return
+      }
       const message = this.signupAttribute.signupPassword
       const base64 = encryptMsg(message)
       this.signuppasswordEncrypt(base64)
