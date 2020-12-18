@@ -37,7 +37,7 @@ export default {
       url: 'wss://' + noPointPreURL,
       hisurl: noPointHost + '/api/danmaku',
       bot: {
-        url: 'http://www.tuling123.com/openapi/api',
+        url: 'https://www.tuling123.com/openapi/api',
         key: '797f060721db48dca531d74bbc847af9',
         id: '',
         isOnHook: false,
