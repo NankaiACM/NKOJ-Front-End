@@ -94,6 +94,7 @@ export default {
     width: 240px;
     height: 100vh;
     border-right: solid 1px #ccc;
+    overflow: auto;
     a {
       display: block;
       width: calc(100% - 2em);

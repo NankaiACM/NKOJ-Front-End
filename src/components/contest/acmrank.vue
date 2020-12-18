@@ -3,7 +3,7 @@
     <div id="contest-rank-container-in" class="container-fluid">
       <vue-loading type="spin" color="black" :size="{ width: '50px', height: '50px' }" v-if="!persons || persons.length<=0"/>
       <div v-for="(person, index) in persons" :key="index" v-if="isNaN(limit) ? true : (index < limit)" class="person-rank-container">
-        <img class="per-img" :src="`${preUrl}/api/avatar/` + person.uid"/>
+        <img class="per-img" :src="`${preUrl}/api/avatar/` + person.uid" :alt="person.nickname"/>
         <div class="per-cnt-ctn media-body container">
           <div class="luck">
           <span class="line"><span class="split-mius">#</span><span :style="t()">{{index + 1}}</span></span><br>
@@ -230,8 +230,8 @@ export default {
   background: #006494;
 }
 
-.test1:hover {
-}
+/* .test1:hover {
+} */
 
 .rank-gray:hover #draw-container {
   opacity: 1;

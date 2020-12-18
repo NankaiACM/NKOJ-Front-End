@@ -175,7 +175,8 @@ const rankList = async function (http, cid) {
         } else {
           one.set(pid, Math.min(one.get(pid), when))
         }
-      } if (ht['status_id'].toString() === '233') {
+      }
+      if (ht['status_id'].toString() === '233') {
         if (!one.has(pid)) {
           if (!secret.has(pid)) {
             secret.set(pid, when)
