@@ -145,7 +145,7 @@ export default {
     },
     wdttdwl () {
       if (this.islogin)
-        window.open(window.location.origin+'/public', '_blank')
+        window.open(window.location.origin + '/public/nkpc.html#/', '_blank')
       else
         this.$emit('logIn')
     },

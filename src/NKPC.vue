@@ -131,7 +131,7 @@
                             :status="mystatus[index] ? mystatus[index].status : 0" :ac="problem.ac" :all="problem.all" :id="problem.problem_id.toString()"
                             :spj="problem.special_judge ? Boolean(problem.special_judge) : false"
                             :dtj="problem.detail_judge ? Boolean(problem.detail_judge) : false"
-                            :url="'/public/#/coding/' + contestid + '/' + problem.problem_id"/>
+                            :url="'/public/nkpc.html#/coding/' + contestid + '/' + problem.problem_id"/>
             </li>
           </ul>
         </div>
