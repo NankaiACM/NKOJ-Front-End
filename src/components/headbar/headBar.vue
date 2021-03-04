@@ -54,7 +54,7 @@
             -->
             <li class="link" v-if="usrLog"><router-link to="/account/setting">个人中心</router-link></li>
             <li class="link" v-if="usrLog"><router-link to="/message">消息中心</router-link></li>
-            <li class="link" v-if="proAdd"><a href="/public/admin.html#/">管理中心[新]<a></li>
+            <li class="link" v-if="proAdd"><a href="/public/admin.html#/">管理中心[新]</a></li>
             <li class="link" v-if="proAdd"><router-link to="/admin">管理中心</router-link></li>
             <li class="link" v-if="usrLog"><a href="#" @click="logout()">注销</a></li>
             <li class="hr"><hr></li>
