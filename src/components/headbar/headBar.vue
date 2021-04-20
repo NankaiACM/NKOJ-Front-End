@@ -58,7 +58,7 @@
             <li class="link" v-if="proAdd"><router-link to="/admin">管理中心</router-link></li>
             <li class="link" v-if="usrLog"><a href="#" @click="logout()">注销</a></li>
             <li class="hr"><hr></li>
-            <li class="lst-login">上次登陆日期 {{new Date(userData.lastLogin).toLocaleDateString()}}</li>
+            <li class="lst-login">上次登录日期 {{new Date(userData.lastLogin).toLocaleDateString()}}</li>
           </dropmenu>
         </div>
       </div>

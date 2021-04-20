@@ -53,7 +53,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-3 control-label">上次登陆</label>
+              <label class="col-sm-3 control-label">上次登录</label>
               <div class="col-sm-9">
                 <input class="form-control" placeholder="1111-11-11" v-model="timeSignIn" disabled/>
               </div>

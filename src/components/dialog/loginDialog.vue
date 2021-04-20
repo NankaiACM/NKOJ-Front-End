@@ -34,7 +34,7 @@
         <div class="form-group">
           <button class="btn" @click.prevent="loginAttempt" :disabled="loginStatus==1">
             <vue-loading type="spin" color="white" :size="{ width: '30px', height: '30px' }" v-if="loginStatus==1"></vue-loading>
-            <div v-else>登陆</div>
+            <div v-else>登录</div>
           </button>
         </div>
         </div>

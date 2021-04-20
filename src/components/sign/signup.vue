@@ -176,7 +176,7 @@ export default {
               } else {
                 vue.statusMessage = resp.error
                 this.signupStatus = 0
-                vue.signupAttribute.signupCaptcha = ""
+                vue.signupAttribute.signupCaptcha = ''
                 vue.captchaUrl = `${noPointHost}/api/captcha/sendmail?_t=` + Math.random()
               }
             },
@@ -205,7 +205,7 @@ export default {
     emailVerifyAttempt () {
       let vue = this
       if (vue.signupStatus === 0) {
-        vue.statusMessage = [{ name: '错误', message: '请重新获取邮件验证码！'}]
+        vue.statusMessage = [{name: '错误', message: '请重新获取邮件验证码！'}]
         return
       }
       vue.signupStatus = 3
@@ -299,7 +299,7 @@ export default {
         })
     },
     signupAttempt: function (event) {
-      if (this.signupAttribute.signupPassword != this.signupAttribute.confirmPassword) {
+      if (this.signupAttribute.signupPassword !== this.signupAttribute.confirmPassword) {
         var vue = this
         vue.statusMessage = [{ name: '错误', message: '两次输入的密码不一致！' }]
         vue.signupStatus = 4

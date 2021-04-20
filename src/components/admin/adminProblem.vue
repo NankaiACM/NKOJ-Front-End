@@ -299,7 +299,7 @@ export default {
       }, err => {
         _this.isInfo = true
         if (err.body.code === 401) {
-          _this.submitInfo = '请您登陆！'
+          _this.submitInfo = '请您登录！'
         } else {
           _this.submitInfo = '未知错误！'
           this.$store.commit('setNotify', {
