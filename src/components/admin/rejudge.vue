@@ -7,7 +7,7 @@
           <input placeholder="solution id" class="i" v-model="solutionId">
           <div class="r" @click="rejudgeSolution">rejudge</div>
         </div>
-        <div class="c" v-if="isRes">{{resMsg}}</div>
+        <div class="c" v-if="isResSolution">{{resMsgSolution}}</div>
       </div>
     </div>
 
@@ -18,7 +18,7 @@
           <input placeholder="problem id" class="i" v-model="problemId">
           <div class="r" @click="rejudgeProblem">rejudge</div>
         </div>
-        <div class="c" v-if="isRes">{{resMsg}}</div>
+        <div class="c" v-if="isResProblem">{{resMsgProblem}}</div>
       </div>
     </div>
   </div>
@@ -30,7 +30,8 @@ export default {
     return {
       solutionId: '',
       problemId: '',
-      isRes: false
+      isResProblem: false,
+      isResSolution: false
     }
   },
   methods: {
@@ -40,8 +41,8 @@ export default {
       vm.$http.get(window.noPointHost + '/api/judge/rejudge/' + vm.solutionId)
         .then(function (res) {
           console.log(JSON.stringify(res))
-          vm.isRes = true
-          vm.resMsg = JSON.stringify(res.body)
+          vm.isResSolution = true
+          vm.resMsgSolution = JSON.stringify(res.body)
         })
     },
     rejudgeProblem: function () {
@@ -50,8 +51,8 @@ export default {
       vm.$http.get(window.noPointHost + '/api/judge/rejudge/:pid' + vm.problemId)
         .then(function (res) {
           console.log(JSON.stringify(res))
-          vm.isRes = true
-          vm.resMsg = JSON.stringify(res.body)
+          vm.isResProblem = true
+          vm.resMsgProblem = JSON.stringify(res.body)
         })
     }
   }
