@@ -1,26 +1,31 @@
 <template>
-  <div id="rejudge" class="bginputbg">
-    <h3>重新评测答案</h3>
-    <div id="bginput" :class="{gray: solutionId === ''}">
-      <div class="b">
-        <input placeholder="solution id" class="i" v-model="solutionId">
-        <div class="r" @click="rejudgeSolution">rejudge</div>
-      </div>
-      <div class="c" v-if="isRes">{{resMsg}}</div>
-    </div>
-    <h3>重新评测题目</h3>
-    <div id="bginput" :class="{gray: problemId === ''}">
-      <div class="b">
-        <input placeholder="problem id" class="i" v-model="problemId">
-        <div class="r" @click="rejudgeProblem">rejudge</div>
+  <div id="rejudgeRoot">
+    <div class="bginputbg">
+      <h3>重新评测答案</h3>
+      <div id="bginput" :class="{gray: solutionId === ''}">
+        <div class="b">
+          <input placeholder="solution id" class="i" v-model="solutionId">
+          <div class="r" @click="rejudgeSolution">rejudge</div>
+        </div>
+        <div class="c" v-if="isRes">{{resMsg}}</div>
       </div>
     </div>
-    <div class="c" v-if="isRes">{{resMsg}}</div>
+
+    <div class="bginputbg">
+      <h3>重新评测题目</h3>
+      <div id="bginput" :class="{gray: problemId === ''}">
+        <div class="b">
+          <input placeholder="problem id" class="i" v-model="problemId">
+          <div class="r" @click="rejudgeProblem">rejudge</div>
+        </div>
+        <div class="c" v-if="isRes">{{resMsg}}</div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'rejudge',
+  name: 'rejudgeRoot',
   data: function () {
     return {
       solutionId: '',
