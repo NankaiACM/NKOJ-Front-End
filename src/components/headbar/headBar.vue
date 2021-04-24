@@ -43,6 +43,11 @@
              v-if="userData.isLogin===false" id="loginBtn">
           <a> 登录<span class="glyphicon glyphicon-log-in"></span></a>
         </div>
+        <div class="field" :class="{'field-focus':nowPage==='resetPwd' && userPage!=='login'}"
+             v-on:click="$emit('resetPwd')"
+             v-if="userData.isLogin===false" style="width:0rem;margin:unset;">
+          <a> 重置<span class="glyphicon glyphicon-lock"></span></a>
+        </div>
         <div class="userdetail" v-if="userData.isLogin">
           <img class="img-circle" :src="avatarUrl">
           <dropmenu v-if="userData.isLogin" :userData="userData">

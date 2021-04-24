@@ -83,6 +83,10 @@ const teriri = () => import(
   /* webpackChunkName: "teriri" */
   '../view/teririplayer/app.vue'
 )
+const resetPwd = () => import(
+  /* webpackChunkName: "reset password" */
+  '../components/sign/resetpwd.vue'
+)
 
 Vue.use(Router)
 console.log(window.noPointHost)
@@ -148,9 +152,8 @@ const router = new Router({
           }
         ]
       },
-      {
-        path: '/sign_up', component: signup
-      }
+      { path: '/sign_up', component: signup },
+      { path: '/reset_passwd', component: resetPwd }
     ]
   }, {
     path: '/NKPC',

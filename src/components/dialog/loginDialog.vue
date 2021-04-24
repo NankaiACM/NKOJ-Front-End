@@ -47,6 +47,7 @@
         </transition>
       </form>
       <div class="text" v-if="loginStatus!=2">没有帐号？立刻<a @click="pageStatus='signUp'">注册</a>！</div>
+      <div class="text" v-if="loginStatus!=2">忘记密码？点此<a @click="pageStatus='resetPwd'">找回</a>！</div>
     </div>
 
     </transition>

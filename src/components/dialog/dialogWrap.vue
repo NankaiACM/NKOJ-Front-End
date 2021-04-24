@@ -12,31 +12,31 @@
 <script>
 export default {
   name: 'dialogWrap',
-  data(){
-    return{
+  data () {
+    return { 
 
     }
   },
-  methods:{
-    enter(el,done){
-      let div1 = document.querySelector("div.shadow-veil")
+  methods: {
+    enter (el, done) {
+      let div1 = document.querySelector('div.shadow-veil')
       Velocity(div1,
-        {backgroundColor: "#000000" ,backgroundColorAlpha: [0.5,0]},
-        {duration: 300,complete: done})
-      let div2 = document.querySelector("div.dialog-field")
+        {backgroundColor: '#000000' , backgroundColorAlpha: [0.5, 0]},
+        {duration: 300, complete: done})
+      let div2 = document.querySelector('div.dialog-field')
       Velocity(div2,
-        {scale: [1,0.8],opacity: [1,0]},
-        {duration: 300,complete: done})
+        {scale: [1, 0.8], opacity: [1, 0]},
+        {duration: 300, complete: done})
     },
-    leave(el,done){
-      let div1 = document.querySelector("div.shadow-veil")
+    leave (el, done) {
+      let div1 = document.querySelector('div.shadow-veil')
       Velocity(div1,
-        {backgroundColor: "#000000" ,backgroundColorAlpha: 0},
-        {duration: 300,complete: done})
-      let div2 = document.querySelector("div.dialog-field")
+        {backgroundColor: '#000000' , backgroundColorAlpha: 0},
+        {duration: 300, complete: done})
+      let div2 = document.querySelector('div.dialog-field')
       Velocity(div2,
-        {scale: [0.8,1],opacity: [0,1]},
-        {duration: 300,complete: done})
+        {scale: [0.8, 1], opacity: [0, 1]},
+        {duration: 300, complete: done})
     }
   }
 }
