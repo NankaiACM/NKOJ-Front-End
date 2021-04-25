@@ -7,14 +7,19 @@
         <div class="r" @click="rejudgeSolution">rejudge</div>
       </div>
     </div>
-    <h3>重新评测题目</h3>
+    <h3>重新评测题目(十分耗时严禁多次点击)</h3>
     <div id="bginput" :class="{gray: problemId === ''}">
       <div class="b">
         <input placeholder="problem id" class="i" v-model="problemId">
-        <div class="r" @click="rejudgeProblem">rejudge</div>
+        <button class="r" @click="rejudgeProblem" :disabled="coldTime!==0">
+          <span v-if="coldTime!==0">(冷却时间{{coldTime}}s)</span>
+          <span v-else>rejudge</span>
+        </button>
       </div>
     </div>
-    <div class="c" v-if="isRes">{{resMsg}}</div>
+    <div class="c" v-if="isRes">
+      <p v-for="(msg, index) in resMsg" :key="index">{{msg}}</p>
+    </div>
   </div>
 </template>
 <script>
@@ -24,10 +29,27 @@ export default {
     return {
       solutionId: '',
       problemId: '',
-      isRes: false
+      isRes: false,
+      coldTime: 0,
+      coldStatus: false
     }
   },
   methods: {
+    setColdTime () {
+      let vm = this
+      vm.coldTime = 10
+      let func = function () {
+        vm.coldTime--
+        if (vm.coldTime !== 0) {
+          setTimeout(func, 1000)
+        }
+      }
+      if (vm.coldTime <= 0) {
+        vm.coldTime = 0
+      } else {
+        setTimeout(func, 1000)
+      }
+    },
     rejudgeSolution: function () {
       const vm = this
       if (vm.solutionId === '') return
@@ -35,19 +57,38 @@ export default {
         .then(function (res) {
           console.log(JSON.stringify(res))
           vm.isRes = true
-          vm.resMsg = JSON.stringify(res.body)
+          let resMsgList = [`
+            code: ${res.body.code}, message: ${res.body.message}, \
+            result: ${res.body.data.result}, time: ${res.body.data.time} \
+            memory: ${res.body.data.memory}, status: ${res.body.data.time}`]
+          const resList = res.body.data.json.detail
+          for (let i = 0, len = resList.length; i < len; i++) {
+            resMsgList.push(JSON.stringify(resList[i]))
+          }
+          vm.resMsg = resMsgList
         })
     },
     rejudgeProblem: function () {
       const vm = this
       if (vm.problemId === '') return
+      vm.setColdTime()
       vm.$http.get(window.noPointHost + '/api/judge/rejudge/problem/' + vm.problemId)
         .then(function (res) {
           console.log(JSON.stringify(res))
           vm.isRes = true
-          vm.resMsg = JSON.stringify(res.body)
+          // vm.resMsg = JSON.stringify(res.body)
+          let resMsgList = [`code: ${res.body.code}, message: ${res.body.message}`]
+          const resList = res.body.data.resultArr
+          for (let i = 0, len = resList.length; i < len; i++) {
+            resMsgList.push(`Solution ID: ${resList[i].sid}, ` + JSON.stringify(resList[i].result))
+          }
+          vm.resMsg = resMsgList
+          console.log(resMsgList.join('\n'))
         })
     }
+  },
+  watch: {
+    coldStatus: this.setColdTime
   }
 }
 </script>
