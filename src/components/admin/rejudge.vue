@@ -59,8 +59,8 @@ export default {
           vm.isRes = true
           let resMsgList = [`
             code: ${res.body.code}, message: ${res.body.message}, \
-            result: ${res.body.data.result}, time: ${res.body.data.time} \
-            memory: ${res.body.data.memory}, status: ${res.body.data.time}`]
+            result: ${res.body.data.json.result}, time: ${res.body.data.json.time} \
+            memory: ${res.body.data.json.memory}, status: ${res.body.data.json.time}`]
           const resList = res.body.data.json.detail
           for (let i = 0, len = resList.length; i < len; i++) {
             resMsgList.push(JSON.stringify(resList[i]))
@@ -80,7 +80,9 @@ export default {
           let resMsgList = [`code: ${res.body.code}, message: ${res.body.message}`]
           const resList = res.body.data.resultArr
           for (let i = 0, len = resList.length; i < len; i++) {
-            resMsgList.push(`Solution ID: ${resList[i].sid}, ` + JSON.stringify(resList[i].result))
+            const tmp = resList[i]
+            resMsgList.push(`Solution ID: ${tmp.sid}, result: ${JSON.stringify(tmp.result)}, score: ${tmp.score}\
+            time: ${tmp.time}, memory: ${tmp.score}, status: ${tmp.status}`)
           }
           vm.resMsg = resMsgList
           console.log(resMsgList.join('\n'))
