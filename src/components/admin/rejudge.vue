@@ -42,7 +42,7 @@ export default {
     rejudgeProblem: function () {
       const vm = this
       if (vm.problemId === '') return
-      vm.$http.get(window.noPointHost + '/api/judge/rejudge/:pid' + vm.problemId)
+      vm.$http.get(window.noPointHost + '/api/judge/rejudge/problem/' + vm.problemId)
         .then(function (res) {
           console.log(JSON.stringify(res))
           vm.isRes = true
