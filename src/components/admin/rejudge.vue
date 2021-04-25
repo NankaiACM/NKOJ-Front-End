@@ -6,7 +6,6 @@
         <input placeholder="solution id" class="i" v-model="solutionId">
         <div class="r" @click="rejudgeSolution">rejudge</div>
       </div>
-      <div class="c" v-if="isRes">{{resMsg}}</div>
     </div>
     <h3>重新评测题目</h3>
     <div id="bginput" :class="{gray: problemId === ''}">
