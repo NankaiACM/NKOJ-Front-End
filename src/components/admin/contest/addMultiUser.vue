@@ -12,14 +12,16 @@
   <template v-if="isRes">
     <div class="panel panel-success" style="margin-top: 3rem;">
       <div class="panel-heading">res</div>
-      <div class="panel-body">{{message}}</div>
-      <table class="table">
+      <div class="panel-body"><p>{{message}}</p></div>
+      <table class="table" style="margin:0.5rem;">
         <tr><th>UserID</th><th>Username</th><th>Password</th></tr>
+	<tbody>
         <tr v-for="(user, index) in resMsg" :key="index">
-          <td>user.user_id</td>
-          <td>user.username</td>
-          <td>user.password</td>
+          <td>{{user.user_id}}</td>
+          <td>{{user.username}}</td>
+          <td>{{user.password}}</td>
         </tr>
+	</tbody>
       </table>
     </div>
   </template>
@@ -61,13 +63,13 @@ export default {
         .then(function (res) {
           console.log(JSON.stringify(res))
           vm.isRes = true
-          vm.message = `code: ${res.body.code}, message: ${res.body.message}`
+          vm.message = `code: ${res.body.code}, message: ${res.body.message} ` + JSON.stringify(res.body.error)
           let resMsgList = []
           const resList = res.body.data.resUser
           for (let i = 0, len = resList.length; i < len; i++) {
             resMsgList.push({
-              userID: resList[i].user_id,
-              nickname: resList[i].username,
+              user_id: resList[i].user_id,
+              username: resList[i].username,
               password: resList[i].password
             })
           }
