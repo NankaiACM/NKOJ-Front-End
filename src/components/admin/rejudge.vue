@@ -30,8 +30,7 @@ export default {
       solutionId: '',
       problemId: '',
       isRes: false,
-      coldTime: 0,
-      coldStatus: false
+      coldTime: 0
     }
   },
   methods: {
@@ -88,9 +87,6 @@ export default {
           console.log(resMsgList.join('\n'))
         })
     }
-  },
-  watch: {
-    coldStatus: this.setColdTime
   }
 }
 </script>
