@@ -10,14 +10,16 @@
     <span v-else>生成用户</span>
   </button>
   <template v-if="isRes">
-    <div class="panel panel-success" v-if="false" style="margin-top: 3rem;">
-      <div class="panel-heading">结果</div>
-      <div class="panel-body">
-        <p v-for="(msg, index) in resMsg" :key="index">{{msg}}</p>
-      </div>
-      <!-- Table -->
-      <table class="table" v-if="false">
-        ...
+    <div class="panel panel-success" style="margin-top: 3rem;">
+      <div class="panel-heading">res</div>
+      <div class="panel-body">{{message}}</div>
+      <table class="table">
+        <tr><th>UserID</th><th>Username</th><th>Password</th></tr>
+        <tr v-for="(user, index) in resMsg" :key="index">
+          <td>user.user_id</td>
+          <td>user.username</td>
+          <td>user.password</td>
+        </tr>
       </table>
     </div>
   </template>
@@ -59,10 +61,15 @@ export default {
         .then(function (res) {
           console.log(JSON.stringify(res))
           vm.isRes = true
-          let resMsgList = [`code: ${res.body.code}, message: ${res.body.message}`]
-          const resList = res.body.data.json.detail
+          vm.message = `code: ${res.body.code}, message: ${res.body.message}`
+          let resMsgList = []
+          const resList = res.body.data.resUser
           for (let i = 0, len = resList.length; i < len; i++) {
-            resMsgList.push(JSON.stringify(resList[i]))
+            resMsgList.push({
+              userID: resList[i].user_id,
+              nickname: resList[i].username,
+              password: resList[i].password
+            })
           }
           vm.resMsg = resMsgList
         })
