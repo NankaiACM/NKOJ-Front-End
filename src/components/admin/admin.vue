@@ -12,7 +12,8 @@
       <router-link to="/admin/allcontest">竞赛列表</router-link>
       <router-link to="/admin/getpc">竞赛数据</router-link>
       <router-link to="/admin/editque">竞赛题目</router-link>
-      <router-link to="/admin/edituser">竞赛用户</router-link>
+      <router-link to="/admin/edituser">竞赛用户(单个)</router-link>
+      <router-link to="/admin/addmultiuser">批量添加竞赛用户</router-link>
       <router-link to="/admin/rejudge">重新评测</router-link>
       <router-link to="/admin/editpost">编辑讨论</router-link>
       <router-link to="/admin/rmpost">删除讨论</router-link>
