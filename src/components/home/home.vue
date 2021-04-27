@@ -71,9 +71,9 @@ export default {
     \\:\\__\\        \\:\\__\\        \\::/  /       \\:\\__\\        \\::/  /       \\:\\__\\
      \\/__/         \\/__/         \\/__/         \\/__/         \\/__/         \\/__/
 
-     @NKUACM 2019
+     @NKUACM 2021
 `, 'color: #6cf')
-    console.log('%c Release 2.6.1. Sunrisefox & Saurus & 墨染 SaucerHi & 什锦', 'color: #6cf')
+    console.log('%c Release 2.7.0. Sunrisefox & Saurus & 墨染 SaucerHi & 什锦 & Alexhaoge', 'color: #6cf')
   },
 }
 </script>
