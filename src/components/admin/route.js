@@ -10,6 +10,7 @@ import edituser from './contest/edituser'
 import addMultiUser from './contest/addMultiUser'
 import editque from './contest/editque'
 import allcontest from './contest/allcontest'
+import standings from './contest/standings'
 import report from './message/report'
 import batch from './message/batch'
 import findusr from './message/find'
@@ -30,6 +31,7 @@ export default {
     { path: '/admin/edituser', component: edituser },
     { path: '/admin/edituser/:id', component: edituser },
     { path: '/admin/addmultiuser', component: addMultiUser },
+    { path: '/admin/standings', component: standings },
     { path: '/admin/editque', component: editque },
     { path: '/admin/editque/:id', component: editque },
     { path: '/admin/editpost', component: editpost },

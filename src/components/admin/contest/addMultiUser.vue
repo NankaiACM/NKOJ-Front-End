@@ -75,17 +75,18 @@ export default {
       let vm = this
       if (vm.accountNum === 0) return
       vm.setColdTime()
-      let nameList = vm.nameListRaw.replace(' ', '').split(/,|，/)
+      let nameList = vm.nameListRaw.replace(' ', '').replace(/[(\r\n)\r\n]+/, '')
+        .split(/,|，/).filter(function (item) { return item !== '' })
       console.log(nameList)
       if (nameList.length !== parseInt(vm.accountNum) || vm.nameListRaw === '') {
         vm.message = `Error: Add ${vm.accountNum} users, but ${nameList.length} names are given`
         vm.isRes = true
         return
       }
-      let sendPackage = new FormData()
-      sendPackage.append('nameList', nameList)
-      sendPackage.append('cid', parseInt(vm.contestID))
-      sendPackage.append('num', parseInt(vm.accountNum))
+      // let sendPackage = new FormData()
+      // sendPackage.append('nameList', nameList)
+      // sendPackage.append('cid', parseInt(vm.contestID))
+      // sendPackage.append('num', parseInt(vm.accountNum))
       vm.$http.post(window.noPointHost + '/api/admin/user/addmulti/', {nameList: nameList, cid: parseInt(vm.contestID), num: parseInt(vm.accountNum)}).then(
         res => {
           console.log(JSON.stringify(res))

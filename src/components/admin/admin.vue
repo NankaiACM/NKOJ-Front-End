@@ -15,6 +15,7 @@
       <router-link to="/admin/edituser">竞赛用户(单个)</router-link>
       <router-link to="/admin/addmultiuser">批量添加竞赛用户</router-link>
       <router-link to="/admin/rejudge">重新评测</router-link>
+      <router-link to="/admin/standings">导出竞赛榜单</router-link>
       <router-link to="/admin/editpost">编辑讨论</router-link>
       <router-link to="/admin/rmpost">删除讨论</router-link>
       <router-link to="/admin/rcpost">恢复讨论</router-link>
