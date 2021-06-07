@@ -14,6 +14,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import isBetween from 'dayjs/plugin/isBetween'
 import 'dayjs/locale/zh-cn'
+import 'babel-polyfill'
 
 Vue.config.productionTip = false
 Vue.use(VueResource)
