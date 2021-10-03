@@ -24,6 +24,3 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
-
-**/id_rsa.pub.js
-**/idRsa.pub.ts
