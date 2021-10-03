@@ -1,111 +1,134 @@
 {
-  "name": "NKU-Online-Judge",
-  "version": "2.6.2",
-  "description": "this is my very first projcet",
-  "author": "Saurus",
+  "name": "nkoj-front-end",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
-    "unit": "jest --config test/unit/jest.conf.js --coverage",
-    "e2e": "node test/e2e/runner.js",
-    "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
-    "build": "node build/build.js"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit",
+    "test:e2e": "vue-cli-service test:e2e",
+    "lint": "vue-cli-service lint",
+    "chrome": "open-cli https://localhost:8080 -- chrome --disable-web-security --user-data-dir=%TEMP%"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
-    "brace": "^0.11.1",
-    "cropperjs": "^1.3.6",
-    "dayjs": "^1.8.7",
-    "echarts": "^4.1.0",
+    "vue-infinite-loading": "^2.3.1",
     "echarts-gl": "^1.1.1",
-    "less": "^3.0.4",
-    "less-loader": "^4.1.0",
-    "markdown-it": "^8.4.2",
-    "markdown-it-latex": "^0.2.0",
-    "markdown-it-mathjax": "^2.0.0",
     "marked": "^0.4.0",
     "match-sorter": "^2.2.3",
     "mavon-editor": "^2.6.9",
-    "moment": "^2.22.1",
     "particles.js": "^2.0.0",
     "video.js": "^7.3.0",
-    "vue": "^2.5.16",
-    "vue-infinite-loading": "^2.3.1",
     "vue-loading-template": "^0.1.7",
-    "vue-resource": "^1.5.0",
-    "vue-router": "^3.0.1",
+    "cropperjs": "^1.3.6",
+    "echarts": "^4.1.0",
+    "vue2-ace-editor": "0.0.8",
     "vue-slide-up-down": "^1.3.0",
-    "vuex": "^3.0.1"
+    "vue-resource": "^1.5.0",
+    "dayjs": "^1.8.7",
+    "animate.css": "^4.1.1",
+    "ant-design-vue": "^1.7.5",
+    "bulma": "^0.9.1",
+    "core-js": "^3.6.5",
+    "diff": "^5.0.0",
+    "diff2html": "^3.1.18",
+    "isomorphic-fetch": "^3.0.0",
+    "markdown-it": "^12.0.4",
+    "markdown-it-latex": "^0.2.0",
+    "markdown-it-mathjax": "^2.0.0",
+    "moment": "^2.29.1",
+    "node-forge": "^0.10.0",
+    "string-format": "^2.0.0",
+    "velocity-animate": "^1.5.2",
+    "vue": "^2.6.11",
+    "vue-class-component": "^7.2.3",
+    "vue-property-decorator": "^9.1.2",
+    "vue-router": "^3.2.0",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
-    "autoprefixer": "^7.2.6",
-    "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.3",
-    "babel-helper-vue-jsx-merge-props": "^2.0.3",
-    "babel-jest": "^21.0.2",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-dynamic-import-node": "^1.2.0",
-    "babel-plugin-syntax-jsx": "^6.18.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "babel-plugin-transform-runtime": "^6.22.0",
-    "babel-plugin-transform-vue-jsx": "^3.7.0",
-    "babel-preset-env": "^1.3.2",
-    "babel-preset-stage-2": "^6.22.0",
-    "babel-register": "^6.22.0",
-    "chalk": "^2.4.1",
-    "chromedriver": "^2.38.3",
-    "copy-webpack-plugin": "^4.5.1",
-    "cross-spawn": "^5.0.1",
-    "css-loader": "^0.28.11",
-    "eslint": "^4.19.1",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-friendly-formatter": "^3.0.0",
-    "eslint-loader": "^1.7.1",
-    "eslint-plugin-import": "^2.11.0",
-    "eslint-plugin-node": "^5.2.0",
-    "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.1.0",
-    "eslint-plugin-vue": "^4.5.0",
-    "extract-text-webpack-plugin": "^3.0.0",
-    "file-loader": "^1.1.11",
-    "friendly-errors-webpack-plugin": "^1.7.0",
-    "html-webpack-plugin": "^2.30.1",
-    "jest": "^22.4.3",
-    "jest-serializer-vue": "^0.3.0",
-    "jquery": "^3.3.1",
-    "nightwatch": "^0.9.21",
-    "node-notifier": "^5.1.2",
-    "optimize-css-assets-webpack-plugin": "^3.2.0",
-    "ora": "^1.4.0",
-    "portfinder": "^1.0.13",
-    "postcss-import": "^11.1.0",
-    "postcss-loader": "^2.1.5",
-    "postcss-url": "^7.3.2",
-    "rimraf": "^2.6.0",
-    "selenium-server": "^3.11.0",
-    "semver": "^5.3.0",
-    "shelljs": "^0.7.6",
-    "uglifyjs-webpack-plugin": "^1.2.5",
-    "url-loader": "^0.5.8",
-    "vue-jest": "^1.0.2",
-    "vue-loader": "^13.3.0",
-    "vue-style-loader": "^3.0.1",
-    "vue-template-compiler": "^2.5.16",
-    "vue2-ace-editor": "0.0.8",
-    "webpack": "^3.11.0",
-    "webpack-bundle-analyzer": "^2.11.1",
-    "webpack-dev-server": "^2.11.2",
-    "webpack-merge": "^4.1.2"
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^5.2.4",
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-e2e-cypress": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-plugin-unit-mocha": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/eslint-config-standard": "^5.1.2",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "@vue/test-utils": "^1.0.3",
+    "chai": "^4.1.2",
+    "eslint": "^6.7.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "less": "^3.0.4",
+    "less-loader": "^5.0.0",
+    "lint-staged": "^9.5.0",
+    "sass": "^1.34.1",
+    "sass-loader": "^10.2.0",
+    "typescript": "~4.1.5",
+    "vue-cli-plugin-pug": "^2.0.0",
+    "vue-template-compiler": "^2.6.11",
+    "commitizen": "^4.2.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "open-cli": "^6.0.1"
   },
-  "engines": {
-    "node": ">= 6.0.0",
-    "npm": ">= 3.0.0"
+  "eslintIgnore": [
+    "*.min.js",
+    "node_modules/*",
+    ".github/*",
+    ".vscode/*",
+    "public/*",
+    "src/views/nkoj/components/contest/iconsearch/iconfont.js"
+  ],
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/standard",
+      "@vue/typescript/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
+    "rules": {
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+      "no-undef": "off"
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/__tests__/*.{j,t}s?(x)",
+          "**/tests/unit/**/*.spec.{j,t}s?(x)"
+        ],
+        "env": {
+          "mocha": true
+        }
+      }
+    ]
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
-    "not ie <= 8"
-  ]
+    "not dead"
+  ],
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,vue,ts,tsx}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
 }

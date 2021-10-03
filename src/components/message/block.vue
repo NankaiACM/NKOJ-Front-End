@@ -1,77 +1,45 @@
-<template>
-<div id="block">
-  <h3>黑名单</h3>
-  <div class="line" v-for="item in block" :key="item.blockee">
-    <img class="img" width="36px" height="36px" :src="img(item.blockee)">
-    <router-link tag="span" :to="'/space/uid/' + item.blockee" class="usr">{{item.blockee}}</router-link>
-    拉黑于
-    <span class="date">{{d(item.since)}}</span>
-  </div>
-</div>
-</template>
-
 <script>
 export default {
-  name: 'block',
-  data: function () {
-    return {
-      block: []
+  name: 'message-block',
+  data () {
+    return {}
+  },
+  props: ['id', 'title', 'content', 'type'],
+  mounted () {
+    setTimeout(this.deleteSelf, 15000)
+  },
+  computed: {
+    isError () {
+      return this.$props.error
     }
   },
   methods: {
-    img: function (id) {
-      return window.noPointHost + '/api/avatar/' + id
+    deleteSelf () {
+      return this.$parent.$parent.deleteMessage(this.$props.id)
     },
-    d: function (timestamp) {
-      return new Date(timestamp).toLocaleString()
+    handleClick () {
+      if (this.type === 'refresh') { return this.$router.go(0) }
+      return this.deleteSelf()
     }
-  },
-  mounted: function () {
-    const vm = this
-    vm.$nextTick(function () {
-      vm.$http.get(window.noPointHost + '/api/message/block/')
-        .then(function (res) {
-          if (res.body.code === 0) {
-            vm.block = res.body.data
-          }
-          vm.$store.commit('setNotify', {
-            title: '获取黑名单',
-            message: res.body.message
-          })
-        }, function (e) {
-          vm.$store.commit('setNotify', {
-            title: '获取错误',
-            message: JSON.stringify(e)
-          })
-        })
-    })
   }
 }
 </script>
+<!-- vue-loader's scoped css won't work with style-loader -->
+<style scoped lang="scss">
+@import './message.scss';
+$type: (error: #cd0930, warning: goldenrod, success: forestgreen);
 
-<style lang="less" scoped>
-#block {
-  .line {
-    padding: 1em 2em;
-    margin: 1em 2em;
-    background: #fff;
-    border-radius: .5em;
-    box-shadow: 0 0 3px #c24f4a;
-    .img {
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .usr {
-      font-size: 18px;
-      color: #9d9d9d;
-      font-weight: 600;
-      padding: 0 1em;
-      cursor: pointer;
-    }
-    .date {
-      padding: 0 1em;
-      color: #9d9d9d;
-    }
-  }
+@each $name, $color in $type {
+  @include message-node ($name, $color);
 }
 </style>
+
+<template>
+<div :id="$options.name" :class="[$options.name, `is-${type}`]" @click="handleClick">
+  <div style="display: flex; font-weight: 700">
+    <div v-html="title"></div>
+    <div class="delete" style="margin-left: auto" @click="deleteSelf"></div>
+  </div>
+  <div class="content" v-html="content"></div>
+</div>
+</template>

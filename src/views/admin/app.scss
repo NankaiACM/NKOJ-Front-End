@@ -1,0 +1,35 @@
+@mixin nomargin {
+  margin: 0;
+}
+
+@mixin nopadding {
+  padding: 0;
+}
+
+@mixin line64px {
+  line-height: 64px;
+}
+
+@mixin vfull {
+  width: 100vw;
+  height: 100vh;
+}
+
+@mixin tcenter {
+  text-align: center;
+}
+
+@mixin margin2em0 {
+  margin: 2em 0;
+}
+
+body, html {
+  @include nomargin();
+  @include nopadding();
+  @include vfull();
+  overflow: hidden;
+}
+
+a {
+  text-decoration: none;
+}
