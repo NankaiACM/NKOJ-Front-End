@@ -75,8 +75,11 @@ const discuss = {
   discuss0: '/posts/0'
 }
 
-// export const API_BASE_URL = '//acm.nankai.edu.cn/api'
-export const API_BASE_URL = '//localhost:8080/api'
+export const API_BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? '//acm.nankai.edu.cn/api'
+    : '//localhost:8080/api'
+// export const API_BASE_URL = '//localhost:8080/api'
 
 export const PUBLIC_BASE_URL = '//acm.nankai.edu.cn/public'
 
