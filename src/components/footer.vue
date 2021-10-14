@@ -1,8 +1,8 @@
 <template>
   <div class="footer band-with-40padding">
-    <div class="contact">NKUACM 2020
+    <div class="contact">NKUACM 2021
       南开大学ACM算法协会
-      QQ群:901121977
+      QQ群:1001918732
     </div>
     <div class="copyright" title="Sun Wei & Wang Yan & SunriseFox & Saurus & rmdyh & windring & Shiien">© Copyright 2005-2021  NKU ACM Association. All Rights Reserved.</div>
   </div>
